@@ -7,7 +7,14 @@ import { getServerSession } from "next-auth"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Toaster } from "@/components/ui/sonner"
+import { Gamepad2, ListCheck, Menu, Settings, Trash2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "Wishlist App",
@@ -20,6 +27,8 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const session = await getServerSession(authOptions)
+
+  console.log("session.user", session?.user)
 
   return (
     <AuthProvider>
@@ -34,14 +43,41 @@ export default async function RootLayout({
         </head>
         <body>
           <nav className="px-6 flex justify-between items-center mb-1 gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
-            <Link href="/">
-              <Image
-                src="/google-logo.png"
-                alt="Wishlist App Logo"
-                width={40}
-                height={40}
-              ></Image>
-            </Link>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost">
+                  <Menu />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit ml-6">
+                <div className="flex flex-col items-start">
+                  <Link href="/wishlist">
+                    <Button className="w-full" variant="ghost">
+                      <ListCheck />
+                      Wishlist
+                    </Button>
+                  </Link>
+                  <Link href="/wishlist">
+                    <Button className="w-full" variant="ghost">
+                      <Gamepad2 />
+                      Owned
+                    </Button>
+                  </Link>
+                  <Link href="/wishlist">
+                    <Button className="w-full" variant="ghost">
+                      <Trash2 />
+                      Graveyard
+                    </Button>
+                  </Link>
+                  <Link href="/wishlist">
+                    <Button className="w-full" variant="ghost">
+                      <Settings />
+                      Settings
+                    </Button>
+                  </Link>
+                </div>
+              </PopoverContent>
+            </Popover>
             <AuthCheck>
               <div className="flex items-center gap-3">
                 <p className="text-right">{session?.user?.name}</p>
