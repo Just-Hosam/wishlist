@@ -28,8 +28,6 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(authOptions)
 
-  console.log("session.user", session?.user)
-
   return (
     <AuthProvider>
       <html className="font-mont text-base" lang="en">
@@ -44,11 +42,13 @@ export default async function RootLayout({
         <body>
           <nav className="px-6 flex justify-between items-center mb-1 gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
             <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="ghost">
-                  <Menu />
-                </Button>
-              </PopoverTrigger>
+              <AuthCheck>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost">
+                    <Menu />
+                  </Button>
+                </PopoverTrigger>
+              </AuthCheck>
               <PopoverContent className="w-fit ml-6">
                 <div className="flex flex-col items-start">
                   <Link href="/wishlist">
@@ -69,21 +69,17 @@ export default async function RootLayout({
                       Graveyard
                     </Button>
                   </Link>
-                  <Link href="/wishlist">
-                    <Button className="w-full" variant="ghost">
-                      <Settings />
-                      Settings
-                    </Button>
-                  </Link>
+                  <SignOutButton />
                 </div>
               </PopoverContent>
             </Popover>
-            <AuthCheck>
+
+            {/* <AuthCheck>
               <div className="flex items-center gap-3">
                 <p className="text-right">{session?.user?.name}</p>
                 <SignOutButton />
               </div>
-            </AuthCheck>
+            </AuthCheck> */}
           </nav>
           <div className="px-6 pb-12 max-w-[700px] m-auto">{children}</div>
           <Toaster />
