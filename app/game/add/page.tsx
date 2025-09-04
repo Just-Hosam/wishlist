@@ -12,10 +12,10 @@ import {
 import { GameCategory } from "@prisma/client"
 import {
   ArrowLeftIcon,
-  CircleCheck,
-  Gamepad2,
-  ListCheck,
-  Trash2,
+  CircleCheckBig,
+  FolderCheck,
+  ScrollText,
+  Skull,
 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
@@ -122,25 +122,25 @@ export default function NewGame() {
             <SelectContent>
               <SelectItem key="wishlist" value="WISHLIST">
                 <div className="flex items-center gap-2">
-                  <ListCheck />
+                  <ScrollText />
                   Wishlist
                 </div>
               </SelectItem>
               <SelectItem key="owned" value="OWNED">
                 <div className="flex items-center gap-2">
-                  <Gamepad2 />
+                  <FolderCheck />
                   Owned
                 </div>
               </SelectItem>
               <SelectItem key="completed" value="COMPLETED">
                 <div className="flex items-center gap-2">
-                  <CircleCheck />
+                  <CircleCheckBig />
                   Completed
                 </div>
               </SelectItem>
               <SelectItem key="graveyard" value="GRAVEYARD">
                 <div className="flex items-center gap-2">
-                  <Trash2 />
+                  <Skull />
                   Graveyard
                 </div>
               </SelectItem>

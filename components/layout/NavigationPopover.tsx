@@ -1,12 +1,18 @@
 "use client"
 
-import AuthCheck from "./AuthCheck"
-import { Button } from "../ui/button"
-import { CircleCheck, Gamepad2, ListCheck, Menu, Trash2 } from "lucide-react"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import {
+  CircleCheckBig,
+  FolderCheck,
+  Menu,
+  ScrollText,
+  Skull,
+} from "lucide-react"
 import Link from "next/link"
-import { SignOutButton } from "./SignoutButton"
 import { useState } from "react"
+import { Button } from "../ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import AuthCheck from "./AuthCheck"
+import { SignOutButton } from "./SignoutButton"
 
 export default function NavigationPopover() {
   const [popoverOpen, setPopoverOpen] = useState(false)
@@ -25,25 +31,25 @@ export default function NavigationPopover() {
           <div className="flex flex-col items-start">
             <Link href="/wishlist" onClick={() => setPopoverOpen(false)}>
               <Button className="w-full" variant="ghost">
-                <ListCheck />
+                <ScrollText />
                 Wishlist
               </Button>
             </Link>
             <Link href="/owned" onClick={() => setPopoverOpen(false)}>
               <Button className="w-full" variant="ghost">
-                <Gamepad2 />
+                <FolderCheck />
                 Owned
               </Button>
             </Link>
             <Link href="/completed" onClick={() => setPopoverOpen(false)}>
               <Button className="w-full" variant="ghost">
-                <CircleCheck />
+                <CircleCheckBig />
                 Completed
               </Button>
             </Link>
             <Link href="/graveyard" onClick={() => setPopoverOpen(false)}>
               <Button className="w-full" variant="ghost">
-                <Trash2 />
+                <Skull />
                 Graveyard
               </Button>
             </Link>

@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { authOptions } from "@/lib/auth-options"
-import prisma from "@/lib/prisma"
-import { PlusIcon } from "lucide-react"
+import { FolderCheck, PlusIcon } from "lucide-react"
 import { getServerSession } from "next-auth"
-import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -16,7 +14,10 @@ export default async function Owned() {
   return (
     <div>
       <header className="flex justify-between items-center gap-4 pb-8 sticky top-[88px] bg-white">
-        <h2 className="text-3xl">Owned</h2>
+        <h2 className="flex items-center gap-3 text-2xl">
+          <FolderCheck />
+          Owned
+        </h2>
         <Link href="game/add">
           <Button size="icon">
             <PlusIcon />
