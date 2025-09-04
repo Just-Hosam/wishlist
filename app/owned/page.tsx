@@ -7,7 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function Wishlist() {
+export default async function Owned() {
   const session = await getServerSession(authOptions)
   const isNotAuthenticated = !session?.user
 
@@ -16,7 +16,7 @@ export default async function Wishlist() {
   return (
     <div>
       <header className="flex justify-between items-center gap-4 pb-8 sticky top-[88px] bg-white">
-        <h2 className="text-3xl">Wishlist</h2>
+        <h2 className="text-3xl">Owned</h2>
         <Link href="game/add">
           <Button size="icon">
             <PlusIcon />
