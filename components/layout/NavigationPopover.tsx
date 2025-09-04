@@ -2,7 +2,7 @@
 
 import AuthCheck from "./AuthCheck"
 import { Button } from "../ui/button"
-import { Gamepad2, ListCheck, Menu, Trash2 } from "lucide-react"
+import { CircleCheck, Gamepad2, ListCheck, Menu, Trash2 } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import Link from "next/link"
 import { SignOutButton } from "./SignoutButton"
@@ -33,6 +33,12 @@ export default function NavigationPopover() {
               <Button className="w-full" variant="ghost">
                 <Gamepad2 />
                 Owned
+              </Button>
+            </Link>
+            <Link href="/completed" onClick={() => setPopoverOpen(false)}>
+              <Button className="w-full" variant="ghost">
+                <CircleCheck />
+                Completed
               </Button>
             </Link>
             <Link href="/graveyard" onClick={() => setPopoverOpen(false)}>
