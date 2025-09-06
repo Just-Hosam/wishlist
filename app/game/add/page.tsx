@@ -1,5 +1,6 @@
 "use client"
 
+import { BackButton } from "@/components/layout/BackButton"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -18,10 +19,12 @@ import {
   Skull,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export default function NewGame() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -41,19 +44,49 @@ export default function NewGame() {
 
     setIsLoading(true)
 
-    // setIsLoading(false)
+    try {
+      const response = await fetch("/api/game", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          length: formData.length ? parseInt(formData.length) : null,
+          category: formData.category,
+        }),
+      })
+
+      if (!response.ok) {
+        const responseText = await response.text()
+        console.error("Response not ok:", response.status, responseText)
+
+        let error
+        try {
+          error = JSON.parse(responseText)
+        } catch (e) {
+          throw new Error(`Server error (${response.status}): ${responseText}`)
+        }
+
+        throw new Error(error.error || "Failed to create game")
+      }
+
+      toast.success("Game added successfully!")
+      router.push("/wishlist")
+      router.refresh()
+    } catch (error) {
+      console.error("Error creating game:", error)
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create game"
+      )
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-3">
-        <Link href="/wishlist">
-          <Button variant="ghost" size="icon">
-            <ArrowLeftIcon />
-          </Button>
-        </Link>
-        <h1 className="text-lg font-semibold">Add Game</h1>
-      </div>
+      <BackButton className="mb-4" />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -70,22 +103,6 @@ export default function NewGame() {
               setFormData(prev => ({ ...prev, name: e.target.value }))
             }
             required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="text-sm font-semibold" htmlFor="coverImageUrl">
-            Cover Image URL
-          </label>
-          <Input
-            id="coverImageUrl"
-            type="url"
-            className="mt-2"
-            placeholder="https://example.com/image.jpg"
-            value={formData.coverImageUrl}
-            onChange={e =>
-              setFormData(prev => ({ ...prev, coverImageUrl: e.target.value }))
-            }
           />
         </div>
 
