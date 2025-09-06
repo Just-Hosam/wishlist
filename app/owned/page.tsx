@@ -4,12 +4,25 @@ import { FolderCheck, PlusIcon } from "lucide-react"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import prisma from "@/lib/prisma"
 
 export default async function Owned() {
   const session = await getServerSession(authOptions)
   const isNotAuthenticated = !session?.user
 
   if (isNotAuthenticated) redirect("/")
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user!.email! },
+    include: {
+      games: {
+        where: { category: "OWNED" },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  })
+
+  const ownedGames = user?.games || []
 
   return (
     <div>
@@ -24,30 +37,31 @@ export default async function Owned() {
           </Button>
         </Link>
       </header>
-      <div className="border rounded-2xl p-6 mb-4">
-        <header>
-          <h3 className="text-xl font-semibold">The Last Faith</h3>
-          <p className="text-light text-xs mt-1 text-gray-600">
-            about 20 hours
-          </p>
-        </header>
-        <div className="mt-4">
-          <p className="mb-1 last:mb-0">PS - $29.99 </p>
-          <p className="mb-1 last:mb-0">Nintendo - $20.99 </p>
+      {ownedGames.length === 0 ? (
+        <div className="mt-10 flex flex-col items-center justify-center text-center">
+          <h3 className="font-semibold text-xl mb-2">No games yet</h3>
+          <p className="mb-6">Get started by adding a game.</p>
+          <Link href="game/add">
+            <Button>
+              <PlusIcon />
+              Add Game
+            </Button>
+          </Link>
         </div>
-      </div>
-      <div className="border rounded-2xl p-6 mb-4">
-        <header>
-          <h3 className="text-xl font-semibold">Crypt Custodian</h3>
-          <p className="text-light text-xs mt-1 text-gray-600">
-            about 16 hours
-          </p>
-        </header>
-        <div className="mt-4">
-          <p className="mb-1 last:mb-0">PS - $24.99 </p>
-          <p className="mb-1 last:mb-0">Nintendo - $18.99 </p>
-        </div>
-      </div>
+      ) : (
+        ownedGames.map(game => (
+          <div key={game.id} className="border rounded-2xl p-6 mb-4">
+            <header>
+              <h3 className="text-xl font-semibold">{game.name}</h3>
+              {game.length && (
+                <p className="text-light text-xs mt-1 text-gray-600">
+                  about {game.length} hours
+                </p>
+              )}
+            </header>
+          </div>
+        ))
+      )}
     </div>
   )
 }
