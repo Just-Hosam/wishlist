@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { authOptions } from "@/lib/auth-options"
-import { PlusIcon, Skull } from "lucide-react"
+import { PlusIcon, SearchX, Skull } from "lucide-react"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -39,6 +39,7 @@ export default async function Graveyard() {
       </header>
       {graveyardGames.length === 0 ? (
         <div className="mt-10 flex flex-col items-center justify-center text-center">
+          <SearchX size={100} strokeWidth={1} className="mb-6" />
           <h3 className="font-semibold text-xl mb-2">No games yet</h3>
           <p className="mb-6">Get started by adding a game.</p>
           <Link href="game/add">
