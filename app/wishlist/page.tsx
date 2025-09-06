@@ -52,16 +52,18 @@ export default async function Wishlist() {
         </div>
       ) : (
         wishlistGames.map(game => (
-          <div key={game.id} className="border rounded-2xl p-6 mb-4">
-            <header>
-              <h3 className="text-xl font-semibold">{game.name}</h3>
-              {game.length && (
-                <p className="text-light text-xs mt-1 text-gray-600">
-                  about {game.length} hours
-                </p>
-              )}
-            </header>
-          </div>
+          <Link href={`/game/${game.id}`} key={game.id}>
+            <div className="border rounded-2xl p-6 mb-4">
+              <header>
+                <h3 className="text-xl font-semibold">{game.name}</h3>
+                {game.length && (
+                  <p className="text-light text-xs mt-1 text-gray-600">
+                    about {game.length} hours
+                  </p>
+                )}
+              </header>
+            </div>
+          </Link>
         ))
       )}
     </div>
