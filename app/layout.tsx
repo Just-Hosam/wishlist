@@ -1,16 +1,15 @@
 import AuthProvider from "@/components/layout/AuthProvider"
 import NavigationPopover from "@/components/layout/NavigationPopover"
 import { Toaster } from "@/components/ui/sonner"
-import { authOptions } from "@/lib/auth-options"
-import { Gamepad2 } from "lucide-react"
 import type { Metadata } from "next"
-import { getServerSession } from "next-auth"
+import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Wishlist App",
-  description: "Manage your wishlists with ease.",
+  title: "GamesList - Wishlist App",
+  description:
+    "Manage your game wishlists with ease. Track games you want to play, own, and have completed.",
 }
 
 export default async function RootLayout({
@@ -18,8 +17,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
-
   return (
     <AuthProvider>
       <html className="font-mont text-base" lang="en">
@@ -34,12 +31,14 @@ export default async function RootLayout({
         <body>
           <nav className="px-6 flex justify-between items-center mb-1 gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
             <Link href="/wishlist">
-              <h1 className="flex items-center gap-2 text-xl">
-                <Gamepad2 />
-                GamesList
-              </h1>
+              <Image
+                src="/gameslist-logo.png"
+                alt="GamesList Logo"
+                width={160}
+                height={50}
+              ></Image>
             </Link>
-            <NavigationPopover></NavigationPopover>
+            <NavigationPopover />
           </nav>
           <div className="px-6 pb-12 max-w-[700px] m-auto">{children}</div>
           <Toaster />
