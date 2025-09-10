@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
+import { Gamepad2 } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "GamesList - Wishlist App",
@@ -31,12 +32,10 @@ export default async function RootLayout({
         <body>
           <nav className="px-6 flex justify-between items-center mb-1 gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
             <Link href="/wishlist">
-              <Image
-                src="/gameslist-logo.png"
-                alt="GamesList Logo"
-                width={160}
-                height={50}
-              ></Image>
+              <h1 className="flex items-center gap-2 text-xl">
+                <Gamepad2 />
+                GamesList
+              </h1>
             </Link>
             <NavigationPopover />
           </nav>
