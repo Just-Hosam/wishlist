@@ -12,19 +12,26 @@ import {
 } from "@/components/ui/select"
 import { GameCategory } from "@prisma/client"
 import { CircleCheckBig, FolderCheck, ScrollText, Skull } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export default function NewGame() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
+
+  // Get default category from URL parameter
+  const getDefaultCategory = (): GameCategory => {
+    return searchParams.get("category")?.toLocaleUpperCase() as GameCategory
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     coverImageUrl: "",
     length: "",
-    category: "WISHLIST" as GameCategory,
+    category: getDefaultCategory(),
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,6 +39,16 @@ export default function NewGame() {
 
     if (!formData.name.trim()) {
       toast.error("Game name is required")
+      return
+    }
+
+    if (!(formData.category in GameCategory)) {
+      toast.error("Invalid category selected")
+      return
+    }
+
+    if (!formData.category) {
+      toast.error("Category is required")
       return
     }
 
@@ -65,7 +82,7 @@ export default function NewGame() {
       }
 
       toast.success("Game added successfully!")
-      router.push("/wishlist")
+      router.back()
       router.refresh()
     } catch (error) {
       console.error("Error creating game:", error)
@@ -118,7 +135,7 @@ export default function NewGame() {
 
         <div>
           <label className="text-sm font-semibold" htmlFor="category">
-            Category
+            Category <span className="text-xs">*</span>
           </label>
           <Select
             value={formData.category}
