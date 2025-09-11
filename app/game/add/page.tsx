@@ -11,14 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { GameCategory } from "@prisma/client"
-import {
-  ArrowLeftIcon,
-  CircleCheckBig,
-  FolderCheck,
-  ScrollText,
-  Skull,
-} from "lucide-react"
-import Link from "next/link"
+import { CircleCheckBig, FolderCheck, ScrollText, Skull } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -169,16 +162,15 @@ export default function NewGame() {
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Saving..." : "Save"}
           </Button>
-          <Link href="/wishlist">
-            <Button
-              type="button"
-              className="mt-2 w-full"
-              variant="ghost"
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
-          </Link>
+          <Button
+            type="button"
+            className="mt-2 w-full"
+            variant="ghost"
+            disabled={isLoading}
+            onClick={() => router.back()}
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     </div>
