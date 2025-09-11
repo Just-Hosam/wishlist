@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import prisma from "@/lib/prisma"
+import { GameCategory } from "@prisma/client"
 
 export default async function Graveyard() {
   const session = await getServerSession(authOptions)
@@ -16,7 +17,7 @@ export default async function Graveyard() {
     where: { email: session.user!.email! },
     include: {
       games: {
-        where: { category: "GRAVEYARD" },
+        where: { category: GameCategory.GRAVEYARD },
         orderBy: { createdAt: "desc" },
       },
     },
@@ -37,7 +38,7 @@ export default async function Graveyard() {
           <SearchX size={100} strokeWidth={1} className="mb-6" />
           <h3 className="font-semibold text-xl mb-2">No games yet</h3>
           <p className="mb-6">Get started by adding a game.</p>
-          <Link href="game/add">
+          <Link href={`/game/add?category=${GameCategory.GRAVEYARD}`}>
             <Button>
               <PlusIcon />
               Add Game

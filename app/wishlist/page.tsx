@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
+import { GameCategory } from "@prisma/client"
 import { PlusIcon, ScrollText, SearchX } from "lucide-react"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
@@ -16,7 +17,7 @@ export default async function Wishlist() {
     where: { email: session.user!.email! },
     include: {
       games: {
-        where: { category: "WISHLIST" },
+        where: { category: GameCategory.WISHLIST },
         orderBy: { createdAt: "desc" },
       },
     },
@@ -38,7 +39,7 @@ export default async function Wishlist() {
           <SearchX size={100} strokeWidth={1} className="mb-6" />
           <h3 className="font-semibold text-xl mb-2">No games yet</h3>
           <p className="mb-6">Get started by adding a game.</p>
-          <Link href="game/add">
+          <Link href={`/game/add?category=${GameCategory.WISHLIST}`}>
             <Button>
               <PlusIcon />
               Add Game
