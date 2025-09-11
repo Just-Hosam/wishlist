@@ -42,9 +42,15 @@ export default function DeleteGameButton({ gameId }: Props) {
       toast.success("Game deleted successfully!")
 
       setIsOpen(false)
+
+      // Get the previous page from browser history
+      const previousPath = document.referrer
+        ? new URL(document.referrer).pathname
+        : "/wishlist"
+
+      // Use router.push to navigate to the previous page and refresh
+      router.push(previousPath)
       router.refresh()
-      // router.back()
-      redirect(`/`)
     } catch (error) {
       console.error("Error deleting game:", error)
       toast.error(
