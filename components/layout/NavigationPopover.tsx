@@ -9,10 +9,14 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
-import { Button } from "../ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import AuthCheck from "./AuthCheck"
-import { SignOutButton } from "./SignoutButton"
+import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import AuthCheck from "@/components/layout/AuthCheck"
+import { SignOutButton } from "@/components/layout/SignoutButton"
 
 export default function NavigationPopover() {
   const [popoverOpen, setPopoverOpen] = useState(false)
