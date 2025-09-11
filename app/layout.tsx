@@ -1,11 +1,19 @@
 import AuthProvider from "@/components/layout/AuthProvider"
-import NavigationPopover from "@/components/layout/NavigationPopover"
+import { SignOutButton } from "@/components/layout/SignoutButton"
+import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  CircleCheckBig,
+  FolderCheck,
+  Gamepad2,
+  PlusIcon,
+  ScrollText,
+  Skull,
+} from "lucide-react"
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
-import { Gamepad2 } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "GamesList - Wishlist App",
@@ -30,15 +38,46 @@ export default async function RootLayout({
           />
         </head>
         <body>
-          <nav className="px-6 flex justify-between items-center mb-1 gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
+          <nav className="px-6 flex justify-between items-center gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
             <Link href="/wishlist">
               <h1 className="flex items-center gap-2 text-xl">
                 <Gamepad2 />
                 GamesList
               </h1>
             </Link>
-            <NavigationPopover />
+            <SignOutButton />
           </nav>
+          <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
+            <Tabs defaultValue="wishlist">
+              <TabsList>
+                <Link href="/wishlist">
+                  <TabsTrigger value="wishlist">
+                    <ScrollText />
+                  </TabsTrigger>
+                </Link>
+                <Link href="/owned">
+                  <TabsTrigger value="owned">
+                    <FolderCheck />
+                  </TabsTrigger>
+                </Link>
+                <Link href="/completed">
+                  <TabsTrigger value="completed">
+                    <CircleCheckBig />
+                  </TabsTrigger>
+                </Link>
+                <Link href="/graveyard">
+                  <TabsTrigger value="graveyard">
+                    <Skull />
+                  </TabsTrigger>
+                </Link>
+              </TabsList>
+            </Tabs>
+            <Link href="game/add">
+              <Button size="sm">
+                <PlusIcon />
+              </Button>
+            </Link>
+          </header>
           <div className="px-6 pb-12 max-w-[700px] m-auto">{children}</div>
           <Toaster />
         </body>

@@ -26,16 +26,11 @@ export default async function Completed() {
 
   return (
     <div>
-      <header className="flex justify-between items-center gap-4 pb-8 sticky top-[88px] bg-white">
+      <header className="flex justify-between items-center gap-4 pb-6 sticky top-[88px] bg-white">
         <h2 className="flex items-center gap-3 text-2xl">
           <CircleCheckBig />
           Completed
         </h2>
-        <Link href="game/add">
-          <Button size="icon">
-            <PlusIcon />
-          </Button>
-        </Link>
       </header>
       {completedGames.length === 0 ? (
         <div className="mt-10 flex flex-col items-center justify-center text-center">
