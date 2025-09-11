@@ -49,31 +49,31 @@ export default async function RootLayout({
           </nav>
           <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
             <Tabs defaultValue="wishlist">
-              <TabsList>
+              <TabsList className="h-11 p-2">
                 <Link href="/wishlist">
-                  <TabsTrigger value="wishlist">
+                  <TabsTrigger className="px-3 py-2" value="wishlist">
                     <ScrollText />
                   </TabsTrigger>
                 </Link>
                 <Link href="/owned">
-                  <TabsTrigger value="owned">
+                  <TabsTrigger className="px-3 py-2" value="owned">
                     <FolderCheck />
                   </TabsTrigger>
                 </Link>
                 <Link href="/completed">
-                  <TabsTrigger value="completed">
+                  <TabsTrigger className="px-3 py-2" value="completed">
                     <CircleCheckBig />
                   </TabsTrigger>
                 </Link>
                 <Link href="/graveyard">
-                  <TabsTrigger value="graveyard">
+                  <TabsTrigger className="px-3 py-2" value="graveyard">
                     <Skull />
                   </TabsTrigger>
                 </Link>
               </TabsList>
             </Tabs>
             <Link href="game/add">
-              <Button size="sm">
+              <Button size="icon">
                 <PlusIcon />
               </Button>
             </Link>
