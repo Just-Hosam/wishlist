@@ -59,3 +59,66 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Get game ID from query parameters
+    const { searchParams } = new URL(request.url)
+    const gameId = searchParams.get("id")
+
+    if (!gameId) {
+      return NextResponse.json(
+        { error: "Game ID is required" },
+        { status: 400 }
+      )
+    }
+
+    // Find user by email
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    // Check if game exists and belongs to the user
+    const existingGame = await prisma.game.findFirst({
+      where: {
+        id: gameId,
+        userId: user.id,
+      },
+    })
+
+    if (!existingGame) {
+      return NextResponse.json(
+        { error: "Game not found or you don't have permission to delete it" },
+        { status: 404 }
+      )
+    }
+
+    // Delete the game
+    await prisma.game.delete({
+      where: {
+        id: gameId,
+      },
+    })
+
+    return NextResponse.json(
+      { message: "Game deleted successfully" },
+      { status: 200 }
+    )
+  } catch (error) {
+    console.error("Error deleting game:", error)
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}
