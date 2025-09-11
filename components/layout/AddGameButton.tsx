@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { useActiveTab } from "@/lib/hooks/useActiveTab"
+import { useActiveTab } from "@/hooks/useActiveTab"
 
 export default function AddGameButton() {
   const activeTab = useActiveTab()

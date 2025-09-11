@@ -3,7 +3,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CircleCheckBig, FolderCheck, ScrollText, Skull } from "lucide-react"
 import Link from "next/link"
-import { useActiveTab } from "@/lib/hooks/useActiveTab"
+import { useActiveTab } from "@/hooks/useActiveTab"
 
 export default function NavigationTabs() {
   const activeTab = useActiveTab()
