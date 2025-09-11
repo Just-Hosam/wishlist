@@ -14,6 +14,9 @@ import {
 import type { Metadata } from "next"
 import Link from "next/link"
 import "./globals.css"
+import { GameCategory } from "@prisma/client"
+import NavigationTabs from "@/components/layout/NavigationTabs"
+import AddGameButton from "@/components/layout/AddGameButton"
 
 export const metadata: Metadata = {
   title: "GamesList - Wishlist App",
@@ -39,7 +42,7 @@ export default async function RootLayout({
         </head>
         <body>
           <nav className="px-6 flex justify-between items-center gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
-            <Link href="/wishlist">
+            <Link href={`/game/add?category=`}>
               <h1 className="flex items-center gap-2 text-xl">
                 <Gamepad2 />
                 GamesList
@@ -48,35 +51,8 @@ export default async function RootLayout({
             <SignOutButton />
           </nav>
           <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
-            <Tabs defaultValue="wishlist">
-              <TabsList className="h-11 p-2">
-                <Link href="/wishlist">
-                  <TabsTrigger className="px-3 py-2" value="wishlist">
-                    <ScrollText />
-                  </TabsTrigger>
-                </Link>
-                <Link href="/owned">
-                  <TabsTrigger className="px-3 py-2" value="owned">
-                    <FolderCheck />
-                  </TabsTrigger>
-                </Link>
-                <Link href="/completed">
-                  <TabsTrigger className="px-3 py-2" value="completed">
-                    <CircleCheckBig />
-                  </TabsTrigger>
-                </Link>
-                <Link href="/graveyard">
-                  <TabsTrigger className="px-3 py-2" value="graveyard">
-                    <Skull />
-                  </TabsTrigger>
-                </Link>
-              </TabsList>
-            </Tabs>
-            <Link href="game/add">
-              <Button size="icon">
-                <PlusIcon />
-              </Button>
-            </Link>
+            <NavigationTabs />
+            <AddGameButton />
           </header>
           <div className="px-6 pb-12 max-w-[700px] m-auto">{children}</div>
           <Toaster />
