@@ -10,28 +10,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTabContext } from "@/contexts/TabContext"
 import { GameCategory } from "@prisma/client"
 import { CircleCheckBig, FolderCheck, ScrollText, Skull } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export default function NewGame() {
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const { activeTab } = useTabContext()
   const [isLoading, setIsLoading] = useState(false)
-
-  // Get default category from URL parameter
-  const getDefaultCategory = (): GameCategory => {
-    return searchParams.get("category")?.toLocaleUpperCase() as GameCategory
-  }
-
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     coverImageUrl: "",
     length: "",
-    category: getDefaultCategory(),
+    category: activeTab,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {

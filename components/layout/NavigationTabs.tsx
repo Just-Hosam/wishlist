@@ -3,31 +3,41 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CircleCheckBig, FolderCheck, ScrollText, Skull } from "lucide-react"
 import Link from "next/link"
-import { useActiveTab } from "@/hooks/useActiveTab"
+import { useTabContext } from "@/contexts/TabContext"
+import { GameCategory } from "@prisma/client"
 
 export default function NavigationTabs() {
-  const activeTab = useActiveTab()
+  const { activeTab, setActiveTab } = useTabContext()
 
   return (
     <Tabs value={activeTab}>
       <TabsList className="h-11 p-2">
-        <Link href="/wishlist">
-          <TabsTrigger className="px-3 py-2" value="wishlist">
+        <Link
+          href="/wishlist"
+          onClick={() => setActiveTab(GameCategory.WISHLIST)}
+        >
+          <TabsTrigger className="px-3 py-2" value="WISHLIST">
             <ScrollText />
           </TabsTrigger>
         </Link>
-        <Link href="/owned">
-          <TabsTrigger className="px-3 py-2" value="owned">
+        <Link href="/owned" onClick={() => setActiveTab(GameCategory.OWNED)}>
+          <TabsTrigger className="px-3 py-2" value="OWNED">
             <FolderCheck />
           </TabsTrigger>
         </Link>
-        <Link href="/completed">
-          <TabsTrigger className="px-3 py-2" value="completed">
+        <Link
+          href="/completed"
+          onClick={() => setActiveTab(GameCategory.COMPLETED)}
+        >
+          <TabsTrigger className="px-3 py-2" value="COMPLETED">
             <CircleCheckBig />
           </TabsTrigger>
         </Link>
-        <Link href="/graveyard">
-          <TabsTrigger className="px-3 py-2" value="graveyard">
+        <Link
+          href="/graveyard"
+          onClick={() => setActiveTab(GameCategory.GRAVEYARD)}
+        >
+          <TabsTrigger className="px-3 py-2" value="GRAVEYARD">
             <Skull />
           </TabsTrigger>
         </Link>
