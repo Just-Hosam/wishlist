@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { Trash2 } from "lucide-react"
+import { useTabContext } from "@/contexts/TabContext"
 
 interface Props {
   gameId: string
@@ -24,6 +25,7 @@ interface Props {
 export default function DeleteGameButton({ gameId }: Props) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const { activeTab } = useTabContext()
   const router = useRouter()
 
   const deleteGame = async () => {
@@ -43,13 +45,7 @@ export default function DeleteGameButton({ gameId }: Props) {
 
       setIsOpen(false)
 
-      // Get the previous page from browser history
-      const previousPath = document.referrer
-        ? new URL(document.referrer).pathname
-        : "/wishlist"
-
-      // Use router.push to navigate to the previous page and refresh
-      router.push(previousPath)
+      router.push("/" + activeTab.toLocaleLowerCase())
       router.refresh()
     } catch (error) {
       console.error("Error deleting game:", error)

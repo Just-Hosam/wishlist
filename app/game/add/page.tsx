@@ -77,7 +77,7 @@ export default function NewGame() {
       }
 
       toast.success("Game added successfully!")
-      router.back()
+      router.push("/" + activeTab.toLocaleLowerCase())
       router.refresh()
     } catch (error) {
       console.error("Error creating game:", error)
