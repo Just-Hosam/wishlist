@@ -38,7 +38,7 @@ export default async function Owned() {
           <SearchX size={100} strokeWidth={1} className="mb-6" />
           <h3 className="font-semibold text-xl mb-2">No games yet</h3>
           <p className="mb-6">Get started by adding a game.</p>
-          <Link href={`/game/add?category=${GameCategory.OWNED}`}>
+          <Link href="/game/add">
             <Button>
               <PlusIcon />
               Add Game
