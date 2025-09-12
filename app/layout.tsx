@@ -8,6 +8,8 @@ import { Gamepad2, PlusIcon } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import "./globals.css"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth-options"
 
 export const metadata: Metadata = {
   title: "GamesList - Wishlist App",
@@ -20,6 +22,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getServerSession(authOptions)
+
   return (
     <AuthProvider>
       <TabProvider>
@@ -38,7 +42,13 @@ export default async function RootLayout({
                 <Gamepad2 />
                 GamesList
               </h1>
-              <SignOutButton />
+              <div className="flex items-center gap-3">
+                <p className="block md:hidden">
+                  {session?.user?.name?.split(" ")[0]}
+                </p>
+                <p className="hidden md:block">{session?.user?.name}</p>
+                <SignOutButton />
+              </div>
             </nav>
             <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
               <NavigationTabs />
