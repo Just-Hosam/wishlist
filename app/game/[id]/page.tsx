@@ -31,7 +31,7 @@ export default async function Game({ params }: Props) {
             </PopoverTrigger>
             <PopoverContent className="w-fit mr-6 md:mr-0">
               <div className="flex flex-col">
-                <Link href={`/game/edit/${id}`}>
+                <Link href={`/game/${id}/edit`}>
                   <Button className="w-full justify-start" variant="ghost">
                     <Pencil />
                     Edit

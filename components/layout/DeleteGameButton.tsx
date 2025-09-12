@@ -32,7 +32,7 @@ export default function DeleteGameButton({ gameId }: Props) {
     try {
       setIsDeleting(true)
 
-      const response = await fetch(`/api/game?id=${gameId}`, {
+      const response = await fetch(`/api/game/${gameId}`, {
         method: "DELETE",
       })
 
