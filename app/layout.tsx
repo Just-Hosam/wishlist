@@ -52,7 +52,7 @@ export default async function RootLayout({
             </nav>
             <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
               <NavigationTabs />
-              <Link href="game/add">
+              <Link href="/game/add">
                 <Button size="icon">
                   <PlusIcon />
                 </Button>

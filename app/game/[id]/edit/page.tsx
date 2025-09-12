@@ -9,7 +9,7 @@ interface Props {
 
 export default async function EditGame({ params }: Props) {
   const { id } = await params
-  
+
   // Fetch the game data
   const game = await prisma.game.findUnique({
     where: { id },
