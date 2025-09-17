@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { authOptions } from "@/lib/auth-options"
-import { FolderCheck, PlusIcon, SearchX } from "lucide-react"
+import { PlusIcon, SearchX } from "lucide-react"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -26,13 +26,7 @@ export default async function Owned() {
   const ownedGames = user?.games || []
 
   return (
-    <div>
-      <header className="flex justify-between items-center gap-4 pb-6 sticky top-[88px] bg-white">
-        <h2 className="flex items-center gap-3 text-2xl">
-          <FolderCheck />
-          Owned
-        </h2>
-      </header>
+    <>
       {ownedGames.length === 0 ? (
         <div className="mt-10 flex flex-col items-center justify-center text-center">
           <SearchX size={100} strokeWidth={1} className="mb-6" />
@@ -61,6 +55,6 @@ export default async function Owned() {
           </Link>
         ))
       )}
-    </div>
+    </>
   )
 }
