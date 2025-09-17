@@ -36,6 +36,10 @@ export default async function RootLayout({
               href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
               rel="stylesheet"
             />
+            {/* <script
+              crossOrigin="anonymous"
+              src="//unpkg.com/react-scan/dist/auto.global.js"
+            ></script> */}
           </head>
           <body>
             <nav className="px-6 flex justify-between items-center gap-6 max-w-[1200px] m-auto py-6 top-0 left-0 right-0 bg-white sticky">
