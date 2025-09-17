@@ -38,7 +38,7 @@ export default async function RootLayout({
             />
           </head>
           <body>
-            <nav className="px-6 flex justify-between items-center gap-6 max-w-[1200px] m-auto pt-6 pb-8  top-0 left-0 right-0 bg-white sticky">
+            <nav className="px-6 flex justify-between items-center gap-6 max-w-[1200px] m-auto py-6 top-0 left-0 right-0 bg-white sticky">
               <h1 className="flex items-center gap-2 text-xl">
                 <Gamepad2 />
                 GamesList
@@ -54,7 +54,7 @@ export default async function RootLayout({
               </AuthCheck>
             </nav>
             <AuthCheck>
-              <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
+              <header className="max-w-[700px] m-auto px-6 mb-8 flex justify-between items-center">
                 <NavigationTabs />
                 <Link href="/game/add">
                   <Button size="icon">
