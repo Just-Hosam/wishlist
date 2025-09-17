@@ -1,5 +1,5 @@
-import { LoaderCircle } from "lucide-react"
+import LoadingSpinner from "@/components/layout/LoadingSpinner"
 
 export default function Loading() {
-  return <LoaderCircle size={50} className=" animate-spin my-12 mx-auto" />
+  return <LoadingSpinner />
 }
