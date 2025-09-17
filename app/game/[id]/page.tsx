@@ -20,16 +20,16 @@ export default async function Game({ params }: Props) {
 
   return (
     <div>
-      <div className="pb-4 flex items-center justify-between gap-4 sticky bg-white top-[88px]">
+      <div className="sticky top-[88px] flex items-center justify-between gap-4 bg-white pb-4">
         <BackButton />
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <Popover>
             <PopoverTrigger asChild>
               <Button size="icon" variant="ghost">
                 <EllipsisVertical />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-fit mr-6 md:mr-0">
+            <PopoverContent className="mr-6 w-fit md:mr-0">
               <div className="flex flex-col">
                 <Link href={`/game/${id}/edit`}>
                   <Button className="w-full justify-start" variant="ghost">
@@ -46,7 +46,7 @@ export default async function Game({ params }: Props) {
       <header>
         <h2 className="text-3xl font-semibold">{game?.name}</h2>
         {game?.length && (
-          <div className="flex gap-1 text-gray-600 text-sm items-center mt-2">
+          <div className="mt-2 flex items-center gap-1 text-sm text-gray-600">
             <Clock size={14} /> {game?.length} hours
           </div>
         )}

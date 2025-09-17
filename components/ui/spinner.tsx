@@ -10,7 +10,7 @@ export default function Spinner({ size = 50, className }: SpinnerProps) {
   return (
     <LoaderCircle
       size={size}
-      className={cn("animate-spin my-12 mx-auto", className)}
+      className={cn("mx-auto my-12 animate-spin", className)}
     />
   )
 }

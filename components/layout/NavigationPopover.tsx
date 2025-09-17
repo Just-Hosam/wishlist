@@ -25,7 +25,7 @@ export default function NavigationPopover() {
             </Button>
           </PopoverTrigger>
         </AuthCheck>
-        <PopoverContent className="w-fit mr-6">
+        <PopoverContent className="mr-6 w-fit">
           <div className="flex flex-col">
             <Link href="/wishlist" onClick={() => setPopoverOpen(false)}>
               <Button className="w-full justify-start" variant="ghost">

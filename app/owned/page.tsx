@@ -30,7 +30,7 @@ export default async function Owned() {
       {ownedGames.length === 0 ? (
         <div className="mt-10 flex flex-col items-center justify-center text-center">
           <SearchX size={100} strokeWidth={1} className="mb-6" />
-          <h3 className="font-semibold text-xl mb-2">No games yet</h3>
+          <h3 className="mb-2 text-xl font-semibold">No games yet</h3>
           <p className="mb-6">Get started by adding a game.</p>
           <Link href="/game/add">
             <Button>
@@ -40,13 +40,13 @@ export default async function Owned() {
           </Link>
         </div>
       ) : (
-        ownedGames.map(game => (
+        ownedGames.map((game) => (
           <Link href={`/game/${game.id}`} key={game.id}>
-            <div key={game.id} className="border rounded-2xl p-6 mb-4">
+            <div key={game.id} className="mb-4 rounded-2xl border p-6">
               <header>
                 <h3 className="text-xl font-semibold">{game.name}</h3>
                 {game.length && (
-                  <p className="text-light text-xs mt-1 text-gray-600">
+                  <p className="text-light mt-1 text-xs text-gray-600">
                     about {game.length} hours
                   </p>
                 )}

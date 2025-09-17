@@ -12,7 +12,7 @@ export default async function Home() {
 
   return (
     <AuthCheck showIfNotAuthenticated>
-      <div className="h-[500px]  flex flex-col items-center justify-center text-center">
+      <div className="flex h-[500px] flex-col items-center justify-center text-center">
         <h2 className="mb-3 text-3xl font-semibold">Welcome!</h2>
         <p className="mb-7">Login to manage your wishlist.</p>
 

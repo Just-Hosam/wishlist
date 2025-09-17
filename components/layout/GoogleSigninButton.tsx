@@ -10,7 +10,7 @@ export function GoogleSigninButton() {
       <Button
         onClick={() => signIn("google")}
         variant="outline"
-        className="p-6 gap-3 rounded-lg"
+        className="gap-3 rounded-lg p-6"
       >
         <Image
           src="/google-logo.png"

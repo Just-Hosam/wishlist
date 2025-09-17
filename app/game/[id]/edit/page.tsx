@@ -27,7 +27,7 @@ export default async function EditGame({ params }: Props) {
 
   return (
     <>
-      <div className="flex items-center gap-2 mb-4">
+      <div className="mb-4 flex items-center gap-2">
         <BackButton />
         <h3 className="text-lg font-medium">Edit Game</h3>
       </div>

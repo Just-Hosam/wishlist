@@ -50,7 +50,7 @@ export default function DeleteGameButton({ gameId }: Props) {
     } catch (error) {
       console.error("Error deleting game:", error)
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete game"
+        error instanceof Error ? error.message : "Failed to delete game",
       )
     } finally {
       setIsDeleting(false)

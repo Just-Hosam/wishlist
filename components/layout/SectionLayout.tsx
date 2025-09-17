@@ -15,7 +15,7 @@ export default function SectionLayout({
 }: SectionLayoutProps) {
   return (
     <div className={className}>
-      <header className="flex justify-between items-center gap-4 pb-4 sticky top-[88px] bg-white">
+      <header className="sticky top-[88px] flex items-center justify-between gap-4 bg-white pb-4">
         <h2 className="flex items-center gap-3 text-2xl">
           <Icon />
           {title}

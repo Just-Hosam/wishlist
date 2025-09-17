@@ -97,7 +97,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         }
 
         throw new Error(
-          error.error || `Failed to ${isEdit ? "update" : "create"} game`
+          error.error || `Failed to ${isEdit ? "update" : "create"} game`,
         )
       }
 
@@ -110,7 +110,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       toast.error(
         error instanceof Error
           ? error.message
-          : `Failed to ${isEdit ? "update" : "create"} game`
+          : `Failed to ${isEdit ? "update" : "create"} game`,
       )
     } finally {
       setIsLoading(false)
@@ -129,8 +129,8 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           className="mt-2"
           placeholder="e.g. The Last Faith"
           value={formData.name}
-          onChange={e =>
-            setFormData(prev => ({ ...prev, name: e.target.value }))
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, name: e.target.value }))
           }
           required
         />
@@ -147,8 +147,8 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           placeholder="e.g. 20"
           min="0"
           value={formData.length}
-          onChange={e =>
-            setFormData(prev => ({ ...prev, length: e.target.value }))
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, length: e.target.value }))
           }
         />
       </div>
@@ -160,7 +160,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         <Select
           value={formData.category}
           onValueChange={(value: GameCategory) =>
-            setFormData(prev => ({ ...prev, category: value }))
+            setFormData((prev) => ({ ...prev, category: value }))
           }
         >
           <SelectTrigger className="mt-2 w-full">
@@ -195,7 +195,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </Select>
       </div>
 
-      <div className="flex flex-col items-stretch mt-8">
+      <div className="mt-8 flex flex-col items-stretch">
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Saving..." : isEdit ? "Update" : "Save"}
         </Button>
