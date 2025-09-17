@@ -10,6 +10,7 @@ import Link from "next/link"
 import "./globals.css"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth-options"
+import AuthCheck from "@/components/layout/AuthCheck"
 
 export const metadata: Metadata = {
   title: "GamesList - Wishlist App",
@@ -42,22 +43,26 @@ export default async function RootLayout({
                 <Gamepad2 />
                 GamesList
               </h1>
-              <div className="flex items-center gap-3">
-                <p className="block md:hidden">
-                  {session?.user?.name?.split(" ")[0]}
-                </p>
-                <p className="hidden md:block">{session?.user?.name}</p>
-                <SignOutButton />
-              </div>
+              <AuthCheck>
+                <div className="flex items-center gap-3">
+                  <p className="block md:hidden">
+                    {session?.user?.name?.split(" ")[0]}
+                  </p>
+                  <p className="hidden md:block">{session?.user?.name}</p>
+                  <SignOutButton />
+                </div>
+              </AuthCheck>
             </nav>
-            <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
-              <NavigationTabs />
-              <Link href="/game/add">
-                <Button size="icon">
-                  <PlusIcon />
-                </Button>
-              </Link>
-            </header>
+            <AuthCheck>
+              <header className="max-w-[700px] m-auto px-6 mb-6 flex justify-between items-center">
+                <NavigationTabs />
+                <Link href="/game/add">
+                  <Button size="icon">
+                    <PlusIcon />
+                  </Button>
+                </Link>
+              </header>
+            </AuthCheck>
             <div className="px-6 pb-12 max-w-[700px] m-auto">{children}</div>
             <Toaster />
           </body>
