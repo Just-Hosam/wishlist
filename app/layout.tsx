@@ -1,16 +1,16 @@
+import AuthCheck from "@/components/layout/AuthCheck"
 import AuthProvider from "@/components/layout/AuthProvider"
+import NavigationPopover from "@/components/layout/NavigationPopover"
 import NavigationTabs from "@/components/layout/NavigationTabs"
-import { SignOutButton } from "@/components/layout/SignoutButton"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
+import { authOptions } from "@/lib/auth-options"
 import { Gamepad2, PlusIcon } from "lucide-react"
 import type { Metadata } from "next"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
 import "./globals.css"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth-options"
-import AuthCheck from "@/components/layout/AuthCheck"
 
 export const metadata: Metadata = {
   title: "GamesList",
@@ -44,13 +44,7 @@ export default async function RootLayout({
                 GamesList
               </h1>
               <AuthCheck>
-                <div className="flex items-center gap-3">
-                  <p className="block md:hidden">
-                    {session?.user?.name?.split(" ")[0]}
-                  </p>
-                  <p className="hidden md:block">{session?.user?.name}</p>
-                  <SignOutButton />
-                </div>
+                <NavigationPopover />
               </AuthCheck>
             </nav>
             <AuthCheck>
