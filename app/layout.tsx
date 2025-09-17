@@ -13,7 +13,7 @@ import { authOptions } from "@/lib/auth-options"
 import AuthCheck from "@/components/layout/AuthCheck"
 
 export const metadata: Metadata = {
-  title: "GamesList - Wishlist App",
+  title: "GamesList",
   description:
     "Manage your game wishlists with ease. Track games you want to play, own, and have completed.",
 }
@@ -64,7 +64,7 @@ export default async function RootLayout({
               </header>
             </AuthCheck>
             <div className="px-6 pb-12 max-w-[700px] m-auto">{children}</div>
-            <Toaster />
+            <Toaster position="top-center" />
           </body>
         </html>
       </TabProvider>
