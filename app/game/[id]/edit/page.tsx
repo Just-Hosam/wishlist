@@ -26,10 +26,12 @@ export default async function EditGame({ params }: Props) {
   }
 
   return (
-    <div>
-      <BackButton className="mb-4" />
-      <h1 className="text-2xl font-semibold mb-6">Edit Game</h1>
+    <>
+      <div className="flex items-center gap-2 mb-4">
+        <BackButton />
+        <h3 className="text-lg font-medium">Edit Game</h3>
+      </div>
       <GameForm game={game} isEdit={true} />
-    </div>
+    </>
   )
 }
