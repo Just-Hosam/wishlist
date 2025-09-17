@@ -1,15 +1,12 @@
 import { LoaderCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-interface LoadingSpinnerProps {
+interface SpinnerProps {
   size?: number
   className?: string
 }
 
-export default function LoadingSpinner({
-  size = 50,
-  className,
-}: LoadingSpinnerProps) {
+export default function Spinner({ size = 50, className }: SpinnerProps) {
   return (
     <LoaderCircle
       size={size}
