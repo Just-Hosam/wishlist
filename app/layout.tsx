@@ -54,7 +54,7 @@ export default async function RootLayout({
               </AuthCheck>
             </nav>
             <AuthCheck>
-              <header className="max-w-[700px] m-auto px-6 mb-8 flex justify-between items-center">
+              <header className="max-w-[700px] m-auto px-6 pb-7 flex justify-between items-center">
                 <NavigationTabs />
                 <Link href="/game/add">
                   <Button size="icon">
