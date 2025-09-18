@@ -11,7 +11,15 @@ import {
 } from "@/components/ui/select"
 import { useTabContext } from "@/contexts/TabContext"
 import { GameCategory } from "@prisma/client"
-import { CircleCheckBig, FolderCheck, ScrollText, Skull } from "lucide-react"
+import {
+  CircleCheckBig,
+  FolderCheck,
+  Pencil,
+  Plus,
+  Save,
+  ScrollText,
+  Skull,
+} from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
@@ -119,6 +127,17 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className="sticky top-[88px] flex items-center justify-between bg-white pb-4">
+        <h2 className="flex items-center gap-3 text-2xl">
+          {isEdit ? <Pencil /> : <Plus />}
+          {isEdit ? "Edit" : "Add"}
+        </h2>
+        <Button type="submit" disabled={isLoading}>
+          <Save />
+          {isLoading ? "Saving..." : "Save"}
+        </Button>
+      </div>
+
       <div className="mb-4">
         <label className="text-sm font-semibold" htmlFor="name">
           Game Name <span className="text-xs">*</span>
@@ -193,21 +212,6 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
             </SelectItem>
           </SelectContent>
         </Select>
-      </div>
-
-      <div className="mt-8 flex flex-col items-stretch">
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Saving..." : isEdit ? "Update" : "Save"}
-        </Button>
-        <Button
-          type="button"
-          className="mt-2 w-full"
-          variant="ghost"
-          disabled={isLoading}
-          onClick={() => router.back()}
-        >
-          Cancel
-        </Button>
       </div>
     </form>
   )

@@ -15,12 +15,10 @@ export default function SectionLayout({
 }: SectionLayoutProps) {
   return (
     <div className={className}>
-      <header className="sticky top-[88px] flex items-center justify-between gap-4 bg-white pb-4">
-        <h2 className="flex items-center gap-3 text-2xl">
-          <Icon />
-          {title}
-        </h2>
-      </header>
+      <h2 className="sticky top-[88px] flex min-h-14 items-center gap-3 bg-white pb-4 text-2xl">
+        <Icon />
+        {title}
+      </h2>
       {children}
     </div>
   )

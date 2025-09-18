@@ -1,4 +1,3 @@
-import { BackButton } from "@/components/layout/BackButton"
 import GameForm from "@/components/GameForm"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
@@ -25,13 +24,5 @@ export default async function EditGame({ params }: Props) {
     notFound()
   }
 
-  return (
-    <>
-      <div className="mb-4 flex items-center gap-2">
-        <BackButton />
-        <h3 className="text-lg font-medium">Edit Game</h3>
-      </div>
-      <GameForm game={game} isEdit={true} />
-    </>
-  )
+  return <GameForm game={game} isEdit={true} />
 }
