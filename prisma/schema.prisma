@@ -72,6 +72,11 @@ enum GameCategory {
   GRAVEYARD
 }
 
+enum Platform {
+  NINTENDO
+  PLAYSTATION
+}
+
 model Game {
   id                 String        @id @default(cuid())
   name               String
@@ -84,6 +89,9 @@ model Game {
   userId             String
   user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Price relationships
+  prices             GamePrice[]
+
   // bookkeeping
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
@@ -91,4 +99,27 @@ model Game {
   @@index([userId, category])
   @@index([name])
   @@index([userId, createdAt])
+}
+
+model GamePrice {
+  id            String   @id @default(cuid())
+  gameId        String
+  game          Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  platform      Platform
+  externalId    String   // NSUID, etc.
+
+  countryCode   String?  @db.Char(2)
+  currencyCode  String?  @db.Char(3)
+
+  regularPrice  Decimal? @db.Decimal(10, 2)
+  currentPrice  Decimal? @db.Decimal(10, 2)
+
+  lastFetchedAt DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([gameId, platform])
+  @@unique([platform, externalId])
+  @@index([gameId])
 }
