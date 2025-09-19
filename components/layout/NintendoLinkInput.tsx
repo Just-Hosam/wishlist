@@ -78,11 +78,11 @@ export default function NintendoLinkInput({
   const Price = () => {
     return (
       <div className="flex items-center gap-3">
-        <span className="text-xl font-medium">
+        <span className="">
           {gameInfo?.discounted_price || gameInfo?.raw_price}
         </span>
         {gameInfo?.discounted_price && (
-          <span className="text-sm font-medium text-muted-foreground line-through">
+          <span className="text-sm text-muted-foreground line-through">
             {gameInfo?.raw_price}
           </span>
         )}
@@ -99,24 +99,25 @@ export default function NintendoLinkInput({
         <Image
           src="/nintendo-switch.svg"
           alt="Nintendo Switch Logo"
-          width={24}
-          height={24}
+          width={18}
+          height={18}
         />
         Nintendo
-        {gameInfo && (
-          <CircleCheck className="rounded-full bg-green-600 text-white" />
-        )}
       </label>
 
       {gameInfo ? (
-        <div className="flex items-center justify-between">
-          <Price />
-          <Button variant="outline" size="icon" onClick={clearGameInfo}>
-            <X />
-          </Button>
+        <div className="flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input px-2">
+          <div className="flex items-center gap-2">
+            <CircleCheck
+              size={19}
+              className="rounded-full bg-green-600 text-white"
+            />
+            <Price />
+          </div>
+          <X className="p-[3px]" onClick={clearGameInfo} />
         </div>
       ) : (
-        <div className="mt-3 flex flex-col gap-2 md:flex-row">
+        <div className="mt-3 flex gap-2">
           <Input
             id="nintendo-url"
             type="url"
@@ -129,13 +130,14 @@ export default function NintendoLinkInput({
             type="button"
             onClick={handleFetchGameInfo}
             disabled={isLoading || !url.trim()}
-            className="w-full flex-shrink-0 bg-destructive md:w-fit"
+            className="w-fit bg-destructive"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                <Link className="h-4 w-4" /> Link
+                <Link className="h-4 w-4" />{" "}
+                <span className="hidden md:block">Link</span>
               </>
             )}
           </Button>

@@ -148,7 +148,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </Button>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="text-sm font-semibold" htmlFor="name">
           Game Name <span className="text-xs">*</span>
         </label>
@@ -165,7 +165,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="text-sm font-semibold" htmlFor="length">
           Game Length (hours)
         </label>
@@ -182,7 +182,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-5">
         <label className="text-sm font-semibold" htmlFor="category">
           Category <span className="text-xs">*</span>
         </label>
@@ -223,12 +223,9 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           </SelectContent>
         </Select>
       </div>
-      <div className="mb-4 text-sm font-semibold">Stores</div>
-
       <NintendoLinkInput
         onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
         onGameInfoCleared={() => setNintendoInfo(null)}
-        className="rounded-xl border p-4"
       />
     </form>
   )
