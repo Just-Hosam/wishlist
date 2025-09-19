@@ -51,7 +51,6 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
     category: activeTab
   })
 
-  // Initialize form data when component mounts or game prop changes
   useEffect(() => {
     if (game) {
       setFormData({
@@ -114,19 +113,16 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       })
 
       if (!response.ok) {
-        const responseText = await response.text()
-        console.error("Response not ok:", response.status, responseText)
-
-        let error
         try {
-          error = JSON.parse(responseText)
-        } catch (e) {
-          throw new Error(`Server error (${response.status}): ${responseText}`)
+          const errorData = await response.json()
+          throw new Error(
+            errorData.error ||
+              errorData.message ||
+              `Failed to ${isEdit ? "update" : "create"} game`
+          )
+        } catch (parseError) {
+          throw new Error(`Failed to ${isEdit ? "update" : "create"} game`)
         }
-
-        throw new Error(
-          error.error || `Failed to ${isEdit ? "update" : "create"} game`
-        )
       }
 
       toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)

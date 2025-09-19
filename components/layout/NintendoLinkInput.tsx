@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
-import { Loader2, Link, ExternalLink } from "lucide-react"
+import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -50,6 +50,7 @@ export default function NintendoLinkInput({
 
       const info = await response.json()
       setGameInfo(info)
+      console.log("info :>>", info)
 
       onGameInfoFound?.(info)
       toast.success("Game information fetched successfully!")
@@ -70,103 +71,66 @@ export default function NintendoLinkInput({
     setUrl("")
   }
 
-  return (
-    <div className={className}>
-      <div className="space-y-4">
-        <div>
-          <label className="text-sm font-semibold" htmlFor="nintendo-url">
-            Nintendo Store URL
-          </label>
-          <p className="text-xs text-muted-foreground">
-            Enter a Nintendo store URL and connect to fetch game information
-            before submitting the form.
-          </p>
-          <div className="mt-3 flex flex-col gap-2">
-            <Input
-              id="nintendo-url"
-              type="url"
-              placeholder="www.nintendo.com/en-ca/..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              disabled={isLoading}
-            />
-            <Button
-              type="button"
-              onClick={handleFetchGameInfo}
-              disabled={isLoading || !url.trim()}
-              className="w-full flex-shrink-0 bg-red-600"
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  <Link className="h-4 w-4" /> Connect Nintendo
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {gameInfo && (
-          <div className="rounded-lg border bg-muted/50 p-4">
-            <div className="flex items-start justify-between">
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold">Game Information</h4>
-                <div className="space-y-1 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">Price:</span>
-                    <span
-                      className={
-                        gameInfo.onSale
-                          ? "text-muted-foreground line-through"
-                          : ""
-                      }
-                    >
-                      {gameInfo.raw_price}
-                    </span>
-                    {gameInfo.onSale && gameInfo.discounted_price && (
-                      <span className="font-medium text-green-600">
-                        {gameInfo.discounted_price}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">Currency:</span>
-                    <span>{gameInfo.currency}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">Region:</span>
-                    <span>{gameInfo.country}</span>
-                  </div>
-                  {gameInfo.onSale && (
-                    <div className="text-xs font-medium text-green-600">
-                      🎉 On Sale!
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="flex gap-1">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => window.open(url, "_blank")}
-                >
-                  <ExternalLink className="h-3 w-3" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearGameInfo}
-                >
-                  ✕
-                </Button>
-              </div>
-            </div>
-          </div>
+  const Price = () => {
+    return (
+      <div className="flex items-center gap-3">
+        <span className="text-xl font-medium">
+          {gameInfo?.discounted_price || gameInfo?.raw_price}
+        </span>
+        {gameInfo?.discounted_price && (
+          <span className="text-sm font-medium text-muted-foreground line-through">
+            {gameInfo?.raw_price}
+          </span>
         )}
       </div>
+    )
+  }
+
+  return (
+    <div className={className}>
+      <label
+        className="mb-2 flex items-center gap-2 text-sm font-semibold"
+        htmlFor="nintendo-url"
+      >
+        Nintendo Store
+        {gameInfo && (
+          <CircleCheck className="rounded-full bg-green-600 text-white" />
+        )}
+      </label>
+
+      {gameInfo ? (
+        <div className="flex items-center justify-between">
+          <Price />
+          <Button variant="outline" size="icon" onClick={clearGameInfo}>
+            <X />
+          </Button>
+        </div>
+      ) : (
+        <div className="mt-3 flex flex-col gap-2 md:flex-row">
+          <Input
+            id="nintendo-url"
+            type="url"
+            placeholder="www.nintendo.com/en-ca/..."
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            disabled={isLoading}
+          />
+          <Button
+            type="button"
+            onClick={handleFetchGameInfo}
+            disabled={isLoading || !url.trim()}
+            className="w-full flex-shrink-0 bg-destructive md:w-fit"
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <Link className="h-4 w-4" /> Link
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
