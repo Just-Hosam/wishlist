@@ -26,6 +26,10 @@ export default async function Game({ params }: Props) {
     ({ platform }) => Platform.NINTENDO === platform
   )
 
+  const playstationPrice = game?.prices?.find(
+    ({ platform }) => Platform.PLAYSTATION === platform
+  )
+
   return (
     <>
       <header className="flex justify-between gap-4">
@@ -93,6 +97,52 @@ export default async function Game({ params }: Props) {
                 <div className="text-xl font-bold">
                   {nintendoPrice.currencyCode}{" "}
                   {nintendoPrice.regularPrice?.toString()}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {playstationPrice && (
+        <div className="mt-6 rounded-xl border p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-blue-600">PlayStation Store</h3>
+              <p className="mt-1 text-xs text-gray-500">
+                {playstationPrice.countryCode &&
+                  `${playstationPrice.countryCode} Store`}
+                {playstationPrice.lastFetchedAt && (
+                  <span className="ml-2">
+                    Updated{" "}
+                    {new Date(
+                      playstationPrice.lastFetchedAt
+                    ).toLocaleDateString()}
+                  </span>
+                )}
+              </p>
+            </div>
+            <div className="text-right">
+              {playstationPrice.currentPrice &&
+              playstationPrice.currentPrice !==
+                playstationPrice.regularPrice ? (
+                <div>
+                  <div className="text-sm text-gray-500 line-through">
+                    {playstationPrice.currencyCode}{" "}
+                    {playstationPrice.regularPrice?.toString()}
+                  </div>
+                  <div className="text-xl font-bold text-green-600">
+                    {playstationPrice.currencyCode}{" "}
+                    {playstationPrice.currentPrice?.toString()}
+                  </div>
+                  <div className="text-xs font-medium text-green-600">
+                    On Sale!
+                  </div>
+                </div>
+              ) : (
+                <div className="text-xl font-bold">
+                  {playstationPrice.currencyCode}{" "}
+                  {playstationPrice.regularPrice?.toString()}
                 </div>
               )}
             </div>

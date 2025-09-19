@@ -21,7 +21,7 @@ export async function PUT(
 
     const { id } = await params
     const body = await request.json()
-    const { name, length, category, nintendo } = body
+    const { name, length, category, nintendo, playstation } = body
 
     // Validate required fields
     if (!name) {
@@ -109,6 +109,48 @@ export async function PUT(
             regularPrice: nintendo.regularPrice || null,
             currentPrice:
               nintendo.currentPrice || nintendo.regularPrice || null,
+            lastFetchedAt: new Date()
+          }
+        })
+      }
+    }
+
+    // Handle PlayStation price data
+    if (playstation) {
+      // Check if a PlayStation price record already exists for this game
+      const existingPrice = await prisma.gamePrice.findFirst({
+        where: {
+          gameId: id,
+          platform: Platform.PLAYSTATION
+        }
+      })
+
+      if (existingPrice) {
+        // Update existing price record
+        await prisma.gamePrice.update({
+          where: { id: existingPrice.id },
+          data: {
+            externalId: id, // Use game ID as external ID for PlayStation for now
+            countryCode: playstation.countryCode || null,
+            currencyCode: playstation.currencyCode || null,
+            regularPrice: playstation.regularPrice || null,
+            currentPrice:
+              playstation.currentPrice || playstation.regularPrice || null,
+            lastFetchedAt: new Date()
+          }
+        })
+      } else {
+        // Create new price record
+        await prisma.gamePrice.create({
+          data: {
+            gameId: id,
+            platform: Platform.PLAYSTATION,
+            externalId: id, // Use game ID as external ID for PlayStation for now
+            countryCode: playstation.countryCode || null,
+            currencyCode: playstation.currencyCode || null,
+            regularPrice: playstation.regularPrice || null,
+            currentPrice:
+              playstation.currentPrice || playstation.regularPrice || null,
             lastFetchedAt: new Date()
           }
         })

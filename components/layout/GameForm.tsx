@@ -109,6 +109,26 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
                     ? parseFloat(nintendoInfo.raw_price_value)
                     : null
               }
+            : null,
+          playstation: playstationInfo
+            ? {
+                countryCode: null, // PlayStation API doesn't provide country code
+                currencyCode: playstationInfo.currency,
+                regularPrice: (() => {
+                  const cleaned = playstationInfo.basePrice.replace(
+                    /[^0-9.]/g,
+                    ""
+                  )
+                  return cleaned ? parseFloat(cleaned) : null
+                })(),
+                currentPrice: (() => {
+                  const cleaned = playstationInfo.currentPrice.replace(
+                    /[^0-9.]/g,
+                    ""
+                  )
+                  return cleaned ? parseFloat(cleaned) : null
+                })()
+              }
             : null
         })
       })

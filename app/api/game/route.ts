@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, length, category, nintendo } = body
+    const { name, length, category, nintendo, playstation } = body
 
     // Validate required fields
     if (!name) {
@@ -61,6 +61,23 @@ export async function POST(request: NextRequest) {
           currencyCode: nintendo.currencyCode || null,
           regularPrice: nintendo.regularPrice || null,
           currentPrice: nintendo.currentPrice || nintendo.regularPrice || null,
+          lastFetchedAt: new Date()
+        }
+      })
+    }
+
+    // If PlayStation data is provided, create a GamePrice record
+    if (playstation) {
+      await prisma.gamePrice.create({
+        data: {
+          gameId: game.id,
+          platform: Platform.PLAYSTATION,
+          externalId: game.id, // Use game ID as external ID for PlayStation for now
+          countryCode: playstation.countryCode || null,
+          currencyCode: playstation.currencyCode || null,
+          regularPrice: playstation.regularPrice || null,
+          currentPrice:
+            playstation.currentPrice || playstation.regularPrice || null,
           lastFetchedAt: new Date()
         }
       })
