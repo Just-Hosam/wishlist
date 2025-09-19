@@ -233,6 +233,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
       <NintendoLinkInput
         onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
+        onGameInfoCleared={() => setNintendoInfo(null)}
         className="rounded-xl border p-4"
       />
     </form>

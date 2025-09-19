@@ -8,12 +8,14 @@ import { useState } from "react"
 import { toast } from "sonner"
 
 interface NintendoLinkInputProps {
-  onGameInfoFound?: (gameInfo: NintendoGameInfo) => void
+  onGameInfoFound: (gameInfo: NintendoGameInfo) => void
+  onGameInfoCleared: () => void
   className?: string
 }
 
 export default function NintendoLinkInput({
   onGameInfoFound,
+  onGameInfoCleared,
   className
 }: NintendoLinkInputProps) {
   const [url, setUrl] = useState("")
@@ -69,6 +71,7 @@ export default function NintendoLinkInput({
   const clearGameInfo = () => {
     setGameInfo(null)
     setUrl("")
+    onGameInfoCleared()
   }
 
   const Price = () => {
