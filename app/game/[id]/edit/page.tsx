@@ -1,4 +1,4 @@
-import GameForm from "@/components/GameForm"
+import GameForm from "@/components/layout/GameForm"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 
@@ -16,8 +16,8 @@ export default async function EditGame({ params }: Props) {
       id: true,
       name: true,
       length: true,
-      category: true,
-    },
+      category: true
+    }
   })
 
   if (!game) {
