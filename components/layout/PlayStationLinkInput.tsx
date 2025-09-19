@@ -5,23 +5,32 @@ import { Input } from "@/components/ui/input"
 import { type GamePrice } from "@/lib/playstation-price"
 import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
 
 interface PlayStationLinkInputProps {
   onGameInfoFound: (gameInfo: GamePrice) => void
   onGameInfoCleared: () => void
   className?: string
+  existingGameInfo?: GamePrice | null
 }
 
 export default function PlayStationLinkInput({
   onGameInfoFound,
   onGameInfoCleared,
-  className
+  className,
+  existingGameInfo
 }: PlayStationLinkInputProps) {
   const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [gameInfo, setGameInfo] = useState<GamePrice | null>(null)
+
+  // Initialize with existing game info if provided
+  useEffect(() => {
+    if (existingGameInfo) {
+      setGameInfo(existingGameInfo)
+    }
+  }, [existingGameInfo])
 
   const handleFetchGameInfo = async () => {
     if (!url.trim()) {

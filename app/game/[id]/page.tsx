@@ -82,12 +82,10 @@ export default async function Game({ params }: Props) {
               nintendoPrice.currentPrice !== nintendoPrice.regularPrice ? (
                 <div>
                   <div className="text-sm text-gray-500 line-through">
-                    {nintendoPrice.currencyCode}{" "}
-                    {nintendoPrice.regularPrice?.toString()}
+                    ${nintendoPrice.regularPrice?.toString()}
                   </div>
                   <div className="text-xl font-bold text-green-600">
-                    {nintendoPrice.currencyCode}{" "}
-                    {nintendoPrice.currentPrice?.toString()}
+                    ${nintendoPrice.currentPrice?.toString()}
                   </div>
                   <div className="text-xs font-medium text-green-600">
                     On Sale!
@@ -95,8 +93,7 @@ export default async function Game({ params }: Props) {
                 </div>
               ) : (
                 <div className="text-xl font-bold">
-                  {nintendoPrice.currencyCode}{" "}
-                  {nintendoPrice.regularPrice?.toString()}
+                  ${nintendoPrice.regularPrice?.toString()}
                 </div>
               )}
             </div>
@@ -128,12 +125,10 @@ export default async function Game({ params }: Props) {
                 playstationPrice.regularPrice ? (
                 <div>
                   <div className="text-sm text-gray-500 line-through">
-                    {playstationPrice.currencyCode}{" "}
-                    {playstationPrice.regularPrice?.toString()}
+                    ${playstationPrice.regularPrice?.toString()}
                   </div>
                   <div className="text-xl font-bold text-green-600">
-                    {playstationPrice.currencyCode}{" "}
-                    {playstationPrice.currentPrice?.toString()}
+                    ${playstationPrice.currentPrice?.toString()}
                   </div>
                   <div className="text-xs font-medium text-green-600">
                     On Sale!
@@ -141,8 +136,7 @@ export default async function Game({ params }: Props) {
                 </div>
               ) : (
                 <div className="text-xl font-bold">
-                  {playstationPrice.currencyCode}{" "}
-                  {playstationPrice.regularPrice?.toString()}
+                  ${playstationPrice.regularPrice?.toString()}
                 </div>
               )}
             </div>

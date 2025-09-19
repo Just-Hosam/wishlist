@@ -31,6 +31,14 @@ interface Game {
   name: string
   length?: number | null
   category: GameCategory
+  prices?: {
+    platform: "NINTENDO" | "PLAYSTATION"
+    externalId: string
+    countryCode: string | null
+    currencyCode: string | null
+    regularPrice: number | null
+    currentPrice: number | null
+  }[]
 }
 
 interface GameFormProps {
@@ -59,6 +67,51 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         length: game.length?.toString() || "",
         category: game.category
       })
+
+      // Set existing platform data if available
+      if (game.prices) {
+        const nintendoPrice = game.prices.find((p) => p.platform === "NINTENDO")
+        const playstationPrice = game.prices.find(
+          (p) => p.platform === "PLAYSTATION"
+        )
+
+        if (nintendoPrice) {
+          // Create Nintendo game info from existing price data
+          const regularPrice = nintendoPrice.regularPrice || 0
+          const currentPrice = nintendoPrice.currentPrice || 0
+
+          const nintendoInfo: NintendoGameInfo = {
+            nsuid: nintendoPrice.externalId,
+            country: nintendoPrice.countryCode || "",
+            currency: nintendoPrice.currencyCode || "",
+            raw_price_value: regularPrice.toString(),
+            discounted_price_value:
+              currentPrice !== regularPrice
+                ? currentPrice.toString()
+                : undefined,
+            raw_price: `$${regularPrice}`,
+            discounted_price:
+              currentPrice !== regularPrice ? `$${currentPrice}` : undefined,
+            onSale: currentPrice !== regularPrice
+          }
+          setNintendoInfo(nintendoInfo)
+        }
+
+        if (playstationPrice) {
+          // Create PlayStation game info from existing price data
+          const regularPrice = playstationPrice.regularPrice || 0
+          const currentPrice = playstationPrice.currentPrice || 0
+
+          const playstationInfo: GamePrice = {
+            name: game.name,
+            currency: playstationPrice.currencyCode || "",
+            basePrice: `$${regularPrice}`,
+            currentPrice: `$${currentPrice}`,
+            savings: regularPrice - currentPrice
+          }
+          setPlaystationInfo(playstationInfo)
+        }
+      }
     }
   }, [game])
 
@@ -250,10 +303,12 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         className="mb-5"
         onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
         onGameInfoCleared={() => setNintendoInfo(null)}
+        existingGameInfo={nintendoInfo}
       />
       <PlayStationLinkInput
         onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
         onGameInfoCleared={() => setPlaystationInfo(null)}
+        existingGameInfo={playstationInfo}
       />
     </form>
   )

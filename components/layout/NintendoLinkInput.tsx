@@ -5,23 +5,32 @@ import { Input } from "@/components/ui/input"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
 import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
 
 interface NintendoLinkInputProps {
   onGameInfoFound: (gameInfo: NintendoGameInfo) => void
   onGameInfoCleared: () => void
   className?: string
+  existingGameInfo?: NintendoGameInfo | null
 }
 
 export default function NintendoLinkInput({
   onGameInfoFound,
   onGameInfoCleared,
-  className
+  className,
+  existingGameInfo
 }: NintendoLinkInputProps) {
   const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [gameInfo, setGameInfo] = useState<NintendoGameInfo | null>(null)
+
+  // Initialize with existing game info if provided
+  useEffect(() => {
+    if (existingGameInfo) {
+      setGameInfo(existingGameInfo)
+    }
+  }, [existingGameInfo])
 
   const handleFetchGameInfo = async () => {
     if (!url.trim()) {
@@ -53,7 +62,6 @@ export default function NintendoLinkInput({
 
       const info = await response.json()
       setGameInfo(info)
-      console.log("info :>>", info)
 
       onGameInfoFound?.(info)
       toast.success("Game information fetched successfully!")

@@ -90,17 +90,17 @@ export default async function Wishlist() {
                     <Image
                       src="/nintendo-switch.svg"
                       alt="Nintendo Switch Logo"
-                      width={24}
-                      height={24}
+                      width={18}
+                      height={18}
                       className="mr-2"
                     />
-                    <span className="text-xl font-medium">
+                    <span className="font-medium">
                       ${nintendoPrice?.currentPrice}
                     </span>
                     {nintendoPrice?.currentPrice !==
                       nintendoPrice?.regularPrice &&
                       nintendoPrice?.regularPrice && (
-                        <span className="ml-3 text-sm font-medium text-muted-foreground line-through">
+                        <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
                           ${nintendoPrice?.regularPrice}
                         </span>
                       )}
@@ -111,20 +111,18 @@ export default async function Wishlist() {
                     <Image
                       src="/playstation.svg"
                       alt="PlayStation Logo"
-                      width={24}
-                      height={24}
+                      width={18}
+                      height={18}
                       className="mr-2"
                     />
-                    <span className="text-xl font-medium">
-                      {playstationPrice?.currencyCode}
-                      {playstationPrice?.currentPrice}
+                    <span className="font-medium">
+                      ${playstationPrice?.currentPrice}
                     </span>
                     {playstationPrice?.currentPrice !==
                       playstationPrice?.regularPrice &&
                       playstationPrice?.regularPrice && (
-                        <span className="ml-3 text-sm font-medium text-muted-foreground line-through">
-                          {playstationPrice?.currencyCode}
-                          {playstationPrice?.regularPrice}
+                        <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
+                          ${playstationPrice?.regularPrice}
                         </span>
                       )}
                   </div>
