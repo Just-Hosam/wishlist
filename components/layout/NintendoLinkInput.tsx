@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
 import { CircleCheck, Link, Loader2, X } from "lucide-react"
+import Image from "next/image"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -95,7 +96,13 @@ export default function NintendoLinkInput({
         className="mb-2 flex items-center gap-2 text-sm font-semibold"
         htmlFor="nintendo-url"
       >
-        Nintendo Store
+        <Image
+          src="/nintendo-switch.svg"
+          alt="Nintendo Switch Logo"
+          width={24}
+          height={24}
+        />
+        Nintendo
         {gameInfo && (
           <CircleCheck className="rounded-full bg-green-600 text-white" />
         )}

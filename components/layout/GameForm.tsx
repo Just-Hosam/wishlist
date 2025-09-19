@@ -1,5 +1,6 @@
 "use client"
 
+import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -10,21 +11,18 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { useTabContext } from "@/contexts/TabContext"
+import { type NintendoGameInfo } from "@/lib/nintendo-price"
 import { GameCategory } from "@prisma/client"
 import {
   CircleCheckBig,
   FolderCheck,
-  Pencil,
-  Plus,
   Save,
   ScrollText,
   Skull
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
-import { type NintendoGameInfo } from "@/lib/nintendo-price"
 
 interface Game {
   id?: string
@@ -143,11 +141,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="sticky top-[88px] flex items-center justify-between bg-white pb-4">
-        <h2 className="flex items-center gap-3 text-2xl">
-          {isEdit ? <Pencil /> : <Plus />}
-          {isEdit ? "Edit" : "Add"}
-        </h2>
+      <div className="sticky top-[88px] flex justify-end bg-white pb-2">
         <Button type="submit" disabled={isLoading}>
           <Save />
           {isLoading ? "Saving..." : "Save"}

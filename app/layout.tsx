@@ -15,11 +15,11 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "GamesList",
   description:
-    "Manage your game wishlists with ease. Track games you want to play, own, and have completed.",
+    "Manage your game wishlists with ease. Track games you want to play, own, and have completed."
 }
 
 export default async function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
