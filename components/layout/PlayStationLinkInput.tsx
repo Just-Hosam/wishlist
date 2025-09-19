@@ -2,43 +2,46 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { type NintendoGameInfo } from "@/lib/nintendo-price"
+import { type GamePrice } from "@/lib/playstation-price"
 import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { toast } from "sonner"
 
-interface NintendoLinkInputProps {
-  onGameInfoFound: (gameInfo: NintendoGameInfo) => void
+interface PlayStationLinkInputProps {
+  onGameInfoFound: (gameInfo: GamePrice) => void
   onGameInfoCleared: () => void
   className?: string
 }
 
-export default function NintendoLinkInput({
+export default function PlayStationLinkInput({
   onGameInfoFound,
   onGameInfoCleared,
   className
-}: NintendoLinkInputProps) {
+}: PlayStationLinkInputProps) {
   const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [gameInfo, setGameInfo] = useState<NintendoGameInfo | null>(null)
+  const [gameInfo, setGameInfo] = useState<GamePrice | null>(null)
 
   const handleFetchGameInfo = async () => {
     if (!url.trim()) {
-      toast.error("Please enter a Nintendo store URL")
+      toast.error("Please enter a PlayStation store URL")
       return
     }
 
-    // Basic URL validation for Nintendo store
-    if (!url.includes("nintendo.com")) {
-      toast.error("Please enter a valid Nintendo store URL")
+    // Basic URL validation for PlayStation store
+    if (
+      !url.includes("playstation.com") &&
+      !url.includes("store.playstation.com")
+    ) {
+      toast.error("Please enter a valid PlayStation store URL")
       return
     }
 
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/nintendo", {
+      const response = await fetch("/api/playstation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -53,12 +56,12 @@ export default function NintendoLinkInput({
 
       const info = await response.json()
       setGameInfo(info)
-      console.log("info :>>", info)
+      console.log("PlayStation info :>>", info)
 
       onGameInfoFound?.(info)
       toast.success("Game information fetched successfully!")
     } catch (error) {
-      console.error("Error fetching game info:", error)
+      console.error("Error fetching PlayStation game info:", error)
       toast.error(
         error instanceof Error
           ? error.message
@@ -79,11 +82,11 @@ export default function NintendoLinkInput({
     return (
       <div className="flex items-center gap-3">
         <span className="">
-          {gameInfo?.discounted_price || gameInfo?.raw_price}
+          {gameInfo?.currentPrice || gameInfo?.basePrice}
         </span>
-        {gameInfo?.discounted_price && (
+        {gameInfo?.currentPrice !== gameInfo?.basePrice && (
           <span className="text-sm text-muted-foreground line-through">
-            {gameInfo?.raw_price}
+            {gameInfo?.basePrice}
           </span>
         )}
       </div>
@@ -94,15 +97,15 @@ export default function NintendoLinkInput({
     <div className={className}>
       <label
         className="flex items-center gap-2 text-sm font-semibold"
-        htmlFor="nintendo-url"
+        htmlFor="playstation-url"
       >
         <Image
-          src="/nintendo-switch.svg"
-          alt="Nintendo Switch Logo"
+          src="/playstation.svg"
+          alt="PlayStation Logo"
           width={18}
           height={18}
         />
-        Nintendo
+        PlayStation
       </label>
 
       {gameInfo ? (
@@ -119,9 +122,9 @@ export default function NintendoLinkInput({
       ) : (
         <div className="mt-2 flex gap-2">
           <Input
-            id="nintendo-url"
+            id="playstation-url"
             type="url"
-            placeholder="www.nintendo.com/en-ca/..."
+            placeholder="store.playstation.com/en-ca/..."
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             disabled={isLoading}
@@ -130,7 +133,7 @@ export default function NintendoLinkInput({
             type="button"
             onClick={handleFetchGameInfo}
             disabled={isLoading || !url.trim()}
-            className="w-fit bg-destructive"
+            className="w-fit bg-blue-600 hover:bg-blue-700"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

@@ -1,6 +1,7 @@
 "use client"
 
 import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
+import PlayStationLinkInput from "@/components/layout/PlayStationLinkInput"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/select"
 import { useTabContext } from "@/contexts/TabContext"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
+import { type GamePrice } from "@/lib/playstation-price"
 import { GameCategory } from "@prisma/client"
 import {
   CircleCheckBig,
@@ -43,6 +45,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
   const [nintendoInfo, setNintendoInfo] = useState<NintendoGameInfo | null>(
     null
   )
+  const [playstationInfo, setPlaystationInfo] = useState<GamePrice | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     length: "",
@@ -224,8 +227,13 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </Select>
       </div>
       <NintendoLinkInput
+        className="mb-5"
         onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
         onGameInfoCleared={() => setNintendoInfo(null)}
+      />
+      <PlayStationLinkInput
+        onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
+        onGameInfoCleared={() => setPlaystationInfo(null)}
       />
     </form>
   )
