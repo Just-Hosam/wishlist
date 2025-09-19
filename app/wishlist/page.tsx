@@ -70,6 +70,10 @@ export default async function Wishlist() {
             ({ platform }) => Platform.NINTENDO === platform
           )
 
+          const playstationPrice = game?.prices?.find(
+            ({ platform }) => Platform.PLAYSTATION === platform
+          )
+
           return (
             <Link href={`/game/${game.id}`} key={game.id}>
               <div className="mb-4 rounded-2xl border p-6">
@@ -98,6 +102,29 @@ export default async function Wishlist() {
                       nintendoPrice?.regularPrice && (
                         <span className="ml-3 text-sm font-medium text-muted-foreground line-through">
                           ${nintendoPrice?.regularPrice}
+                        </span>
+                      )}
+                  </div>
+                )}
+                {playstationPrice && (
+                  <div className="mt-4 flex items-center">
+                    <Image
+                      src="/playstation.svg"
+                      alt="PlayStation Logo"
+                      width={24}
+                      height={24}
+                      className="mr-2"
+                    />
+                    <span className="text-xl font-medium">
+                      {playstationPrice?.currencyCode}
+                      {playstationPrice?.currentPrice}
+                    </span>
+                    {playstationPrice?.currentPrice !==
+                      playstationPrice?.regularPrice &&
+                      playstationPrice?.regularPrice && (
+                        <span className="ml-3 text-sm font-medium text-muted-foreground line-through">
+                          {playstationPrice?.currencyCode}
+                          {playstationPrice?.regularPrice}
                         </span>
                       )}
                   </div>
