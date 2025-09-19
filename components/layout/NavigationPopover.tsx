@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from "@/components/ui/popover"
 import { Menu, Settings } from "lucide-react"
 import Link from "next/link"
@@ -27,12 +27,6 @@ export default function NavigationPopover() {
         </AuthCheck>
         <PopoverContent className="mr-6 w-fit">
           <div className="flex flex-col">
-            <Link href="/wishlist" onClick={() => setPopoverOpen(false)}>
-              <Button className="w-full justify-start" variant="ghost">
-                <Settings />
-                Settings
-              </Button>
-            </Link>
             <SignOutButton />
           </div>
         </PopoverContent>
