@@ -22,9 +22,9 @@ export default async function Game({ params }: Props) {
     include: { prices: { orderBy: { lastFetchedAt: "desc" } } }
   })
 
-  console.log("game :>>", game)
-
-  const nintendoPrice = game?.prices?.[0]
+  const nintendoPrice = game?.prices?.find(
+    ({ platform }) => Platform.NINTENDO === platform
+  )
 
   return (
     <>
