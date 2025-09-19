@@ -85,27 +85,6 @@ export default async function Wishlist() {
                     </p>
                   )}
                 </header>
-                {nintendoPrice && (
-                  <div className="mt-4 flex items-center">
-                    <Image
-                      src="/nintendo-switch.svg"
-                      alt="Nintendo Switch Logo"
-                      width={18}
-                      height={18}
-                      className="mr-2"
-                    />
-                    <span className="font-medium">
-                      ${nintendoPrice?.currentPrice}
-                    </span>
-                    {nintendoPrice?.currentPrice !==
-                      nintendoPrice?.regularPrice &&
-                      nintendoPrice?.regularPrice && (
-                        <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
-                          ${nintendoPrice?.regularPrice}
-                        </span>
-                      )}
-                  </div>
-                )}
                 {playstationPrice && (
                   <div className="mt-4 flex items-center">
                     <Image
@@ -123,6 +102,27 @@ export default async function Wishlist() {
                       playstationPrice?.regularPrice && (
                         <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
                           ${playstationPrice?.regularPrice}
+                        </span>
+                      )}
+                  </div>
+                )}
+                {nintendoPrice && (
+                  <div className="mt-4 flex items-center">
+                    <Image
+                      src="/nintendo-switch.svg"
+                      alt="Nintendo Switch Logo"
+                      width={18}
+                      height={18}
+                      className="mr-2"
+                    />
+                    <span className="font-medium">
+                      ${nintendoPrice?.currentPrice}
+                    </span>
+                    {nintendoPrice?.currentPrice !==
+                      nintendoPrice?.regularPrice &&
+                      nintendoPrice?.regularPrice && (
+                        <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
+                          ${nintendoPrice?.regularPrice}
                         </span>
                       )}
                   </div>

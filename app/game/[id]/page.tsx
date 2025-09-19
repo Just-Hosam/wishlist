@@ -61,46 +61,6 @@ export default async function Game({ params }: Props) {
         </Popover>
       </header>
 
-      {nintendoPrice && (
-        <div className="mt-6 rounded-xl border p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-red-600">Nintendo Store</h3>
-              <p className="mt-1 text-xs text-gray-500">
-                {nintendoPrice.countryCode &&
-                  `${nintendoPrice.countryCode} Store`}
-                {nintendoPrice.lastFetchedAt && (
-                  <span className="ml-2">
-                    Updated{" "}
-                    {new Date(nintendoPrice.lastFetchedAt).toLocaleDateString()}
-                  </span>
-                )}
-              </p>
-            </div>
-            <div className="text-right">
-              {nintendoPrice.currentPrice &&
-              nintendoPrice.currentPrice !== nintendoPrice.regularPrice ? (
-                <div>
-                  <div className="text-sm text-gray-500 line-through">
-                    ${nintendoPrice.regularPrice?.toString()}
-                  </div>
-                  <div className="text-xl font-bold text-green-600">
-                    ${nintendoPrice.currentPrice?.toString()}
-                  </div>
-                  <div className="text-xs font-medium text-green-600">
-                    On Sale!
-                  </div>
-                </div>
-              ) : (
-                <div className="text-xl font-bold">
-                  ${nintendoPrice.regularPrice?.toString()}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
       {playstationPrice && (
         <div className="mt-6 rounded-xl border p-4">
           <div className="flex items-center justify-between">
@@ -137,6 +97,46 @@ export default async function Game({ params }: Props) {
               ) : (
                 <div className="text-xl font-bold">
                   ${playstationPrice.regularPrice?.toString()}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {nintendoPrice && (
+        <div className="mt-6 rounded-xl border p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-red-600">Nintendo Store</h3>
+              <p className="mt-1 text-xs text-gray-500">
+                {nintendoPrice.countryCode &&
+                  `${nintendoPrice.countryCode} Store`}
+                {nintendoPrice.lastFetchedAt && (
+                  <span className="ml-2">
+                    Updated{" "}
+                    {new Date(nintendoPrice.lastFetchedAt).toLocaleDateString()}
+                  </span>
+                )}
+              </p>
+            </div>
+            <div className="text-right">
+              {nintendoPrice.currentPrice &&
+              nintendoPrice.currentPrice !== nintendoPrice.regularPrice ? (
+                <div>
+                  <div className="text-sm text-gray-500 line-through">
+                    ${nintendoPrice.regularPrice?.toString()}
+                  </div>
+                  <div className="text-xl font-bold text-green-600">
+                    ${nintendoPrice.currentPrice?.toString()}
+                  </div>
+                  <div className="text-xs font-medium text-green-600">
+                    On Sale!
+                  </div>
+                </div>
+              ) : (
+                <div className="text-xl font-bold">
+                  ${nintendoPrice.regularPrice?.toString()}
                 </div>
               )}
             </div>

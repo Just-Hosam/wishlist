@@ -299,16 +299,16 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           </SelectContent>
         </Select>
       </div>
-      <NintendoLinkInput
-        className="mb-5"
-        onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
-        onGameInfoCleared={() => setNintendoInfo(null)}
-        existingGameInfo={nintendoInfo}
-      />
       <PlayStationLinkInput
+        className="mb-5"
         onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
         onGameInfoCleared={() => setPlaystationInfo(null)}
         existingGameInfo={playstationInfo}
+      />
+      <NintendoLinkInput
+        onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
+        onGameInfoCleared={() => setNintendoInfo(null)}
+        existingGameInfo={nintendoInfo}
       />
     </form>
   )
