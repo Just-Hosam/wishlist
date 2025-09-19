@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
-import { GameCategory } from "@prisma/client"
+import { GameCategory, Platform } from "@prisma/client"
 
 interface Params {
   id: string
@@ -21,7 +21,7 @@ export async function PUT(
 
     const { id } = await params
     const body = await request.json()
-    const { name, description, coverImageUrl, length, category } = body
+    const { name, length, category, nintendo } = body
 
     // Validate required fields
     if (!name) {
@@ -41,7 +41,7 @@ export async function PUT(
 
     // Find user by email
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: session.user.email }
     })
 
     if (!user) {
@@ -52,8 +52,8 @@ export async function PUT(
     const existingGame = await prisma.game.findFirst({
       where: {
         id,
-        userId: user.id,
-      },
+        userId: user.id
+      }
     })
 
     if (!existingGame) {
@@ -69,9 +69,51 @@ export async function PUT(
       data: {
         name,
         length: length ? parseInt(length) : null,
-        category: category || existingGame.category,
-      },
+        category: category || existingGame.category
+      }
     })
+
+    // Handle Nintendo price data
+    if (nintendo && nintendo.nsuid) {
+      // Check if a Nintendo price record already exists for this game
+      const existingPrice = await prisma.gamePrice.findFirst({
+        where: {
+          gameId: id,
+          platform: Platform.NINTENDO
+        }
+      })
+
+      if (existingPrice) {
+        // Update existing price record
+        await prisma.gamePrice.update({
+          where: { id: existingPrice.id },
+          data: {
+            externalId: nintendo.nsuid,
+            countryCode: nintendo.countryCode || null,
+            currencyCode: nintendo.currencyCode || null,
+            regularPrice: nintendo.regularPrice || null,
+            currentPrice:
+              nintendo.currentPrice || nintendo.regularPrice || null,
+            lastFetchedAt: new Date()
+          }
+        })
+      } else {
+        // Create new price record
+        await prisma.gamePrice.create({
+          data: {
+            gameId: id,
+            platform: Platform.NINTENDO,
+            externalId: nintendo.nsuid,
+            countryCode: nintendo.countryCode || null,
+            currencyCode: nintendo.currencyCode || null,
+            regularPrice: nintendo.regularPrice || null,
+            currentPrice:
+              nintendo.currentPrice || nintendo.regularPrice || null,
+            lastFetchedAt: new Date()
+          }
+        })
+      }
+    }
 
     return NextResponse.json(updatedGame, { status: 200 })
   } catch (error) {
@@ -98,7 +140,7 @@ export async function DELETE(
 
     // Find user by email
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: session.user.email }
     })
 
     if (!user) {
@@ -109,8 +151,8 @@ export async function DELETE(
     const existingGame = await prisma.game.findFirst({
       where: {
         id,
-        userId: user.id,
-      },
+        userId: user.id
+      }
     })
 
     if (!existingGame) {
@@ -122,7 +164,7 @@ export async function DELETE(
 
     // Delete the game
     await prisma.game.delete({
-      where: { id },
+      where: { id }
     })
 
     return NextResponse.json(

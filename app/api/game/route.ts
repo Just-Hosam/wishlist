@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
-import { GameCategory } from "@prisma/client"
+import { GameCategory, Platform } from "@prisma/client"
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, coverImageUrl, length, category } = body
+    const { name, length, category, nintendo } = body
 
     // Validate required fields
     if (!name) {
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     // Find user by email
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: session.user.email }
     })
 
     if (!user) {
@@ -46,9 +46,25 @@ export async function POST(request: NextRequest) {
         name,
         length: length ? parseInt(length) : null,
         category: category || GameCategory.WISHLIST,
-        userId: user.id,
-      },
+        userId: user.id
+      }
     })
+
+    // If Nintendo data is provided, create a GamePrice record
+    if (nintendo && nintendo.nsuid) {
+      await prisma.gamePrice.create({
+        data: {
+          gameId: game.id,
+          platform: Platform.NINTENDO,
+          externalId: nintendo.nsuid,
+          countryCode: nintendo.countryCode || null,
+          currencyCode: nintendo.currencyCode || null,
+          regularPrice: nintendo.regularPrice || null,
+          currentPrice: nintendo.currentPrice || nintendo.regularPrice || null,
+          lastFetchedAt: new Date()
+        }
+      })
+    }
 
     return NextResponse.json(game, { status: 201 })
   } catch (error) {

@@ -7,7 +7,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select"
 import { useTabContext } from "@/contexts/TabContext"
 import { GameCategory } from "@prisma/client"
@@ -18,11 +18,13 @@ import {
   Plus,
   Save,
   ScrollText,
-  Skull,
+  Skull
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
+import NintendoLinkInput from "@/components/NintendoLinkInput"
+import { type NintendoGameInfo } from "@/lib/nintendo-price"
 
 interface Game {
   id?: string
@@ -40,10 +42,13 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
   const router = useRouter()
   const { activeTab } = useTabContext()
   const [isLoading, setIsLoading] = useState(false)
+  const [nintendoInfo, setNintendoInfo] = useState<NintendoGameInfo | null>(
+    null
+  )
   const [formData, setFormData] = useState({
     name: "",
     length: "",
-    category: activeTab,
+    category: activeTab
   })
 
   // Initialize form data when component mounts or game prop changes
@@ -52,7 +57,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       setFormData({
         name: game.name,
         length: game.length?.toString() || "",
-        category: game.category,
+        category: game.category
       })
     }
   }, [game])
@@ -84,13 +89,28 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       const response = await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           name: formData.name.trim(),
           length: formData.length ? parseInt(formData.length) : null,
           category: formData.category,
-        }),
+          nintendo: nintendoInfo
+            ? {
+                nsuid: nintendoInfo.nsuid,
+                countryCode: nintendoInfo.country,
+                currencyCode: nintendoInfo.currency,
+                regularPrice: nintendoInfo.raw_price_value
+                  ? parseFloat(nintendoInfo.raw_price_value)
+                  : null,
+                currentPrice: nintendoInfo.discounted_price_value
+                  ? parseFloat(nintendoInfo.discounted_price_value)
+                  : nintendoInfo.raw_price_value
+                    ? parseFloat(nintendoInfo.raw_price_value)
+                    : null
+              }
+            : null
+        })
       })
 
       if (!response.ok) {
@@ -105,7 +125,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         }
 
         throw new Error(
-          error.error || `Failed to ${isEdit ? "update" : "create"} game`,
+          error.error || `Failed to ${isEdit ? "update" : "create"} game`
         )
       }
 
@@ -118,7 +138,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       toast.error(
         error instanceof Error
           ? error.message
-          : `Failed to ${isEdit ? "update" : "create"} game`,
+          : `Failed to ${isEdit ? "update" : "create"} game`
       )
     } finally {
       setIsLoading(false)
@@ -172,7 +192,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         />
       </div>
 
-      <div>
+      <div className="mb-4">
         <label className="text-sm font-semibold" htmlFor="category">
           Category <span className="text-xs">*</span>
         </label>
@@ -213,6 +233,12 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           </SelectContent>
         </Select>
       </div>
+      <div className="mb-4 text-sm font-semibold">Stores</div>
+
+      <NintendoLinkInput
+        onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
+        className="rounded-xl border p-4"
+      />
     </form>
   )
 }

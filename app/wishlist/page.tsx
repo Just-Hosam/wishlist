@@ -19,8 +19,9 @@ export default async function Wishlist() {
       games: {
         where: { category: GameCategory.WISHLIST },
         orderBy: { createdAt: "desc" },
-      },
-    },
+        include: { prices: { orderBy: { lastFetchedAt: "desc" } } }
+      }
+    }
   })
 
   const wishlistGames = user?.games || []
@@ -40,20 +41,57 @@ export default async function Wishlist() {
           </Link>
         </div>
       ) : (
-        wishlistGames.map((game) => (
-          <Link href={`/game/${game.id}`} key={game.id}>
-            <div className="mb-4 rounded-2xl border p-6">
-              <header>
-                <h3 className="text-xl font-semibold">{game.name}</h3>
-                {game.length && (
-                  <p className="text-light mt-1 text-xs text-gray-600">
-                    about {game.length} hours
-                  </p>
-                )}
-              </header>
-            </div>
-          </Link>
-        ))
+        wishlistGames.map((game) => {
+          const nintendoPrice = game.prices?.[0]
+          return (
+            <Link href={`/game/${game.id}`} key={game.id}>
+              <div className="mb-4 rounded-2xl border p-6">
+                <header>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold">{game.name}</h3>
+                      {game.length && (
+                        <p className="text-light mt-1 text-xs text-gray-600">
+                          about {game.length} hours
+                        </p>
+                      )}
+                    </div>
+                    {nintendoPrice && (
+                      <div className="ml-4 text-right">
+                        <div className="flex items-center gap-2">
+                          <div className="text-xs font-medium text-red-600">
+                            Nintendo
+                          </div>
+                        </div>
+                        <div className="mt-1">
+                          {nintendoPrice.currentPrice &&
+                          nintendoPrice.currentPrice !==
+                            nintendoPrice.regularPrice ? (
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-500 line-through">
+                                {nintendoPrice.currencyCode}{" "}
+                                {nintendoPrice.regularPrice?.toString()}
+                              </span>
+                              <span className="font-semibold text-green-600">
+                                {nintendoPrice.currencyCode}{" "}
+                                {nintendoPrice.currentPrice?.toString()}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="font-semibold">
+                              {nintendoPrice.currencyCode}{" "}
+                              {nintendoPrice.regularPrice?.toString()}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </header>
+              </div>
+            </Link>
+          )
+        })
       )}
     </>
   )

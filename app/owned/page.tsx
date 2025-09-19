@@ -18,9 +18,9 @@ export default async function Owned() {
     include: {
       games: {
         where: { category: GameCategory.OWNED },
-        orderBy: { createdAt: "desc" },
-      },
-    },
+        orderBy: { createdAt: "desc" }
+      }
+    }
   })
 
   const ownedGames = user?.games || []
