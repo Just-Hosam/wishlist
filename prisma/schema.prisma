@@ -120,6 +120,5 @@ model GamePrice {
   updatedAt     DateTime @updatedAt
 
   @@unique([gameId, platform])
-  @@unique([platform, externalId])
   @@index([gameId])
 }
