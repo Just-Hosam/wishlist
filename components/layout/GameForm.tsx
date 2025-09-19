@@ -23,7 +23,7 @@ import {
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
-import NintendoLinkInput from "@/components/NintendoLinkInput"
+import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
 
 interface Game {
