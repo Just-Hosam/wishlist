@@ -21,6 +21,7 @@ export default async function EditGame({ params }: Props) {
         select: {
           platform: true,
           externalId: true,
+          storeUrl: true,
           countryCode: true,
           currencyCode: true,
           regularPrice: true,
@@ -39,6 +40,7 @@ export default async function EditGame({ params }: Props) {
     ...gameData,
     prices: gameData.prices.map((price) => ({
       ...price,
+      storeUrl: price.storeUrl,
       regularPrice: price.regularPrice ? Number(price.regularPrice) : null,
       currentPrice: price.currentPrice ? Number(price.currentPrice) : null
     }))
