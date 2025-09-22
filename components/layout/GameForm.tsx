@@ -34,6 +34,7 @@ interface Game {
   prices?: {
     platform: "NINTENDO" | "PLAYSTATION"
     externalId: string
+    storeUrl: string | null
     countryCode: string | null
     currencyCode: string | null
     regularPrice: number | null
@@ -82,6 +83,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
           const nintendoInfo: NintendoGameInfo = {
             nsuid: nintendoPrice.externalId,
+            storeUrl: nintendoPrice.storeUrl || "",
             country: nintendoPrice.countryCode || "",
             currency: nintendoPrice.currencyCode || "",
             raw_price_value: regularPrice.toString(),
@@ -104,6 +106,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
           const playstationInfo: GamePrice = {
             name: game.name,
+            storeUrl: playstationPrice.storeUrl || "",
             currency: playstationPrice.currencyCode || "",
             basePrice: `$${regularPrice}`,
             currentPrice: `$${currentPrice}`,
@@ -151,6 +154,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           nintendo: nintendoInfo
             ? {
                 nsuid: nintendoInfo.nsuid,
+                storeUrl: nintendoInfo.storeUrl,
                 countryCode: nintendoInfo.country,
                 currencyCode: nintendoInfo.currency,
                 regularPrice: nintendoInfo.raw_price_value
@@ -165,6 +169,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
             : null,
           playstation: playstationInfo
             ? {
+                storeUrl: playstationInfo.storeUrl,
                 countryCode: null, // PlayStation API doesn't provide country code
                 currencyCode: playstationInfo.currency,
                 regularPrice: (() => {

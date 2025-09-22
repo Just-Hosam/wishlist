@@ -1,21 +1,28 @@
 // Nintendo price scraping utilities
 
-export const getNSUID = async (url: string): Promise<string> => {
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`Failed to fetch URL: ${response.status}`)
+export const getNSUID = async (url: string): Promise<string | null> => {
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      console.error(`Failed to fetch Nintendo URL: ${response.status}`)
+      return null
+    }
+
+    const html = await response.text()
+
+    // Find the first instance of "nsuid": then pull in the value in the next ""
+    const nsuidMatch = html.match(/"nsuid"\s*:\s*"([^"]+)"/)
+
+    if (!nsuidMatch || !nsuidMatch[1]) {
+      console.error("NSUID not found in the page")
+      return null
+    }
+
+    return nsuidMatch[1]
+  } catch (error) {
+    console.error("Error fetching NSUID:", error)
+    return null
   }
-
-  const html = await response.text()
-
-  // Find the first instance of "nsuid": then pull in the value in the next ""
-  const nsuidMatch = html.match(/"nsuid"\s*:\s*"([^"]+)"/)
-
-  if (!nsuidMatch || !nsuidMatch[1]) {
-    throw new Error("NSUID not found in the page")
-  }
-
-  return nsuidMatch[1]
 }
 
 // const response_sample = {
@@ -60,45 +67,80 @@ export interface NintendoGameInfo {
   country: string
   currency: string
   onSale: boolean
+  storeUrl: string
+}
+
+export interface NintendoPriceData {
+  nsuid: string
+  raw_price: string
+  raw_price_value: string // The clean numeric value
+  discounted_price?: string
+  discounted_price_value?: string // The clean numeric value
+  country: string
+  currency: string
+  onSale: boolean
 }
 
 export async function getCurrentPrice(
   nsuid: string,
   country = COUNTRY,
   lang = LANG
-): Promise<NintendoGameInfo> {
-  const url = `https://api.ec.nintendo.com/v1/price?country=${country}&ids=${nsuid}&lang=${lang}`
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  const data = await res.json()
+): Promise<NintendoPriceData | null> {
+  try {
+    const url = `https://api.ec.nintendo.com/v1/price?country=${country}&ids=${nsuid}&lang=${lang}`
+    const res = await fetch(url)
+    if (!res.ok) {
+      console.error(`Nintendo API HTTP ${res.status}`)
+      return null
+    }
+    const data = await res.json()
 
-  const row = data.prices?.[0]
+    const row = data.prices?.[0]
 
-  const priceAvailable = row.discount_price || row.regular_price
-  if (!priceAvailable) throw new Error("Price fields missing")
+    const priceAvailable = row?.discount_price || row?.regular_price
+    if (!priceAvailable) {
+      console.error("Price fields missing from Nintendo API response")
+      return null
+    }
 
-  const raw_price = row.regular_price?.amount
-  const raw_price_value = row.regular_price?.raw_value
-  const discounted_price = row.discount_price?.amount
-  const discounted_price_value = row.discount_price?.raw_value
+    const raw_price = row.regular_price?.amount
+    const raw_price_value = row.regular_price?.raw_value
+    const discounted_price = row.discount_price?.amount
+    const discounted_price_value = row.discount_price?.raw_value
 
-  return {
-    nsuid,
-    raw_price,
-    raw_price_value,
-    discounted_price,
-    discounted_price_value,
-    country,
-    currency: row.regular_price?.currency,
-    onSale: !!row.discount_price
+    return {
+      nsuid,
+      raw_price,
+      raw_price_value,
+      discounted_price,
+      discounted_price_value,
+      country,
+      currency: row.regular_price?.currency,
+      onSale: !!row.discount_price
+    }
+  } catch (error) {
+    console.error("Error fetching Nintendo price:", error)
+    return null
   }
 }
 
 export async function getNintendoGameInfo(
   url: string
-): Promise<NintendoGameInfo> {
+): Promise<NintendoGameInfo | null> {
   const nsuid = await getNSUID(url)
-  return await getCurrentPrice(nsuid)
+  if (!nsuid) {
+    return null
+  }
+
+  const gameInfo = await getCurrentPrice(nsuid)
+  if (!gameInfo) {
+    return null
+  }
+
+  return {
+    ...gameInfo,
+    storeUrl: url
+  }
 }
 
 // Example usage (commented out for production)

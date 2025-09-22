@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
           gameId: game.id,
           platform: Platform.NINTENDO,
           externalId: nintendo.nsuid,
+          storeUrl: nintendo.storeUrl || null,
           countryCode: nintendo.countryCode || null,
           currencyCode: nintendo.currencyCode || null,
           regularPrice: nintendo.regularPrice || null,
@@ -73,6 +74,7 @@ export async function POST(request: NextRequest) {
           gameId: game.id,
           platform: Platform.PLAYSTATION,
           externalId: game.id, // Use game ID as external ID for PlayStation for now
+          storeUrl: playstation.storeUrl || null,
           countryCode: playstation.countryCode || null,
           currencyCode: playstation.currencyCode || null,
           regularPrice: playstation.regularPrice || null,

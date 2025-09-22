@@ -19,6 +19,13 @@ export async function POST(request: NextRequest) {
 
     const gameInfo = await getNintendoGameInfo(url)
 
+    if (!gameInfo) {
+      return NextResponse.json(
+        { error: "Failed to fetch game information from Nintendo store" },
+        { status: 404 }
+      )
+    }
+
     return NextResponse.json(gameInfo)
   } catch (error) {
     console.error("Error fetching Nintendo game info:", error)

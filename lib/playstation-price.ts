@@ -5,6 +5,16 @@ export interface GamePrice {
   savings: number
   discount?: string
   currency: string
+  storeUrl: string
+}
+
+export interface ExtractedPrice {
+  name: string
+  basePrice: string
+  currentPrice: string
+  savings: number
+  discount?: string
+  currency: string
 }
 
 export async function getPlayStationGamePrice(
@@ -19,14 +29,24 @@ export async function getPlayStationGamePrice(
     }
 
     const html = await response.text()
-    return extractPrice(html)
+    const gamePrice = extractPrice(html)
+
+    // Include the original store URL in the response
+    if (gamePrice) {
+      return {
+        ...gamePrice,
+        storeUrl: url
+      }
+    }
+
+    return null
   } catch (error) {
     console.error("Error fetching PlayStation game price:", error)
     return null
   }
 }
 
-export function extractPrice(html: string): GamePrice | null {
+export function extractPrice(html: string): ExtractedPrice | null {
   const scriptRegex =
     /<script[^>]*type="application\/json"[^>]*>([\s\S]*?)<\/script>/g
   let match
