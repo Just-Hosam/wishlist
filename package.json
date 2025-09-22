@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "update-playstation-prices": "curl -X POST http://localhost:3000/api/cron/update-playstation-prices"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",

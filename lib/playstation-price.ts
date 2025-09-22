@@ -18,10 +18,20 @@ export interface ExtractedPrice {
 }
 
 export async function getPlayStationGamePrice(
-  url: string
+  url: string,
+  headers?: Record<string, string>
 ): Promise<GamePrice | null> {
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        ...headers
+      }
+    })
     if (!response.ok) {
       throw new Error(
         `Failed to fetch PlayStation Store page: ${response.status}`
