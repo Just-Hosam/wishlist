@@ -108,6 +108,7 @@ model GamePrice {
 
   platform      Platform
   externalId    String   // NSUID, etc.
+  storeUrl      String?  // Store URL for re-fetching prices
 
   countryCode   String?  @db.Char(2)
   currencyCode  String?  @db.Char(3)
