@@ -1,6 +1,6 @@
+import PriceLayout from "@/components/layout/PriceLayout"
 import { Button } from "@/components/ui/button"
 import { authOptions } from "@/lib/auth-options"
-import { NintendoGameInfo } from "@/lib/nintendo-price"
 import prisma from "@/lib/prisma"
 import { GameCategory, Platform } from "@prisma/client"
 import { PlusIcon, SearchX } from "lucide-react"
@@ -92,18 +92,18 @@ export default async function Wishlist() {
                       alt="PlayStation Logo"
                       width={18}
                       height={18}
-                      className="mr-2"
+                      className="mr-3"
                     />
-                    <span className="font-medium">
-                      ${playstationPrice?.currentPrice}
-                    </span>
-                    {playstationPrice?.currentPrice !==
-                      playstationPrice?.regularPrice &&
-                      playstationPrice?.regularPrice && (
-                        <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
-                          ${playstationPrice?.regularPrice}
-                        </span>
-                      )}
+                    <PriceLayout
+                      onSale={
+                        playstationPrice.currentPrice !==
+                          playstationPrice.regularPrice &&
+                        !!playstationPrice.regularPrice
+                      }
+                      currentPrice={Number(playstationPrice.currentPrice || 0)}
+                      regularPrice={Number(playstationPrice.regularPrice || 0)}
+                      currency={playstationPrice.currencyCode || "USD"}
+                    />
                   </div>
                 )}
                 {nintendoPrice && (
@@ -113,18 +113,18 @@ export default async function Wishlist() {
                       alt="Nintendo Switch Logo"
                       width={18}
                       height={18}
-                      className="mr-2"
+                      className="mr-3"
                     />
-                    <span className="font-medium">
-                      ${nintendoPrice?.currentPrice}
-                    </span>
-                    {nintendoPrice?.currentPrice !==
-                      nintendoPrice?.regularPrice &&
-                      nintendoPrice?.regularPrice && (
-                        <span className="ml-2 text-xs font-medium text-muted-foreground line-through">
-                          ${nintendoPrice?.regularPrice}
-                        </span>
-                      )}
+                    <PriceLayout
+                      onSale={
+                        nintendoPrice.currentPrice !==
+                          nintendoPrice.regularPrice &&
+                        !!nintendoPrice.regularPrice
+                      }
+                      currentPrice={Number(nintendoPrice.currentPrice || 0)}
+                      regularPrice={Number(nintendoPrice.regularPrice || 0)}
+                      currency={nintendoPrice.currencyCode || "USD"}
+                    />
                   </div>
                 )}
               </div>

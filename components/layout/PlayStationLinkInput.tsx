@@ -7,6 +7,7 @@ import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
+import PriceLayout from "./PriceLayout"
 
 interface PlayStationLinkInputProps {
   onGameInfoFound: (gameInfo: GamePrice) => void
@@ -88,17 +89,22 @@ export default function PlayStationLinkInput({
   }
 
   const Price = () => {
+    if (!gameInfo) return null
+
+    // Extract numeric values from price strings
+    const currentPrice = parseFloat(
+      gameInfo.currentPrice.replace(/[^0-9.]/g, "")
+    )
+    const regularPrice = parseFloat(gameInfo.basePrice.replace(/[^0-9.]/g, ""))
+    const isOnSale = currentPrice < regularPrice
+
     return (
-      <div className="flex items-center gap-3">
-        <span className="">
-          {gameInfo?.currentPrice || gameInfo?.basePrice}
-        </span>
-        {gameInfo?.currentPrice !== gameInfo?.basePrice && (
-          <span className="text-sm text-muted-foreground line-through">
-            {gameInfo?.basePrice}
-          </span>
-        )}
-      </div>
+      <PriceLayout
+        onSale={isOnSale}
+        currentPrice={currentPrice}
+        regularPrice={regularPrice}
+        currency={gameInfo.currency}
+      />
     )
   }
 
@@ -118,7 +124,7 @@ export default function PlayStationLinkInput({
       </label>
 
       {gameInfo ? (
-        <div className="mt-2 flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input px-2">
+        <div className="mt-2 flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input pl-3 pr-2">
           <div className="flex items-center gap-2">
             <CircleCheck
               size={19}

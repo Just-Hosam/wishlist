@@ -1,5 +1,5 @@
-import { BackButton } from "@/components/layout/BackButton"
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import PriceLayout from "@/components/layout/PriceLayout"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -9,6 +9,7 @@ import {
 import prisma from "@/lib/prisma"
 import { Platform } from "@prisma/client"
 import { Clock, EllipsisVertical, Pencil } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 
 interface Props {
@@ -32,7 +33,7 @@ export default async function Game({ params }: Props) {
 
   return (
     <>
-      <header className="flex justify-between gap-4">
+      <header className="mb-6 flex justify-between gap-4">
         <div className="flex-1">
           <h2 className="text-3xl font-semibold">{game?.name}</h2>
           {game?.length && (
@@ -62,85 +63,44 @@ export default async function Game({ params }: Props) {
       </header>
 
       {playstationPrice && (
-        <div className="mt-6 rounded-xl border p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-blue-600">PlayStation Store</h3>
-              <p className="mt-1 text-xs text-gray-500">
-                {playstationPrice.countryCode &&
-                  `${playstationPrice.countryCode} Store`}
-                {playstationPrice.lastFetchedAt && (
-                  <span className="ml-2">
-                    Updated{" "}
-                    {new Date(
-                      playstationPrice.lastFetchedAt
-                    ).toLocaleDateString()}
-                  </span>
-                )}
-              </p>
-            </div>
-            <div className="text-right">
-              {playstationPrice.currentPrice &&
-              playstationPrice.currentPrice !==
-                playstationPrice.regularPrice ? (
-                <div>
-                  <div className="text-sm text-gray-500 line-through">
-                    ${playstationPrice.regularPrice?.toString()}
-                  </div>
-                  <div className="text-xl font-bold text-green-600">
-                    ${playstationPrice.currentPrice?.toString()}
-                  </div>
-                  <div className="text-xs font-medium text-green-600">
-                    On Sale!
-                  </div>
-                </div>
-              ) : (
-                <div className="text-xl font-bold">
-                  ${playstationPrice.regularPrice?.toString()}
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="flex items-center">
+          <Image
+            src="/playstation.svg"
+            alt="PlayStation Logo"
+            width={18}
+            height={18}
+            className="mr-3"
+          />
+          <PriceLayout
+            onSale={
+              playstationPrice.currentPrice !== playstationPrice.regularPrice &&
+              !!playstationPrice.regularPrice
+            }
+            currentPrice={Number(playstationPrice.currentPrice || 0)}
+            regularPrice={Number(playstationPrice.regularPrice || 0)}
+            currency={playstationPrice.currencyCode || "USD"}
+          />
         </div>
       )}
 
       {nintendoPrice && (
-        <div className="mt-6 rounded-xl border p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-red-600">Nintendo Store</h3>
-              <p className="mt-1 text-xs text-gray-500">
-                {nintendoPrice.countryCode &&
-                  `${nintendoPrice.countryCode} Store`}
-                {nintendoPrice.lastFetchedAt && (
-                  <span className="ml-2">
-                    Updated{" "}
-                    {new Date(nintendoPrice.lastFetchedAt).toLocaleDateString()}
-                  </span>
-                )}
-              </p>
-            </div>
-            <div className="text-right">
-              {nintendoPrice.currentPrice &&
-              nintendoPrice.currentPrice !== nintendoPrice.regularPrice ? (
-                <div>
-                  <div className="text-sm text-gray-500 line-through">
-                    ${nintendoPrice.regularPrice?.toString()}
-                  </div>
-                  <div className="text-xl font-bold text-green-600">
-                    ${nintendoPrice.currentPrice?.toString()}
-                  </div>
-                  <div className="text-xs font-medium text-green-600">
-                    On Sale!
-                  </div>
-                </div>
-              ) : (
-                <div className="text-xl font-bold">
-                  ${nintendoPrice.regularPrice?.toString()}
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="flex items-center">
+          <Image
+            src="/nintendo-switch.svg"
+            alt="Nintendo Switch Logo"
+            width={18}
+            height={18}
+            className="mr-3"
+          />
+          <PriceLayout
+            onSale={
+              nintendoPrice.currentPrice !== nintendoPrice.regularPrice &&
+              !!nintendoPrice.regularPrice
+            }
+            currentPrice={Number(nintendoPrice.currentPrice || 0)}
+            regularPrice={Number(nintendoPrice.regularPrice || 0)}
+            currency={nintendoPrice.currencyCode || "USD"}
+          />
         </div>
       )}
     </>

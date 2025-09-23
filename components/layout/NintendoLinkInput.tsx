@@ -7,6 +7,7 @@ import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
+import PriceLayout from "./PriceLayout"
 
 interface NintendoLinkInputProps {
   onGameInfoFound: (gameInfo: NintendoGameInfo) => void
@@ -84,17 +85,22 @@ export default function NintendoLinkInput({
   }
 
   const Price = () => {
+    if (!gameInfo) return null
+
+    const currentPrice =
+      gameInfo.onSale && gameInfo.discounted_price_value
+        ? parseFloat(gameInfo.discounted_price_value)
+        : parseFloat(gameInfo.raw_price_value)
+
+    const regularPrice = parseFloat(gameInfo.raw_price_value)
+
     return (
-      <div className="flex items-center gap-3">
-        <span className="">
-          {gameInfo?.discounted_price || gameInfo?.raw_price}
-        </span>
-        {gameInfo?.discounted_price && (
-          <span className="text-sm text-muted-foreground line-through">
-            {gameInfo?.raw_price}
-          </span>
-        )}
-      </div>
+      <PriceLayout
+        onSale={gameInfo.onSale}
+        currentPrice={currentPrice}
+        regularPrice={regularPrice}
+        currency={gameInfo.currency}
+      />
     )
   }
 
@@ -114,7 +120,7 @@ export default function NintendoLinkInput({
       </label>
 
       {gameInfo ? (
-        <div className="mt-2 flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input px-2">
+        <div className="mt-2 flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input pl-3 pr-2">
           <div className="flex items-center gap-2">
             <CircleCheck
               size={19}
