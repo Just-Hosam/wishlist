@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/update-playstation-prices",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/update-nintendo-prices",
+      "schedule": "0 2 * * *"
     }
   ]
 }

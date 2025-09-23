@@ -2,7 +2,16 @@
 
 export const getNSUID = async (url: string): Promise<string | null> => {
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      headers: {
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        Connection: "keep-alive",
+        "Upgrade-Insecure-Requests": "1"
+      }
+    })
     if (!response.ok) {
       console.error(`Failed to fetch Nintendo URL: ${response.status}`)
       return null
@@ -88,7 +97,17 @@ export async function getCurrentPrice(
 ): Promise<NintendoPriceData | null> {
   try {
     const url = `https://api.ec.nintendo.com/v1/price?country=${country}&ids=${nsuid}&lang=${lang}`
-    const res = await fetch(url)
+    const res = await fetch(url, {
+      headers: {
+        Accept:
+          "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        Connection: "keep-alive",
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      }
+    })
     if (!res.ok) {
       console.error(`Nintendo API HTTP ${res.status}`)
       return null
