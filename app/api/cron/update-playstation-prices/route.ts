@@ -1,6 +1,6 @@
 import { getPlayStationGamePrice } from "@/lib/playstation-price"
 import prisma from "@/lib/prisma"
-import { Platform } from "@prisma/client"
+import { Platform, GameCategory } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 const BATCH_SIZE = 5
@@ -10,13 +10,21 @@ export async function POST() {
 
   try {
     const playstationPrices = await prisma.gamePrice.findMany({
-      where: { platform: Platform.PLAYSTATION }
+      where: {
+        platform: Platform.PLAYSTATION,
+        game: {
+          category: GameCategory.WISHLIST
+        }
+      },
+      include: {
+        game: true
+      }
     })
 
     const batch = playstationPrices.slice(0, BATCH_SIZE)
 
     console.log(
-      `[CRON] Processing ${batch.length} of ${playstationPrices.length} games`
+      `[CRON] Processing ${batch.length} of ${playstationPrices.length} wishlist games`
     )
 
     let updated = 0
