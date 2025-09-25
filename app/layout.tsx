@@ -5,10 +5,8 @@ import NavigationTabs from "@/components/layout/NavigationTabs"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
-import { authOptions } from "@/lib/auth-options"
 import { Gamepad2, PlusIcon } from "lucide-react"
 import type { Metadata } from "next"
-import { getServerSession } from "next-auth"
 import Link from "next/link"
 import "./globals.css"
 
@@ -23,13 +21,27 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
-
   return (
     <AuthProvider>
       <TabProvider>
         <html className="font-mont text-base" lang="en">
           <head>
+            <link
+              rel="icon"
+              type="image/png"
+              href="/favicon/favicon-96x96.png"
+              sizes="96x96"
+            />
+            <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+            <link rel="shortcut icon" href="/favicon/favicon.ico" />
+            <link
+              rel="apple-touch-icon"
+              sizes="180x180"
+              href="/favicon/apple-touch-icon.png"
+            />
+            <meta name="apple-mobile-web-app-title" content="GamesList" />
+            <link rel="manifest" href="/favicon/site.webmanifest" />
+
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" />
             <link
