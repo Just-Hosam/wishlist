@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { authOptions } from "@/lib/auth-options"
 import {
+  ArrowRight,
   Clock,
   EllipsisVertical,
   Pencil,
@@ -18,6 +19,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import MoveGameButton from "@/components/layout/MoveGameButton"
 
 export default async function Completed() {
   const session = await getServerSession(authOptions)
@@ -58,7 +60,7 @@ export default async function Completed() {
               <div className="flex-1 text-xl font-medium">
                 <h3>{game.name}</h3>
                 {game.length && (
-                  <p className="text-light mt-1 flex items-center gap-1 text-xs text-gray-600">
+                  <p className="mt-1 flex items-center gap-1 text-xs font-normal text-gray-600">
                     <Clock size={14} /> {game?.length} hours
                   </p>
                 )}
@@ -71,6 +73,28 @@ export default async function Completed() {
                 </PopoverTrigger>
                 <PopoverContent className="mr-4 w-fit md:mr-0">
                   <div className="flex flex-col">
+                    <MoveGameButton
+                      gameId={game.id}
+                      fromCategory={GameCategory.COMPLETED}
+                      toCategory={GameCategory.WISHLIST}
+                      buttonText="To Wishlist"
+                      icon={<ArrowRight />}
+                    />
+                    <MoveGameButton
+                      gameId={game.id}
+                      fromCategory={GameCategory.COMPLETED}
+                      toCategory={GameCategory.OWNED}
+                      buttonText="To Owned"
+                      icon={<ArrowRight />}
+                    />
+                    <MoveGameButton
+                      gameId={game.id}
+                      fromCategory={GameCategory.COMPLETED}
+                      toCategory={GameCategory.GRAVEYARD}
+                      buttonText="To Graveyard"
+                      icon={<ArrowRight />}
+                    />
+                    <div className="my-2 rounded-full border-[0.5px]"></div>
                     <Link href={`/game/${game.id}/edit`}>
                       <Button className="w-full justify-start" variant="ghost">
                         <Pencil />

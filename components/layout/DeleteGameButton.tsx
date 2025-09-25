@@ -12,7 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { Trash2 } from "lucide-react"
@@ -33,7 +33,7 @@ export default function DeleteGameButton({ gameId }: Props) {
       setIsDeleting(true)
 
       const response = await fetch(`/api/game/${gameId}`, {
-        method: "DELETE",
+        method: "DELETE"
       })
 
       if (!response.ok) {
@@ -50,7 +50,7 @@ export default function DeleteGameButton({ gameId }: Props) {
     } catch (error) {
       console.error("Error deleting game:", error)
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete game",
+        error instanceof Error ? error.message : "Failed to delete game"
       )
     } finally {
       setIsDeleting(false)
@@ -60,7 +60,7 @@ export default function DeleteGameButton({ gameId }: Props) {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button className="text-destructive" variant="ghost">
+        <Button className="justify-start text-destructive" variant="ghost">
           <Trash2 />
           Delete
         </Button>
