@@ -5,6 +5,17 @@ import { NextResponse } from "next/server"
 
 const BATCH_SIZE = 5
 
+const batchArr = (arr: any[], batchSize: number) => {
+  const result = []
+
+  for (let i = 0; i < arr.length; i += batchSize) {
+    const batch = arr.slice(i, i + batchSize)
+    result.push(batch)
+  }
+
+  return result
+}
+
 export async function POST() {
   console.log("[CRON] Starting PlayStation price update job...")
 
@@ -21,10 +32,10 @@ export async function POST() {
       }
     })
 
-    const batch = playstationPrices.slice(0, BATCH_SIZE)
+    const batches = batchArr(playstationPrices, BATCH_SIZE)
 
     console.log(
-      `[CRON] Processing ${batch.length} of ${playstationPrices.length} wishlist games`
+      `[CRON] Processing ${playstationPrices.length} wishlist games in ${batches.length} batches`
     )
 
     let updated = 0
@@ -38,51 +49,76 @@ export async function POST() {
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
     ]
 
-    for (const gamePrice of batch) {
-      try {
-        // Random User-Agent for each request
-        const randomUserAgent =
-          userAgents[Math.floor(Math.random() * userAgents.length)]
+    for (const [batchIndex, batch] of batches.entries()) {
+      console.log(
+        `[CRON] Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} games)`
+      )
 
-        const playstationData = await getPlayStationGamePrice(
-          gamePrice.storeUrl!,
-          { "User-Agent": randomUserAgent }
-        )
+      for (const gamePrice of batch) {
+        try {
+          // Random User-Agent for each request
+          const randomUserAgent =
+            userAgents[Math.floor(Math.random() * userAgents.length)]
 
-        if (playstationData) {
-          // Convert prices to Decimal
-          const currentPrice = parseFloat(playstationData.currentPrice)
-          const regularPrice = parseFloat(playstationData.basePrice)
+          const playstationData = await getPlayStationGamePrice(
+            gamePrice.storeUrl!,
+            { "User-Agent": randomUserAgent }
+          )
 
-          await prisma.gamePrice.update({
-            where: { id: gamePrice.id },
-            data: {
-              regularPrice,
-              currentPrice,
-              currencyCode: playstationData.currency,
-              lastFetchedAt: new Date(),
-              updatedAt: new Date()
+          if (playstationData) {
+            // Convert prices to Decimal (remove currency symbols and parse)
+            const currentPrice = parseFloat(
+              playstationData.currentPrice.replace(/[^0-9.-]/g, "")
+            )
+            const regularPrice = parseFloat(
+              playstationData.basePrice.replace(/[^0-9.-]/g, "")
+            )
+
+            // Validate that prices are valid numbers
+            if (isNaN(currentPrice) || isNaN(regularPrice)) {
+              console.error(
+                `[CRON] Invalid price data for game ID ${gamePrice.id}: currentPrice=${currentPrice}, regularPrice=${regularPrice}`
+              )
+              errors++
+              continue
             }
-          })
 
-          updated++
-        } else {
+            await prisma.gamePrice.update({
+              where: { id: gamePrice.id },
+              data: {
+                regularPrice,
+                currentPrice,
+                currencyCode: playstationData.currency,
+                lastFetchedAt: new Date(),
+                updatedAt: new Date()
+              }
+            })
+
+            updated++
+          } else {
+            errors++
+          }
+
+          // Randomized delay: 2-5 seconds between requests
+          const randomDelay = Math.floor(Math.random() * 3000) + 2000
+          await new Promise((resolve) => setTimeout(resolve, randomDelay))
+        } catch (error) {
+          console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
           errors++
         }
+      }
 
-        // Randomized delay: 2-5 seconds between requests
-        const randomDelay = Math.floor(Math.random() * 3000) + 2000
-        await new Promise((resolve) => setTimeout(resolve, randomDelay))
-      } catch (error) {
-        console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
-        errors++
+      // Add delay between batches
+      if (batchIndex < batches.length - 1) {
+        console.log(`[CRON] Waiting before next batch...`)
+        await new Promise((resolve) => setTimeout(resolve, 3000))
       }
     }
 
     const result = {
       platform: "PlayStation",
       total: playstationPrices.length,
-      processed: batch.length,
+      processed: playstationPrices.length,
       updated,
       errors,
       timestamp: new Date().toISOString()

@@ -5,6 +5,17 @@ import { NextResponse } from "next/server"
 
 const BATCH_SIZE = 5
 
+const batchArr = (arr: any[], batchSize: number) => {
+  const result = []
+
+  for (let i = 0; i < arr.length; i += batchSize) {
+    const batch = arr.slice(i, i + batchSize)
+    result.push(batch)
+  }
+
+  return result
+}
+
 export async function POST() {
   console.log("[CRON] Starting Nintendo price update job...")
 
@@ -21,10 +32,10 @@ export async function POST() {
       }
     })
 
-    const batch = nintendoPrices.slice(0, BATCH_SIZE)
+    const batches = batchArr(nintendoPrices, BATCH_SIZE)
 
     console.log(
-      `[CRON] Processing ${batch.length} of ${nintendoPrices.length} wishlist games`
+      `[CRON] Processing ${nintendoPrices.length} wishlist games in ${batches.length} batches`
     )
 
     let updated = 0
@@ -38,50 +49,62 @@ export async function POST() {
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
     ]
 
-    for (const gamePrice of batch) {
-      try {
-        // Random User-Agent for each request
-        const randomUserAgent =
-          userAgents[Math.floor(Math.random() * userAgents.length)]
+    for (const [batchIndex, batch] of batches.entries()) {
+      console.log(
+        `[CRON] Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} games)`
+      )
 
-        const nintendoData = await getNintendoGameInfo(gamePrice.storeUrl!)
+      for (const gamePrice of batch) {
+        try {
+          // Random User-Agent for each request
+          const randomUserAgent =
+            userAgents[Math.floor(Math.random() * userAgents.length)]
 
-        if (nintendoData) {
-          // Use discounted price if on sale, otherwise use regular price
-          const currentPrice = nintendoData.onSale
-            ? parseFloat(nintendoData.discounted_price_value!)
-            : parseFloat(nintendoData.raw_price_value)
-          const regularPrice = parseFloat(nintendoData.raw_price_value)
+          const nintendoData = await getNintendoGameInfo(gamePrice.storeUrl!)
 
-          await prisma.gamePrice.update({
-            where: { id: gamePrice.id },
-            data: {
-              regularPrice,
-              currentPrice,
-              currencyCode: nintendoData.currency,
-              lastFetchedAt: new Date(),
-              updatedAt: new Date()
-            }
-          })
+          if (nintendoData) {
+            // Use discounted price if on sale, otherwise use regular price
+            const currentPrice = nintendoData.onSale
+              ? parseFloat(nintendoData.discounted_price_value!)
+              : parseFloat(nintendoData.raw_price_value)
+            const regularPrice = parseFloat(nintendoData.raw_price_value)
 
-          updated++
-        } else {
+            await prisma.gamePrice.update({
+              where: { id: gamePrice.id },
+              data: {
+                regularPrice,
+                currentPrice,
+                currencyCode: nintendoData.currency,
+                lastFetchedAt: new Date(),
+                updatedAt: new Date()
+              }
+            })
+
+            updated++
+          } else {
+            errors++
+          }
+
+          // Randomized delay: 2-5 seconds between requests
+          const randomDelay = Math.floor(Math.random() * 3000) + 2000
+          await new Promise((resolve) => setTimeout(resolve, randomDelay))
+        } catch (error) {
+          console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
           errors++
         }
+      }
 
-        // Randomized delay: 2-5 seconds between requests
-        const randomDelay = Math.floor(Math.random() * 3000) + 2000
-        await new Promise((resolve) => setTimeout(resolve, randomDelay))
-      } catch (error) {
-        console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
-        errors++
+      // Add delay between batches
+      if (batchIndex < batches.length - 1) {
+        console.log(`[CRON] Waiting before next batch...`)
+        await new Promise((resolve) => setTimeout(resolve, 3000))
       }
     }
 
     const result = {
       platform: "Nintendo",
       total: nintendoPrices.length,
-      processed: batch.length,
+      processed: nintendoPrices.length,
       updated,
       errors,
       timestamp: new Date().toISOString()
