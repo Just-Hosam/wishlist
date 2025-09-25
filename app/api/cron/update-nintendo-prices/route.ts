@@ -16,7 +16,7 @@ const batchArr = (arr: any[], batchSize: number) => {
   return result
 }
 
-export async function POST() {
+export async function GET() {
   console.log("[CRON] Starting Nintendo price update job...")
 
   try {
