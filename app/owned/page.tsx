@@ -87,13 +87,6 @@ export default async function Owned() {
                       buttonText="To Completed"
                       icon={<ArrowRight />}
                     />
-                    <MoveGameButton
-                      gameId={game.id}
-                      fromCategory={GameCategory.OWNED}
-                      toCategory={GameCategory.GRAVEYARD}
-                      buttonText="To Graveyard"
-                      icon={<ArrowRight />}
-                    />
                     <div className="my-2 rounded-full border-[0.5px]"></div>
                     <Link href={`/game/${game.id}/edit`}>
                       <Button className="w-full justify-start" variant="ghost">

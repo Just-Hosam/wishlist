@@ -295,12 +295,6 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
                 Completed
               </div>
             </SelectItem>
-            <SelectItem key="graveyard" value="GRAVEYARD">
-              <div className="flex items-center gap-2">
-                <Skull />
-                Graveyard
-              </div>
-            </SelectItem>
           </SelectContent>
         </Select>
       </div>

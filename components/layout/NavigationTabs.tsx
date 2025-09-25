@@ -33,14 +33,6 @@ export default function NavigationTabs() {
             <CircleCheckBig />
           </TabsTrigger>
         </Link>
-        <Link
-          href="/graveyard"
-          onClick={() => setActiveTab(GameCategory.GRAVEYARD)}
-        >
-          <TabsTrigger className="px-3 py-2" value="GRAVEYARD">
-            <Skull />
-          </TabsTrigger>
-        </Link>
       </TabsList>
     </Tabs>
   )
