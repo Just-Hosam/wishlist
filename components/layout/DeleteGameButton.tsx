@@ -25,7 +25,6 @@ interface Props {
 export default function DeleteGameButton({ gameId }: Props) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const { activeTab } = useTabContext()
   const router = useRouter()
 
   const deleteGame = async () => {
@@ -45,7 +44,6 @@ export default function DeleteGameButton({ gameId }: Props) {
 
       setIsOpen(false)
 
-      router.push("/" + activeTab.toLocaleLowerCase())
       router.refresh()
     } catch (error) {
       console.error("Error deleting game:", error)
@@ -75,13 +73,14 @@ export default function DeleteGameButton({ gameId }: Props) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={deleteGame}
+
+          <Button
             disabled={isDeleting}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            variant="destructive"
+            onClick={deleteGame}
           >
             {isDeleting ? "Deleting..." : "Delete Game"}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
