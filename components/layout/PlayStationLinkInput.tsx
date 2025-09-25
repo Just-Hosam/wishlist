@@ -66,7 +66,6 @@ export default function PlayStationLinkInput({
 
       const info = await response.json()
       setGameInfo(info)
-      console.log("PlayStation info :>>", info)
 
       onGameInfoFound?.(info)
       toast.success("Game information fetched successfully!")

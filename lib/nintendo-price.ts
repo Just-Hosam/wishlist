@@ -161,13 +161,3 @@ export async function getNintendoGameInfo(
     storeUrl: url
   }
 }
-
-// Example usage (commented out for production)
-/*
-const gameUrl =
-  "https://www.nintendo.com/en-ca/store/products/final-fantasy-vii-remake-intergrade-switch-2/"
-
-getNintendoGameInfo(gameUrl)
-  .then(console.log)
-  .catch(console.error)
-*/
