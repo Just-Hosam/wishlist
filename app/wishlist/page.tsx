@@ -1,9 +1,21 @@
+import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import PriceLayout from "@/components/layout/PriceLayout"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory, Platform } from "@prisma/client"
-import { PlusIcon, SearchX } from "lucide-react"
+import {
+  Clock,
+  EllipsisVertical,
+  Pencil,
+  PlusIcon,
+  SearchX
+} from "lucide-react"
 import { getServerSession } from "next-auth"
 import Image from "next/image"
 import Link from "next/link"
@@ -75,60 +87,85 @@ export default async function Wishlist() {
           )
 
           return (
-            <Link href={`/game/${game.id}`} key={game.id}>
-              <div className="mb-4 rounded-2xl border p-6">
-                <header>
-                  <h3 className="text-xl font-semibold">{game.name}</h3>
+            <div key={game.id} className="mb-4 rounded-3xl border p-6">
+              <header className="flex items-center justify-between gap-4">
+                <div className="flex-1 text-xl font-medium">
+                  <h3>{game.name}</h3>
                   {game.length && (
-                    <p className="text-light mt-1 text-xs text-gray-600">
-                      about {game.length} hours
+                    <p className="text-light mt-1 flex items-center gap-1 text-xs text-gray-600">
+                      <Clock size={14} /> {game?.length} hours
                     </p>
                   )}
-                </header>
-                {playstationPrice && (
-                  <div className="mt-4 flex items-center">
-                    <Image
-                      src="/playstation.svg"
-                      alt="PlayStation Logo"
-                      width={18}
-                      height={18}
-                      className="mr-3"
-                    />
-                    <PriceLayout
-                      onSale={
-                        playstationPrice.currentPrice !==
-                          playstationPrice.regularPrice &&
-                        !!playstationPrice.regularPrice
-                      }
-                      currentPrice={Number(playstationPrice.currentPrice || 0)}
-                      regularPrice={Number(playstationPrice.regularPrice || 0)}
-                      currency={playstationPrice.currencyCode || "USD"}
-                    />
-                  </div>
-                )}
-                {nintendoPrice && (
-                  <div className="mt-4 flex items-center">
-                    <Image
-                      src="/nintendo-switch.svg"
-                      alt="Nintendo Switch Logo"
-                      width={18}
-                      height={18}
-                      className="mr-3"
-                    />
-                    <PriceLayout
-                      onSale={
-                        nintendoPrice.currentPrice !==
-                          nintendoPrice.regularPrice &&
-                        !!nintendoPrice.regularPrice
-                      }
-                      currentPrice={Number(nintendoPrice.currentPrice || 0)}
-                      regularPrice={Number(nintendoPrice.regularPrice || 0)}
-                      currency={nintendoPrice.currencyCode || "USD"}
-                    />
-                  </div>
-                )}
-              </div>
-            </Link>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="self-start px-2"
+                    >
+                      <EllipsisVertical />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-fit">
+                    <div className="flex flex-col">
+                      <Link href={`/game/${game.id}/edit`}>
+                        <Button
+                          className="w-full justify-start"
+                          variant="ghost"
+                        >
+                          <Pencil />
+                          Edit
+                        </Button>
+                      </Link>
+                      <DeleteGameButton gameId={game.id} />
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </header>
+              {playstationPrice && (
+                <div className="mt-4 flex items-center">
+                  <Image
+                    src="/playstation.svg"
+                    alt="PlayStation Logo"
+                    width={18}
+                    height={18}
+                    className="mr-3"
+                  />
+                  <PriceLayout
+                    onSale={
+                      playstationPrice.currentPrice !==
+                        playstationPrice.regularPrice &&
+                      !!playstationPrice.regularPrice
+                    }
+                    currentPrice={Number(playstationPrice.currentPrice || 0)}
+                    regularPrice={Number(playstationPrice.regularPrice || 0)}
+                    currency={playstationPrice.currencyCode || "USD"}
+                  />
+                </div>
+              )}
+              {nintendoPrice && (
+                <div className="mt-4 flex items-center">
+                  <Image
+                    src="/nintendo-switch.svg"
+                    alt="Nintendo Switch Logo"
+                    width={18}
+                    height={18}
+                    className="mr-3"
+                  />
+                  <PriceLayout
+                    onSale={
+                      nintendoPrice.currentPrice !==
+                        nintendoPrice.regularPrice &&
+                      !!nintendoPrice.regularPrice
+                    }
+                    currentPrice={Number(nintendoPrice.currentPrice || 0)}
+                    regularPrice={Number(nintendoPrice.regularPrice || 0)}
+                    currency={nintendoPrice.currencyCode || "USD"}
+                  />
+                </div>
+              )}
+            </div>
           )
         })
       )}
