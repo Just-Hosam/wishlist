@@ -69,7 +69,7 @@ export default async function Owned() {
                     <EllipsisVertical />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-fit">
+                <PopoverContent className="mr-4 w-fit md:mr-0">
                   <div className="flex flex-col">
                     <Link href={`/game/${game.id}/edit`}>
                       <Button className="w-full justify-start" variant="ghost">
