@@ -1,11 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { redirect, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -14,45 +10,33 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog"
-import { toast } from "sonner"
+import { Button } from "@/components/ui/button"
+import { deleteGame } from "@/server/actions/game"
 import { Trash2 } from "lucide-react"
-import { useTabContext } from "@/contexts/TabContext"
+import { useState, useTransition } from "react"
+import { toast } from "sonner"
 
 interface Props {
   gameId: string
 }
 
 export default function DeleteGameButton({ gameId }: Props) {
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
-  const deleteGame = async () => {
-    try {
-      setIsDeleting(true)
-
-      const response = await fetch(`/api/game/${gameId}`, {
-        method: "DELETE"
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || "Failed to delete game")
+  const handleDelete = () => {
+    startTransition(async () => {
+      try {
+        await deleteGame(gameId)
+        toast.success("Game deleted successfully!")
+        setIsOpen(false)
+      } catch (error) {
+        console.error("Error deleting game:", error)
+        toast.error(
+          error instanceof Error ? error.message : "Failed to delete game."
+        )
       }
-
-      toast.success("Game deleted successfully!")
-
-      setIsOpen(false)
-
-      router.refresh()
-    } catch (error) {
-      console.error("Error deleting game:", error)
-      toast.error(
-        error instanceof Error ? error.message : "Failed to delete game"
-      )
-    } finally {
-      setIsDeleting(false)
-    }
+    })
   }
 
   return (
@@ -67,19 +51,18 @@ export default function DeleteGameButton({ gameId }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete this game from your collection. This
-            action cannot be undone.
+            This action cannot be undone. This will permanently delete the game
+            from your list.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <Button
-            disabled={isDeleting}
+            disabled={isPending}
             variant="destructive"
-            onClick={deleteGame}
+            onClick={handleDelete}
           >
-            {isDeleting ? "Deleting..." : "Delete Game"}
+            {isPending ? "Deleting..." : "Delete Game"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
