@@ -13,7 +13,7 @@ export function GoogleSigninButton() {
         className="gap-3 rounded-lg p-6"
       >
         <Image
-          src="/google-logo.png"
+          src="/google.svg"
           alt="Google Logo"
           width={20}
           height={20}
