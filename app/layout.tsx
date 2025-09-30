@@ -35,6 +35,8 @@ export default async function RootLayout({
             />
             <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
             <link rel="shortcut icon" href="/favicon/favicon.ico" />
+
+            {/* iOS PWA Configuration */}
             <link
               rel="apple-touch-icon"
               sizes="180x180"
@@ -45,6 +47,17 @@ export default async function RootLayout({
               name="apple-mobile-web-app-status-bar-style"
               content="black-translucent"
             />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+
+            {/* Android PWA Configuration */}
+            <meta name="mobile-web-app-capable" content="yes" />
+
+            {/* General PWA Configuration */}
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, viewport-fit=cover"
+            />
+            <link rel="manifest" href="/manifest.json" />
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" />
