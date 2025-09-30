@@ -1,4 +1,3 @@
-import AuthCheck from "@/components/layout/AuthCheck"
 import { GoogleSigninButton } from "@/components/layout/GoogleSigninButton"
 import { authOptions } from "@/lib/auth-options"
 import { getServerSession } from "next-auth"
@@ -11,13 +10,11 @@ export default async function Home() {
   if (isAuthenticated) redirect("/wishlist")
 
   return (
-    <AuthCheck showIfNotAuthenticated>
-      <div className="flex h-[500px] flex-col items-center justify-center text-center">
-        <h2 className="mb-3 text-3xl font-semibold">Welcome!</h2>
-        <p className="mb-7">Login to manage your wishlist.</p>
+    <div className="flex h-[500px] flex-col items-center justify-center text-center">
+      <h2 className="mb-3 text-3xl font-semibold">Welcome!</h2>
+      <p className="mb-7">Login to manage your wishlist.</p>
 
-        <GoogleSigninButton />
-      </div>
-    </AuthCheck>
+      <GoogleSigninButton />
+    </div>
   )
 }
