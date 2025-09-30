@@ -8,7 +8,7 @@ import { TabProvider } from "@/contexts/TabContext"
 import { Gamepad2, PlusIcon } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
-import "./globals.css"
+import "../styles/globals.css"
 
 export const metadata: Metadata = {
   title: "GamesList",
