@@ -53,7 +53,7 @@ export default async function RootLayout({
             ></script> */}
           </head>
           <body>
-            <nav className="sticky left-0 right-0 top-0 m-auto flex max-w-[1200px] items-center justify-between gap-6 bg-white px-6 py-6">
+            <nav className="sticky left-0 right-0 top-0 m-auto flex min-h-[88px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 py-6">
               <h1 className="flex items-center gap-2 text-xl">
                 <Gamepad2 />
                 GamesList
@@ -62,16 +62,16 @@ export default async function RootLayout({
                 <NavigationPopover />
               </AuthCheck>
             </nav>
-            <AuthCheck>
-              <header className="m-auto flex max-w-[700px] items-center justify-between px-6 pb-7">
+            <header className="m-auto flex max-w-[700px] items-center justify-between px-6 pb-7">
+              <AuthCheck fallback={<div className="h-[44px] w-full" />}>
                 <NavigationTabs />
                 <Link href="/game/add">
                   <Button size="icon">
                     <PlusIcon />
                   </Button>
                 </Link>
-              </header>
-            </AuthCheck>
+              </AuthCheck>
+            </header>
             <div className="m-auto max-w-[700px] px-6 pb-12">{children}</div>
             <Toaster position="top-center" />
           </body>
