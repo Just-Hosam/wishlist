@@ -42,7 +42,7 @@ export default async function RootLayout({
             <meta name="apple-mobile-web-app-title" content="GamesList" />
             <meta
               name="apple-mobile-web-app-status-bar-style"
-              content="white-translucent"
+              content="default"
             />
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
