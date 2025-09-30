@@ -1,11 +1,11 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { moveGame } from "@/server/actions/game"
 import { GameCategory } from "@prisma/client"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Spinner from "../ui/spinner"
+import { useTransition } from "react"
 import { toast } from "sonner"
+import Spinner from "../ui/spinner"
 
 interface MoveGameButtonProps {
   gameId: string
@@ -22,36 +22,18 @@ export default function MoveGameButton({
   buttonText,
   icon
 }: MoveGameButtonProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
-  const handleMove = async () => {
-    setIsLoading(true)
-
-    try {
-      const response = await fetch(`/api/game/${gameId}/move`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          gameId,
-          fromCategory,
-          toCategory
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to move game")
+  const handleMove = () => {
+    startTransition(async () => {
+      try {
+        await moveGame(gameId, toCategory)
+        toast.success("Game moved successfully!")
+      } catch (error) {
+        console.error("Error moving game:", error)
+        toast.error("Failed to move game")
       }
-
-      toast.success("Game moved successfully!")
-      router.refresh()
-    } catch (error) {
-      console.error("Error moving game:", error)
-    } finally {
-      setIsLoading(false)
-    }
+    })
   }
 
   return (
@@ -59,9 +41,9 @@ export default function MoveGameButton({
       className="w-full justify-start"
       variant="ghost"
       onClick={handleMove}
-      disabled={isLoading}
+      disabled={isPending}
     >
-      {isLoading ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <>

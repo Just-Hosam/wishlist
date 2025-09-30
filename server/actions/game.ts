@@ -329,3 +329,79 @@ export async function updateGame(id: string, data: GameData) {
 
   return updatedGame
 }
+
+export async function moveGame(gameId: string, toCategory: GameCategory) {
+  const session = await getServerSession(authOptions)
+
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized.")
+  }
+
+  if (!gameId) {
+    throw new Error("Game ID is required.")
+  }
+
+  if (!Object.values(GameCategory).includes(toCategory)) {
+    throw new Error("Invalid category.")
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email }
+  })
+
+  if (!user) {
+    throw new Error("User not found.")
+  }
+
+  const game = await prisma.game.findFirst({
+    where: {
+      id: gameId,
+      userId: user.id
+    }
+  })
+
+  if (!game) {
+    throw new Error("Game not found or you don't have permission to move it.")
+  }
+
+  const oldCategory = game.category
+
+  const updatedGame = await prisma.game.update({
+    where: { id: gameId },
+    data: {
+      category: toCategory
+    }
+  })
+
+  // Revalidate both the old and new category pages
+  if (oldCategory === GameCategory.WISHLIST) {
+    revalidatePath("/(lists)/wishlist")
+  }
+  if (oldCategory === GameCategory.OWNED) {
+    revalidatePath("/(lists)/owned")
+  }
+  if (oldCategory === GameCategory.COMPLETED) {
+    revalidatePath("/(lists)/completed")
+  }
+  if (oldCategory === GameCategory.GRAVEYARD) {
+    revalidatePath("/(lists)/graveyard")
+  }
+
+  // Revalidate the new category page if it's different
+  if (toCategory !== oldCategory) {
+    if (toCategory === GameCategory.WISHLIST) {
+      revalidatePath("/(lists)/wishlist")
+    }
+    if (toCategory === GameCategory.OWNED) {
+      revalidatePath("/(lists)/owned")
+    }
+    if (toCategory === GameCategory.COMPLETED) {
+      revalidatePath("/(lists)/completed")
+    }
+    if (toCategory === GameCategory.GRAVEYARD) {
+      revalidatePath("/(lists)/graveyard")
+    }
+  }
+
+  return updatedGame
+}
