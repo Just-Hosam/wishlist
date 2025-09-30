@@ -2,6 +2,7 @@ import AuthCheck from "@/components/layout/AuthCheck"
 import AuthProvider from "@/components/layout/AuthProvider"
 import NavigationPopover from "@/components/layout/NavigationPopover"
 import NavigationTabs from "@/components/layout/NavigationTabs"
+import SplashScreen from "@/components/layout/SplashScreen"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
@@ -42,7 +43,7 @@ export default async function RootLayout({
             <meta name="apple-mobile-web-app-title" content="GamesList" />
             <meta
               name="apple-mobile-web-app-status-bar-style"
-              content="default"
+              content="black-translucent"
             />
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -57,6 +58,7 @@ export default async function RootLayout({
             ></script> */}
           </head>
           <body>
+            <SplashScreen />
             <nav className="sticky left-0 right-0 top-0 m-auto flex min-h-[88px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 py-6">
               <h1 className="flex items-center gap-2 text-xl">
                 <Gamepad2 />

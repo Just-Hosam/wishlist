@@ -33,7 +33,7 @@ interface Game {
   length?: number | null
   category: GameCategory
   prices?: {
-    platform: "NINTENDO" | "PLAYSTATION"
+    platform: Platform
     externalId: string
     storeUrl: string | null
     countryCode: string | null
