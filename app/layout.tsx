@@ -40,6 +40,10 @@ export default async function RootLayout({
               href="/favicon/apple-touch-icon.png"
             />
             <meta name="apple-mobile-web-app-title" content="GamesList" />
+            <meta
+              name="apple-mobile-web-app-status-bar-style"
+              content="white-translucent"
+            />
 
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" />
