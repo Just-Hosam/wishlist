@@ -14,7 +14,7 @@ import {
 import { useTabContext } from "@/contexts/TabContext"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
 import { type GamePrice } from "@/lib/playstation-price"
-import { GameCategory } from "@prisma/client"
+import { GameCategory, Platform } from "@prisma/client"
 import {
   CircleCheckBig,
   FolderCheck,
@@ -23,8 +23,9 @@ import {
   Skull
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
+import { createGame, updateGame } from "@/server/actions/game"
 
 interface Game {
   id?: string
@@ -50,7 +51,7 @@ interface GameFormProps {
 export default function GameForm({ game, isEdit = false }: GameFormProps) {
   const router = useRouter()
   const { activeTab } = useTabContext()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [nintendoInfo, setNintendoInfo] = useState<NintendoGameInfo | null>(
     null
   )
@@ -71,9 +72,11 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
       // Set existing platform data if available
       if (game.prices) {
-        const nintendoPrice = game.prices.find((p) => p.platform === "NINTENDO")
+        const nintendoPrice = game.prices.find(
+          (p) => p.platform === Platform.NINTENDO
+        )
         const playstationPrice = game.prices.find(
-          (p) => p.platform === "PLAYSTATION"
+          (p) => p.platform === Platform.PLAYSTATION
         )
 
         if (nintendoPrice) {
@@ -136,20 +139,11 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       return
     }
 
-    setIsLoading(true)
-
-    try {
-      const url = isEdit ? `/api/game/${game?.id}` : "/api/game"
-      const method = isEdit ? "PUT" : "POST"
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
+    startTransition(async () => {
+      try {
+        const gameData = {
           name: formData.name.trim(),
-          length: formData.length ? parseInt(formData.length) : null,
+          length: formData.length,
           category: formData.category,
           nintendo: nintendoInfo
             ? {
@@ -159,73 +153,62 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
                 currencyCode: nintendoInfo.currency,
                 regularPrice: nintendoInfo.raw_price_value
                   ? parseFloat(nintendoInfo.raw_price_value)
-                  : null,
+                  : undefined,
                 currentPrice: nintendoInfo.discounted_price_value
                   ? parseFloat(nintendoInfo.discounted_price_value)
                   : nintendoInfo.raw_price_value
                     ? parseFloat(nintendoInfo.raw_price_value)
-                    : null
+                    : undefined
               }
-            : null,
+            : undefined,
           playstation: playstationInfo
             ? {
                 storeUrl: playstationInfo.storeUrl,
-                countryCode: null, // PlayStation API doesn't provide country code
+                countryCode: undefined, // PlayStation API doesn't provide country code
                 currencyCode: playstationInfo.currency,
                 regularPrice: (() => {
                   const cleaned = playstationInfo.basePrice.replace(
                     /[^0-9.]/g,
                     ""
                   )
-                  return cleaned ? parseFloat(cleaned) : null
+                  return cleaned ? parseFloat(cleaned) : undefined
                 })(),
                 currentPrice: (() => {
                   const cleaned = playstationInfo.currentPrice.replace(
                     /[^0-9.]/g,
                     ""
                   )
-                  return cleaned ? parseFloat(cleaned) : null
+                  return cleaned ? parseFloat(cleaned) : undefined
                 })()
               }
-            : null
-        })
-      })
-
-      if (!response.ok) {
-        try {
-          const errorData = await response.json()
-          throw new Error(
-            errorData.error ||
-              errorData.message ||
-              `Failed to ${isEdit ? "update" : "create"} game`
-          )
-        } catch (parseError) {
-          throw new Error(`Failed to ${isEdit ? "update" : "create"} game`)
+            : undefined
         }
+
+        if (isEdit && game?.id) {
+          await updateGame(game.id, gameData)
+        } else {
+          await createGame(gameData)
+        }
+
+        toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
+        router.push("/" + activeTab.toLowerCase())
+      } catch (error) {
+        console.error(`Error ${isEdit ? "updating" : "creating"} game:`, error)
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : `Failed to ${isEdit ? "update" : "create"} game`
+        )
       }
-
-      toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
-
-      router.push("/" + activeTab.toLowerCase())
-      router.refresh()
-    } catch (error) {
-      console.error(`Error ${isEdit ? "updating" : "creating"} game:`, error)
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : `Failed to ${isEdit ? "update" : "create"} game`
-      )
-    } finally {
-      setIsLoading(false)
-    }
+    })
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="sticky top-[88px] flex justify-end bg-white pb-2">
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isPending}>
           <Save />
-          {isLoading ? "Saving..." : "Save"}
+          {isPending ? "Saving..." : "Save"}
         </Button>
       </div>
 
