@@ -111,7 +111,7 @@ export default function NintendoLinkInput({
         htmlFor="nintendo-url"
       >
         <Image
-          src="/nintendo-switch.svg"
+          src="/logos/nintendo-switch.svg"
           alt="Nintendo Switch Logo"
           width={18}
           height={18}

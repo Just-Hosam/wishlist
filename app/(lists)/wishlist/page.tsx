@@ -144,7 +144,7 @@ export default async function Wishlist() {
                 {playstationPrice && (
                   <div className="flex items-center">
                     <Image
-                      src="/playstation.svg"
+                      src="/logos/playstation.svg"
                       alt="PlayStation Logo"
                       width={18}
                       height={18}
@@ -165,7 +165,7 @@ export default async function Wishlist() {
                 {nintendoPrice && (
                   <div className="flex items-center">
                     <Image
-                      src="/nintendo-switch.svg"
+                      src="/logos/nintendo-switch.svg"
                       alt="Nintendo Switch Logo"
                       width={18}
                       height={18}

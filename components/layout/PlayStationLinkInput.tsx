@@ -114,7 +114,7 @@ export default function PlayStationLinkInput({
         htmlFor="playstation-url"
       >
         <Image
-          src="/playstation.svg"
+          src="/logos/playstation.svg"
           alt="PlayStation Logo"
           width={18}
           height={18}
