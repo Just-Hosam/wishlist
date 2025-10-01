@@ -16,12 +16,12 @@ export default function NavigationTabs() {
           href="/wishlist"
           onClick={() => setActiveTab(GameCategory.WISHLIST)}
         >
-          <TabsTrigger className="px-3 py-2" value="WISHLIST">
+          <TabsTrigger className="px-3 py-2" value={GameCategory.WISHLIST}>
             <ScrollText />
           </TabsTrigger>
         </Link>
         <Link href="/owned" onClick={() => setActiveTab(GameCategory.OWNED)}>
-          <TabsTrigger className="px-3 py-2" value="OWNED">
+          <TabsTrigger className="px-3 py-2" value={GameCategory.OWNED}>
             <FolderCheck />
           </TabsTrigger>
         </Link>
@@ -29,8 +29,16 @@ export default function NavigationTabs() {
           href="/completed"
           onClick={() => setActiveTab(GameCategory.COMPLETED)}
         >
-          <TabsTrigger className="px-3 py-2" value="COMPLETED">
+          <TabsTrigger className="px-3 py-2" value={GameCategory.COMPLETED}>
             <CircleCheckBig />
+          </TabsTrigger>
+        </Link>
+        <Link
+          href="/graveyard"
+          onClick={() => setActiveTab(GameCategory.GRAVEYARD)}
+        >
+          <TabsTrigger className="px-3 py-2" value={GameCategory.GRAVEYARD}>
+            <Skull />
           </TabsTrigger>
         </Link>
       </TabsList>

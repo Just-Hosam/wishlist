@@ -262,22 +262,28 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem key="wishlist" value="WISHLIST">
+            <SelectItem key="wishlist" value={GameCategory.WISHLIST}>
               <div className="flex items-center gap-2">
                 <ScrollText />
                 Wishlist
               </div>
             </SelectItem>
-            <SelectItem key="owned" value="OWNED">
+            <SelectItem key="owned" value={GameCategory.OWNED}>
               <div className="flex items-center gap-2">
                 <FolderCheck />
                 Owned
               </div>
             </SelectItem>
-            <SelectItem key="completed" value="COMPLETED">
+            <SelectItem key="completed" value={GameCategory.COMPLETED}>
               <div className="flex items-center gap-2">
                 <CircleCheckBig />
                 Completed
+              </div>
+            </SelectItem>
+            <SelectItem key="graveyard" value={GameCategory.GRAVEYARD}>
+              <div className="flex items-center gap-2">
+                <Skull />
+                Graveyard
               </div>
             </SelectItem>
           </SelectContent>
