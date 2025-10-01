@@ -179,16 +179,6 @@ export default async function RootLayout({
                 <NavigationPopover />
               </AuthCheck>
             </nav>
-            <header className="m-auto flex max-w-[700px] items-center justify-between px-6 pb-7">
-              <AuthCheck fallback={<div className="h-[44px] w-full" />}>
-                <NavigationTabs />
-                <Link href="/game/add">
-                  <Button size="icon">
-                    <PlusIcon />
-                  </Button>
-                </Link>
-              </AuthCheck>
-            </header>
             <div className="m-auto max-w-[700px] px-6 pb-12">{children}</div>
             <Toaster position="top-center" />
           </body>

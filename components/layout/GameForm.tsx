@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
 import { createGame, updateGame } from "@/server/actions/game"
+import { BackButton } from "./BackButton"
 
 interface Game {
   id?: string
@@ -205,7 +206,8 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="sticky top-[88px] flex justify-end bg-white pb-2">
+      <div className="sticky top-[88px] flex min-h-[64px] items-center justify-between gap-2 bg-white pb-5">
+        <BackButton />
         <Button type="submit" disabled={isPending}>
           <Save />
           {isPending ? "Saving..." : "Save"}
