@@ -1,13 +1,11 @@
 import AuthCheck from "@/components/layout/AuthCheck"
 import AuthProvider from "@/components/layout/AuthProvider"
 import NavigationPopover from "@/components/layout/NavigationPopover"
-import NavigationTabs from "@/components/layout/NavigationTabs"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
-import { Gamepad2, PlusIcon } from "lucide-react"
+import { Gamepad2, Menu } from "lucide-react"
 import type { Metadata } from "next"
-import Link from "next/link"
 import "../styles/globals.css"
 
 export const metadata: Metadata = {
@@ -175,7 +173,13 @@ export default async function RootLayout({
                 <Gamepad2 />
                 GamesList
               </h1>
-              <AuthCheck>
+              <AuthCheck
+                fallback={
+                  <Button variant="ghost" size="icon">
+                    <Menu />
+                  </Button>
+                }
+              >
                 <NavigationPopover />
               </AuthCheck>
             </nav>
