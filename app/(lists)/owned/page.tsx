@@ -1,5 +1,14 @@
+import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
 import { authOptions } from "@/lib/auth-options"
+import prisma from "@/lib/prisma"
+import { GameCategory } from "@prisma/client"
 import {
   ArrowRight,
   Clock,
@@ -11,17 +20,8 @@ import {
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import prisma from "@/lib/prisma"
-import { GameCategory } from "@prisma/client"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover"
-import DeleteGameButton from "@/components/layout/DeleteGameButton"
-import MoveGameButton from "@/components/layout/MoveGameButton"
 
-export default async function Owned() {
+export default async function Library() {
   const session = await getServerSession(authOptions)
   const isNotAuthenticated = !session?.user
 
@@ -31,17 +31,17 @@ export default async function Owned() {
     where: { email: session.user!.email! },
     include: {
       games: {
-        where: { category: GameCategory.OWNED },
+        where: { category: GameCategory.LIBRARY },
         orderBy: { createdAt: "desc" }
       }
     }
   })
 
-  const ownedGames = user?.games || []
+  const libraryGames = user?.games || []
 
   return (
     <>
-      {ownedGames.length === 0 ? (
+      {libraryGames.length === 0 ? (
         <div className="mt-10 flex flex-col items-center justify-center text-center">
           <SearchX size={100} strokeWidth={1} className="mb-6" />
           <h3 className="mb-2 text-xl font-semibold">No games yet</h3>
@@ -54,7 +54,7 @@ export default async function Owned() {
           </Link>
         </div>
       ) : (
-        ownedGames.map((game) => (
+        libraryGames.map((game) => (
           <div key={game.id} className="mb-4 rounded-3xl border p-6">
             <header className="flex items-center justify-between gap-4">
               <div className="flex-1 text-xl font-medium">
@@ -75,23 +75,23 @@ export default async function Owned() {
                   <div className="flex flex-col">
                     <MoveGameButton
                       gameId={game.id}
-                      fromCategory={GameCategory.OWNED}
+                      fromCategory={GameCategory.LIBRARY}
                       toCategory={GameCategory.WISHLIST}
                       buttonText="To Wishlist"
                       icon={<ArrowRight />}
                     />
                     <MoveGameButton
                       gameId={game.id}
-                      fromCategory={GameCategory.OWNED}
+                      fromCategory={GameCategory.LIBRARY}
                       toCategory={GameCategory.COMPLETED}
                       buttonText="To Completed"
                       icon={<ArrowRight />}
                     />
                     <MoveGameButton
                       gameId={game.id}
-                      fromCategory={GameCategory.OWNED}
-                      toCategory={GameCategory.GRAVEYARD}
-                      buttonText="To Graveyard"
+                      fromCategory={GameCategory.LIBRARY}
+                      toCategory={GameCategory.ARCHIVED}
+                      buttonText="To Archived"
                       icon={<ArrowRight />}
                     />
                     <div className="my-2 rounded-full border-[0.5px]"></div>

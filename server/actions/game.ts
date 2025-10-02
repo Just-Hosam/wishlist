@@ -62,13 +62,13 @@ export async function deleteGame(id: string) {
   if (game.category === GameCategory.WISHLIST) {
     revalidatePath("/(lists)/wishlist")
   }
-  if (game.category === GameCategory.OWNED) {
+  if (game.category === GameCategory.LIBRARY) {
     revalidatePath("/(lists)/owned")
   }
   if (game.category === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
-  if (game.category === GameCategory.GRAVEYARD) {
+  if (game.category === GameCategory.ARCHIVED) {
     revalidatePath("/(lists)/graveyard")
   }
 }
@@ -149,13 +149,13 @@ export async function createGame(data: GameData) {
   if (game.category === GameCategory.WISHLIST) {
     revalidatePath("/(lists)/wishlist")
   }
-  if (game.category === GameCategory.OWNED) {
+  if (game.category === GameCategory.LIBRARY) {
     revalidatePath("/(lists)/owned")
   }
   if (game.category === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
-  if (game.category === GameCategory.GRAVEYARD) {
+  if (game.category === GameCategory.ARCHIVED) {
     revalidatePath("/(lists)/graveyard")
   }
 
@@ -301,13 +301,13 @@ export async function updateGame(id: string, data: GameData) {
   if (existingGame.category === GameCategory.WISHLIST) {
     revalidatePath("/(lists)/wishlist")
   }
-  if (existingGame.category === GameCategory.OWNED) {
+  if (existingGame.category === GameCategory.LIBRARY) {
     revalidatePath("/(lists)/owned")
   }
   if (existingGame.category === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
-  if (existingGame.category === GameCategory.GRAVEYARD) {
+  if (existingGame.category === GameCategory.ARCHIVED) {
     revalidatePath("/(lists)/graveyard")
   }
 
@@ -316,13 +316,13 @@ export async function updateGame(id: string, data: GameData) {
     if (updatedGame.category === GameCategory.WISHLIST) {
       revalidatePath("/(lists)/wishlist")
     }
-    if (updatedGame.category === GameCategory.OWNED) {
+    if (updatedGame.category === GameCategory.LIBRARY) {
       revalidatePath("/(lists)/owned")
     }
     if (updatedGame.category === GameCategory.COMPLETED) {
       revalidatePath("/(lists)/completed")
     }
-    if (updatedGame.category === GameCategory.GRAVEYARD) {
+    if (updatedGame.category === GameCategory.ARCHIVED) {
       revalidatePath("/(lists)/graveyard")
     }
   }
@@ -377,13 +377,13 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   if (oldCategory === GameCategory.WISHLIST) {
     revalidatePath("/(lists)/wishlist")
   }
-  if (oldCategory === GameCategory.OWNED) {
+  if (oldCategory === GameCategory.LIBRARY) {
     revalidatePath("/(lists)/owned")
   }
   if (oldCategory === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
-  if (oldCategory === GameCategory.GRAVEYARD) {
+  if (oldCategory === GameCategory.ARCHIVED) {
     revalidatePath("/(lists)/graveyard")
   }
 
@@ -392,13 +392,13 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
     if (toCategory === GameCategory.WISHLIST) {
       revalidatePath("/(lists)/wishlist")
     }
-    if (toCategory === GameCategory.OWNED) {
+    if (toCategory === GameCategory.LIBRARY) {
       revalidatePath("/(lists)/owned")
     }
     if (toCategory === GameCategory.COMPLETED) {
       revalidatePath("/(lists)/completed")
     }
-    if (toCategory === GameCategory.GRAVEYARD) {
+    if (toCategory === GameCategory.ARCHIVED) {
       revalidatePath("/(lists)/graveyard")
     }
   }

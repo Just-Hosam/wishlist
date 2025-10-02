@@ -1,5 +1,14 @@
+import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
 import { authOptions } from "@/lib/auth-options"
+import prisma from "@/lib/prisma"
+import { GameCategory } from "@prisma/client"
 import {
   ArrowRight,
   Clock,
@@ -11,15 +20,6 @@ import {
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import prisma from "@/lib/prisma"
-import { GameCategory } from "@prisma/client"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover"
-import DeleteGameButton from "@/components/layout/DeleteGameButton"
-import MoveGameButton from "@/components/layout/MoveGameButton"
 
 export default async function Completed() {
   const session = await getServerSession(authOptions)
@@ -83,15 +83,15 @@ export default async function Completed() {
                     <MoveGameButton
                       gameId={game.id}
                       fromCategory={GameCategory.COMPLETED}
-                      toCategory={GameCategory.OWNED}
-                      buttonText="To Owned"
+                      toCategory={GameCategory.LIBRARY}
+                      buttonText="To Library"
                       icon={<ArrowRight />}
                     />
                     <MoveGameButton
                       gameId={game.id}
                       fromCategory={GameCategory.COMPLETED}
-                      toCategory={GameCategory.GRAVEYARD}
-                      buttonText="To Graveyard"
+                      toCategory={GameCategory.ARCHIVED}
+                      buttonText="To Archived"
                       icon={<ArrowRight />}
                     />
                     <div className="my-2 rounded-full border-[0.5px]"></div>

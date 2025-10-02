@@ -14,18 +14,12 @@ import {
 import { useTabContext } from "@/contexts/TabContext"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
 import { type GamePrice } from "@/lib/playstation-price"
+import { createGame, updateGame } from "@/server/actions/game"
 import { GameCategory, Platform } from "@prisma/client"
-import {
-  CircleCheckBig,
-  FolderCheck,
-  Save,
-  ScrollText,
-  Skull
-} from "lucide-react"
+import { Archive, CheckCircle2, FolderCheck, Heart, Save } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { createGame, updateGame } from "@/server/actions/game"
 import { BackButton } from "./BackButton"
 
 interface Game {
@@ -264,26 +258,26 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           <SelectContent>
             <SelectItem key="wishlist" value={GameCategory.WISHLIST}>
               <div className="flex items-center gap-2">
-                <ScrollText />
+                <Heart />
                 Wishlist
               </div>
             </SelectItem>
-            <SelectItem key="owned" value={GameCategory.OWNED}>
+            <SelectItem key="library" value={GameCategory.LIBRARY}>
               <div className="flex items-center gap-2">
                 <FolderCheck />
-                Owned
+                Library
               </div>
             </SelectItem>
             <SelectItem key="completed" value={GameCategory.COMPLETED}>
               <div className="flex items-center gap-2">
-                <CircleCheckBig />
+                <CheckCircle2 />
                 Completed
               </div>
             </SelectItem>
-            <SelectItem key="graveyard" value={GameCategory.GRAVEYARD}>
+            <SelectItem key="archived" value={GameCategory.ARCHIVED}>
               <div className="flex items-center gap-2">
-                <Skull />
-                Graveyard
+                <Archive />
+                Archived
               </div>
             </SelectItem>
           </SelectContent>

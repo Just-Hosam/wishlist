@@ -1,13 +1,13 @@
 import SectionLayout from "@/components/layout/SectionLayout"
-import { Skull } from "lucide-react"
+import { Archive } from "lucide-react"
 
-export default function GraveyardLayout({
-  children,
+export default function ArchivedLayout({
+  children
 }: {
   children: React.ReactNode
 }) {
   return (
-    <SectionLayout title="Graveyard" icon={Skull}>
+    <SectionLayout title="Archived" icon={Archive}>
       {children}
     </SectionLayout>
   )

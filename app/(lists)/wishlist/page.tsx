@@ -114,8 +114,8 @@ export default async function Wishlist() {
                       <MoveGameButton
                         gameId={game.id}
                         fromCategory={GameCategory.WISHLIST}
-                        toCategory={GameCategory.OWNED}
-                        buttonText="To Owned"
+                        toCategory={GameCategory.LIBRARY}
+                        buttonText="To Library"
                         icon={<ArrowRight />}
                       />
                       <MoveGameButton
@@ -128,8 +128,8 @@ export default async function Wishlist() {
                       <MoveGameButton
                         gameId={game.id}
                         fromCategory={GameCategory.WISHLIST}
-                        toCategory={GameCategory.GRAVEYARD}
-                        buttonText="To Graveyard"
+                        toCategory={GameCategory.ARCHIVED}
+                        buttonText="To Archived"
                         icon={<ArrowRight />}
                       />
                       <div className="my-2 rounded-full border-[0.5px]"></div>
