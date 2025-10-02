@@ -11,11 +11,11 @@ export default function SectionLayout({
   children,
   title,
   icon: Icon,
-  className,
+  className
 }: SectionLayoutProps) {
   return (
     <div className={className}>
-      <h2 className="sticky top-[88px] flex min-h-14 items-center gap-3 bg-white pb-4 text-2xl">
+      <h2 className="sticky top-[72px] flex items-center gap-3 bg-white pb-3 text-2xl">
         <Icon />
         {title}
       </h2>

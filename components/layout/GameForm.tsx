@@ -200,7 +200,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="sticky top-[88px] flex min-h-[64px] items-center justify-between gap-2 bg-white pb-5">
+      <div className="sticky top-[72px] flex min-h-[64px] items-center justify-between gap-2 bg-white pb-5">
         <BackButton />
         <Button type="submit" disabled={isPending}>
           <Save />
@@ -242,7 +242,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         />
       </div>
 
-      <div className="mb-5">
+      <div className="mb-6">
         <label className="text-sm font-semibold" htmlFor="category">
           Category <span className="text-xs">*</span>
         </label>
@@ -284,7 +284,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </Select>
       </div>
       <PlayStationLinkInput
-        className="mb-5"
+        className="mb-6"
         onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
         onGameInfoCleared={() => setPlaystationInfo(null)}
         existingGameInfo={playstationInfo}
