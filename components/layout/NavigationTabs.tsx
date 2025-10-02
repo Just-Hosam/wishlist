@@ -20,7 +20,10 @@ export default function NavigationTabs() {
             <Heart />
           </TabsTrigger>
         </Link>
-        <Link href="/owned" onClick={() => setActiveTab(GameCategory.LIBRARY)}>
+        <Link
+          href="/library"
+          onClick={() => setActiveTab(GameCategory.LIBRARY)}
+        >
           <TabsTrigger className="px-3 py-2" value={GameCategory.LIBRARY}>
             <FolderCheck />
           </TabsTrigger>
@@ -34,7 +37,7 @@ export default function NavigationTabs() {
           </TabsTrigger>
         </Link>
         <Link
-          href="/graveyard"
+          href="/archived"
           onClick={() => setActiveTab(GameCategory.ARCHIVED)}
         >
           <TabsTrigger className="px-3 py-2" value={GameCategory.ARCHIVED}>

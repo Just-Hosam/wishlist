@@ -63,13 +63,13 @@ export async function deleteGame(id: string) {
     revalidatePath("/(lists)/wishlist")
   }
   if (game.category === GameCategory.LIBRARY) {
-    revalidatePath("/(lists)/owned")
+    revalidatePath("/(lists)/library")
   }
   if (game.category === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
   if (game.category === GameCategory.ARCHIVED) {
-    revalidatePath("/(lists)/graveyard")
+    revalidatePath("/(lists)/archived")
   }
 }
 
@@ -150,13 +150,13 @@ export async function createGame(data: GameData) {
     revalidatePath("/(lists)/wishlist")
   }
   if (game.category === GameCategory.LIBRARY) {
-    revalidatePath("/(lists)/owned")
+    revalidatePath("/(lists)/library")
   }
   if (game.category === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
   if (game.category === GameCategory.ARCHIVED) {
-    revalidatePath("/(lists)/graveyard")
+    revalidatePath("/(lists)/archived")
   }
 
   return game
@@ -302,13 +302,13 @@ export async function updateGame(id: string, data: GameData) {
     revalidatePath("/(lists)/wishlist")
   }
   if (existingGame.category === GameCategory.LIBRARY) {
-    revalidatePath("/(lists)/owned")
+    revalidatePath("/(lists)/library")
   }
   if (existingGame.category === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
   if (existingGame.category === GameCategory.ARCHIVED) {
-    revalidatePath("/(lists)/graveyard")
+    revalidatePath("/(lists)/archived")
   }
 
   // If category changed, also revalidate the new category page
@@ -317,13 +317,13 @@ export async function updateGame(id: string, data: GameData) {
       revalidatePath("/(lists)/wishlist")
     }
     if (updatedGame.category === GameCategory.LIBRARY) {
-      revalidatePath("/(lists)/owned")
+      revalidatePath("/(lists)/library")
     }
     if (updatedGame.category === GameCategory.COMPLETED) {
       revalidatePath("/(lists)/completed")
     }
     if (updatedGame.category === GameCategory.ARCHIVED) {
-      revalidatePath("/(lists)/graveyard")
+      revalidatePath("/(lists)/archived")
     }
   }
 
@@ -378,13 +378,13 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
     revalidatePath("/(lists)/wishlist")
   }
   if (oldCategory === GameCategory.LIBRARY) {
-    revalidatePath("/(lists)/owned")
+    revalidatePath("/(lists)/library")
   }
   if (oldCategory === GameCategory.COMPLETED) {
     revalidatePath("/(lists)/completed")
   }
   if (oldCategory === GameCategory.ARCHIVED) {
-    revalidatePath("/(lists)/graveyard")
+    revalidatePath("/(lists)/archived")
   }
 
   // Revalidate the new category page if it's different
@@ -393,13 +393,13 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
       revalidatePath("/(lists)/wishlist")
     }
     if (toCategory === GameCategory.LIBRARY) {
-      revalidatePath("/(lists)/owned")
+      revalidatePath("/(lists)/library")
     }
     if (toCategory === GameCategory.COMPLETED) {
       revalidatePath("/(lists)/completed")
     }
     if (toCategory === GameCategory.ARCHIVED) {
-      revalidatePath("/(lists)/graveyard")
+      revalidatePath("/(lists)/archived")
     }
   }
 
