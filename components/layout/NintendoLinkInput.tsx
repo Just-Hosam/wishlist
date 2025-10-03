@@ -121,11 +121,8 @@ export default function NintendoLinkInput({
 
       {gameInfo ? (
         <div className="mt-2 flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input pl-3 pr-2">
-          <div className="flex items-center gap-2">
-            <CircleCheck
-              size={19}
-              className="rounded-full bg-green-600 text-white"
-            />
+          <div className="flex items-center gap-3">
+            <CircleCheck size={19} className="rounded-full text-green-600" />
             <Price />
           </div>
           <X className="p-[3px]" onClick={clearGameInfo} />
