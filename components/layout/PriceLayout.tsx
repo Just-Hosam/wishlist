@@ -29,7 +29,7 @@ export default function PriceLayout({
 
   return (
     <div className={"flex items-center " + className}>
-      <span>{formatPrice(currentPrice)}</span>
+      <span className="font-medium">{formatPrice(currentPrice)}</span>
       {onSale && regularPrice && currentPrice !== regularPrice && (
         <>
           <span className="ml-2 text-xs text-muted-foreground line-through">
