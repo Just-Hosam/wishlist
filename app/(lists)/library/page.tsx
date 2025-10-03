@@ -55,7 +55,7 @@ export default async function Library() {
         </div>
       ) : (
         libraryGames.map((game) => (
-          <div key={game.id} className="mb-4 rounded-3xl border p-6">
+          <div key={game.id} className="mb-4 rounded-3xl border px-6 py-5">
             <header className="flex items-center justify-between gap-4">
               <div className="flex-1 text-xl font-medium">
                 <h3>{game.name}</h3>

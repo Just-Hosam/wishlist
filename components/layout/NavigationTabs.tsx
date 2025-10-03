@@ -11,37 +11,41 @@ export default function NavigationTabs() {
 
   return (
     <Tabs value={activeTab}>
-      <TabsList className="h-11 p-2">
+      <TabsList>
         <Link
           href="/wishlist"
           onClick={() => setActiveTab(GameCategory.WISHLIST)}
         >
-          <TabsTrigger className="px-3 py-2" value={GameCategory.WISHLIST}>
+          <TabsTrigger value={GameCategory.WISHLIST}>
             <Heart />
+            {activeTab === GameCategory.WISHLIST && <>Wishlist</>}
           </TabsTrigger>
         </Link>
         <Link
           href="/library"
           onClick={() => setActiveTab(GameCategory.LIBRARY)}
         >
-          <TabsTrigger className="px-3 py-2" value={GameCategory.LIBRARY}>
+          <TabsTrigger value={GameCategory.LIBRARY}>
             <FolderCheck />
+            {activeTab === GameCategory.LIBRARY && <>Library</>}
           </TabsTrigger>
         </Link>
         <Link
           href="/completed"
           onClick={() => setActiveTab(GameCategory.COMPLETED)}
         >
-          <TabsTrigger className="px-3 py-2" value={GameCategory.COMPLETED}>
+          <TabsTrigger value={GameCategory.COMPLETED}>
             <CheckCircle2 />
+            {activeTab === GameCategory.COMPLETED && <>Completed</>}
           </TabsTrigger>
         </Link>
         <Link
           href="/archived"
           onClick={() => setActiveTab(GameCategory.ARCHIVED)}
         >
-          <TabsTrigger className="px-3 py-2" value={GameCategory.ARCHIVED}>
+          <TabsTrigger value={GameCategory.ARCHIVED}>
             <Archive />
+            {activeTab === GameCategory.ARCHIVED && <>Archived</>}
           </TabsTrigger>
         </Link>
       </TabsList>

@@ -89,7 +89,7 @@ export default async function Wishlist() {
           )
 
           return (
-            <div key={game.id} className="mb-4 rounded-3xl border p-6">
+            <div key={game.id} className="mb-4 rounded-3xl border px-6 py-5">
               <header className="flex items-center justify-between gap-4">
                 <div className="flex-1 text-xl font-medium">
                   <h3>{game.name}</h3>
@@ -147,7 +147,7 @@ export default async function Wishlist() {
                   </PopoverContent>
                 </Popover>
               </header>
-              <div className="mt-6 flex flex-col gap-3 empty:mt-0">
+              <div className="mt-6 flex flex-col gap-2 empty:mt-0">
                 {playstationPrice && (
                   <div className="flex items-center">
                     <Image

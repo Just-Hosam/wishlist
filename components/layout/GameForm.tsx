@@ -200,7 +200,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="sticky top-[72px] flex min-h-[64px] items-center justify-between gap-2 bg-white pb-5">
+      <div className="sticky top-[68px] mb-3 flex min-h-[48px] items-center justify-between gap-2 bg-white pb-1">
         <BackButton />
         <Button type="submit" disabled={isPending}>
           <Save />
