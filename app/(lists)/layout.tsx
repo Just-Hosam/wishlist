@@ -11,7 +11,7 @@ export default function ListsLayout({
 }) {
   return (
     <>
-      <header className="sticky top-[68px] m-auto mb-3 flex min-h-[48px] max-w-[700px] items-center justify-between bg-white pb-1">
+      <header className="sticky top-[68px] m-auto flex min-h-[60px] max-w-[700px] items-center justify-between bg-white pb-4">
         <NavigationTabs />
         <Link href="/game/add">
           <Button size="icon">
