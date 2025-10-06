@@ -24,6 +24,9 @@ export default function NavigationPopover() {
         <div className="flex flex-col">
           <SignOutButton />
         </div>
+        <div className="mt-1 text-center text-xs text-gray-500">
+          version {process.env.APP_VERSION}
+        </div>
       </PopoverContent>
     </Popover>
   )

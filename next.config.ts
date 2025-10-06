@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  env: {
+    APP_VERSION: process.env.npm_package_version
+  }
+}
 
-export default nextConfig;
+export default nextConfig
