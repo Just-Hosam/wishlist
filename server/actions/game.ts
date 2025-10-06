@@ -251,6 +251,20 @@ export async function updateGame(id: string, data: GameData) {
         }
       })
     }
+  } else {
+    // If Nintendo data is not provided, check if a price record exists and delete it
+    const existingPrice = await prisma.gamePrice.findFirst({
+      where: {
+        gameId: id,
+        platform: Platform.NINTENDO
+      }
+    })
+
+    if (existingPrice) {
+      await prisma.gamePrice.delete({
+        where: { id: existingPrice.id }
+      })
+    }
   }
 
   // Handle PlayStation price data
@@ -293,6 +307,20 @@ export async function updateGame(id: string, data: GameData) {
             playstation.currentPrice || playstation.regularPrice || null,
           lastFetchedAt: new Date()
         }
+      })
+    }
+  } else {
+    // If PlayStation data is not provided, check if a price record exists and delete it
+    const existingPrice = await prisma.gamePrice.findFirst({
+      where: {
+        gameId: id,
+        platform: Platform.PLAYSTATION
+      }
+    })
+
+    if (existingPrice) {
+      await prisma.gamePrice.delete({
+        where: { id: existingPrice.id }
       })
     }
   }
