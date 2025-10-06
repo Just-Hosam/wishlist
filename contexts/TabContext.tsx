@@ -1,12 +1,13 @@
 "use client"
 
 import { GameCategory } from "@prisma/client"
+import { usePathname } from "next/navigation"
 import {
   createContext,
   useContext,
   useState,
   useEffect,
-  ReactNode,
+  ReactNode
 } from "react"
 
 interface TabContextType {
@@ -19,28 +20,34 @@ const TabContext = createContext<TabContextType | undefined>(undefined)
 
 export function TabProvider({
   children,
-  initial = GameCategory.WISHLIST,
+  initial = GameCategory.WISHLIST
 }: {
   children: ReactNode
   initial?: GameCategory
 }) {
-  const [activeTab, setActiveTab] = useState<GameCategory>(initial)
+  const pathname = usePathname()
+  const getTabFromPath = () => {
+    const path = pathname.split("/").pop()?.toUpperCase()
+    const isValidCategory = Object.values(GameCategory).includes(
+      path as GameCategory
+    )
 
-  // Load from localStorage on mount
+    if (isValidCategory) return path as GameCategory
+
+    return initial
+  }
+
+  const currentTab = getTabFromPath()
+  const [activeTab, setActiveTab] = useState<GameCategory>(
+    currentTab || initial
+  )
+
   useEffect(() => {
-    const stored = localStorage.getItem("activeTab")
-    if (
-      stored &&
-      Object.values(GameCategory).includes(stored as GameCategory)
-    ) {
-      setActiveTab(stored as GameCategory)
+    const tabFromPath = getTabFromPath()
+    if (tabFromPath) {
+      setActiveTab(tabFromPath)
     }
-  }, [])
-
-  // Save to localStorage when activeTab changes
-  useEffect(() => {
-    localStorage.setItem("activeTab", activeTab)
-  }, [activeTab])
+  }, [pathname])
 
   const reset = () => setActiveTab(GameCategory.WISHLIST)
 
