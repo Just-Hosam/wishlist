@@ -7,6 +7,7 @@ import { TabProvider } from "@/contexts/TabContext"
 import { Gamepad2, Menu } from "lucide-react"
 import type { Metadata } from "next"
 import "../styles/globals.css"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "GamesList",
@@ -169,10 +170,12 @@ export default async function RootLayout({
           </head>
           <body>
             <nav className="sticky left-0 right-0 top-0 m-auto flex min-h-[68px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 pb-4 pt-3">
-              <h1 className="flex items-center gap-2 text-xl">
-                <Gamepad2 />
-                GamesList
-              </h1>
+              <Link href="/wishlist" aria-label="Home">
+                <h1 className="flex items-center gap-2 text-xl">
+                  <Gamepad2 />
+                  GamesList
+                </h1>
+              </Link>
               <AuthCheck
                 fallback={
                   <Button variant="ghost" size="icon">
