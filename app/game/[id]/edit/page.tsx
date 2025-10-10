@@ -1,19 +1,12 @@
 import GameForm from "@/components/layout/GameForm"
-import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
-import { getServerSession } from "next-auth"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 interface Props {
   params: Promise<{ id: string }>
 }
 
 export default async function EditGame({ params }: Props) {
-  const session = await getServerSession(authOptions)
-  const isNotAuthenticated = !session?.user
-
-  if (isNotAuthenticated) redirect("/")
-
   const { id } = await params
 
   // Fetch the game data with platform prices

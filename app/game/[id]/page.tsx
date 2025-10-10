@@ -6,25 +6,17 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { Platform } from "@prisma/client"
 import { Clock, EllipsisVertical, Pencil } from "lucide-react"
-import { getServerSession } from "next-auth"
 import Image from "next/image"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
 interface Props {
   params: Promise<{ id: string }>
 }
 
 export default async function Game({ params }: Props) {
-  const session = await getServerSession(authOptions)
-  const isNotAuthenticated = !session?.user
-
-  if (isNotAuthenticated) redirect("/")
-
   const { id } = await params
   const game = await prisma?.game.findUnique({
     where: { id },

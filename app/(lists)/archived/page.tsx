@@ -6,7 +6,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory } from "@prisma/client"
 import {
@@ -17,26 +16,36 @@ import {
   PlusIcon,
   SearchX
 } from "lucide-react"
-import { getServerSession } from "next-auth"
+import { unstable_cache } from "next/cache"
 import Link from "next/link"
-import { redirect } from "next/navigation"
+
+const getCachedUserWithArchivedGames = (email: string) =>
+  unstable_cache(
+    async () => {
+      console.log("Fetching archived data for:", email)
+
+      const user = await prisma.user.findUnique({
+        where: { email },
+        include: {
+          games: {
+            where: { category: GameCategory.ARCHIVED },
+            orderBy: { createdAt: "desc" }
+          }
+        }
+      })
+
+      console.log("Archived games found:", user?.games?.length || 0)
+
+      return user
+    },
+    [`user-archived-games-${email}`], // Dynamic cache key per user
+    { revalidate: 1800 } // 30 minutes
+  )
 
 export default async function Archived() {
-  const session = await getServerSession(authOptions)
-  const isNotAuthenticated = !session?.user
-
-  if (isNotAuthenticated) redirect("/")
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user!.email! },
-    include: {
-      games: {
-        where: { category: GameCategory.ARCHIVED },
-        orderBy: { createdAt: "desc" }
-      }
-    }
-  })
-
+  const user = await getCachedUserWithArchivedGames(
+    "hosamdahrouj56@gmail.com"
+  )()
   const archivedGames = user?.games || []
 
   return (

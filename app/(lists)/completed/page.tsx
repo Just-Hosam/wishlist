@@ -6,7 +6,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory } from "@prisma/client"
 import {
@@ -17,26 +16,36 @@ import {
   PlusIcon,
   SearchX
 } from "lucide-react"
-import { getServerSession } from "next-auth"
+import { unstable_cache } from "next/cache"
 import Link from "next/link"
-import { redirect } from "next/navigation"
+
+const getCachedUserWithCompletedGames = (email: string) =>
+  unstable_cache(
+    async () => {
+      console.log("Fetching completed data for:", email)
+
+      const user = await prisma.user.findUnique({
+        where: { email },
+        include: {
+          games: {
+            where: { category: GameCategory.COMPLETED },
+            orderBy: { createdAt: "desc" }
+          }
+        }
+      })
+
+      console.log("Completed games found:", user?.games?.length || 0)
+
+      return user
+    },
+    [`user-completed-games-${email}`], // Dynamic cache key per user
+    { revalidate: 1800 } // 30 minutes
+  )
 
 export default async function Completed() {
-  const session = await getServerSession(authOptions)
-  const isNotAuthenticated = !session?.user
-
-  if (isNotAuthenticated) redirect("/")
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user!.email! },
-    include: {
-      games: {
-        where: { category: GameCategory.COMPLETED },
-        orderBy: { createdAt: "desc" }
-      }
-    }
-  })
-
+  const user = await getCachedUserWithCompletedGames(
+    "hosamdahrouj56@gmail.com"
+  )()
   const completedGames = user?.games || []
 
   return (
