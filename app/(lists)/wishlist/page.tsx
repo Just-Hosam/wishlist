@@ -8,6 +8,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
+import { getUserId } from "@/lib/user"
 import { GameCategory, Platform } from "@prisma/client"
 import {
   ArrowRight,
@@ -18,10 +19,8 @@ import {
   SearchX
 } from "lucide-react"
 import { unstable_cache } from "next/cache"
-import { headers, type UnsafeUnwrappedHeaders } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
-import { NextRequest } from "next/server"
 
 const getCachedWishlistGames = (userId: string) =>
   unstable_cache(
@@ -62,10 +61,8 @@ const getCachedWishlistGames = (userId: string) =>
   )
 
 export default async function Wishlist() {
-  const nextHeaders = headers() as unknown as UnsafeUnwrappedHeaders
-  const userId = nextHeaders.get("x-user-id")
-
-  const wishlistGames = await getCachedWishlistGames(userId!)()
+  const userId = await getUserId()
+  const wishlistGames = await getCachedWishlistGames(userId)()
 
   return (
     <>

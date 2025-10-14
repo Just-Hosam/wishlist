@@ -7,6 +7,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
+import { getUserId } from "@/lib/user"
 import { GameCategory } from "@prisma/client"
 import {
   ArrowRight,
@@ -17,7 +18,6 @@ import {
   SearchX
 } from "lucide-react"
 import { unstable_cache } from "next/cache"
-import { headers, UnsafeUnwrappedHeaders } from "next/headers"
 import Link from "next/link"
 
 const getCachedCompletedGames = (userId: string) =>
@@ -45,10 +45,8 @@ const getCachedCompletedGames = (userId: string) =>
   )
 
 export default async function Completed() {
-  const nextHeaders = headers() as unknown as UnsafeUnwrappedHeaders
-  const userId = nextHeaders.get("x-user-id")
-
-  const completedGames = await getCachedCompletedGames(userId!)()
+  const userId = await getUserId()
+  const completedGames = await getCachedCompletedGames(userId)()
 
   return (
     <>
