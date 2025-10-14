@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
 import { Gamepad2, Menu } from "lucide-react"
 import type { Metadata } from "next"
-import "../styles/globals.css"
 import Link from "next/link"
+import "../styles/globals.css"
 
 export const metadata: Metadata = {
   title: "GamesList",
