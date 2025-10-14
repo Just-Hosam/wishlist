@@ -61,7 +61,7 @@ const getCachedWishlistGames = (userId: string) =>
     { revalidate: 1800 } // 30 minutes
   )
 
-export default async function Wishlist(request: NextRequest) {
+export default async function Wishlist() {
   const nextHeaders = headers() as unknown as UnsafeUnwrappedHeaders
   const userId = nextHeaders.get("x-user-id")
 
