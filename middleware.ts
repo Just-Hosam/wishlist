@@ -1,23 +1,29 @@
+import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const sessionToken = request.cookies.get("next-auth.session-token")
-  const isAuthenticated = !!sessionToken?.value
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET
+  })
 
-  if (!isAuthenticated && pathname !== "/") {
+  if (!token && pathname !== "/") {
     const url = request.nextUrl.clone()
     url.pathname = "/"
     return NextResponse.redirect(url)
   }
 
-  if (isAuthenticated && pathname === "/") {
+  if (token && pathname === "/") {
     const url = request.nextUrl.clone()
     url.pathname = "/wishlist"
     return NextResponse.redirect(url)
   }
 
-  return NextResponse.next()
+  const requestHeaders = new Headers(request.headers)
+  if (token?.sub) requestHeaders.set("x-user-id", token.sub)
+
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
