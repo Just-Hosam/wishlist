@@ -17,36 +17,38 @@ import {
   SearchX
 } from "lucide-react"
 import { unstable_cache } from "next/cache"
+import { headers, UnsafeUnwrappedHeaders } from "next/headers"
 import Link from "next/link"
 
-const getCachedUserWithCompletedGames = (email: string) =>
+const getCachedCompletedGames = (userId: string) =>
   unstable_cache(
     async () => {
-      console.log("Fetching completed data for:", email)
-
-      const user = await prisma.user.findUnique({
-        where: { email },
-        include: {
-          games: {
-            where: { category: GameCategory.COMPLETED },
-            orderBy: { createdAt: "desc" }
-          }
-        }
+      const games = await prisma.game.findMany({
+        where: {
+          userId,
+          category: GameCategory.COMPLETED
+        },
+        orderBy: { createdAt: "desc" }
       })
 
-      console.log("Completed games found:", user?.games?.length || 0)
-
-      return user
+      return games.map((game) => ({
+        id: game.id,
+        name: game.name,
+        length: game.length,
+        category: game.category,
+        createdAt: game.createdAt.toISOString(),
+        updatedAt: game.updatedAt.toISOString()
+      }))
     },
-    [`user-completed-games-${email}`], // Dynamic cache key per user
+    [`user-completed-games-${userId}`],
     { revalidate: 1800 } // 30 minutes
   )
 
 export default async function Completed() {
-  const user = await getCachedUserWithCompletedGames(
-    "hosamdahrouj56@gmail.com"
-  )()
-  const completedGames = user?.games || []
+  const nextHeaders = headers() as unknown as UnsafeUnwrappedHeaders
+  const userId = nextHeaders.get("x-user-id")
+
+  const completedGames = await getCachedCompletedGames(userId!)()
 
   return (
     <>

@@ -18,134 +18,54 @@ import {
   SearchX
 } from "lucide-react"
 import { unstable_cache } from "next/cache"
+import { headers, type UnsafeUnwrappedHeaders } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
+import { NextRequest } from "next/server"
 
-export const mockWishlistGames = [
-  {
-    id: "clxoil20j000008l43n8n5b5a",
-    name: "The Legend of Zelda: Breath of the Wild 2",
-    length: 80,
-    category: GameCategory.WISHLIST,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    prices: [
-      {
-        id: "price1",
-        gameId: "clxoil20j000008l43n8n5b5a",
-        platform: Platform.NINTENDO,
-        externalId: "12345",
-        countryCode: "US",
-        currencyCode: "USD",
-        regularPrice: "59.99",
-        currentPrice: "49.99",
-        lastFetchedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    ]
-  },
-  {
-    id: "clxoil20j000008l43n8n5b5b",
-    name: "Hogwarts Legacy",
-    length: 60,
-    category: GameCategory.WISHLIST,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    prices: [
-      {
-        id: "price2",
-        gameId: "clxoil20j000008l43n8n5b5b",
-        platform: Platform.PLAYSTATION,
-        externalId: "67890",
-        countryCode: "US",
-        currencyCode: "USD",
-        regularPrice: "69.99",
-        currentPrice: "69.99",
-        lastFetchedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    ]
-  },
-  {
-    id: "clxoil20j000008l43n8n5b5c",
-    name: "Cyberpunk 2077",
-    length: 100,
-    category: GameCategory.WISHLIST,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    prices: [
-      {
-        id: "price3",
-        gameId: "clxoil20j000008l43n8n5b5c",
-        platform: Platform.PLAYSTATION,
-        externalId: "54321",
-        countryCode: "US",
-        currencyCode: "USD",
-        regularPrice: "39.99",
-        currentPrice: "29.99",
-        lastFetchedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
-    ]
-  }
-]
-
-const getCachedUserWithGames = (email: string) =>
+const getCachedWishlistGames = (userId: string) =>
   unstable_cache(
     async () => {
-      console.log("Fetching wishlist data for:", email)
-
-      const user = await prisma.user.findUnique({
-        where: { email },
-        include: {
-          games: {
-            where: { category: GameCategory.WISHLIST },
-            orderBy: { updatedAt: "desc" },
-            include: { prices: { orderBy: { lastFetchedAt: "desc" } } }
-          }
-        }
+      const games = await prisma.game.findMany({
+        where: {
+          userId,
+          category: GameCategory.WISHLIST
+        },
+        orderBy: { updatedAt: "desc" },
+        include: { prices: { orderBy: { lastFetchedAt: "desc" } } }
       })
 
-      console.log("Wishlist games found:", user?.games?.length || 0)
-
-      // Serialize the data within the cached function to handle Date objects
-      return user
-        ? {
-            ...user,
-            games: user.games.map((game) => ({
-              id: game.id,
-              name: game.name,
-              length: game.length,
-              category: game.category,
-              createdAt: game.createdAt.toISOString(),
-              updatedAt: game.updatedAt.toISOString(),
-              prices: game.prices.map((price) => ({
-                id: price.id,
-                gameId: price.gameId,
-                platform: price.platform,
-                externalId: price.externalId,
-                countryCode: price.countryCode,
-                currencyCode: price.currencyCode,
-                regularPrice: price.regularPrice?.toString() || null,
-                currentPrice: price.currentPrice?.toString() || null,
-                lastFetchedAt: price.lastFetchedAt?.toISOString() || null,
-                createdAt: price.createdAt.toISOString(),
-                updatedAt: price.updatedAt.toISOString()
-              }))
-            }))
-          }
-        : null
+      return games.map((game) => ({
+        id: game.id,
+        name: game.name,
+        length: game.length,
+        category: game.category,
+        createdAt: game.createdAt.toISOString(),
+        updatedAt: game.updatedAt.toISOString(),
+        prices: game.prices.map((price) => ({
+          id: price.id,
+          gameId: price.gameId,
+          platform: price.platform,
+          externalId: price.externalId,
+          countryCode: price.countryCode,
+          currencyCode: price.currencyCode,
+          regularPrice: price.regularPrice?.toString() || null,
+          currentPrice: price.currentPrice?.toString() || null,
+          lastFetchedAt: price.lastFetchedAt?.toISOString() || null,
+          createdAt: price.createdAt.toISOString(),
+          updatedAt: price.updatedAt.toISOString()
+        }))
+      }))
     },
-    [`user-wishlist-games-${email}`], // Dynamic cache key per user
+    [`user-wishlist-games-${userId}`],
     { revalidate: 1800 } // 30 minutes
   )
 
-export default async function Wishlist() {
-  const user = await getCachedUserWithGames("hosamdahrouj56@gmail.com")()
-  const wishlistGames = user?.games || []
+export default async function Wishlist(request: NextRequest) {
+  const nextHeaders = headers() as unknown as UnsafeUnwrappedHeaders
+  const userId = nextHeaders.get("x-user-id")
+
+  const wishlistGames = await getCachedWishlistGames(userId!)()
 
   return (
     <>
