@@ -10,6 +10,8 @@ import {
   ReactNode
 } from "react"
 
+const LIST_PATHS = ["/wishlist", "/library", "/completed", "/archived"]
+
 interface TabContextType {
   activeTab: GameCategory
   setActiveTab: (tab: GameCategory) => void
@@ -26,27 +28,18 @@ export function TabProvider({
   initial?: GameCategory
 }) {
   const pathname = usePathname()
-  const getTabFromPath = () => {
-    const path = pathname.split("/").pop()?.toUpperCase()
-    const isValidCategory = Object.values(GameCategory).includes(
-      path as GameCategory
-    )
+  const isListPage = LIST_PATHS.includes(pathname)
+  let currentTab = initial
 
-    if (isValidCategory) return path as GameCategory
-
-    return initial
+  if (isListPage) {
+    currentTab = getTabFromPath(pathname) || currentTab
   }
 
-  const currentTab = getTabFromPath()
-  const [activeTab, setActiveTab] = useState<GameCategory>(
-    currentTab || initial
-  )
+  const [activeTab, setActiveTab] = useState<GameCategory>(currentTab)
 
   useEffect(() => {
-    const tabFromPath = getTabFromPath()
-    if (tabFromPath) {
-      setActiveTab(tabFromPath)
-    }
+    const tabFromPath = getTabFromPath(pathname)
+    if (tabFromPath) setActiveTab(tabFromPath)
   }, [pathname])
 
   const reset = () => setActiveTab(GameCategory.WISHLIST)
@@ -64,4 +57,15 @@ export function useTabContext() {
     throw new Error("useTabContext must be used within a TabProvider")
   }
   return context
+}
+
+const getTabFromPath = (pathname: string) => {
+  const path = pathname.split("/").pop()?.toUpperCase()
+  const isValidCategory = Object.values(GameCategory).includes(
+    path as GameCategory
+  )
+
+  if (isValidCategory) return path as GameCategory
+
+  return null
 }
