@@ -208,7 +208,10 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </Button>
       </div>
 
-      <div className="mb-5">
+      <div
+        className="mb-5 duration-500 animate-in fade-in slide-in-from-top-3"
+        style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
+      >
         <label className="text-sm font-semibold" htmlFor="name">
           Game Name <span className="text-xs">*</span>
         </label>
@@ -225,7 +228,10 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         />
       </div>
 
-      <div className="mb-5">
+      <div
+        className="mb-5 duration-500 animate-in fade-in slide-in-from-top-3"
+        style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+      >
         <label className="text-sm font-semibold" htmlFor="length">
           Game Length (hours)
         </label>
@@ -242,7 +248,10 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         />
       </div>
 
-      <div className="mb-6">
+      <div
+        className="mb-6 duration-500 animate-in fade-in slide-in-from-top-3"
+        style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
+      >
         <label className="text-sm font-semibold" htmlFor="category">
           Category <span className="text-xs">*</span>
         </label>
@@ -283,17 +292,26 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           </SelectContent>
         </Select>
       </div>
-      <PlayStationLinkInput
-        className="mb-6"
-        onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
-        onGameInfoCleared={() => setPlaystationInfo(null)}
-        existingGameInfo={playstationInfo}
-      />
-      <NintendoLinkInput
-        onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
-        onGameInfoCleared={() => setNintendoInfo(null)}
-        existingGameInfo={nintendoInfo}
-      />
+      <div
+        className="mb-6 duration-500 animate-in fade-in slide-in-from-top-3"
+        style={{ animationDelay: "300ms", animationFillMode: "backwards" }}
+      >
+        <PlayStationLinkInput
+          onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
+          onGameInfoCleared={() => setPlaystationInfo(null)}
+          existingGameInfo={playstationInfo}
+        />
+      </div>
+      <div
+        className="duration-500 animate-in fade-in slide-in-from-top-3"
+        style={{ animationDelay: "400ms", animationFillMode: "backwards" }}
+      >
+        <NintendoLinkInput
+          onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
+          onGameInfoCleared={() => setNintendoInfo(null)}
+          existingGameInfo={nintendoInfo}
+        />
+      </div>
     </form>
   )
 }
