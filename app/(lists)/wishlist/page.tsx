@@ -15,12 +15,12 @@ import {
   Clock,
   EllipsisVertical,
   Pencil,
-  PlusIcon,
-  SearchX
+  PlusIcon
 } from "lucide-react"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
+import ListEmptyState from "@/components/layout/ListEmptyState"
 
 const getCachedWishlistGames = (userId: string) =>
   unstable_cache(
@@ -67,17 +67,7 @@ export default async function Wishlist() {
   return (
     <>
       {wishlistGames.length === 0 ? (
-        <div className="mt-10 flex flex-col items-center justify-center text-center">
-          <SearchX size={100} strokeWidth={1} className="mb-6" />
-          <h3 className="mb-2 text-xl font-semibold">No games yet</h3>
-          <p className="mb-6">Get started by adding a game.</p>
-          <Link href="/game/add">
-            <Button>
-              <PlusIcon />
-              Add Game
-            </Button>
-          </Link>
-        </div>
+        <ListEmptyState />
       ) : (
         wishlistGames.map((game) => {
           const nintendoPrice = game?.prices?.find(
