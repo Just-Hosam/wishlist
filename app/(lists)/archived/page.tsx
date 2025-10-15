@@ -55,7 +55,14 @@ export default async function Archived() {
         <ListEmptyState />
       ) : (
         archivedGames.map((game) => (
-          <div key={game.id} className="mb-4 rounded-3xl border px-6 py-5">
+          <div
+            key={game.id}
+            className="mb-4 rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+            style={{
+              animationDelay: `${archivedGames.indexOf(game) * 100}ms`,
+              animationFillMode: "backwards"
+            }}
+          >
             <header className="flex items-center justify-between gap-4">
               <div className="flex-1 text-xl font-medium">
                 <h3>{game.name}</h3>
