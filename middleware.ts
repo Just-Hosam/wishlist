@@ -20,14 +20,12 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  const requestHeaders = new Headers(request.headers)
-  if (token?.sub) requestHeaders.set("x-user-id", token.sub)
-
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
+    // Exclude API, next static routes, images, favicon, and JSON files (including manifest.json)
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.json|.*\\.json$|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
   ]
 }
