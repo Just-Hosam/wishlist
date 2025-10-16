@@ -28,6 +28,10 @@ interface GameData {
   }
 }
 
+function revalidateGameCategory(category: GameCategory, userId: string) {
+  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
+}
+
 export async function deleteGame(id: string) {
   const session = await getServerSession(authOptions)
   const userId = session?.user?.id
@@ -55,20 +59,7 @@ export async function deleteGame(id: string) {
 
   await prisma.game.delete({ where: { id: game.id } })
 
-  switch (game.category) {
-    case GameCategory.WISHLIST:
-      revalidateTag(`user-wishlist-games-${userId}`)
-      break
-    case GameCategory.LIBRARY:
-      revalidateTag(`user-library-games-${userId}`)
-      break
-    case GameCategory.COMPLETED:
-      revalidateTag(`user-completed-games-${userId}`)
-      break
-    case GameCategory.ARCHIVED:
-      revalidateTag(`user-archived-games-${userId}`)
-      break
-  }
+  revalidateGameCategory(game.category, userId)
 }
 
 export async function createGame(data: GameData) {
@@ -145,20 +136,7 @@ export async function createGame(data: GameData) {
   }
 
   // Revalidate the appropriate list page
-  switch (game.category) {
-    case GameCategory.WISHLIST:
-      revalidateTag(`user-wishlist-games-${user.id}`)
-      break
-    case GameCategory.LIBRARY:
-      revalidateTag(`user-library-games-${user.id}`)
-      break
-    case GameCategory.COMPLETED:
-      revalidateTag(`user-completed-games-${user.id}`)
-      break
-    case GameCategory.ARCHIVED:
-      revalidateTag(`user-archived-games-${user.id}`)
-      break
-  }
+  revalidateGameCategory(game.category, user.id)
 
   return game
 }
@@ -334,37 +312,11 @@ export async function updateGame(id: string, data: GameData) {
   }
 
   // Revalidate both the old and new category pages in case the category changed
-  switch (existingGame.category) {
-    case GameCategory.WISHLIST:
-      revalidateTag(`user-wishlist-games-${user.id}`)
-      break
-    case GameCategory.LIBRARY:
-      revalidateTag(`user-library-games-${user.id}`)
-      break
-    case GameCategory.COMPLETED:
-      revalidateTag(`user-completed-games-${user.id}`)
-      break
-    case GameCategory.ARCHIVED:
-      revalidateTag(`user-archived-games-${user.id}`)
-      break
-  }
+  revalidateGameCategory(existingGame.category, user.id)
 
   // If category changed, also revalidate the new category page
   if (updatedGame.category !== existingGame.category) {
-    switch (updatedGame.category) {
-      case GameCategory.WISHLIST:
-        revalidateTag(`user-wishlist-games-${user.id}`)
-        break
-      case GameCategory.LIBRARY:
-        revalidateTag(`user-library-games-${user.id}`)
-        break
-      case GameCategory.COMPLETED:
-        revalidateTag(`user-completed-games-${user.id}`)
-        break
-      case GameCategory.ARCHIVED:
-        revalidateTag(`user-archived-games-${user.id}`)
-        break
-    }
+    revalidateGameCategory(updatedGame.category, user.id)
   }
 
   return updatedGame
@@ -416,37 +368,11 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   })
 
   // Revalidate both the old and new category pages
-  switch (oldCategory) {
-    case GameCategory.WISHLIST:
-      revalidateTag(`user-wishlist-games-${user.id}`)
-      break
-    case GameCategory.LIBRARY:
-      revalidateTag(`user-library-games-${user.id}`)
-      break
-    case GameCategory.COMPLETED:
-      revalidateTag(`user-completed-games-${user.id}`)
-      break
-    case GameCategory.ARCHIVED:
-      revalidateTag(`user-archived-games-${user.id}`)
-      break
-  }
+  revalidateGameCategory(oldCategory, user.id)
 
   // Revalidate the new category page if it's different
   if (toCategory !== oldCategory) {
-    switch (toCategory) {
-      case GameCategory.WISHLIST:
-        revalidateTag(`user-wishlist-games-${user.id}`)
-        break
-      case GameCategory.LIBRARY:
-        revalidateTag(`user-library-games-${user.id}`)
-        break
-      case GameCategory.COMPLETED:
-        revalidateTag(`user-completed-games-${user.id}`)
-        break
-      case GameCategory.ARCHIVED:
-        revalidateTag(`user-archived-games-${user.id}`)
-        break
-    }
+    revalidateGameCategory(toCategory, user.id)
   }
 
   return updatedGame

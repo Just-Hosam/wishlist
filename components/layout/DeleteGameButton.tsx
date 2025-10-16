@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { deleteGame } from "@/server/actions/game"
 import { Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function DeleteGameButton({ gameId }: Props) {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
@@ -30,6 +32,7 @@ export default function DeleteGameButton({ gameId }: Props) {
         await deleteGame(gameId)
         toast.success("Game deleted successfully!")
         setIsOpen(false)
+        router.refresh()
       } catch (error) {
         console.error("Error deleting game:", error)
         toast.error(

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { moveGame } from "@/server/actions/game"
 import { GameCategory } from "@prisma/client"
+import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import Spinner from "../ui/spinner"
@@ -22,6 +23,7 @@ export default function MoveGameButton({
   buttonText,
   icon
 }: MoveGameButtonProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
   const handleMove = () => {
@@ -29,6 +31,7 @@ export default function MoveGameButton({
       try {
         await moveGame(gameId, toCategory)
         toast.success("Game moved successfully!")
+        router.refresh()
       } catch (error) {
         console.error("Error moving game:", error)
         toast.error("Failed to move game")
