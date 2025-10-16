@@ -84,6 +84,7 @@ model Game {
   coverImageUrl      String?
   length             Int?
   category           GameCategory  @default(WISHLIST)
+  platforms          Platform[]
 
   // User relationship
   userId             String
