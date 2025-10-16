@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory, Platform } from "@prisma/client"
 import { getServerSession } from "next-auth"
-import { revalidatePath } from "next/cache"
+import { revalidateTag } from "next/cache"
 
 interface GameData {
   name: string
@@ -30,14 +30,13 @@ interface GameData {
 
 export async function deleteGame(id: string) {
   const session = await getServerSession(authOptions)
+  const userId = session?.user?.id
 
-  if (!session?.user?.email) {
+  if (!userId) {
     throw new Error("Unauthorized.")
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
-  })
+  const user = await prisma.user.findUnique({ where: { id: userId } })
 
   if (!user) {
     throw new Error("User not found.")
@@ -54,24 +53,20 @@ export async function deleteGame(id: string) {
     throw new Error("Game not found.")
   }
 
-  await prisma.game.delete({
-    where: {
-      id: game.id
-    }
-  })
+  await prisma.game.delete({ where: { id: game.id } })
 
   switch (game.category) {
     case GameCategory.WISHLIST:
-      revalidatePath("/wishlist")
+      revalidateTag(`user-wishlist-games-${userId}`)
       break
     case GameCategory.LIBRARY:
-      revalidatePath("/library")
+      revalidateTag(`user-library-games-${userId}`)
       break
     case GameCategory.COMPLETED:
-      revalidatePath("/completed")
+      revalidateTag(`user-completed-games-${userId}`)
       break
     case GameCategory.ARCHIVED:
-      revalidatePath("/archived")
+      revalidateTag(`user-archived-games-${userId}`)
       break
   }
 }
@@ -79,7 +74,9 @@ export async function deleteGame(id: string) {
 export async function createGame(data: GameData) {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.email) {
+  const userId = session?.user?.id
+
+  if (!userId) {
     throw new Error("Unauthorized.")
   }
 
@@ -96,7 +93,7 @@ export async function createGame(data: GameData) {
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
+    where: { id: userId }
   })
 
   if (!user) {
@@ -150,16 +147,16 @@ export async function createGame(data: GameData) {
   // Revalidate the appropriate list page
   switch (game.category) {
     case GameCategory.WISHLIST:
-      revalidatePath("/wishlist")
+      revalidateTag(`user-wishlist-games-${user.id}`)
       break
     case GameCategory.LIBRARY:
-      revalidatePath("/library")
+      revalidateTag(`user-library-games-${user.id}`)
       break
     case GameCategory.COMPLETED:
-      revalidatePath("/completed")
+      revalidateTag(`user-completed-games-${user.id}`)
       break
     case GameCategory.ARCHIVED:
-      revalidatePath("/archived")
+      revalidateTag(`user-archived-games-${user.id}`)
       break
   }
 
@@ -169,7 +166,9 @@ export async function createGame(data: GameData) {
 export async function updateGame(id: string, data: GameData) {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.email) {
+  const userId = session?.user?.id
+
+  if (!userId) {
     throw new Error("Unauthorized.")
   }
 
@@ -186,7 +185,7 @@ export async function updateGame(id: string, data: GameData) {
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
+    where: { id: userId }
   })
 
   if (!user) {
@@ -337,16 +336,16 @@ export async function updateGame(id: string, data: GameData) {
   // Revalidate both the old and new category pages in case the category changed
   switch (existingGame.category) {
     case GameCategory.WISHLIST:
-      revalidatePath("/wishlist")
+      revalidateTag(`user-wishlist-games-${user.id}`)
       break
     case GameCategory.LIBRARY:
-      revalidatePath("/library")
+      revalidateTag(`user-library-games-${user.id}`)
       break
     case GameCategory.COMPLETED:
-      revalidatePath("/completed")
+      revalidateTag(`user-completed-games-${user.id}`)
       break
     case GameCategory.ARCHIVED:
-      revalidatePath("/archived")
+      revalidateTag(`user-archived-games-${user.id}`)
       break
   }
 
@@ -354,16 +353,16 @@ export async function updateGame(id: string, data: GameData) {
   if (updatedGame.category !== existingGame.category) {
     switch (updatedGame.category) {
       case GameCategory.WISHLIST:
-        revalidatePath("/wishlist")
+        revalidateTag(`user-wishlist-games-${user.id}`)
         break
       case GameCategory.LIBRARY:
-        revalidatePath("/library")
+        revalidateTag(`user-library-games-${user.id}`)
         break
       case GameCategory.COMPLETED:
-        revalidatePath("/completed")
+        revalidateTag(`user-completed-games-${user.id}`)
         break
       case GameCategory.ARCHIVED:
-        revalidatePath("/archived")
+        revalidateTag(`user-archived-games-${user.id}`)
         break
     }
   }
@@ -374,7 +373,9 @@ export async function updateGame(id: string, data: GameData) {
 export async function moveGame(gameId: string, toCategory: GameCategory) {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.email) {
+  const userId = session?.user?.id
+
+  if (!userId) {
     throw new Error("Unauthorized.")
   }
 
@@ -387,7 +388,7 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
+    where: { id: userId }
   })
 
   if (!user) {
@@ -417,16 +418,16 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   // Revalidate both the old and new category pages
   switch (oldCategory) {
     case GameCategory.WISHLIST:
-      revalidatePath("/wishlist")
+      revalidateTag(`user-wishlist-games-${user.id}`)
       break
     case GameCategory.LIBRARY:
-      revalidatePath("/library")
+      revalidateTag(`user-library-games-${user.id}`)
       break
     case GameCategory.COMPLETED:
-      revalidatePath("/completed")
+      revalidateTag(`user-completed-games-${user.id}`)
       break
     case GameCategory.ARCHIVED:
-      revalidatePath("/archived")
+      revalidateTag(`user-archived-games-${user.id}`)
       break
   }
 
@@ -434,16 +435,16 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   if (toCategory !== oldCategory) {
     switch (toCategory) {
       case GameCategory.WISHLIST:
-        revalidatePath("/wishlist")
+        revalidateTag(`user-wishlist-games-${user.id}`)
         break
       case GameCategory.LIBRARY:
-        revalidatePath("/library")
+        revalidateTag(`user-library-games-${user.id}`)
         break
       case GameCategory.COMPLETED:
-        revalidatePath("/completed")
+        revalidateTag(`user-completed-games-${user.id}`)
         break
       case GameCategory.ARCHIVED:
-        revalidatePath("/archived")
+        revalidateTag(`user-archived-games-${user.id}`)
         break
     }
   }
