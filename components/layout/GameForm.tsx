@@ -95,7 +95,6 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   useEffect(() => {
     if (game) {
-      console.log("game :>>", game)
       dispatch({ field: "name", value: game.name })
       dispatch({ field: "length", value: game.length?.toString() || "" })
       dispatch({ field: "category", value: game.category })
