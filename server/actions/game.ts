@@ -28,8 +28,8 @@ interface GameData {
   }
 }
 
-function revalidateGameCategory(category: GameCategory, userId: string) {
-  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
+function revalidateGameCategory(category: GameCategory) {
+  revalidateTag(`user-${category.toLowerCase()}-games`)
 }
 
 export async function deleteGame(id: string) {
@@ -59,7 +59,7 @@ export async function deleteGame(id: string) {
 
   await prisma.game.delete({ where: { id: game.id } })
 
-  revalidateGameCategory(game.category, userId)
+  revalidateGameCategory(game.category)
 }
 
 export async function createGame(data: GameData) {
@@ -136,7 +136,7 @@ export async function createGame(data: GameData) {
   }
 
   // Revalidate the appropriate list page
-  revalidateGameCategory(game.category, user.id)
+  revalidateGameCategory(game.category)
 
   return game
 }
@@ -312,11 +312,11 @@ export async function updateGame(id: string, data: GameData) {
   }
 
   // Revalidate both the old and new category pages in case the category changed
-  revalidateGameCategory(existingGame.category, user.id)
+  revalidateGameCategory(existingGame.category)
 
   // If category changed, also revalidate the new category page
   if (updatedGame.category !== existingGame.category) {
-    revalidateGameCategory(updatedGame.category, user.id)
+    revalidateGameCategory(updatedGame.category)
   }
 
   return updatedGame
@@ -368,11 +368,11 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   })
 
   // Revalidate both the old and new category pages
-  revalidateGameCategory(oldCategory, user.id)
+  revalidateGameCategory(oldCategory)
 
   // Revalidate the new category page if it's different
   if (toCategory !== oldCategory) {
-    revalidateGameCategory(toCategory, user.id)
+    revalidateGameCategory(toCategory)
   }
 
   return updatedGame

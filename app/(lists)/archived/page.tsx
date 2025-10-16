@@ -34,8 +34,11 @@ const getCachedArchivedGames = (userId: string) =>
         updatedAt: game.updatedAt.toISOString()
       }))
     },
-    [`user-archived-games-${userId}`],
-    { revalidate: 1800 } // 30 minutes
+    [userId],
+    {
+      tags: ["user-archived-games"],
+      revalidate: 1800 // 30 minutes
+    }
   )
 
 export default async function Archived() {

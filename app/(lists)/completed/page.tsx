@@ -43,8 +43,11 @@ const getCachedCompletedGames = (userId: string) =>
         updatedAt: game.updatedAt.toISOString()
       }))
     },
-    [`user-completed-games-${userId}`],
-    { revalidate: 1800 } // 30 minutes
+    [userId],
+    {
+      tags: ["user-completed-games"],
+      revalidate: 1800 // 30 minutes
+    }
   )
 
 export default async function Completed() {

@@ -36,8 +36,11 @@ const getCachedLibraryGames = (userId: string) =>
         updatedAt: game.updatedAt.toISOString()
       }))
     },
-    [`user-library-games-${userId}`],
-    { revalidate: 1800 } // 30 minutes
+    [userId],
+    {
+      tags: ["user-library-games"],
+      revalidate: 1800 // 30 minutes
+    }
   )
 
 export default async function Library() {
