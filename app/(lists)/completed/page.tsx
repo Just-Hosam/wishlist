@@ -116,14 +116,13 @@ export default async function Completed() {
               </Popover>
             </header>
 
-            <div className="mt-4 flex gap-2 empty:hidden">
+            <div className="mt-6 flex gap-2 empty:hidden">
               {game.platforms?.includes(Platform.NINTENDO) && (
                 <Image
                   src="/logos/nintendo-switch.svg"
                   alt="Nintendo Switch Logo"
                   width={25}
                   height={25}
-                  className="mr-3"
                 />
               )}
               {game.platforms?.includes(Platform.PLAYSTATION) && (
@@ -132,7 +131,6 @@ export default async function Completed() {
                   alt="PlayStation Logo"
                   width={25}
                   height={25}
-                  className="mr-3"
                 />
               )}
             </div>
