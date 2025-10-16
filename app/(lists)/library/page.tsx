@@ -1,4 +1,5 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
 import {
@@ -8,18 +9,11 @@ import {
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
-import { GameCategory } from "@prisma/client"
-import {
-  ArrowRight,
-  Clock,
-  EllipsisVertical,
-  Pencil,
-  PlusIcon,
-  SearchX
-} from "lucide-react"
+import { GameCategory, Platform } from "@prisma/client"
+import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
 import { unstable_cache } from "next/cache"
+import Image from "next/image"
 import Link from "next/link"
-import ListEmptyState from "@/components/layout/ListEmptyState"
 
 const getCachedLibraryGames = (userId: string) =>
   unstable_cache(
@@ -29,7 +23,7 @@ const getCachedLibraryGames = (userId: string) =>
           userId,
           category: GameCategory.LIBRARY
         },
-        orderBy: { createdAt: "desc" }
+        orderBy: { updatedAt: "desc" }
       })
 
       return games.map((game) => ({
@@ -37,6 +31,7 @@ const getCachedLibraryGames = (userId: string) =>
         name: game.name,
         length: game.length,
         category: game.category,
+        platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
       }))
@@ -113,6 +108,27 @@ export default async function Library() {
                 </PopoverContent>
               </Popover>
             </header>
+
+            <div className="mt-4 flex gap-2 empty:hidden">
+              {game.platforms?.includes(Platform.NINTENDO) && (
+                <Image
+                  src="/logos/nintendo-switch.svg"
+                  alt="Nintendo Switch Logo"
+                  width={25}
+                  height={25}
+                  className="mr-3"
+                />
+              )}
+              {game.platforms?.includes(Platform.PLAYSTATION) && (
+                <Image
+                  src="/logos/playstation.svg"
+                  alt="PlayStation Logo"
+                  width={25}
+                  height={25}
+                  className="mr-3"
+                />
+              )}
+            </div>
           </div>
         ))
       )}

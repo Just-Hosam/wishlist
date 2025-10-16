@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
-import { GameCategory } from "@prisma/client"
+import { GameCategory, Platform } from "@prisma/client"
 import {
   ArrowRight,
   Clock,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import { unstable_cache } from "next/cache"
 import Link from "next/link"
+import Image from "next/image"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 
 const getCachedCompletedGames = (userId: string) =>
@@ -29,7 +30,7 @@ const getCachedCompletedGames = (userId: string) =>
           userId,
           category: GameCategory.COMPLETED
         },
-        orderBy: { createdAt: "desc" }
+        orderBy: { updatedAt: "desc" }
       })
 
       return games.map((game) => ({
@@ -37,6 +38,7 @@ const getCachedCompletedGames = (userId: string) =>
         name: game.name,
         length: game.length,
         category: game.category,
+        platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
       }))
@@ -113,6 +115,27 @@ export default async function Completed() {
                 </PopoverContent>
               </Popover>
             </header>
+
+            <div className="mt-4 flex gap-2 empty:hidden">
+              {game.platforms?.includes(Platform.NINTENDO) && (
+                <Image
+                  src="/logos/nintendo-switch.svg"
+                  alt="Nintendo Switch Logo"
+                  width={25}
+                  height={25}
+                  className="mr-3"
+                />
+              )}
+              {game.platforms?.includes(Platform.PLAYSTATION) && (
+                <Image
+                  src="/logos/playstation.svg"
+                  alt="PlayStation Logo"
+                  width={25}
+                  height={25}
+                  className="mr-3"
+                />
+              )}
+            </div>
           </div>
         ))
       )}

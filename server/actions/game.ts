@@ -10,6 +10,7 @@ interface GameData {
   name: string
   length?: string
   category: GameCategory
+  platforms?: Platform[]
   nintendo?: {
     nsuid: string
     storeUrl?: string
@@ -82,7 +83,7 @@ export async function createGame(data: GameData) {
     throw new Error("Unauthorized.")
   }
 
-  const { name, length, category, nintendo, playstation } = data
+  const { name, length, category, platforms, nintendo, playstation } = data
 
   // Validate required fields
   if (!name || !category) {
@@ -102,13 +103,13 @@ export async function createGame(data: GameData) {
     throw new Error("User not found.")
   }
 
-  // Create the game
   const game = await prisma.game.create({
     data: {
       name,
       length: length ? parseInt(length) : null,
       category: category || GameCategory.WISHLIST,
-      userId: user.id
+      userId: user.id,
+      platforms: platforms ?? []
     }
   })
 
@@ -129,7 +130,6 @@ export async function createGame(data: GameData) {
     })
   }
 
-  // If PlayStation data is provided, create a GamePrice record
   if (playstation) {
     await prisma.gamePrice.create({
       data: {
@@ -173,7 +173,7 @@ export async function updateGame(id: string, data: GameData) {
     throw new Error("Unauthorized.")
   }
 
-  const { name, length, category, nintendo, playstation } = data
+  const { name, length, category, platforms, nintendo, playstation } = data
 
   // Validate required fields
   if (!name) {
@@ -205,14 +205,19 @@ export async function updateGame(id: string, data: GameData) {
     throw new Error("Game not found or you don't have permission to edit it.")
   }
 
-  // Update the game
+  const updateData: any = {
+    name,
+    length: length ? parseInt(length) : null,
+    category: category || existingGame.category
+  }
+
+  if (platforms !== undefined) {
+    updateData.platforms = { set: platforms }
+  }
+
   const updatedGame = await prisma.game.update({
     where: { id },
-    data: {
-      name,
-      length: length ? parseInt(length) : null,
-      category: category || existingGame.category
-    }
+    data: updateData
   })
 
   // Handle Nintendo price data

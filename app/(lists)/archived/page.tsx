@@ -1,4 +1,5 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,17 +10,9 @@ import {
 import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
 import { GameCategory } from "@prisma/client"
-import {
-  ArrowRight,
-  Clock,
-  EllipsisVertical,
-  Pencil,
-  PlusIcon,
-  SearchX
-} from "lucide-react"
+import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
 import { unstable_cache } from "next/cache"
 import Link from "next/link"
-import ListEmptyState from "@/components/layout/ListEmptyState"
 
 const getCachedArchivedGames = (userId: string) =>
   unstable_cache(
@@ -29,7 +22,7 @@ const getCachedArchivedGames = (userId: string) =>
           userId,
           category: GameCategory.ARCHIVED
         },
-        orderBy: { createdAt: "desc" }
+        orderBy: { updatedAt: "desc" }
       })
 
       return games.map((game) => ({
