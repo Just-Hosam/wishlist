@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import Spinner from "@/components/ui/spinner"
 import { toggleNowPlaying } from "@/server/actions/game"
-import { PlayCircle, Square, StopCircle } from "lucide-react"
+import { PlayCircle, StopCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { toast } from "sonner"
