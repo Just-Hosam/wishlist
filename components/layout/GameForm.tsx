@@ -283,8 +283,11 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         style={{ animationDelay: "50ms", animationFillMode: "backwards" }}
       >
         <label className="text-sm font-semibold" htmlFor="length">
-          Game Length (hours)
+          Game Length
         </label>
+        <p className="text-xs font-light text-muted-foreground">
+          Enter the length in hours.
+        </p>
         <Input
           id="length"
           type="number"
@@ -405,6 +408,9 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           <label className="text-sm font-semibold" htmlFor="category">
             Owned on
           </label>
+          <p className="text-xs font-light text-muted-foreground">
+            Select all platforms you own this on.
+          </p>
           <div
             className={clsx(
               "mt-2 flex cursor-pointer items-center rounded-[32px] border px-6 py-4",
