@@ -41,12 +41,12 @@ export default function PWASplashScreen() {
       <div className="flex animate-pulse flex-col items-center gap-4">
         <Image
           src="/favicon/favicon.svg"
-          alt="GamesList"
+          alt="Playward"
           width={120}
           height={120}
           className="drop-shadow-lg"
         />
-        <h1 className="text-2xl font-semibold text-gray-800">GamesList</h1>
+        <h1 className="text-2xl font-semibold text-gray-800">Playward</h1>
       </div>
     </div>
   )

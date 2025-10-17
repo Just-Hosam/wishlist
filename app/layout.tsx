@@ -10,7 +10,7 @@ import Link from "next/link"
 import "../styles/globals.css"
 
 export const metadata: Metadata = {
-  title: "GamesList",
+  title: "Playward",
   description:
     "Manage your game wishlists with ease. Track games you want to play, own, and have completed."
 }
@@ -40,7 +40,7 @@ export default async function RootLayout({
               sizes="180x180"
               href="/favicon/apple-touch-icon.png"
             />
-            <meta name="apple-mobile-web-app-title" content="GamesList" />
+            <meta name="apple-mobile-web-app-title" content="Playward" />
             <meta
               name="apple-mobile-web-app-status-bar-style"
               content="black-translucent"
@@ -173,7 +173,7 @@ export default async function RootLayout({
               <Link href="/wishlist" aria-label="Home">
                 <h1 className="flex items-center gap-2 text-xl">
                   <Gamepad2 />
-                  GamesList
+                  Playward
                 </h1>
               </Link>
               <AuthCheck
