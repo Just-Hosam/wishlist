@@ -85,6 +85,7 @@ model Game {
   length             Int?
   category           GameCategory  @default(WISHLIST)
   platforms          Platform[]
+  nowPlaying         Boolean       @default(false)
 
   // User relationship
   userId             String
