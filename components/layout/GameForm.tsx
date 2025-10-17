@@ -24,6 +24,7 @@ interface Game {
   length?: number | null
   category: GameCategory
   platforms?: Platform[]
+  nowPlaying?: boolean
   prices?: {
     platform: Platform
     externalId: string
@@ -53,6 +54,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
     null
   )
   const [playstationInfo, setPlaystationInfo] = useState<GamePrice | null>(null)
+  const [nowPlaying, setNowPlaying] = useState(false)
 
   const platformReducer = (
     state: PlatformState,
@@ -98,6 +100,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       dispatch({ field: "name", value: game.name })
       dispatch({ field: "length", value: game.length?.toString() || "" })
       dispatch({ field: "category", value: game.category })
+      setNowPlaying(!!game.nowPlaying)
       if (game.platforms && Array.isArray(game.platforms)) {
         game.platforms.forEach((p) =>
           dispatchPlatforms({ type: "set", platform: p, value: true })
@@ -182,6 +185,8 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           platforms: Object.entries(platforms)
             .filter(([, v]) => v)
             .map(([k]) => k as Platform),
+          nowPlaying:
+            formData.category === GameCategory.LIBRARY ? nowPlaying : false,
           nintendo: nintendoInfo
             ? {
                 nsuid: nintendoInfo.nsuid,
@@ -278,8 +283,11 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         style={{ animationDelay: "50ms", animationFillMode: "backwards" }}
       >
         <label className="text-sm font-semibold" htmlFor="length">
-          Game Length (hours)
+          Game Length
         </label>
+        <p className="text-xs font-light text-muted-foreground">
+          Enter the length in hours.
+        </p>
         <Input
           id="length"
           type="number"
@@ -362,15 +370,48 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </>
       )}
 
-      {(formData.category === GameCategory.LIBRARY ||
-        formData.category === GameCategory.COMPLETED) && (
+      {formData.category === GameCategory.LIBRARY && (
         <div
           className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
           style={{ animationDelay: "150ms", animationFillMode: "backwards" }}
         >
+          <label className="text-sm font-semibold" htmlFor="nowPlayingToggle">
+            Now Playing
+          </label>
+          <button
+            id="nowPlayingToggle"
+            type="button"
+            className={clsx(
+              "mt-2 flex w-full items-center rounded-[32px] border px-6 py-4 text-left text-sm transition-colors",
+              nowPlaying && "border-emerald-500 bg-emerald-100"
+            )}
+            onClick={() => setNowPlaying((prev) => !prev)}
+            aria-pressed={nowPlaying}
+          >
+            <span>
+              {nowPlaying ? "Currently being Played" : "Not being Played"}
+            </span>
+          </button>
+        </div>
+      )}
+
+      {(formData.category === GameCategory.LIBRARY ||
+        formData.category === GameCategory.COMPLETED) && (
+        <div
+          key={formData.category}
+          className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
+          style={{
+            animationDelay:
+              formData.category === GameCategory.LIBRARY ? "200ms" : "150ms",
+            animationFillMode: "backwards"
+          }}
+        >
           <label className="text-sm font-semibold" htmlFor="category">
             Owned on
           </label>
+          <p className="text-xs font-light text-muted-foreground">
+            Select all platforms you own this on.
+          </p>
           <div
             className={clsx(
               "mt-2 flex cursor-pointer items-center rounded-[32px] border px-6 py-4",

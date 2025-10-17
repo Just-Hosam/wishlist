@@ -66,7 +66,7 @@ export default async function Wishlist() {
       {wishlistGames.length === 0 ? (
         <ListEmptyState />
       ) : (
-        wishlistGames.map((game) => {
+        wishlistGames.map((game, index) => {
           const nintendoPrice = game?.prices?.find(
             ({ platform }) => Platform.NINTENDO === platform
           )
@@ -80,7 +80,7 @@ export default async function Wishlist() {
               key={game.id}
               className="mb-4 rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
               style={{
-                animationDelay: `${wishlistGames.indexOf(game) * 100}ms`,
+                animationDelay: `${index * 100}ms`,
                 animationFillMode: "backwards"
               }}
             >
