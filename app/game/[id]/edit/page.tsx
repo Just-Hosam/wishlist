@@ -18,6 +18,7 @@ export default async function EditGame({ params }: Props) {
       length: true,
       category: true,
       platforms: true,
+      nowPlaying: true,
       prices: {
         select: {
           platform: true,

@@ -11,6 +11,7 @@ interface GameData {
   length?: string
   category: GameCategory
   platforms?: Platform[]
+  nowPlaying?: boolean
   nintendo?: {
     nsuid: string
     storeUrl?: string
@@ -71,7 +72,15 @@ export async function createGame(data: GameData) {
     throw new Error("Unauthorized.")
   }
 
-  const { name, length, category, platforms, nintendo, playstation } = data
+  const {
+    name,
+    length,
+    category,
+    platforms,
+    nintendo,
+    playstation,
+    nowPlaying
+  } = data
 
   // Validate required fields
   if (!name || !category) {
@@ -91,13 +100,16 @@ export async function createGame(data: GameData) {
     throw new Error("User not found.")
   }
 
+  const gameCategory = category || GameCategory.WISHLIST
+
   const game = await prisma.game.create({
     data: {
       name,
       length: length ? parseInt(length) : null,
-      category: category || GameCategory.WISHLIST,
+      category: gameCategory,
       userId: user.id,
-      platforms: platforms ?? []
+      platforms: platforms ?? [],
+      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false
     }
   })
 
@@ -150,7 +162,15 @@ export async function updateGame(id: string, data: GameData) {
     throw new Error("Unauthorized.")
   }
 
-  const { name, length, category, platforms, nintendo, playstation } = data
+  const {
+    name,
+    length,
+    category,
+    platforms,
+    nintendo,
+    playstation,
+    nowPlaying
+  } = data
 
   // Validate required fields
   if (!name) {
@@ -182,10 +202,15 @@ export async function updateGame(id: string, data: GameData) {
     throw new Error("Game not found or you don't have permission to edit it.")
   }
 
+  const nextCategory = category || existingGame.category
+
   const updateData: any = {
     name,
     length: length ? parseInt(length) : null,
-    category: category || existingGame.category
+    category: nextCategory,
+    nowPlaying: nextCategory === GameCategory.LIBRARY
+      ? nowPlaying ?? existingGame.nowPlaying ?? false
+      : false
   }
 
   if (platforms !== undefined) {
@@ -363,7 +388,8 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   const updatedGame = await prisma.game.update({
     where: { id: gameId },
     data: {
-      category: toCategory
+      category: toCategory,
+      nowPlaying: false
     }
   })
 
