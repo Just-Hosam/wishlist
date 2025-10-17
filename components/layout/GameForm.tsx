@@ -379,20 +379,14 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
             id="nowPlayingToggle"
             type="button"
             className={clsx(
-              "mt-2 flex w-full items-center justify-between rounded-[32px] border px-6 py-4 text-left transition-colors",
+              "mt-2 flex w-full items-center rounded-[32px] border px-6 py-4 text-left text-sm transition-colors",
               nowPlaying && "border-emerald-500 bg-emerald-100"
             )}
             onClick={() => setNowPlaying((prev) => !prev)}
             aria-pressed={nowPlaying}
           >
-            <span>Currently playing</span>
-            <span
-              className={clsx(
-                "text-xs font-medium text-gray-600",
-                nowPlaying && "text-emerald-700"
-              )}
-            >
-              {nowPlaying ? "On" : "Off"}
+            <span>
+              {nowPlaying ? "Currently being Played" : "Not being Played"}
             </span>
           </button>
         </div>
