@@ -347,6 +347,53 @@ export async function updateGame(id: string, data: GameData) {
   return updatedGame
 }
 
+export async function toggleNowPlaying(gameId: string) {
+  const session = await getServerSession(authOptions)
+  const userId = session?.user?.id
+
+  if (!userId) {
+    throw new Error("Unauthorized.")
+  }
+
+  if (!gameId) {
+    throw new Error("Game ID is required.")
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId }
+  })
+
+  if (!user) {
+    throw new Error("User not found.")
+  }
+
+  const game = await prisma.game.findFirst({
+    where: {
+      id: gameId,
+      userId: user.id
+    }
+  })
+
+  if (!game) {
+    throw new Error("Game not found or you don't have permission to update it.")
+  }
+
+  if (game.category !== GameCategory.LIBRARY) {
+    throw new Error("Only library games can be toggled.")
+  }
+
+  const updatedGame = await prisma.game.update({
+    where: { id: gameId },
+    data: {
+      nowPlaying: !game.nowPlaying
+    }
+  })
+
+  revalidateGameCategory(GameCategory.LIBRARY)
+
+  return updatedGame.nowPlaying
+}
+
 export async function moveGame(gameId: string, toCategory: GameCategory) {
   const session = await getServerSession(authOptions)
 

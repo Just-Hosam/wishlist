@@ -1,6 +1,7 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
+import ToggleNowPlayingButton from "@/components/layout/ToggleNowPlayingButton"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -142,6 +143,11 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
         </PopoverTrigger>
         <PopoverContent className="mr-4 w-fit md:mr-0">
           <div className="flex flex-col">
+            <ToggleNowPlayingButton
+              gameId={game.id}
+              nowPlaying={game.nowPlaying}
+            />
+            <div className="my-2 rounded-full border-[0.5px]"></div>
             <MoveGameButton
               gameId={game.id}
               fromCategory={GameCategory.LIBRARY}
