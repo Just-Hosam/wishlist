@@ -79,7 +79,11 @@ export default async function Completed() {
               </div>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button size="sm" variant="ghost" className="self-start px-2">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="mr-[-4px] self-start px-2"
+                  >
                     <EllipsisVertical />
                   </Button>
                 </PopoverTrigger>

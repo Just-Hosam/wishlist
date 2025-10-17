@@ -285,7 +285,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         <label className="text-sm font-semibold" htmlFor="length">
           Game Length
         </label>
-        <p className="text-xs font-light text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           Enter the length in hours.
         </p>
         <Input
@@ -382,7 +382,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
             id="nowPlayingToggle"
             type="button"
             className={clsx(
-              "mt-2 flex w-full items-center rounded-[32px] border px-6 py-4 text-left text-sm transition-colors",
+              "mt-2 flex w-full items-center rounded-[32px] border px-6 py-4 text-sm transition-colors",
               nowPlaying && "border-emerald-500 bg-emerald-100"
             )}
             onClick={() => setNowPlaying((prev) => !prev)}
@@ -409,12 +409,12 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           <label className="text-sm font-semibold" htmlFor="category">
             Owned on
           </label>
-          <p className="text-xs font-light text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             Select all platforms you own this on.
           </p>
           <div
             className={clsx(
-              "mt-2 flex cursor-pointer items-center rounded-[32px] border px-6 py-4",
+              "mt-2 flex cursor-pointer items-center rounded-[32px] border px-6 py-4 text-sm",
               platforms[Platform.PLAYSTATION] && "border-blue-500 bg-blue-100"
             )}
             onClick={() => togglePlatformSelection(Platform.PLAYSTATION)}
@@ -430,7 +430,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           </div>
           <div
             className={clsx(
-              "mt-2 flex cursor-pointer items-center rounded-[32px] border px-6 py-4",
+              "mt-2 flex cursor-pointer items-center rounded-[32px] border px-6 py-4 text-sm",
               platforms[Platform.NINTENDO] && "border-blue-500 bg-blue-100"
             )}
             onClick={() => togglePlatformSelection(Platform.NINTENDO)}

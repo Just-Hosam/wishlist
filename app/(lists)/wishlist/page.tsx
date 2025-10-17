@@ -98,7 +98,7 @@ export default async function Wishlist() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="self-start px-2"
+                      className="mr-[-4px] self-start px-2"
                     >
                       <EllipsisVertical />
                     </Button>
