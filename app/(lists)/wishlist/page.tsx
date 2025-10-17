@@ -1,4 +1,5 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
 import PriceLayout from "@/components/layout/PriceLayout"
 import { Button } from "@/components/ui/button"
@@ -10,17 +11,10 @@ import {
 import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
 import { GameCategory, Platform } from "@prisma/client"
-import {
-  ArrowRight,
-  Clock,
-  EllipsisVertical,
-  Pencil,
-  PlusIcon
-} from "lucide-react"
+import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
-import ListEmptyState from "@/components/layout/ListEmptyState"
 
 const getCachedWishlistGames = (userId: string) =>
   unstable_cache(
