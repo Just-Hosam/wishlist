@@ -398,6 +398,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
       {(formData.category === GameCategory.LIBRARY ||
         formData.category === GameCategory.COMPLETED) && (
         <div
+          key={formData.category}
           className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
           style={{
             animationDelay:
