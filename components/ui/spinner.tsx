@@ -8,7 +8,7 @@ interface SpinnerProps {
 
 export default function Spinner({ size = 50, className }: SpinnerProps) {
   return (
-    <div className="duration-500 animate-in fade-in zoom-in-95">
+    <div className="mx-auto duration-500 animate-in fade-in zoom-in-95">
       <LoaderCircle
         size={size}
         className={cn("mx-auto my-28 animate-spin", className)}
