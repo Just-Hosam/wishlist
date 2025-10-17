@@ -10,7 +10,13 @@ import {
 import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
 import { GameCategory, Platform } from "@prisma/client"
-import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
+import {
+  ArrowRight,
+  Clock,
+  EllipsisVertical,
+  Pencil,
+  PlayCircle
+} from "lucide-react"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
@@ -32,6 +38,7 @@ const getCachedLibraryGames = (userId: string) =>
         length: game.length,
         category: game.category,
         platforms: game.platforms,
+        nowPlaying: game.nowPlaying,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
       }))
@@ -55,61 +62,76 @@ export default async function Library() {
         libraryGames.map((game) => (
           <div
             key={game.id}
-            className="mb-4 rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+            className="mb-4 overflow-hidden rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
             style={{
               animationDelay: `${libraryGames.indexOf(game) * 100}ms`,
               animationFillMode: "backwards"
             }}
           >
-            <header className="flex items-center justify-between gap-4">
-              <div className="flex-1 text-xl font-medium">
-                <h3>{game.name}</h3>
-                {game.length && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-normal text-gray-600">
-                    <Clock size={14} /> {game?.length} hours
-                  </p>
-                )}
+            <header>
+              {game.nowPlaying && (
+                <div className="mx-[-24px] mt-[-20px] flex items-center gap-2 bg-gradient-to-b from-emerald-50 to-white px-6 py-4 text-sm font-medium text-emerald-600">
+                  <PlayCircle size={16} />
+                  Now Playing
+                </div>
+              )}
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex-1 text-xl font-medium">
+                  <h3>{game.name}</h3>
+                  {game.length && (
+                    <p className="mt-1 flex items-center gap-1 text-xs font-normal text-gray-600">
+                      <Clock size={14} /> {game?.length} hours
+                    </p>
+                  )}
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="mr-[-4px] self-start px-2"
+                    >
+                      <EllipsisVertical />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="mr-4 w-fit md:mr-0">
+                    <div className="flex flex-col">
+                      <MoveGameButton
+                        gameId={game.id}
+                        fromCategory={GameCategory.LIBRARY}
+                        toCategory={GameCategory.WISHLIST}
+                        buttonText="To Wishlist"
+                        icon={<ArrowRight />}
+                      />
+                      <MoveGameButton
+                        gameId={game.id}
+                        fromCategory={GameCategory.LIBRARY}
+                        toCategory={GameCategory.COMPLETED}
+                        buttonText="To Completed"
+                        icon={<ArrowRight />}
+                      />
+                      <MoveGameButton
+                        gameId={game.id}
+                        fromCategory={GameCategory.LIBRARY}
+                        toCategory={GameCategory.ARCHIVED}
+                        buttonText="To Archived"
+                        icon={<ArrowRight />}
+                      />
+                      <div className="my-2 rounded-full border-[0.5px]"></div>
+                      <Link href={`/game/${game.id}/edit`}>
+                        <Button
+                          className="w-full justify-start"
+                          variant="ghost"
+                        >
+                          <Pencil />
+                          Edit
+                        </Button>
+                      </Link>
+                      <DeleteGameButton gameId={game.id} />
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button size="sm" variant="ghost" className="self-start px-2">
-                    <EllipsisVertical />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="mr-4 w-fit md:mr-0">
-                  <div className="flex flex-col">
-                    <MoveGameButton
-                      gameId={game.id}
-                      fromCategory={GameCategory.LIBRARY}
-                      toCategory={GameCategory.WISHLIST}
-                      buttonText="To Wishlist"
-                      icon={<ArrowRight />}
-                    />
-                    <MoveGameButton
-                      gameId={game.id}
-                      fromCategory={GameCategory.LIBRARY}
-                      toCategory={GameCategory.COMPLETED}
-                      buttonText="To Completed"
-                      icon={<ArrowRight />}
-                    />
-                    <MoveGameButton
-                      gameId={game.id}
-                      fromCategory={GameCategory.LIBRARY}
-                      toCategory={GameCategory.ARCHIVED}
-                      buttonText="To Archived"
-                      icon={<ArrowRight />}
-                    />
-                    <div className="my-2 rounded-full border-[0.5px]"></div>
-                    <Link href={`/game/${game.id}/edit`}>
-                      <Button className="w-full justify-start" variant="ghost">
-                        <Pencil />
-                        Edit
-                      </Button>
-                    </Link>
-                    <DeleteGameButton gameId={game.id} />
-                  </div>
-                </PopoverContent>
-              </Popover>
             </header>
 
             <div className="mt-6 flex gap-5 empty:hidden">
