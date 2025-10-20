@@ -1,4 +1,3 @@
-import AuthCheck from "@/components/layout/AuthCheck"
 import NavigationTabs from "@/components/layout/NavigationTabs"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
