@@ -73,7 +73,7 @@ export default async function Completed() {
                 <h3>{game.name}</h3>
                 {game.length && (
                   <p className="mt-1 flex items-center gap-1 text-xs font-normal text-gray-600">
-                    <Clock size={14} /> {game?.length} hours
+                    <Clock size={12} /> {game?.length} hours
                   </p>
                 )}
               </div>

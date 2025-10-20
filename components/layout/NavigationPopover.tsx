@@ -20,7 +20,7 @@ export default function NavigationPopover() {
           <Menu />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="mr-6 w-fit">
+      <PopoverContent className="mr-4 w-fit">
         <div className="flex flex-col">
           <SignOutButton />
         </div>

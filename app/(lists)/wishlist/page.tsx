@@ -16,6 +16,1835 @@ import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 
+type WishlistGame = {
+  id: string
+  name: string
+  length: number | null
+  category: GameCategory
+  createdAt: string
+  updatedAt: string
+  prices: Array<{
+    id: string
+    gameId: string
+    platform: Platform
+    externalId: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    regularPrice: string | null
+    currentPrice: string | null
+    lastFetchedAt: string | null
+    createdAt: string
+    updatedAt: string
+  }>
+}
+
+const MOCK_WISHLIST_GAMES: WishlistGame[] = [
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-1",
+    name: "Starfall Odyssey",
+    length: 48,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+    updatedAt: new Date("2023-12-11T08:30:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-1-ps",
+        gameId: "mock-1",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-starfall-odyssey",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "69.99",
+        currentPrice: "54.99",
+        lastFetchedAt: new Date("2023-12-11T08:00:00.000Z").toISOString(),
+        createdAt: new Date("2023-12-01T12:00:00.000Z").toISOString(),
+        updatedAt: new Date("2023-12-11T08:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-2",
+    name: "Chrono Harbor",
+    length: 32,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+    updatedAt: new Date("2024-01-10T11:20:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-2-switch",
+        gameId: "mock-2",
+        platform: Platform.NINTENDO,
+        externalId: "switch-chrono-harbor",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "59.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-01-10T11:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-01-05T09:15:00.000Z").toISOString(),
+        updatedAt: new Date("2024-01-10T11:00:00.000Z").toISOString()
+      }
+    ]
+  },
+  {
+    id: "mock-3",
+    name: "Eclipse Frontier",
+    length: null,
+    category: GameCategory.WISHLIST,
+    createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+    updatedAt: new Date("2024-02-20T17:05:00.000Z").toISOString(),
+    prices: [
+      {
+        id: "mock-3-ps",
+        gameId: "mock-3",
+        platform: Platform.PLAYSTATION,
+        externalId: "ps-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "79.99",
+        currentPrice: "64.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      },
+      {
+        id: "mock-3-switch",
+        gameId: "mock-3",
+        platform: Platform.NINTENDO,
+        externalId: "switch-eclipse-frontier",
+        countryCode: "US",
+        currencyCode: "USD",
+        regularPrice: "74.99",
+        currentPrice: "59.99",
+        lastFetchedAt: new Date("2024-02-20T17:00:00.000Z").toISOString(),
+        createdAt: new Date("2024-02-14T14:45:00.000Z").toISOString(),
+        updatedAt: new Date("2024-02-20T17:00:00.000Z").toISOString()
+      }
+    ]
+  }
+]
+
 const getCachedWishlistGames = (userId: string) =>
   unstable_cache(
     async () => {
@@ -59,7 +1888,11 @@ const getCachedWishlistGames = (userId: string) =>
 
 export default async function Wishlist() {
   const userId = await getUserId()
-  const wishlistGames = await getCachedWishlistGames(userId)()
+  // const wishlistGames = await getCachedWishlistGames(userId)()
+  const wishlistGames = MOCK_WISHLIST_GAMES.map((game, index) => ({
+    ...game,
+    id: game.id + index
+  }))
 
   return (
     <>
@@ -89,7 +1922,7 @@ export default async function Wishlist() {
                   <h3>{game.name}</h3>
                   {game.length && (
                     <p className="mt-1 flex items-center gap-1 text-xs font-normal text-gray-600">
-                      <Clock size={14} /> {game?.length} hours
+                      <Clock size={12} /> {game?.length} hours
                     </p>
                   )}
                 </div>

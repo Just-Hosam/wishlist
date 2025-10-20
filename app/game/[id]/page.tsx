@@ -38,7 +38,7 @@ export default async function Game({ params }: Props) {
           <h2 className="text-3xl font-semibold">{game?.name}</h2>
           {game?.length && (
             <div className="mt-2 flex items-center gap-1 text-sm text-gray-600">
-              <Clock size={14} /> {game?.length} hours
+              <Clock size={12} /> {game?.length} hours
             </div>
           )}
         </div>
