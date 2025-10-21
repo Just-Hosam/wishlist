@@ -11,14 +11,8 @@ import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
 import { GameCategory } from "@prisma/client"
 import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
-import { Metadata } from "next"
 import { unstable_cache } from "next/cache"
 import Link from "next/link"
-
-export const metadata: Metadata = {
-  title: "Archived",
-  description: "Games you have archived."
-}
 
 const getCachedArchivedGames = (userId: string) =>
   unstable_cache(
