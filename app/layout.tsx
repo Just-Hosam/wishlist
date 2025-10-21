@@ -10,10 +10,7 @@ import Link from "next/link"
 import "../styles/globals.css"
 
 export const metadata: Metadata = {
-  title: {
-    default: "Playward",
-    template: "Playward | %s"
-  },
+  title: "Playward",
   description:
     "Manage your game wishlists with ease. Track games you want to play, own, and have completed."
 }
