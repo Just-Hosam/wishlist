@@ -57,13 +57,7 @@ const getCachedWishlistGames = (userId: string) =>
     }
   )
 
-export default async function Wishlist({
-  testingId
-}: {
-  children: React.ReactNode
-  testingId?: number
-}) {
-  console.log("testingId :>>", testingId)
+export default async function Wishlist() {
   const userId = await getUserId()
   const wishlistGames = await getCachedWishlistGames(userId)()
 
