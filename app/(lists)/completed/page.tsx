@@ -1,4 +1,5 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
+import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,18 +10,16 @@ import {
 import prisma from "@/lib/prisma"
 import { getUserId } from "@/lib/user"
 import { GameCategory, Platform } from "@prisma/client"
-import {
-  ArrowRight,
-  Clock,
-  EllipsisVertical,
-  Pencil,
-  PlusIcon,
-  SearchX
-} from "lucide-react"
+import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
+import { Metadata } from "next"
 import { unstable_cache } from "next/cache"
-import Link from "next/link"
 import Image from "next/image"
-import ListEmptyState from "@/components/layout/ListEmptyState"
+import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Completed",
+  description: "Games you have completed."
+}
 
 const getCachedCompletedGames = (userId: string) =>
   unstable_cache(

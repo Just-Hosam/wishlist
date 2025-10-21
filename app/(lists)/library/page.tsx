@@ -19,9 +19,15 @@ import {
   Pencil,
   PlayCircle
 } from "lucide-react"
+import { Metadata } from "next"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Library",
+  description: "Your game library."
+}
 
 interface LibraryGame {
   id: string
