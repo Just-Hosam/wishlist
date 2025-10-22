@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
+import { fetchNintendoGameInfo } from "@/server/actions/nintendo"
 import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -48,20 +49,7 @@ export default function NintendoLinkInput({
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/nintendo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ url })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to fetch game information")
-      }
-
-      const info = await response.json()
+      const info = await fetchNintendoGameInfo(url)
       setGameInfo(info)
 
       onGameInfoFound?.(info)
