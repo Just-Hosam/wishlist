@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type GamePrice } from "@/lib/playstation-price"
+import { fetchPlayStationGameInfo } from "@/server/actions/playstation"
 import { CircleCheck, Link, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -51,20 +52,7 @@ export default function PlayStationLinkInput({
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/playstation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ url })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to fetch game information")
-      }
-
-      const info = await response.json()
+      const info = await fetchPlayStationGameInfo(url)
       setGameInfo(info)
 
       onGameInfoFound?.(info)
