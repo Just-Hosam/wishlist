@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "update-playstation-prices": "curl -X POST http://localhost:3000/api/cron/update-playstation-prices",
-    "update-nintendo-prices": "curl -X POST http://localhost:3000/api/cron/update-nintendo-prices"
+    "update-nintendo-prices": "curl -X POST http://localhost:3000/api/cron/update-nintendo-prices",
+    "deploy": "./scripts/deploy.sh"
   },
   "prisma": {
     "schema": "server/prisma/schema.prisma"
