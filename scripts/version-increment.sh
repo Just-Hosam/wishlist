@@ -7,7 +7,7 @@ npm version patch --no-git-tag-version
 NEW_VERSION=$(node -p "require('./package.json').version")
 
 # Stage and commit the change
-git add package.json
+git add package.json package-lock.json
 git commit -m "chore: Bump version to $NEW_VERSION"
 
 # Push to remote
