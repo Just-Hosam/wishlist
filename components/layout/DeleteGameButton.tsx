@@ -30,9 +30,9 @@ export default function DeleteGameButton({ gameId }: Props) {
     startTransition(async () => {
       try {
         await deleteGame(gameId)
+        router.refresh()
         toast.success("Game deleted successfully!")
         setIsOpen(false)
-        router.refresh()
       } catch (error) {
         console.error("Error deleting game:", error)
         toast.error(

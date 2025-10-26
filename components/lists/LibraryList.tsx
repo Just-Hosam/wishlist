@@ -1,3 +1,5 @@
+"use client"
+
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
@@ -8,9 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import prisma from "@/lib/prisma"
-import { getUserId } from "@/lib/user"
-import { Game, GameCategory, Platform } from "@prisma/client"
+import { GameCategory, Platform } from "@prisma/client"
 import {
   ArrowRight,
   Clock,
@@ -19,11 +19,10 @@ import {
   Pencil,
   PlayCircle
 } from "lucide-react"
-import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 
-interface LibraryGame {
+type LibraryGame = {
   id: string
   name: string
   length: number | null
@@ -34,45 +33,13 @@ interface LibraryGame {
   updatedAt: string
 }
 
-const getCachedLibraryGames = (userId: string) =>
-  unstable_cache(
-    async (): Promise<LibraryGame[][]> => {
-      const games = await prisma.game.findMany({
-        where: {
-          userId,
-          category: GameCategory.LIBRARY
-        },
-        orderBy: [{ nowPlaying: "desc" }, { updatedAt: "desc" }]
-      })
+interface LibraryListProps {
+  games: LibraryGame[]
+}
 
-      const libraryGames = games.map(
-        (game: Game): LibraryGame => ({
-          id: game.id,
-          name: game.name,
-          length: game.length,
-          category: game.category,
-          platforms: game.platforms,
-          nowPlaying: game.nowPlaying,
-          createdAt: game.createdAt.toISOString(),
-          updatedAt: game.updatedAt.toISOString()
-        })
-      )
-
-      const nowPlayingGames = libraryGames.filter((game) => game.nowPlaying)
-      const backlogGames = libraryGames.filter((game) => !game.nowPlaying)
-
-      return [nowPlayingGames, backlogGames]
-    },
-    [userId],
-    {
-      tags: ["user-library-games"],
-      revalidate: 1800 // 30 minutes
-    }
-  )
-
-export default async function Library() {
-  const userId = await getUserId()
-  const [nowPlayingGames, backlogGames] = await getCachedLibraryGames(userId)()
+export default function LibraryList({ games }: LibraryListProps) {
+  const nowPlayingGames = games.filter((game) => game.nowPlaying)
+  const backlogGames = games.filter((game) => !game.nowPlaying)
   const hasNowPlaying = nowPlayingGames.length > 0
   const hasBacklog = backlogGames.length > 0
 
@@ -87,7 +54,7 @@ export default async function Library() {
           <div className="flex items-center gap-[6px] pb-4 pt-1 text-sm font-medium">
             <PlayCircle size={16} /> Now Playing
           </div>
-          {nowPlayingGames.map((game: LibraryGame, index: number) => (
+          {nowPlayingGames.map((game, index) => (
             <LibraryGameCard game={game} index={index} key={game.id} />
           ))}
         </>
@@ -100,7 +67,7 @@ export default async function Library() {
               Backlog
             </div>
           )}
-          {backlogGames.map((game: LibraryGame, index: number) => (
+          {backlogGames.map((game, index) => (
             <LibraryGameCard game={game} index={index} key={game.id} />
           ))}
         </>

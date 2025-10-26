@@ -233,8 +233,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         }
 
         toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
-        router.push("/" + activeTab.toLowerCase())
-        router.refresh()
+        router.push("/lists")
       } catch (error) {
         console.error(`Error ${isEdit ? "updating" : "creating"} game:`, error)
         toast.error(
