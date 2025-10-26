@@ -1,16 +1,7 @@
 "use client"
 
 import { GameCategory } from "@prisma/client"
-import { usePathname } from "next/navigation"
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode
-} from "react"
-
-const LIST_PATHS = ["/wishlist", "/library", "/completed", "/archived"]
+import { createContext, useContext, useState, ReactNode } from "react"
 
 interface TabContextType {
   activeTab: GameCategory
@@ -27,20 +18,7 @@ export function TabProvider({
   children: ReactNode
   initial?: GameCategory
 }) {
-  const pathname = usePathname()
-  const isListPage = LIST_PATHS.includes(pathname)
-  let currentTab = initial
-
-  if (isListPage) {
-    currentTab = getTabFromPath(pathname) || currentTab
-  }
-
-  const [activeTab, setActiveTab] = useState<GameCategory>(currentTab)
-
-  useEffect(() => {
-    const tabFromPath = getTabFromPath(pathname)
-    if (tabFromPath) setActiveTab(tabFromPath)
-  }, [pathname])
+  const [activeTab, setActiveTab] = useState<GameCategory>(initial)
 
   const reset = () => setActiveTab(GameCategory.WISHLIST)
 
@@ -57,15 +35,4 @@ export function useTabContext() {
     throw new Error("useTabContext must be used within a TabProvider")
   }
   return context
-}
-
-const getTabFromPath = (pathname: string) => {
-  const path = pathname.split("/").pop()?.toUpperCase()
-  const isValidCategory = Object.values(GameCategory).includes(
-    path as GameCategory
-  )
-
-  if (isValidCategory) return path as GameCategory
-
-  return null
 }
