@@ -59,9 +59,9 @@ export default function WishlistList({ games }: WishlistListProps) {
           return (
             <div
               key={game.id}
-              className="mb-4 rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+              className="mb-4 rounded-3xl border px-6 py-5 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
               style={{
-                animationDelay: `${index * 100}ms`,
+                animationDelay: `${index * 50}ms`,
                 animationFillMode: "backwards"
               }}
             >
