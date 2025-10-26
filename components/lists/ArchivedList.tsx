@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { GameCategory } from "@prisma/client"
+import { GameCategory } from "@/types/game"
 import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
 import Link from "next/link"
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { GameCategory } from "@prisma/client"
+import { GameCategory } from "@/types/game"
 import { createContext, useContext, useState, ReactNode } from "react"
 
 interface TabContextType {

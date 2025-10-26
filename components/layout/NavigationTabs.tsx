@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
-import { GameCategory } from "@prisma/client"
+import { GameCategory } from "@/types/game"
 import { Archive, CheckCircle2, FolderCheck, Heart } from "lucide-react"
 
 export default function NavigationTabs() {

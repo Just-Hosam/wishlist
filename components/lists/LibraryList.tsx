@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { GameCategory, Platform } from "@prisma/client"
+import { GameCategory, Platform } from "@/types/game"
 import {
   ArrowRight,
   Clock,
