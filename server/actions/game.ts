@@ -29,8 +29,8 @@ interface GameData {
   }
 }
 
-function revalidateGameCategory(category: GameCategory) {
-  revalidateTag(`user-${category.toLowerCase()}-games`)
+function revalidateGameCategory(category: GameCategory, userId: string) {
+  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
 }
 
 export async function deleteGame(id: string) {
@@ -60,7 +60,7 @@ export async function deleteGame(id: string) {
 
   await prisma.game.delete({ where: { id: game.id } })
 
-  revalidateGameCategory(game.category)
+  revalidateGameCategory(game.category, userId)
 }
 
 export async function createGame(data: GameData) {
@@ -148,7 +148,7 @@ export async function createGame(data: GameData) {
   }
 
   // Revalidate the appropriate list page
-  revalidateGameCategory(game.category)
+  revalidateGameCategory(game.category, userId)
 
   return game
 }
@@ -208,9 +208,10 @@ export async function updateGame(id: string, data: GameData) {
     name,
     length: length ? parseInt(length) : null,
     category: nextCategory,
-    nowPlaying: nextCategory === GameCategory.LIBRARY
-      ? nowPlaying ?? existingGame.nowPlaying ?? false
-      : false
+    nowPlaying:
+      nextCategory === GameCategory.LIBRARY
+        ? (nowPlaying ?? existingGame.nowPlaying ?? false)
+        : false
   }
 
   if (platforms !== undefined) {
@@ -337,11 +338,11 @@ export async function updateGame(id: string, data: GameData) {
   }
 
   // Revalidate both the old and new category pages in case the category changed
-  revalidateGameCategory(existingGame.category)
+  revalidateGameCategory(existingGame.category, userId)
 
   // If category changed, also revalidate the new category page
   if (updatedGame.category !== existingGame.category) {
-    revalidateGameCategory(updatedGame.category)
+    revalidateGameCategory(updatedGame.category, userId)
   }
 
   return updatedGame
@@ -389,7 +390,7 @@ export async function toggleNowPlaying(gameId: string) {
     }
   })
 
-  revalidateGameCategory(GameCategory.LIBRARY)
+  revalidateGameCategory(GameCategory.LIBRARY, userId)
 
   return updatedGame.nowPlaying
 }
@@ -441,11 +442,11 @@ export async function moveGame(gameId: string, toCategory: GameCategory) {
   })
 
   // Revalidate both the old and new category pages
-  revalidateGameCategory(oldCategory)
+  revalidateGameCategory(oldCategory, userId)
 
   // Revalidate the new category page if it's different
   if (toCategory !== oldCategory) {
-    revalidateGameCategory(toCategory)
+    revalidateGameCategory(toCategory, userId)
   }
 
   return updatedGame
