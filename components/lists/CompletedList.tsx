@@ -1,3 +1,5 @@
+"use client"
+
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
@@ -7,57 +9,37 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import prisma from "@/lib/prisma"
-import { getUserId } from "@/lib/user"
-import { GameCategory, Platform } from "@prisma/client"
+import { GameCategory, Platform } from "@/types/game"
 import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
-import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 
-const getCachedCompletedGames = (userId: string) =>
-  unstable_cache(
-    async () => {
-      const games = await prisma.game.findMany({
-        where: {
-          userId,
-          category: GameCategory.COMPLETED
-        },
-        orderBy: { updatedAt: "desc" }
-      })
+type CompletedGame = {
+  id: string
+  name: string
+  length: number | null
+  category: GameCategory
+  platforms: Platform[] | null
+  createdAt: string
+  updatedAt: string
+}
 
-      return games.map((game) => ({
-        id: game.id,
-        name: game.name,
-        length: game.length,
-        category: game.category,
-        platforms: game.platforms,
-        createdAt: game.createdAt.toISOString(),
-        updatedAt: game.updatedAt.toISOString()
-      }))
-    },
-    [userId],
-    {
-      tags: ["user-completed-games"],
-      revalidate: 1800 // 30 minutes
-    }
-  )
+interface CompletedListProps {
+  games: CompletedGame[]
+}
 
-export default async function Completed() {
-  const userId = await getUserId()
-  const completedGames = await getCachedCompletedGames(userId)()
-
+export default function CompletedList({ games }: CompletedListProps) {
   return (
     <>
-      {completedGames.length === 0 ? (
+      {games.length === 0 ? (
         <ListEmptyState />
       ) : (
-        completedGames.map((game, index) => (
+        games.map((game, index) => (
           <div
             key={game.id}
-            className="mb-4 rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+            className="mb-4 rounded-3xl border px-6 py-5 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
             style={{
-              animationDelay: `${index * 100}ms`,
+              animationDelay: `${index * 50}ms`,
               animationFillMode: "backwards"
             }}
           >
@@ -116,7 +98,7 @@ export default async function Completed() {
               </Popover>
             </header>
 
-            <div className="mt-6 flex gap-2 empty:hidden">
+            <div className="mt-6 flex gap-5 empty:hidden">
               {game.platforms?.includes(Platform.NINTENDO) && (
                 <Image
                   src="/logos/nintendo-switch.svg"

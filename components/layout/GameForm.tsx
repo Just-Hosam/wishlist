@@ -9,7 +9,7 @@ import { useTabContext } from "@/contexts/TabContext"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
 import { type GamePrice } from "@/lib/playstation-price"
 import { createGame, updateGame } from "@/server/actions/game"
-import { GameCategory, Platform } from "@prisma/client"
+import { GameCategory, Platform } from "@/types/game"
 import clsx from "clsx"
 import { Archive, CheckCircle2, FolderCheck, Heart, Save } from "lucide-react"
 import Image from "next/image"
@@ -233,8 +233,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         }
 
         toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
-        router.push("/" + activeTab.toLowerCase())
-        router.refresh()
+        router.push("/lists")
       } catch (error) {
         console.error(`Error ${isEdit ? "updating" : "creating"} game:`, error)
         toast.error(

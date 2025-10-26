@@ -2,9 +2,8 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
-import { GameCategory } from "@prisma/client"
+import { GameCategory } from "@/types/game"
 import { Archive, CheckCircle2, FolderCheck, Heart } from "lucide-react"
-import Link from "next/link"
 
 export default function NavigationTabs() {
   const { activeTab, setActiveTab } = useTabContext()
@@ -12,42 +11,34 @@ export default function NavigationTabs() {
   return (
     <Tabs value={activeTab}>
       <TabsList>
-        <Link
-          href="/wishlist"
+        <TabsTrigger
           onClick={() => setActiveTab(GameCategory.WISHLIST)}
+          value={GameCategory.WISHLIST}
         >
-          <TabsTrigger value={GameCategory.WISHLIST}>
-            <Heart />
-            {activeTab === GameCategory.WISHLIST && <>Wishlist</>}
-          </TabsTrigger>
-        </Link>
-        <Link
-          href="/library"
+          <Heart />
+          {activeTab === GameCategory.WISHLIST && <>Wishlist</>}
+        </TabsTrigger>
+        <TabsTrigger
           onClick={() => setActiveTab(GameCategory.LIBRARY)}
+          value={GameCategory.LIBRARY}
         >
-          <TabsTrigger value={GameCategory.LIBRARY}>
-            <FolderCheck />
-            {activeTab === GameCategory.LIBRARY && <>Library</>}
-          </TabsTrigger>
-        </Link>
-        <Link
-          href="/completed"
+          <FolderCheck />
+          {activeTab === GameCategory.LIBRARY && <>Library</>}
+        </TabsTrigger>
+        <TabsTrigger
           onClick={() => setActiveTab(GameCategory.COMPLETED)}
+          value={GameCategory.COMPLETED}
         >
-          <TabsTrigger value={GameCategory.COMPLETED}>
-            <CheckCircle2 />
-            {activeTab === GameCategory.COMPLETED && <>Completed</>}
-          </TabsTrigger>
-        </Link>
-        <Link
-          href="/archived"
+          <CheckCircle2 />
+          {activeTab === GameCategory.COMPLETED && <>Completed</>}
+        </TabsTrigger>
+        <TabsTrigger
           onClick={() => setActiveTab(GameCategory.ARCHIVED)}
+          value={GameCategory.ARCHIVED}
         >
-          <TabsTrigger value={GameCategory.ARCHIVED}>
-            <Archive />
-            {activeTab === GameCategory.ARCHIVED && <>Archived</>}
-          </TabsTrigger>
-        </Link>
+          <Archive />
+          {activeTab === GameCategory.ARCHIVED && <>Archived</>}
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   )

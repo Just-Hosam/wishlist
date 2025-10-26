@@ -16,7 +16,7 @@ export default async function middleware(request: NextRequest) {
 
   if (token && pathname === "/") {
     const url = request.nextUrl.clone()
-    url.pathname = "/wishlist"
+    url.pathname = "/lists"
     return NextResponse.redirect(url)
   }
 

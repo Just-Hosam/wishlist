@@ -1,3 +1,5 @@
+"use client"
+
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
@@ -7,55 +9,35 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import prisma from "@/lib/prisma"
-import { getUserId } from "@/lib/user"
-import { GameCategory } from "@prisma/client"
+import { GameCategory } from "@/types/game"
 import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
-import { unstable_cache } from "next/cache"
 import Link from "next/link"
 
-const getCachedArchivedGames = (userId: string) =>
-  unstable_cache(
-    async () => {
-      const games = await prisma.game.findMany({
-        where: {
-          userId,
-          category: GameCategory.ARCHIVED
-        },
-        orderBy: { updatedAt: "desc" }
-      })
+type ArchivedGame = {
+  id: string
+  name: string
+  length: number | null
+  category: GameCategory
+  createdAt: string
+  updatedAt: string
+}
 
-      return games.map((game) => ({
-        id: game.id,
-        name: game.name,
-        length: game.length,
-        category: game.category,
-        createdAt: game.createdAt.toISOString(),
-        updatedAt: game.updatedAt.toISOString()
-      }))
-    },
-    [userId],
-    {
-      tags: ["user-archived-games"],
-      revalidate: 1800 // 30 minutes
-    }
-  )
+interface ArchivedListProps {
+  games: ArchivedGame[]
+}
 
-export default async function Archived() {
-  const userId = await getUserId()
-  const archivedGames = await getCachedArchivedGames(userId)()
-
+export default function ArchivedList({ games }: ArchivedListProps) {
   return (
     <>
-      {archivedGames.length === 0 ? (
+      {games.length === 0 ? (
         <ListEmptyState />
       ) : (
-        archivedGames.map((game, index) => (
+        games.map((game, index) => (
           <div
             key={game.id}
-            className="mb-4 rounded-3xl border px-6 py-5 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+            className="mb-4 rounded-3xl border px-6 py-5 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
             style={{
-              animationDelay: `${index * 100}ms`,
+              animationDelay: `${index * 50}ms`,
               animationFillMode: "backwards"
             }}
           >
