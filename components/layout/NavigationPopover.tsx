@@ -7,7 +7,8 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { Menu } from "lucide-react"
+import { Info, Menu } from "lucide-react"
+import Link from "next/link"
 import { useState } from "react"
 
 export default function NavigationPopover() {
@@ -22,9 +23,17 @@ export default function NavigationPopover() {
       </PopoverTrigger>
       <PopoverContent className="mr-4 w-fit">
         <div className="flex flex-col">
+          <Link href="/about">
+            <Button className="w-full justify-start" variant="ghost">
+              <Info />
+              About
+            </Button>
+          </Link>
           <SignOutButton />
         </div>
-        <div className="mt-1 text-center text-xs text-gray-500">
+        <div className="mb-2 mt-1 rounded-full border-[0.5px]"></div>
+
+        <div className="text-center text-xs text-gray-500">
           version {process.env.APP_VERSION}
         </div>
       </PopoverContent>

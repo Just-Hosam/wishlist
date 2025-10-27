@@ -9,7 +9,7 @@ export function SignOutButton() {
     <Button
       onClick={() => signOut()}
       variant="ghost"
-      className="w-full justify-start"
+      className="w-full justify-start text-destructive"
     >
       <LogOutIcon />
       Logout
