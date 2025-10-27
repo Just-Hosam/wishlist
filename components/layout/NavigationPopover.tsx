@@ -22,6 +22,12 @@ export default function NavigationPopover() {
       </PopoverTrigger>
       <PopoverContent className="mr-4 w-fit">
         <div className="flex flex-col">
+          <Link href="/about">
+            <Button className="w-full justify-start" variant="ghost">
+              <Info />
+              About
+            </Button>
+          </Link>
           <SignOutButton />
         </div>
         <div className="mt-1 text-center text-xs text-gray-500">
