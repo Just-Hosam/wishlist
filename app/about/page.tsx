@@ -31,7 +31,7 @@ export default function AboutPage() {
           <Gamepad2 size={16} className="text-primary" />
           <h2 className="text-xl font-semibold">About the App</h2>
         </div>
-        <p className="space-y-4 text-muted-foreground">
+        <p className="text-muted-foreground">
           Playward helps you organize and track your video game collection and
           wishlist.
         </p>
