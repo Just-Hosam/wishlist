@@ -1,3 +1,4 @@
+import { BackButton } from "@/components/layout/BackButton"
 import { Button } from "@/components/ui/button"
 import {
   Github,
@@ -13,36 +14,25 @@ import Link from "next/link"
 export default function AboutPage() {
   return (
     <>
-      <Link href="/lists">
-        <Button variant="ghost" size="sm" className="mb-5 mt-2 gap-2">
-          <ArrowLeft size={16} />
-          Back to Playward
-        </Button>
-      </Link>
-      <div className="mb-10">
-        <div className="text-center">
-          <h1 className="mb-2 text-3xl font-bold">About Playward</h1>
-          <p className="text-muted-foreground">Manage your games with ease</p>
-        </div>
-      </div>
+      <BackButton className="min-h-[60px] pb-4" />
 
       <section className="mb-7">
-        <div className="mb-4 flex items-center gap-3">
+        <div className="mb-3 flex items-center gap-3">
           <Gamepad2 size={16} className="text-primary" />
-          <h2 className="text-xl font-semibold">About the App</h2>
+          <h2 className="text-xl font-semibold">About Playward</h2>
         </div>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Playward helps you organize and track your video game collection and
           wishlist.
         </p>
       </section>
 
       <section>
-        <div className="mb-4 flex items-center gap-3">
+        <div className="mb-3 flex items-center gap-3">
           <User size={16} className="text-primary" />
           <h2 className="text-xl font-semibold">About the Developer</h2>
         </div>
-        <div className="space-y-4 text-muted-foreground">
+        <div className="space-y-4 text-sm text-muted-foreground">
           <p>
             Hi! I'm Sam, I made Playward as a personal project to track the
             games I play.
@@ -53,7 +43,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="mt-6 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
+        <div className="mt-5 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
           <Link
             href="https://github.com/Just-Hosam"
             target="_blank"
