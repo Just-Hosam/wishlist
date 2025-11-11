@@ -14,25 +14,33 @@ import Link from "next/link"
 export default function AboutPage() {
   return (
     <>
-      <BackButton className="min-h-[60px] pb-4" />
+      <div className="min-h-[60px] pb-4">
+        <BackButton />
+      </div>
 
-      <section className="mb-7">
+      <section
+        className="mb-7 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
+      >
         <div className="mb-3 flex items-center gap-3">
-          <Gamepad2 size={16} className="text-primary" />
+          <Gamepad2 size={24} className="text-primary" />
           <h2 className="text-xl font-semibold">About Playward</h2>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm">
           Playward helps you organize and track your video game collection and
           wishlist.
         </p>
       </section>
 
-      <section>
+      <section
+        className="duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        style={{ animationDelay: "50ms", animationFillMode: "backwards" }}
+      >
         <div className="mb-3 flex items-center gap-3">
-          <User size={16} className="text-primary" />
+          <User size={24} className="text-primary" />
           <h2 className="text-xl font-semibold">About the Developer</h2>
         </div>
-        <div className="space-y-4 text-sm text-muted-foreground">
+        <div className="space-y-4 text-sm">
           <p>
             Hi! I'm Sam, I made Playward as a personal project to track the
             games I play.
@@ -43,7 +51,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="mt-5 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
+        <div className="mt-6 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
           <Link
             href="https://github.com/Just-Hosam"
             target="_blank"
