@@ -24,7 +24,11 @@ export default function NavigationPopover() {
       <PopoverContent className="mr-4 w-fit">
         <div className="flex flex-col">
           <Link href="/about">
-            <Button className="w-full justify-start" variant="ghost">
+            <Button
+              className="w-full justify-start"
+              variant="ghost"
+              onClick={() => setPopoverOpen(false)}
+            >
               <Info />
               About
             </Button>
