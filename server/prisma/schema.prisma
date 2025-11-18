@@ -75,6 +75,8 @@ enum GameCategory {
 enum Platform {
   NINTENDO
   PLAYSTATION
+  PC
+  XBOX
 }
 
 model Game {
@@ -87,17 +89,20 @@ model Game {
   platforms          Platform[]
   nowPlaying         Boolean       @default(false)
 
+  // IGDB relationship
+  igdbGameId         String?
+  
   // User relationship
   userId             String
   user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   // Price relationships
   prices             GamePrice[]
-
+  
   // bookkeeping
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
-
+  
   @@index([userId, category])
   @@index([name])
   @@index([userId, createdAt])
@@ -124,4 +129,44 @@ model GamePrice {
 
   @@unique([gameId, platform])
   @@index([gameId])
+}
+
+model IGDBGame {
+  id                      String     @id @default(cuid())
+  igdbId                  Int        @unique
+  
+  // Basic info
+  name                    String
+  slug                    String
+  alternativeNames        String[]
+  summary                 String
+  
+  // Media
+  coverImageId            String
+  screenshotImageIds      String[]
+  videoId                 String?
+  
+  // Taxonomy
+  genreIds                Int[]
+  platforms               Platform[]
+  
+  // Ranking signals
+  firstReleaseDate        Int
+  hypes                   Int?       @default(0)
+  rating                  Float?
+  ratingCount             Int?       @default(0)
+  aggregatedRating        Float?
+  aggregatedRatingCount   Int?       @default(0)
+  
+  // Store identifiers
+  playstationUrlSegment   String?
+  nintendoUrlSegment      String?
+  steamUrlSegment         String?
+  
+  // Timestamps
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
+  
+  @@index([name])
+  @@index([igdbId])
 }
