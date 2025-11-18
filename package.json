@@ -9,6 +9,7 @@
     "lint": "next lint",
     "update-playstation-prices": "curl -X POST http://localhost:3000/api/cron/update-playstation-prices",
     "update-nintendo-prices": "curl -X POST http://localhost:3000/api/cron/update-nintendo-prices",
+    "igdb-token": "npx tsx --env-file=.env scripts/igdb/token.ts",
     "deploy": "./scripts/deploy.sh"
   },
   "prisma": {
