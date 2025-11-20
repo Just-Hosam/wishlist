@@ -35,7 +35,7 @@ export const fetchGamesBatch = async (
         hypes, rating, rating_count, aggregated_rating, aggregated_rating_count;
 
       where 
-        game_type = (0, 8, 9)
+        game_type = (0, 2, 3, 8, 9)
         & platforms = (48, 167, 130, 508, 6, 169)
         & first_release_date != null 
         & first_release_date >= 1262329201
@@ -44,7 +44,7 @@ export const fetchGamesBatch = async (
         & videos != null
         & genres != null
         & themes != (42) 
-        & keywords != (343, 1961, 2509, 3586, 26306);
+        & keywords != (343, 847, 2509, 3586, 26306);
 
       sort id asc;
       limit ${safeLimit};
