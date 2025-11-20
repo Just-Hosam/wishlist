@@ -44,6 +44,8 @@ interface GameFormProps {
 interface PlatformState {
   [Platform.PLAYSTATION]: boolean
   [Platform.NINTENDO]: boolean
+  [Platform.XBOX]: boolean
+  [Platform.PC]: boolean
 }
 
 export default function GameForm({ game, isEdit = false }: GameFormProps) {
@@ -72,7 +74,9 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
 
   const [platforms, dispatchPlatforms] = useReducer(platformReducer, {
     [Platform.PLAYSTATION]: false,
-    [Platform.NINTENDO]: false
+    [Platform.NINTENDO]: false,
+    [Platform.XBOX]: false,
+    [Platform.PC]: false
   })
 
   const formReducer = (
