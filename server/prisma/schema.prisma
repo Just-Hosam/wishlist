@@ -131,6 +131,8 @@ model GamePrice {
   @@index([gameId])
 }
 
+// IGDB Schema
+
 model IGDBGame {
   id                      String     @id @default(cuid())
   igdbId                  Int        @unique
@@ -145,7 +147,7 @@ model IGDBGame {
   coverImageId            String
   screenshotImageIds      String[]
   videoId                 String?
-  
+
   // Taxonomy
   genreIds                Int[]
   platforms               Platform[]
