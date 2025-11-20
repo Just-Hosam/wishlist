@@ -14,7 +14,9 @@ export type GameCategory = (typeof GameCategory)[keyof typeof GameCategory]
 
 export const Platform = {
   NINTENDO: "NINTENDO",
-  PLAYSTATION: "PLAYSTATION"
+  PLAYSTATION: "PLAYSTATION",
+  XBOX: "XBOX",
+  PC: "PC"
 } as const
 
 export type Platform = (typeof Platform)[keyof typeof Platform]
