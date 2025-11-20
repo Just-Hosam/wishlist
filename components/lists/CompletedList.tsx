@@ -85,7 +85,7 @@ export default function CompletedList({ games }: CompletedListProps) {
                       buttonText="To Archived"
                       icon={<ArrowRight />}
                     />
-                    <div className="my-2 rounded-full border-[0.5px]"></div>
+                    <div className="mx-[-8px] my-2 rounded-full border-[0.5px]"></div>
                     <Link href={`/game/${game.id}/edit`}>
                       <Button className="w-full justify-start" variant="ghost">
                         <Pencil />
