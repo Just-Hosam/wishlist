@@ -12,7 +12,7 @@ export default async function ListsLayout({
     <>
       <header className="sticky top-[68px] m-auto flex min-h-[60px] max-w-[700px] items-center justify-between bg-white pb-4">
         <NavigationTabs />
-        <Link href="/game/add">
+        <Link href="/search">
           <Button size="icon">
             <Plus />
           </Button>

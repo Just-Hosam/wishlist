@@ -117,7 +117,7 @@ export function SearchPage() {
         Search for games
       </h2>
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        Start typing to find games from the IGDB database
+        Start typing to find games to track
       </p>
     </div>
   )
@@ -146,62 +146,64 @@ export function SearchPage() {
   const renderResults = () => (
     <div>
       {results.map((game, index) => (
-        <div
-          key={game.id}
-          className="flex cursor-pointer gap-4 border-b border-gray-200 py-5 transition-all duration-500 animate-in fade-in slide-in-from-top-3 first:pt-2 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
-          style={{
-            animationDelay: `${index * 50}ms`,
-            animationFillMode: "backwards"
-          }}
-        >
-          {/* Cover Image */}
-          <div className="h-24 w-[72px] flex-shrink-0 overflow-hidden rounded bg-gray-200 shadow-lg dark:bg-gray-700">
-            {game.coverImageId ? (
-              <Image
-                src={getImageUrl(game.coverImageId)}
-                alt={game.name}
-                width={72}
-                height={96}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-gray-400">
-                <Search className="h-8 w-8" />
-              </div>
-            )}
+        <div key={game.id}>
+          <div
+            className="mx-[-24px] flex cursor-pointer gap-4 border-gray-200 px-[24px] py-5 transition-all duration-500 animate-in fade-in slide-in-from-top-3 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800/50"
+            style={{
+              animationDelay: `${index * 50}ms`,
+              animationFillMode: "backwards"
+            }}
+          >
+            {/* Cover Image */}
+            <div className="h-24 w-[72px] flex-shrink-0 overflow-hidden rounded-md bg-gray-200 shadow-lg dark:bg-gray-700">
+              {game.coverImageId ? (
+                <Image
+                  src={getImageUrl(game.coverImageId)}
+                  alt={game.name}
+                  width={72}
+                  height={96}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-gray-400">
+                  <Search className="h-8 w-8" />
+                </div>
+              )}
+            </div>
+
+            {/* Game Info */}
+            <div className="flex flex-1 flex-col">
+              <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
+                {game.name}
+              </h3>
+
+              {/* Release Date */}
+              {game.firstReleaseDate && (
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  {formatReleaseDate(game.firstReleaseDate)}
+                </p>
+              )}
+
+              {/* Platforms - Show unique platform icons */}
+              {game.platforms && game.platforms.length > 0 && (
+                <div className="mt-auto flex items-center gap-2">
+                  {[...new Set(game.platforms)].map((platform, idx) => {
+                    const icon = getPlatformIcon(platform)
+                    return icon ? (
+                      <Image
+                        key={idx}
+                        src={icon}
+                        alt={getPlatformAlt(platform)}
+                        width={13}
+                        height={13}
+                      />
+                    ) : null
+                  })}
+                </div>
+              )}
+            </div>
           </div>
-
-          {/* Game Info */}
-          <div className="flex flex-1 flex-col">
-            <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
-              {game.name}
-            </h3>
-
-            {/* Release Date */}
-            {game.firstReleaseDate && (
-              <p className="mb-2 text-xs text-gray-600 dark:text-gray-400">
-                {formatReleaseDate(game.firstReleaseDate)}
-              </p>
-            )}
-
-            {/* Platforms - Show unique platform icons */}
-            {game.platforms && game.platforms.length > 0 && (
-              <div className="mt-auto flex items-center gap-2">
-                {[...new Set(game.platforms)].map((platform, idx) => {
-                  const icon = getPlatformIcon(platform)
-                  return icon ? (
-                    <Image
-                      key={idx}
-                      src={icon}
-                      alt={getPlatformAlt(platform)}
-                      width={14}
-                      height={14}
-                    />
-                  ) : null
-                })}
-              </div>
-            )}
-          </div>
+          <div className="mx-[-24px] rounded-full border-[0.5px] px-[24px]"></div>
         </div>
       ))}
     </div>
@@ -210,7 +212,7 @@ export function SearchPage() {
   return (
     <div>
       {/* Sticky Header with Back Button and Search Bar */}
-      <div className="sticky top-[68px] flex min-h-[60px] items-center gap-2 bg-white pb-4 duration-500 animate-in fade-in slide-in-from-top-3">
+      <div className="sticky top-[68px] mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 duration-500 animate-in fade-in slide-in-from-top-3">
         <BackButton />
 
         <div className="relative flex-1">

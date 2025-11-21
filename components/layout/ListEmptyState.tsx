@@ -10,7 +10,7 @@ export default function ListEmptyState() {
       <p className="mb-8 text-sm text-gray-600">
         Get started by adding a game.
       </p>
-      <Link href="/game/add">
+      <Link href="/search">
         <Button size="lg">
           <PlusIcon />
           Add Game
