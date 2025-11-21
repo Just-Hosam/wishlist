@@ -114,7 +114,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
               gameId={game.id}
               nowPlaying={game.nowPlaying}
             />
-            <div className="mx-[-8px] my-2 rounded-full border-[0.5px]"></div>
+            <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
             <MoveGameButton
               gameId={game.id}
               fromCategory={GameCategory.LIBRARY}
@@ -136,7 +136,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
               buttonText="To Archived"
               icon={<ArrowRight />}
             />
-            <div className="mx-[-8px] my-2 rounded-full border-[0.5px]"></div>
+            <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
             <Link href={`/game/${game.id}/edit`}>
               <Button className="w-full justify-start" variant="ghost">
                 <Pencil />

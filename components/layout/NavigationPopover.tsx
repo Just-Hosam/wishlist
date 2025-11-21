@@ -35,7 +35,7 @@ export default function NavigationPopover() {
           </Link>
           <SignOutButton />
         </div>
-        <div className="mx-[-8px] mb-3 mt-2 rounded-full border-[0.5px]"></div>
+        <div className="mx-[-12px] mb-3 mt-2 rounded-full border-[0.5px]"></div>
 
         <div className="text-center text-xs text-gray-500">
           version {process.env.APP_VERSION}
