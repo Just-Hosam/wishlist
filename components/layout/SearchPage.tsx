@@ -155,13 +155,13 @@ export function SearchPage() {
             }}
           >
             {/* Cover Image */}
-            <div className="h-24 w-[72px] flex-shrink-0 overflow-hidden rounded-md bg-gray-200 shadow-lg dark:bg-gray-700">
+            <div className="h-[104px] w-[78px] flex-shrink-0 overflow-hidden rounded-md bg-gray-200 shadow-lg dark:bg-gray-700">
               {game.coverImageId ? (
                 <Image
                   src={getImageUrl(game.coverImageId)}
                   alt={game.name}
-                  width={72}
-                  height={96}
+                  width={78}
+                  height={104}
                   className="h-full w-full object-cover"
                 />
               ) : (
@@ -220,7 +220,7 @@ export function SearchPage() {
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
             aria-hidden
-            size={17}
+            size={16}
           />
 
           <Input
