@@ -214,7 +214,7 @@ export function SearchPage() {
 
   return (
     <div>
-      <div className="sticky top-[68px] mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white/80 px-[24px] pb-4 backdrop-blur-sm duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
+      <div className="sticky top-[68px] mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
         <BackButton />
 
         <div className="relative flex-1">
@@ -236,13 +236,13 @@ export function SearchPage() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search for games..."
-            className="h-10 rounded-full pl-9 pr-9 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
+            className="h-10 rounded-full pl-9 pr-9 transition-all duration-200"
           />
 
           {query && (
             <button
               onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-sm text-gray-500 hover:text-gray-700"
               aria-label="Clear search"
             >
               <X size={15} />
