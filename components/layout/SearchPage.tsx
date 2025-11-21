@@ -61,10 +61,13 @@ export function SearchPage() {
     setQuery("")
     setResults([])
     setHasSearched(false)
-    // Refocus the input after clearing
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 0)
+    inputRef.current?.focus()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      inputRef.current?.blur()
+    }
   }
 
   const getImageUrl = (imageId: string) => {
@@ -211,12 +214,10 @@ export function SearchPage() {
 
   return (
     <div>
-      {/* Sticky Header with Back Button and Search Bar */}
       <div className="sticky top-[68px] mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white/80 px-[24px] pb-4 backdrop-blur-sm duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
         <BackButton />
 
         <div className="relative flex-1">
-          {/* Left search icon */}
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
             aria-hidden
@@ -226,10 +227,16 @@ export function SearchPage() {
           <Input
             ref={inputRef}
             type="text"
+            inputMode="search"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Search for games..."
-            className="h-10 rounded-full border-transparent bg-gray-50 pl-9 pr-9 shadow-sm transition-all duration-200 placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 dark:bg-gray-800"
+            className="h-10 rounded-full pl-9 pr-9 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
           />
 
           {query && (
