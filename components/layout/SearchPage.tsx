@@ -229,7 +229,7 @@ export function SearchPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for games..."
-            className="h-10 rounded-full border-transparent bg-gray-50 pl-9 pr-9 text-sm shadow-sm transition-all duration-200 placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 dark:bg-gray-800"
+            className="h-10 rounded-full border-transparent bg-gray-50 pl-9 pr-9 shadow-sm transition-all duration-200 placeholder:text-gray-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 dark:bg-gray-800"
           />
 
           {query && (
