@@ -48,7 +48,7 @@ export function SearchPage() {
       } finally {
         setIsLoading(false)
       }
-    }, 600) // 400ms debounce
+    }, 700) // 700ms debounce
 
     return () => {
       if (debounceRef.current) {
