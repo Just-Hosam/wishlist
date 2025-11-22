@@ -169,7 +169,7 @@ export default async function RootLayout({
             ></script> */}
           </head>
           <body>
-            <nav className="sticky left-0 right-0 top-0 m-auto flex min-h-[68px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 pb-4 pt-3">
+            <nav className="sticky left-0 right-0 top-0 z-40 m-auto flex min-h-[68px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 pb-4 pt-3">
               <Link href="/lists" aria-label="Home">
                 <h1 className="flex items-center gap-2 text-xl">
                   <Gamepad2 />

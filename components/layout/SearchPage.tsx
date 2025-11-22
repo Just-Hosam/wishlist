@@ -214,7 +214,7 @@ export function SearchPage() {
 
   return (
     <div>
-      <div className="sticky top-[68px] mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
+      <div className="sticky top-[68px] z-40 mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
         <BackButton />
 
         <div className="relative flex-1">

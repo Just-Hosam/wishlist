@@ -10,7 +10,7 @@ export default async function ListsLayout({
 }) {
   return (
     <>
-      <header className="sticky top-[68px] m-auto flex min-h-[60px] max-w-[700px] items-center justify-between bg-white pb-4">
+      <header className="sticky top-[68px] z-40 m-auto mx-[-24px] flex min-h-[60px] max-w-[700px] items-center justify-between bg-white px-6 pb-4">
         <NavigationTabs />
         <Link href="/search">
           <Button size="icon">
