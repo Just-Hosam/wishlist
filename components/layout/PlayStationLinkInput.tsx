@@ -15,13 +15,15 @@ interface PlayStationLinkInputProps {
   onGameInfoCleared: () => void
   className?: string
   existingGameInfo?: GamePrice | null
+  initialUrl?: string | null
 }
 
 export default function PlayStationLinkInput({
   onGameInfoFound,
   onGameInfoCleared,
   className,
-  existingGameInfo
+  existingGameInfo,
+  initialUrl
 }: PlayStationLinkInputProps) {
   const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +35,13 @@ export default function PlayStationLinkInput({
       setGameInfo(existingGameInfo)
     }
   }, [existingGameInfo])
+
+  // Initialize URL from initialUrl prop
+  useEffect(() => {
+    if (initialUrl && !url) {
+      setUrl(initialUrl)
+    }
+  }, [initialUrl])
 
   const handleFetchGameInfo = async () => {
     if (!url.trim()) {

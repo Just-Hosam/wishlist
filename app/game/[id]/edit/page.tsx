@@ -19,6 +19,9 @@ export default async function EditGame({ params }: Props) {
       category: true,
       platforms: true,
       nowPlaying: true,
+      igdbGameId: true,
+      coverImageUrl: true,
+      description: true,
       prices: {
         select: {
           platform: true,
@@ -40,6 +43,9 @@ export default async function EditGame({ params }: Props) {
   // Convert Decimal values to numbers for serialization
   const game = {
     ...gameData,
+    igdbGameId: gameData.igdbGameId || undefined,
+    coverImageUrl: gameData.coverImageUrl || undefined,
+    description: gameData.description || undefined,
     prices: gameData.prices.map((price) => ({
       ...price,
       storeUrl: price.storeUrl,
@@ -48,5 +54,7 @@ export default async function EditGame({ params }: Props) {
     }))
   }
 
-  return <GameForm game={game} isEdit={true} />
+  return (
+    <GameForm game={game} isEdit={true} isFromIGDB={!!gameData.igdbGameId} />
+  )
 }

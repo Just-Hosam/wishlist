@@ -12,6 +12,9 @@ interface GameData {
   category: GameCategory
   platforms?: Platform[]
   nowPlaying?: boolean
+  igdbGameId?: string
+  coverImageUrl?: string
+  description?: string
   nintendo?: {
     nsuid: string
     storeUrl?: string
@@ -79,7 +82,10 @@ export async function createGame(data: GameData) {
     platforms,
     nintendo,
     playstation,
-    nowPlaying
+    nowPlaying,
+    igdbGameId,
+    coverImageUrl,
+    description
   } = data
 
   // Validate required fields
@@ -109,7 +115,10 @@ export async function createGame(data: GameData) {
       category: gameCategory,
       userId: user.id,
       platforms: platforms ?? [],
-      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false
+      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false,
+      igdbGameId: igdbGameId || null,
+      coverImageUrl: coverImageUrl || null,
+      description: description || null
     }
   })
 
@@ -169,7 +178,10 @@ export async function updateGame(id: string, data: GameData) {
     platforms,
     nintendo,
     playstation,
-    nowPlaying
+    nowPlaying,
+    igdbGameId,
+    coverImageUrl,
+    description
   } = data
 
   // Validate required fields
@@ -212,6 +224,17 @@ export async function updateGame(id: string, data: GameData) {
       nextCategory === GameCategory.LIBRARY
         ? (nowPlaying ?? existingGame.nowPlaying ?? false)
         : false
+  }
+
+  // Only update IGDB fields if explicitly provided (don't overwrite with undefined)
+  if (igdbGameId !== undefined) {
+    updateData.igdbGameId = igdbGameId
+  }
+  if (coverImageUrl !== undefined) {
+    updateData.coverImageUrl = coverImageUrl
+  }
+  if (description !== undefined) {
+    updateData.description = description
   }
 
   if (platforms !== undefined) {

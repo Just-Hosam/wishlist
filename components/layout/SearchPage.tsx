@@ -1,61 +1,43 @@
 "use client"
 
-import { searchIGDBGames, type IGDBSearchResult } from "@/server/actions/igdb"
-import { useState, useEffect, useRef } from "react"
-import { Input } from "@/components/ui/input"
 import { BackButton } from "@/components/layout/BackButton"
+import { Input } from "@/components/ui/input"
 import Spinner from "@/components/ui/spinner"
-import { X, Search } from "lucide-react"
+import { searchIGDBGames, type IGDBSearchResult } from "@/server/actions/igdb"
 import { Platform } from "@prisma/client"
+import { Search, X } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { useRef, useState } from "react"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<IGDBSearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
-  const debounceRef = useRef<NodeJS.Timeout>()
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Focus input on mount
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  // Debounced search
-  useEffect(() => {
     if (query.trim().length < 2) {
       setResults([])
       setHasSearched(false)
       return
     }
 
-    // Clear previous timeout
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current)
+    setIsLoading(true)
+    setHasSearched(true)
+    try {
+      const searchResults = await searchIGDBGames(query, 20)
+      setResults(searchResults)
+    } catch (error) {
+      console.error("Search error:", error)
+      setResults([])
+    } finally {
+      setIsLoading(false)
     }
-
-    // Set new timeout
-    debounceRef.current = setTimeout(async () => {
-      setIsLoading(true)
-      setHasSearched(true)
-      try {
-        const searchResults = await searchIGDBGames(query, 20)
-        setResults(searchResults)
-      } catch (error) {
-        console.error("Search error:", error)
-        setResults([])
-      } finally {
-        setIsLoading(false)
-      }
-    }, 700) // 700ms debounce
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current)
-      }
-    }
-  }, [query])
+  }
 
   const handleClearSearch = () => {
     setQuery("")
@@ -64,44 +46,8 @@ export function SearchPage() {
     inputRef.current?.focus()
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      inputRef.current?.blur()
-    }
-  }
-
   const getImageUrl = (imageId: string) => {
     return `https://images.igdb.com/igdb/image/upload/t_cover_big/${imageId}.jpg`
-  }
-
-  const getPlatformIcon = (platform: Platform) => {
-    switch (platform) {
-      case Platform.NINTENDO:
-        return "/logos/nintendo-switch.svg"
-      case Platform.PLAYSTATION:
-        return "/logos/playstation.svg"
-      case Platform.XBOX:
-        return "/logos/xbox.svg"
-      case Platform.PC:
-        return "/logos/windows-10.svg"
-      default:
-        return null
-    }
-  }
-
-  const getPlatformAlt = (platform: Platform) => {
-    switch (platform) {
-      case Platform.NINTENDO:
-        return "Nintendo Switch"
-      case Platform.PLAYSTATION:
-        return "PlayStation"
-      case Platform.XBOX:
-        return "Xbox"
-      case Platform.PC:
-        return "PC"
-      default:
-        return platform
-    }
   }
 
   const formatReleaseDate = (timestamp: number) => {
@@ -149,7 +95,7 @@ export function SearchPage() {
   const renderResults = () => (
     <div>
       {results.map((game, index) => (
-        <div key={game.id}>
+        <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
           <div
             className="mx-[-24px] flex cursor-pointer gap-4 border-gray-200 px-[24px] py-5 transition-all duration-500 animate-in fade-in slide-in-from-top-3 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800/50"
             style={{
@@ -189,25 +135,45 @@ export function SearchPage() {
 
               {/* Platforms - Show unique platform icons */}
               {game.platforms && game.platforms.length > 0 && (
-                <div className="mt-auto flex items-center gap-2">
-                  {[...new Set(game.platforms)].map((platform, idx) => {
-                    const icon = getPlatformIcon(platform)
-                    return icon ? (
-                      <Image
-                        key={idx}
-                        src={icon}
-                        alt={getPlatformAlt(platform)}
-                        width={13}
-                        height={13}
-                      />
-                    ) : null
-                  })}
+                <div className="mt-auto flex items-center gap-2 pb-1">
+                  {game.platforms.includes(Platform.PLAYSTATION) && (
+                    <Image
+                      src="/logos/playstation.svg"
+                      alt="PlayStation"
+                      width={13}
+                      height={13}
+                    />
+                  )}
+                  {game.platforms.includes(Platform.NINTENDO) && (
+                    <Image
+                      src="/logos/nintendo-switch.svg"
+                      alt="Nintendo Switch"
+                      width={13}
+                      height={13}
+                    />
+                  )}
+                  {game.platforms.includes(Platform.PC) && (
+                    <Image
+                      src="/logos/windows-10.svg"
+                      alt="PC"
+                      width={13}
+                      height={13}
+                    />
+                  )}
+                  {game.platforms.includes(Platform.XBOX) && (
+                    <Image
+                      src="/logos/xbox.svg"
+                      alt="Xbox"
+                      width={13}
+                      height={13}
+                    />
+                  )}
                 </div>
               )}
             </div>
           </div>
           <div className="mx-[-24px] rounded-full border-[0.5px] px-[24px]"></div>
-        </div>
+        </Link>
       ))}
     </div>
   )
@@ -217,7 +183,7 @@ export function SearchPage() {
       <div className="sticky top-[68px] z-40 mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
         <BackButton />
 
-        <div className="relative flex-1">
+        <form onSubmit={handleSubmit} className="relative flex-1">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
             aria-hidden
@@ -234,13 +200,13 @@ export function SearchPage() {
             spellCheck="false"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
             placeholder="Search for games..."
             className="h-10 rounded-full pl-9 pr-9 transition-all duration-200"
           />
 
           {query && (
             <button
+              type="button"
               onClick={handleClearSearch}
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-sm text-gray-500 hover:text-gray-700"
               aria-label="Clear search"
@@ -248,7 +214,7 @@ export function SearchPage() {
               <X size={15} />
             </button>
           )}
-        </div>
+        </form>
       </div>
 
       {/* Search Results Area */}

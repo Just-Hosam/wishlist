@@ -37,13 +37,25 @@ const chooseVideoId = (videos: RawIGDBGame["videos"] = []): string | null => {
 }
 
 const segmentPSURL = (url: string): string | null => {
-  const match = url.match(/concept\/(\d+)/)
-  return match ? match[1] : null
+  // Handle both /concept/ and /product/ URL formats
+  const conceptMatch = url.match(/concept\/(\d+)/)
+  if (conceptMatch) return conceptMatch[1]
+
+  const productMatch = url.match(/product\/([\w-]+)/)
+  if (productMatch) return productMatch[1]
+
+  return null
 }
 
 const segmentNintendoURL = (url: string): string | null => {
-  const match = url.match(/games\/detail\/([\w-]+)/)
-  return match ? match[1] : null
+  // Handle both /games/detail/ and /store/products/ URL formats
+  const detailMatch = url.match(/games\/detail\/([\w-]+)/)
+  if (detailMatch) return detailMatch[1]
+
+  const productsMatch = url.match(/store\/products\/([\w-]+)/)
+  if (productsMatch) return productsMatch[1]
+
+  return null
 }
 
 const segmentSteamURL = (url: string): string | null => {
@@ -99,14 +111,9 @@ export const serializeGame = (game: RawIGDBGame): SerializedIGDBGame => {
     nintendoUrlSegment: segmentNintendoURL(
       findWebsiteByType(game.websites, 24) ?? ""
     ),
-    steamUrlSegment: segmentSteamURL(
-      findWebsiteByType(game.websites, 13) ?? ""
-    ),
-    createdAt: new Date(),
-    updatedAt: new Date()
+    steamUrlSegment: segmentSteamURL(findWebsiteByType(game.websites, 13) ?? "")
   }
 }
 
-export const serializeGames = (
-  games: RawIGDBGame[]
-): SerializedIGDBGame[] => games.map(serializeGame)
+export const serializeGames = (games: RawIGDBGame[]): SerializedIGDBGame[] =>
+  games.map(serializeGame)

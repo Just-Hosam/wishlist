@@ -15,13 +15,15 @@ interface NintendoLinkInputProps {
   onGameInfoCleared: () => void
   className?: string
   existingGameInfo?: NintendoGameInfo | null
+  initialUrl?: string | null
 }
 
 export default function NintendoLinkInput({
   onGameInfoFound,
   onGameInfoCleared,
   className,
-  existingGameInfo
+  existingGameInfo,
+  initialUrl
 }: NintendoLinkInputProps) {
   const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +35,13 @@ export default function NintendoLinkInput({
       setGameInfo(existingGameInfo)
     }
   }, [existingGameInfo])
+
+  // Initialize URL from initialUrl prop
+  useEffect(() => {
+    if (initialUrl && !url) {
+      setUrl(initialUrl)
+    }
+  }, [initialUrl])
 
   const handleFetchGameInfo = async () => {
     if (!url.trim()) {

@@ -25,6 +25,13 @@ interface Game {
   category: GameCategory
   platforms?: Platform[]
   nowPlaying?: boolean
+  igdbGameId?: string
+  coverImageUrl?: string
+  description?: string
+  storeUrls?: {
+    nintendo: string | null
+    playstation: string | null
+  }
   prices?: {
     platform: Platform
     externalId: string
@@ -39,6 +46,7 @@ interface Game {
 interface GameFormProps {
   game?: Game
   isEdit?: boolean
+  isFromIGDB?: boolean
 }
 
 interface PlatformState {
@@ -48,7 +56,11 @@ interface PlatformState {
   [Platform.PC]: boolean
 }
 
-export default function GameForm({ game, isEdit = false }: GameFormProps) {
+export default function GameForm({
+  game,
+  isEdit = false,
+  isFromIGDB = false
+}: GameFormProps) {
   const router = useRouter()
   const { activeTab } = useTabContext()
   const [isPending, startTransition] = useTransition()
@@ -159,8 +171,15 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
           setPlaystationInfo(playstationInfo)
         }
       }
+
+      // Handle IGDB store URLs (pre-populated from IGDB data)
+      if (game.storeUrls && isFromIGDB) {
+        // Note: We don't set price info for IGDB games initially
+        // The user can fetch prices later if they want
+        // Store URLs are just for display/reference
+      }
     }
-  }, [game])
+  }, [game, isFromIGDB])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -191,6 +210,9 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
             .map(([k]) => k as Platform),
           nowPlaying:
             formData.category === GameCategory.LIBRARY ? nowPlaying : false,
+          igdbGameId: game?.igdbGameId,
+          coverImageUrl: game?.coverImageUrl,
+          description: game?.description,
           nintendo: nintendoInfo
             ? {
                 nsuid: nintendoInfo.nsuid,
@@ -263,23 +285,45 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
         </Button>
       </div>
 
-      <div
-        className="duration-500 animate-in fade-in slide-in-from-top-3"
-        style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
-      >
-        <label className="text-sm font-semibold" htmlFor="name">
-          Game Name <span className="text-xs">*</span>
-        </label>
-        <Input
-          id="name"
-          type="text"
-          className="mt-2"
-          placeholder="e.g. The Last Faith"
-          value={formData.name}
-          onChange={(e) => dispatch({ field: "name", value: e.target.value })}
-          required
-        />
-      </div>
+      {/* Cover Image Display for IGDB Games */}
+      {isFromIGDB && game?.coverImageUrl && (
+        <div
+          className="mb-6 flex flex-col items-center text-center duration-500 animate-in fade-in slide-in-from-top-3"
+          style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
+        >
+          <div className="mb-4 h-[160px] w-[120px] overflow-hidden rounded-xl bg-gray-200 shadow-lg">
+            <Image
+              src={game.coverImageUrl}
+              alt={game.name}
+              width={120}
+              height={160}
+            />
+          </div>
+          <h2 className="w-2/3 text-xl font-medium text-gray-900 dark:text-gray-100">
+            {game.name}
+          </h2>
+        </div>
+      )}
+
+      {!isFromIGDB && (
+        <div
+          className="duration-500 animate-in fade-in slide-in-from-top-3"
+          style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
+        >
+          <label className="text-sm font-semibold" htmlFor="name">
+            Game Name <span className="text-xs">*</span>
+          </label>
+          <Input
+            id="name"
+            type="text"
+            className="mt-2"
+            placeholder="e.g. The Last Faith"
+            value={formData.name}
+            onChange={(e) => dispatch({ field: "name", value: e.target.value })}
+            required
+          />
+        </div>
+      )}
 
       <div
         className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
@@ -358,6 +402,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
               onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
               onGameInfoCleared={() => setPlaystationInfo(null)}
               existingGameInfo={playstationInfo}
+              initialUrl={game?.storeUrls?.playstation}
             />
           </div>
           <div
@@ -368,6 +413,7 @@ export default function GameForm({ game, isEdit = false }: GameFormProps) {
               onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
               onGameInfoCleared={() => setNintendoInfo(null)}
               existingGameInfo={nintendoInfo}
+              initialUrl={game?.storeUrls?.nintendo}
             />
           </div>
         </>

@@ -21,6 +21,7 @@ export const getCachedWishlistGames = async (userId: string) => {
         name: game.name,
         length: game.length,
         category: game.category,
+        coverImageUrl: game.coverImageUrl,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString(),
         prices: game.prices.map((price) => ({
@@ -62,6 +63,7 @@ export const getCachedLibraryGames = async (userId: string) => {
         name: game.name,
         length: game.length,
         category: game.category,
+        coverImageUrl: game.coverImageUrl,
         platforms: game.platforms,
         nowPlaying: game.nowPlaying,
         createdAt: game.createdAt.toISOString(),
@@ -92,6 +94,7 @@ export const getCachedCompletedGames = async (userId: string) => {
         name: game.name,
         length: game.length,
         category: game.category,
+        coverImageUrl: game.coverImageUrl,
         platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
@@ -121,6 +124,8 @@ export const getCachedArchivedGames = async (userId: string) => {
         name: game.name,
         length: game.length,
         category: game.category,
+        coverImageUrl: game.coverImageUrl,
+        platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
       }))
