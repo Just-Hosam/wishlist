@@ -9,7 +9,6 @@ import Spinner from "../ui/spinner"
 interface GameLengthInputProps {
   igdbGameId?: string
   value: string
-  isEdit?: boolean
   onChange: (value: string) => void
 }
 
@@ -18,7 +17,6 @@ type State = "loading" | "input" | "fetched"
 export default function GameLengthInput({
   igdbGameId,
   value,
-  isEdit,
   onChange
 }: GameLengthInputProps) {
   const [state, setState] = useState<State>("loading")
@@ -27,9 +25,6 @@ export default function GameLengthInput({
   useEffect(() => {
     let cancelled = false
     const init = async () => {
-      console.log("value :>>", value)
-      console.log("igdbGameId :>>", igdbGameId)
-
       if (hasFetched) {
         setState("fetched")
         return

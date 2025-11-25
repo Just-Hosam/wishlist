@@ -341,7 +341,6 @@ export default function GameForm({
           <GameLengthInput
             igdbGameId={game?.igdbGameId}
             value={formData.length}
-            isEdit={isEdit}
             onChange={(value) => dispatch({ field: "length", value })}
           />
         )}
