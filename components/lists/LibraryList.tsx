@@ -52,8 +52,8 @@ export default function LibraryList({ games }: LibraryListProps) {
     <>
       {hasNowPlaying && (
         <>
-          <div className="flex items-center gap-[6px] pb-4 pt-1 text-sm font-medium">
-            <PlayCircle size={16} /> Now Playing
+          <div className="flex items-center gap-2 pb-3 pt-1 font-medium">
+            <PlayCircle size={17} /> Now Playing
           </div>
           {nowPlayingGames.map((game, index) => (
             <LibraryGameCard game={game} index={index} key={game.id} />
@@ -63,8 +63,8 @@ export default function LibraryList({ games }: LibraryListProps) {
       {hasBacklog && (
         <>
           {hasNowPlaying && (
-            <div className="flex items-center gap-[6px] pb-4 pt-2 text-sm font-medium">
-              <Layers size={16} />
+            <div className="mt-1 flex items-center gap-2 pb-3 pt-2 font-medium">
+              <Layers size={17} />
               Backlog
             </div>
           )}
@@ -84,7 +84,7 @@ interface LibraryGameCardProps {
 
 const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
   <div
-    className="mx-[-24px] flex gap-4 px-[24px] py-4 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+    className="mx-[-24px] flex gap-4 px-[24px] pb-6 pt-1 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
     style={{
       animationDelay: `${index * 50}ms`,
       animationFillMode: "backwards"

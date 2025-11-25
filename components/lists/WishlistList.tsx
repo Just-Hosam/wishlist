@@ -60,7 +60,7 @@ export default function WishlistList({ games }: WishlistListProps) {
           return (
             <div
               key={game.id}
-              className="mx-[-24px] flex gap-4 px-[24px] py-4 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+              className="mx-[-24px] flex gap-4 px-[24px] pb-6 pt-1 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
               style={{
                 animationDelay: `${index * 50}ms`,
                 animationFillMode: "backwards"
@@ -82,7 +82,7 @@ export default function WishlistList({ games }: WishlistListProps) {
               {/* Main Content */}
               <div className="flex min-w-0 flex-1 flex-col">
                 {/* Header with title and menu */}
-                <header className="3 flex items-start justify-between">
+                <header className="flex items-start justify-between gap-2">
                   <div className="flex-1">
                     <h3 className="mb-1 line-clamp-2 text-lg font-medium text-gray-900">
                       {game.name}
