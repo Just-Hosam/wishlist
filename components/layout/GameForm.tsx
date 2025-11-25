@@ -1,5 +1,6 @@
 "use client"
 
+import GameLengthInput from "@/components/layout/GameLengthInput"
 import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
 import PlayStationLinkInput from "@/components/layout/PlayStationLinkInput"
 import { Button } from "@/components/ui/button"
@@ -329,20 +330,10 @@ export default function GameForm({
         className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
         style={{ animationDelay: "50ms", animationFillMode: "backwards" }}
       >
-        <label className="text-sm font-semibold" htmlFor="length">
-          Game Length
-        </label>
-        <p className="text-xs text-muted-foreground">
-          Enter the length in hours.
-        </p>
-        <Input
-          id="length"
-          type="number"
-          className="mt-2"
-          placeholder="e.g. 20"
-          min="0"
+        <GameLengthInput
+          igdbGameId={game?.igdbGameId}
           value={formData.length}
-          onChange={(e) => dispatch({ field: "length", value: e.target.value })}
+          onChange={(value) => dispatch({ field: "length", value })}
         />
       </div>
 
