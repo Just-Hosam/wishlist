@@ -17,7 +17,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useReducer, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { BackButton } from "./BackButton"
+import { PageHeader } from "./PageHeader"
 
 interface Game {
   id?: string
@@ -285,13 +285,12 @@ export default function GameForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="sticky top-[68px] z-40 flex min-h-[60px] items-center justify-between gap-2 bg-white pb-4">
-        <BackButton />
-        <Button type="submit" disabled={isPending}>
+      <PageHeader>
+        <Button className="ml-auto" type="submit" disabled={isPending}>
           <Save />
           {isPending ? "Saving..." : "Save"}
         </Button>
-      </div>
+      </PageHeader>
 
       {/* Cover Image Display for IGDB Games */}
       {isFromIGDB && game?.coverImageUrl && (

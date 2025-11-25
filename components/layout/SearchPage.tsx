@@ -1,6 +1,6 @@
 "use client"
 
-import { BackButton } from "@/components/layout/BackButton"
+import { PageHeader } from "@/components/layout/PageHeader"
 import { Input } from "@/components/ui/input"
 import Spinner from "@/components/ui/spinner"
 import { searchIGDBGames, type IGDBSearchResult } from "@/server/actions/igdb"
@@ -180,9 +180,7 @@ export function SearchPage() {
 
   return (
     <div>
-      <div className="sticky top-[68px] z-40 mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 duration-500 animate-in fade-in slide-in-from-top-3 dark:bg-slate-900/75">
-        <BackButton />
-
+      <PageHeader>
         <form onSubmit={handleSubmit} className="relative flex-1">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
@@ -215,7 +213,7 @@ export function SearchPage() {
             </button>
           )}
         </form>
-      </div>
+      </PageHeader>
 
       {/* Search Results Area */}
       {!hasSearched && !isLoading && renderEmptyState()}

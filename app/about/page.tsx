@@ -1,4 +1,4 @@
-import { BackButton } from "@/components/layout/BackButton"
+import { PageHeader } from "@/components/layout/PageHeader"
 import { Button } from "@/components/ui/button"
 import {
   Github,
@@ -14,9 +14,7 @@ import Link from "next/link"
 export default function AboutPage() {
   return (
     <>
-      <div className="min-h-[60px] pb-4">
-        <BackButton />
-      </div>
+      <PageHeader />
 
       <section
         className="mb-7 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
