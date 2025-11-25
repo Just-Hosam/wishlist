@@ -112,6 +112,7 @@ export function SearchPage() {
                   width={78}
                   height={104}
                   className="h-full w-full object-cover"
+                  priority={index < 5}
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-gray-400">

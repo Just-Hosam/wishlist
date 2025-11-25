@@ -53,6 +53,7 @@ export default function CompletedList({ games }: CompletedListProps) {
                   width={105}
                   height={140}
                   className="h-full w-full object-cover"
+                  priority={index < 5}
                 />
               </div>
             )}

@@ -75,6 +75,7 @@ export default function WishlistList({ games }: WishlistListProps) {
                     width={105}
                     height={140}
                     className="h-full w-full object-cover"
+                    priority={index < 5}
                   />
                 </div>
               )}
