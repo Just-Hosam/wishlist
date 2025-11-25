@@ -392,11 +392,14 @@ export default function GameForm({
       </div>
 
       {formData.category === GameCategory.WISHLIST && (
-        <>
-          <div
-            className="mt-6 duration-500 animate-in fade-in slide-in-from-top-3"
-            style={{ animationDelay: "150ms", animationFillMode: "backwards" }}
-          >
+        <div
+          className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
+          style={{ animationDelay: "150ms", animationFillMode: "backwards" }}
+        >
+          <label className="text-sm font-semibold" htmlFor="category">
+            Stores
+          </label>
+          <div className="mt-3">
             <PlayStationLinkInput
               onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
               onGameInfoCleared={() => setPlaystationInfo(null)}
@@ -404,10 +407,7 @@ export default function GameForm({
               initialUrl={game?.storeUrls?.playstation}
             />
           </div>
-          <div
-            className="mt-6 duration-500 animate-in fade-in slide-in-from-top-3"
-            style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
-          >
+          <div className="mt-3">
             <NintendoLinkInput
               onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
               onGameInfoCleared={() => setNintendoInfo(null)}
@@ -415,7 +415,7 @@ export default function GameForm({
               initialUrl={game?.storeUrls?.nintendo}
             />
           </div>
-        </>
+        </div>
       )}
 
       {formData.category === GameCategory.LIBRARY && (

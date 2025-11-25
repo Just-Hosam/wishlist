@@ -1,13 +1,11 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
 import { type GamePrice } from "@/lib/playstation-price"
 import { fetchPlayStationGameInfo } from "@/server/actions/playstation"
-import { CircleCheck, Link, Loader2, X } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { toast } from "sonner"
 import PriceLayout from "./PriceLayout"
 
 interface PlayStationLinkInputProps {
@@ -27,71 +25,95 @@ export default function PlayStationLinkInput({
 }: PlayStationLinkInputProps) {
   const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [gameInfo, setGameInfo] = useState<GamePrice | null>(null)
+  const [priceData, setPriceData] = useState<GamePrice | null>(null)
+  const [isLinked, setIsLinked] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Initialize with existing game info if provided
   useEffect(() => {
     if (existingGameInfo) {
-      setGameInfo(existingGameInfo)
+      setPriceData(existingGameInfo)
+      setIsLinked(true)
+      // Set URL from existing game info so the unlink button isn't disabled
+      if (existingGameInfo.storeUrl) {
+        setUrl(existingGameInfo.storeUrl)
+      }
     }
   }, [existingGameInfo])
 
-  // Initialize URL from initialUrl prop
+  // Initialize URL from initialUrl prop and auto-fetch
   useEffect(() => {
     if (initialUrl && !url) {
       setUrl(initialUrl)
+      // Auto-fetch price data if we have an initial URL and not already linked
+      if (!existingGameInfo) {
+        fetchPriceData(initialUrl)
+      }
     }
-  }, [initialUrl])
+  }, [initialUrl, existingGameInfo])
 
-  const handleFetchGameInfo = async () => {
-    if (!url.trim()) {
-      toast.error("Please enter a PlayStation store URL")
+  const fetchPriceData = async (urlToFetch: string) => {
+    if (!urlToFetch.trim()) {
       return
     }
 
     // Basic URL validation for PlayStation store
     if (
-      !url.includes("playstation.com") &&
-      !url.includes("store.playstation.com")
+      !urlToFetch.includes("playstation.com") &&
+      !urlToFetch.includes("store.playstation.com")
     ) {
-      toast.error("Please enter a valid PlayStation store URL")
+      setError("Please enter a valid PlayStation store URL")
       return
     }
 
     setIsLoading(true)
+    setError(null)
 
     try {
-      const info = await fetchPlayStationGameInfo(url)
-      setGameInfo(info)
-
-      onGameInfoFound?.(info)
-      toast.success("Game information fetched successfully!")
+      const info = await fetchPlayStationGameInfo(urlToFetch)
+      setPriceData(info)
+      setError(null)
     } catch (error) {
       console.error("Error fetching PlayStation game info:", error)
-      toast.error(
+      setError(
         error instanceof Error
           ? error.message
           : "Failed to fetch game information"
       )
+      setPriceData(null)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const clearGameInfo = () => {
-    setGameInfo(null)
-    setUrl("")
+  const handleLink = () => {
+    if (priceData) {
+      setIsLinked(true)
+      onGameInfoFound?.(priceData)
+    }
+  }
+
+  const handleUnlink = () => {
+    setIsLinked(false)
     onGameInfoCleared()
   }
 
+  const handleToggle = (checked: boolean) => {
+    if (checked) {
+      handleLink()
+    } else {
+      handleUnlink()
+    }
+  }
+
   const Price = () => {
-    if (!gameInfo) return null
+    if (!priceData) return null
 
     // Extract numeric values from price strings
     const currentPrice = parseFloat(
-      gameInfo.currentPrice.replace(/[^0-9.]/g, "")
+      priceData.currentPrice.replace(/[^0-9.]/g, "")
     )
-    const regularPrice = parseFloat(gameInfo.basePrice.replace(/[^0-9.]/g, ""))
+    const regularPrice = parseFloat(priceData.basePrice.replace(/[^0-9.]/g, ""))
     const isOnSale = currentPrice < regularPrice
 
     return (
@@ -99,61 +121,58 @@ export default function PlayStationLinkInput({
         onSale={isOnSale}
         currentPrice={currentPrice}
         regularPrice={regularPrice}
-        currency={gameInfo.currency}
+        currency={priceData.currency}
       />
     )
   }
 
   return (
     <div className={className}>
-      <label
-        className="flex items-center gap-2 text-sm font-semibold"
-        htmlFor="playstation-url"
-      >
+      <div className="flex items-center">
+        {/* Store Label */}
         <Image
           src="/logos/playstation.svg"
           alt="PlayStation Logo"
-          width={18}
-          height={18}
+          width={20}
+          height={20}
+          className="mr-3"
         />
-        PlayStation
-      </label>
 
-      {gameInfo ? (
-        <div className="mt-2 flex min-h-[40px] items-center justify-between gap-2 rounded-lg border border-input pl-3 pr-2">
-          <div className="flex items-center gap-3">
-            <CircleCheck size={19} className="rounded-full text-green-600" />
-            <Price />
-          </div>
-          <X className="p-[3px]" onClick={clearGameInfo} />
-        </div>
-      ) : (
-        <div className="mt-2 flex gap-2">
-          <Input
-            id="playstation-url"
-            type="url"
-            placeholder="store.playstation.com/en-ca/..."
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            disabled={isLoading}
-          />
-          <Button
-            type="button"
-            onClick={handleFetchGameInfo}
-            disabled={isLoading || !url.trim()}
-            className="w-fit bg-blue-600 hover:bg-blue-700"
-          >
-            {isLoading ? (
+        {/* Spinner or Price Info */}
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          {isLoading && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <>
-                <Link className="h-4 w-4" />{" "}
-                <span className="hidden md:block">Link</span>
-              </>
-            )}
-          </Button>
+              <span className="hidden sm:inline">Fetching price...</span>
+            </div>
+          )}
+
+          {!isLoading && priceData && <Price />}
+
+          {!isLoading && error && (
+            <span className="text-sm text-red-600">{error}</span>
+          )}
+
+          {!isLoading && !priceData && !error && !url && (
+            <span className="text-sm text-muted-foreground">
+              No store URL available
+            </span>
+          )}
         </div>
-      )}
+
+        {/* Link/Unlink Switch */}
+        <Switch
+          checked={isLinked}
+          onCheckedChange={handleToggle}
+          disabled={
+            !url ||
+            isLoading ||
+            (!priceData && !error) ||
+            (!!error && !isLinked)
+          }
+          className="data-[state=checked]:bg-blue-600"
+        />
+      </div>
     </div>
   )
 }
