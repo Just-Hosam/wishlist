@@ -277,3 +277,54 @@ export async function searchIGDBGames(
     throw new Error("Failed to search IGDB games")
   }
 }
+
+export interface GameTimeToBeat {
+  normallyHours: number
+}
+
+export async function fetchGameTimeToBeats(
+  igdbGameId: string
+): Promise<GameTimeToBeat | null> {
+  const CLIENT_ID = process.env.IGDB_CLIENT_ID
+  const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
+
+  if (!CLIENT_ID || !ACCESS_TOKEN) {
+    throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
+  }
+
+  try {
+    const response = await fetch("https://api.igdb.com/v4/game_time_to_beats", {
+      method: "POST",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "text/plain"
+      },
+      body: `fields *; where game_id = ${igdbGameId};`
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`IGDB API error (${response.status}): ${errorText}`)
+    }
+
+    const data = await response.json()
+
+    if (!data || data.length === 0) {
+      return null
+    }
+
+    const timeData = data[0]
+
+    const normallyHours = timeData.normally
+      ? Math.round(timeData.normally / 3600)
+      : 0
+
+    return {
+      normallyHours
+    }
+  } catch (error) {
+    console.error("Error fetching game time to beat:", error)
+    throw error
+  }
+}

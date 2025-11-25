@@ -1,5 +1,6 @@
 "use client"
 
+import GameLengthInput from "@/components/layout/GameLengthInput"
 import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
 import PlayStationLinkInput from "@/components/layout/PlayStationLinkInput"
 import { Button } from "@/components/ui/button"
@@ -69,6 +70,7 @@ export default function GameForm({
   )
   const [playstationInfo, setPlaystationInfo] = useState<GamePrice | null>(null)
   const [nowPlaying, setNowPlaying] = useState(false)
+  const [isDataLoaded, setIsDataLoaded] = useState(false)
 
   const platformReducer = (
     state: PlatformState,
@@ -178,6 +180,12 @@ export default function GameForm({
         // The user can fetch prices later if they want
         // Store URLs are just for display/reference
       }
+
+      // Mark data as loaded after all setup is complete
+      setIsDataLoaded(true)
+    } else {
+      // For new games (not editing), mark as loaded immediately
+      setIsDataLoaded(true)
     }
   }, [game, isFromIGDB])
 
@@ -329,21 +337,13 @@ export default function GameForm({
         className="mt-5 duration-500 animate-in fade-in slide-in-from-top-3"
         style={{ animationDelay: "50ms", animationFillMode: "backwards" }}
       >
-        <label className="text-sm font-semibold" htmlFor="length">
-          Game Length
-        </label>
-        <p className="text-xs text-muted-foreground">
-          Enter the length in hours.
-        </p>
-        <Input
-          id="length"
-          type="number"
-          className="mt-2"
-          placeholder="e.g. 20"
-          min="0"
-          value={formData.length}
-          onChange={(e) => dispatch({ field: "length", value: e.target.value })}
-        />
+        {(!isEdit || isDataLoaded) && (
+          <GameLengthInput
+            igdbGameId={game?.igdbGameId}
+            value={formData.length}
+            onChange={(value) => dispatch({ field: "length", value })}
+          />
+        )}
       </div>
 
       <div
@@ -459,7 +459,7 @@ export default function GameForm({
             Owned on
           </label>
           <p className="text-xs text-muted-foreground">
-            Select all platforms you own this on.
+            Select all platforms you own the game on.
           </p>
           <div
             className={clsx(
