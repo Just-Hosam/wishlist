@@ -9,6 +9,7 @@ import Spinner from "../ui/spinner"
 interface GameLengthInputProps {
   igdbGameId?: string
   value: string
+  isEdit?: boolean
   onChange: (value: string) => void
 }
 
@@ -17,12 +18,23 @@ type State = "loading" | "input" | "fetched"
 export default function GameLengthInput({
   igdbGameId,
   value,
+  isEdit,
   onChange
 }: GameLengthInputProps) {
   const [state, setState] = useState<State>("loading")
+  const [hasFetched, setHasFetched] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
     const init = async () => {
+      console.log("value :>>", value)
+      console.log("igdbGameId :>>", igdbGameId)
+
+      if (hasFetched) {
+        setState("fetched")
+        return
+      }
+
       if (value || !igdbGameId) {
         setState("input")
         return
@@ -30,8 +42,9 @@ export default function GameLengthInput({
 
       try {
         const timeData = await fetchGameTimeToBeats(igdbGameId)
-        if (timeData?.normallyHours) {
+        if (!cancelled && timeData?.normallyHours) {
           onChange(timeData.normallyHours.toString())
+          setHasFetched(true)
           setState("fetched")
           return
         }
@@ -39,11 +52,17 @@ export default function GameLengthInput({
         console.error("Error fetching game time to beat:", error)
       }
 
-      setState("input")
+      if (!cancelled) {
+        setState("input")
+      }
     }
 
     init()
-  }, [])
+
+    return () => {
+      cancelled = true
+    }
+  }, [igdbGameId, value, onChange, hasFetched])
 
   return (
     <>
