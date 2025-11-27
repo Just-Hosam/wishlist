@@ -35,7 +35,7 @@ export default function PriceLayout({
           <span className="ml-[6px] text-xs font-light text-muted-foreground line-through">
             {formatPrice(regularPrice)}
           </span>
-          <span className="ml-2 rounded border border-red-600 px-1 py-0.5 text-xs font-light text-red-600">
+          <span className="ml-2 rounded bg-red-600 px-1 py-[2px] text-xs font-light text-white">
             -{Math.round(((regularPrice - currentPrice) / regularPrice) * 100)}%
           </span>
         </>
