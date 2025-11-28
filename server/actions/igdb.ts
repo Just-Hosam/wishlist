@@ -1,9 +1,11 @@
 "use server"
 
-import prisma from "@/lib/prisma"
 import { Platform } from "@prisma/client"
 
-export interface IGDBSearchResult {
+/**
+ * IGDB game data structure
+ */
+export interface IGDBGame {
   id: string
   igdbId: number
   name: string
@@ -11,21 +13,20 @@ export interface IGDBSearchResult {
   summary: string
   coverImageId: string
   screenshotImageIds: string[]
+  videoId: string | null
   platforms: Platform[]
   firstReleaseDate: number
+
+  // Ranking metadata (optional, only used during search)
   rating?: number | null
   ratingCount?: number | null
   aggregatedRating?: number | null
   aggregatedRatingCount?: number | null
   hypes?: number | null
-  videoId?: string | null
-  similarity?: number // For sorting by relevance
-  qualityScore?: number // Computed quality score
-}
 
-interface RawSearchResult extends IGDBSearchResult {
-  playstationUrlSegment?: string | null
+  // Store URL segments (for building full URLs)
   nintendoUrlSegment?: string | null
+  playstationUrlSegment?: string | null
   steamUrlSegment?: string | null
 }
 
@@ -89,7 +90,7 @@ function calculateRecencyWeight(firstReleaseDateSec?: number): number {
 /**
  * Calculate quality score for a game based on multiple factors
  */
-function calculateQualityScore(game: RawSearchResult): number {
+function calculateQualityScore(game: IGDBGame): number {
   // Bayesian average constants
   // These represent the "prior" belief about average ratings and minimum votes needed
   const BAYESIAN_CONSTANTS = {
@@ -101,19 +102,17 @@ function calculateQualityScore(game: RawSearchResult): number {
 
   // Weights for different components
   const WEIGHTS = {
-    similarity: 0.2, // Text similarity to search query
-    userRating: 0.25, // User ratings (Bayesian average)
-    criticRating: 0.15, // Critic ratings (Bayesian average)
-    recency: 0.2, // Recent/upcoming releases get strong boost
-    hypes: 0.12, // Community hype (important for new games)
+    userRating: 0.3, // User ratings (Bayesian average)
+    criticRating: 0.2, // Critic ratings (Bayesian average)
+    recency: 0.25, // Recent/upcoming releases get strong boost
+    hypes: 0.15, // Community hype (important for new games)
     completeness: 0.05, // Has screenshots, videos, store links
-    popularity: 0.03 // Combined rating counts
+    popularity: 0.05 // Combined rating counts
   }
 
-  // 1. Similarity Score (how well the name matches the query)
-  const similarityScore = (game.similarity ?? 0) * 100
+  // Note: No similarity score for API search (IGDB handles relevance)
 
-  // 2. User Rating Score (Bayesian average)
+  // 1. User Rating Score (Bayesian average)
   // Formula: (C × m + v × R) / (C + v)
   // Where: C = confidence (min votes), m = prior mean, v = actual votes, R = actual rating
   const userRating = game.rating ?? 0
@@ -129,7 +128,7 @@ function calculateQualityScore(game: RawSearchResult): number {
   const userScore =
     bayesianUserRating * (userCount > 0 ? Math.log10(userCount + 1) : 0)
 
-  // 3. Critic Rating Score (Bayesian average)
+  // 2. Critic Rating Score (Bayesian average)
   const criticRating = game.aggregatedRating ?? 0
   const criticCount = game.aggregatedRatingCount ?? 0
   const bayesianCriticRating =
@@ -143,14 +142,14 @@ function calculateQualityScore(game: RawSearchResult): number {
   const criticScore =
     bayesianCriticRating * (criticCount > 0 ? Math.log10(criticCount + 1) : 0)
 
-  // 4. Recency Score
+  // 3. Recency Score
   const recencyScore = calculateRecencyWeight(game.firstReleaseDate) * 100
 
-  // 5. Hypes Score (stronger for highly anticipated games)
+  // 4. Hypes Score (stronger for highly anticipated games)
   // Use square root of log to give more weight to higher hype counts
   const hypesScore = game.hypes ? Math.sqrt(Math.log10(game.hypes + 1)) * 35 : 0
 
-  // 6. Completeness Score (penalize games missing key properties)
+  // 5. Completeness Score (penalize games missing key properties)
   let completenessScore = 100
   if (!game.screenshotImageIds || game.screenshotImageIds.length === 0) {
     completenessScore -= 30 // Missing screenshots is a big penalty
@@ -169,13 +168,12 @@ function calculateQualityScore(game: RawSearchResult): number {
     completenessScore -= 15 // Poor/missing summary
   }
 
-  // 7. Popularity Score (combined rating counts)
+  // 6. Popularity Score (combined rating counts)
   const totalRatingCount = userCount + criticCount
   const popularityScore = Math.log10(totalRatingCount + 1) * 10
 
   // Combine all scores with weights
   const finalScore =
-    similarityScore * WEIGHTS.similarity +
     userScore * WEIGHTS.userRating +
     criticScore * WEIGHTS.criticRating +
     recencyScore * WEIGHTS.recency +
@@ -189,92 +187,230 @@ function calculateQualityScore(game: RawSearchResult): number {
 /**
  * Rank games by quality after search
  */
-function rankGamesByQuality(games: RawSearchResult[]): IGDBSearchResult[] {
+function rankGamesByQuality(games: IGDBGame[]): IGDBGame[] {
   return games
     .map((game) => ({
       ...game,
       qualityScore: calculateQualityScore(game)
     }))
     .sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0))
-    .map(
-      ({
-        playstationUrlSegment,
-        nintendoUrlSegment,
-        steamUrlSegment,
-        ...game
-      }) => game
-    )
 }
 
 /**
- * Search IGDB games using PostgreSQL's pg_trgm extension for fuzzy text matching.
- *
- * @param query - The search query string
- * @param limit - Maximum number of results to return (default: 15)
- * @returns Array of matching IGDB games sorted by relevance and quality
+ * Raw IGDB API response type
  */
-export async function searchIGDBGames(
-  query: string,
-  limit: number = 15
-): Promise<IGDBSearchResult[]> {
+interface RawIGDBAPIGame {
+  id: number
+  name: string
+  slug: string
+  summary?: string
+  cover?: { image_id: string }
+  screenshots?: { image_id: string }[]
+  videos?: { video_id: string; name: string }[]
+  platforms?: { id: number }[]
+  first_release_date?: number
+  rating?: number
+  rating_count?: number
+  aggregated_rating?: number
+  aggregated_rating_count?: number
+  hypes?: number
+  websites?: { type: number; url: string }[]
+}
+
+/**
+ * Transform IGDB platform IDs to Platform enum
+ */
+function transformIGDBPlatforms(igdbIds: number[]): Platform[] {
+  const platformMap: Record<number, Platform> = {
+    6: Platform.PC,
+    48: Platform.PLAYSTATION,
+    167: Platform.PLAYSTATION,
+    130: Platform.NINTENDO,
+    508: Platform.NINTENDO,
+    169: Platform.XBOX
+  }
+
+  const platforms = igdbIds.map((id) => platformMap[id]).filter(Boolean)
+  return [...new Set(platforms)] // Remove duplicates
+}
+
+/**
+ * Choose the best video from available videos based on quality ranking
+ */
+function chooseVideoId(
+  videos: { video_id: string; name: string }[] = []
+): string | null {
+  if (videos.length === 0) {
+    return null
+  }
+
+  const VIDEO_NAME_RANKING = [
+    "Launch Trailer",
+    "Trailer",
+    "Announcement Trailer",
+    "Gameplay Trailer",
+    "Release Date Trailer",
+    "Gameplay Video",
+    "Game Intro"
+  ]
+
+  const ranked = [...videos].sort((a, b) => {
+    const rankA = VIDEO_NAME_RANKING.indexOf(a.name)
+    const rankB = VIDEO_NAME_RANKING.indexOf(b.name)
+    const safeRankA = rankA === -1 ? Number.MAX_SAFE_INTEGER : rankA
+    const safeRankB = rankB === -1 ? Number.MAX_SAFE_INTEGER : rankB
+    return safeRankA - safeRankB
+  })
+
+  return ranked[0]?.video_id ?? null
+}
+
+/**
+ * Extract store URL segments from IGDB websites array
+ */
+function extractStoreSegments(websites: { type: number; url: string }[]): {
+  nintendoUrlSegment: string | null
+  playstationUrlSegment: string | null
+  steamUrlSegment: string | null
+} {
+  // IGDB website type codes: 13=Steam, 16=Nintendo, 17=PlayStation
+  const nintendo = websites.find((w) => w.type === 16)
+  const playstation = websites.find((w) => w.type === 17)
+  const steam = websites.find((w) => w.type === 13)
+
+  return {
+    nintendoUrlSegment: nintendo ? segmentNintendoURL(nintendo.url) : null,
+    playstationUrlSegment: playstation ? segmentPSURL(playstation.url) : null,
+    steamUrlSegment: steam ? segmentSteamURL(steam.url) : null
+  }
+}
+
+// URL segment parsers - keep path structure
+function segmentNintendoURL(url: string): string | null {
+  // Keep the path structure: games/detail/slug or store/products/slug
+  const detailMatch = url.match(/(games\/detail\/[\w-]+)/)
+  if (detailMatch) return detailMatch[1]
+
+  const productsMatch = url.match(/(store\/products\/[\w-]+)/)
+  if (productsMatch) return productsMatch[1]
+
+  return null
+}
+
+function segmentPSURL(url: string): string | null {
+  // Keep the path structure: concept/id or product/slug
+  const conceptMatch = url.match(/(concept\/\d+)/)
+  if (conceptMatch) return conceptMatch[1]
+
+  const productMatch = url.match(/(product\/[\w-]+)/)
+  if (productMatch) return productMatch[1]
+
+  return null
+}
+
+function segmentSteamURL(url: string): string | null {
+  // Keep the path structure: app/id/name
+  const match = url.match(/(app\/\d+\/[\w-]+)/)
+  if (match) return match[1]
+
+  // Fallback to just app/id
+  const simpleMatch = url.match(/(app\/\d+)/)
+  return simpleMatch ? simpleMatch[1] : null
+}
+
+/**
+ * Search IGDB API directly and return ranked results
+ */
+export async function searchIGDBGamesDirect(
+  query: string
+): Promise<IGDBGame[]> {
+  const CLIENT_ID = process.env.IGDB_CLIENT_ID
+  const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
+
+  if (!CLIENT_ID || !ACCESS_TOKEN) {
+    throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
+  }
+
   if (!query || query.trim().length === 0) {
     return []
   }
 
-  const searchQuery = query.trim()
-
   try {
-    // Step 1: Fetch top 50 search results based on text matching
-    // This casts a wide net to ensure we capture all relevant games
-    const searchResults = await prisma.$queryRaw<RawSearchResult[]>`
-      SELECT 
-        id,
-        "igdbId",
-        name,
-        slug,
-        summary,
-        "coverImageId",
-        "screenshotImageIds",
-        "videoId",
-        platforms,
-        "firstReleaseDate",
-        rating,
-        "ratingCount",
-        "aggregatedRating",
-        "aggregatedRatingCount",
-        hypes,
-        "playstationUrlSegment",
-        "nintendoUrlSegment",
-        "steamUrlSegment",
-        similarity(name, ${searchQuery}) as similarity
-      FROM "IGDBGame"
-      WHERE 
-        similarity(name, ${searchQuery}) > 0.3
-        OR name ILIKE ${`%${searchQuery}%`}
-        OR slug ILIKE ${`%${searchQuery}%`}
-        OR ${searchQuery} = ANY("alternativeNames")
-      ORDER BY 
-        -- Exact match gets highest priority
-        CASE WHEN LOWER(name) = LOWER(${searchQuery}) THEN 0 ELSE 1 END,
-        -- Starts with query gets second priority
-        CASE WHEN LOWER(name) LIKE LOWER(${searchQuery + "%"}) THEN 0 ELSE 1 END,
-        -- Word boundary match (e.g., "zelda" in "The Legend of Zelda")
-        CASE WHEN LOWER(name) LIKE LOWER(${"% " + searchQuery + "%"}) THEN 0 ELSE 1 END,
-        -- Then by similarity score
-        similarity(name, ${searchQuery}) DESC,
-        -- Finally by basic popularity for tie-breaking
-        "ratingCount" DESC NULLS LAST,
-        rating DESC NULLS LAST
-      LIMIT 50
-    `
+    const response = await fetch("https://api.igdb.com/v4/games", {
+      method: "POST",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "text/plain"
+      },
+      body: `
+        search "${query.trim()}";
+        
+        fields 
+          name, slug,
+          summary,
+          first_release_date,
+          websites.type, websites.url,
+          platforms.id,
+          cover.image_id, screenshots.image_id, videos.video_id, videos.name,
+          hypes, rating, rating_count, aggregated_rating, aggregated_rating_count;
 
-    // Step 2: Rank the top 50 by quality score and return top {limit} results
-    const rankedResults = rankGamesByQuality(searchResults)
+        where 
+          game_type = (0, 2, 3, 8, 9)
+          & platforms = (48, 167, 130, 508, 6, 169)
+          & first_release_date != null 
+          & first_release_date >= 1262329201
+          & summary != null
+          & cover != null
+          & videos != null
+          & genres != null
+          & themes != (42) 
+          & keywords != (343, 847, 2509, 3586, 26306);
+        
+          limit 100;
+      `.trim()
+    })
 
-    return rankedResults.slice(0, limit)
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`IGDB API error (${response.status}): ${errorText}`)
+    }
+
+    const rawGames: RawIGDBAPIGame[] = await response.json()
+
+    // Transform to IGDBGame format
+    const games: IGDBGame[] = rawGames.map((game) => {
+      const storeSegments = extractStoreSegments(game.websites || [])
+
+      return {
+        id: game.id.toString(),
+        igdbId: game.id,
+        name: game.name,
+        slug: game.slug,
+        summary: game.summary || "",
+        coverImageId: game.cover?.image_id || "",
+        screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
+        videoId: chooseVideoId(game.videos),
+        platforms: transformIGDBPlatforms(
+          game.platforms?.map((p) => p.id) || []
+        ),
+        firstReleaseDate: game.first_release_date || 0,
+        rating: game.rating || null,
+        ratingCount: game.rating_count || null,
+        aggregatedRating: game.aggregated_rating || null,
+        aggregatedRatingCount: game.aggregated_rating_count || null,
+        hypes: game.hypes || null,
+        ...storeSegments
+      }
+    })
+
+    // Apply ranking algorithm
+    const rankedGames = rankGamesByQuality(games)
+
+    return rankedGames.slice(0, 20)
   } catch (error) {
-    console.error("Error searching IGDB games:", error)
-    throw new Error("Failed to search IGDB games")
+    console.error("Error searching IGDB API:", error)
+    throw new Error("Failed to search IGDB API")
   }
 }
 
