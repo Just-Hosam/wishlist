@@ -80,32 +80,39 @@ enum Platform {
 }
 
 model Game {
-  id                 String        @id @default(cuid())
-  name               String
-  description        String?
-  coverImageUrl      String?
-  length             Int?
-  category           GameCategory  @default(WISHLIST)
-  platforms          Platform[]
-  nowPlaying         Boolean       @default(false)
+  id                        String        @id @default(cuid())
+  length                    Int?
+  category                  GameCategory  @default(WISHLIST)
+  platforms                 Platform[]
+  nowPlaying                Boolean       @default(false)
 
-  // IGDB relationship
-  igdbGameId         String?
+  // IGDB metadata
+  igdbId                    Int?         @unique
+  igdbName                  String?      
+  igdbSlug                  String?      
+  igdbSummary               String?      @db.Text
+  igdbCoverImageId          String?      
+  igdbScreenshotIds         String[]     
+  igdbVideoId               String?      
+  igdbPlatformIds           Int[]        
+  igdbFirstReleaseDate      Int?        
+  igdbNintendoUrlSegment    String?
+  igdbPlaystationUrlSegment String?
+  igdbSteamUrlSegment       String?
   
-  // User relationship
-  userId             String
-  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  // Price relationships
-  prices             GamePrice[]
+  // Relationships
+  userId                    String
+  user                      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prices                    GamePrice[]
   
   // bookkeeping
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
+  createdAt                 DateTime      @default(now())
+  updatedAt                 DateTime      @updatedAt
   
   @@index([userId, category])
-  @@index([name])
+  @@index([igdbName])
   @@index([userId, createdAt])
+  @@index([igdbId])
 }
 
 model GamePrice {
@@ -129,46 +136,4 @@ model GamePrice {
 
   @@unique([gameId, platform])
   @@index([gameId])
-}
-
-// IGDB Schema
-
-model IGDBGame {
-  id                      String     @id @default(cuid())
-  igdbId                  Int        @unique
-  
-  // Basic info
-  name                    String
-  slug                    String
-  alternativeNames        String[]
-  summary                 String
-  
-  // Media
-  coverImageId            String
-  screenshotImageIds      String[]
-  videoId                 String?
-
-  // Taxonomy
-  genreIds                Int[]
-  platforms               Platform[]
-  
-  // Ranking signals
-  firstReleaseDate        Int
-  hypes                   Int?       @default(0)
-  rating                  Float?
-  ratingCount             Int?       @default(0)
-  aggregatedRating        Float?
-  aggregatedRatingCount   Int?       @default(0)
-  
-  // Store identifiers
-  playstationUrlSegment   String?
-  nintendoUrlSegment      String?
-  steamUrlSegment         String?
-  
-  // Timestamps
-  createdAt               DateTime   @default(now())
-  updatedAt               DateTime   @updatedAt
-  
-  @@index([name])
-  @@index([igdbId])
 }
