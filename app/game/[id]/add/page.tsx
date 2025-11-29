@@ -1,5 +1,5 @@
 import GameForm from "@/components/layout/GameForm"
-import { buildIGDBImageUrl, getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
+import { getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
 import { getIGDBGameById } from "@/server/actions/igdb"
 import { GameCategory } from "@prisma/client"
 import { notFound } from "next/navigation"
