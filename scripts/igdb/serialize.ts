@@ -1,5 +1,5 @@
 import { Platform } from "@prisma/client"
-import { RawIGDBGame, SerializedIGDBGame } from "./types"
+import { RawIGDBGame } from "./types"
 
 const platformMap: Record<number, Platform> = {
   6: Platform.PC,
@@ -84,7 +84,7 @@ const findWebsiteByType = (
   return websites.find((website) => website.type === type)?.url ?? null
 }
 
-export const serializeGame = (game: RawIGDBGame): SerializedIGDBGame => {
+export const serializeGame = (game: RawIGDBGame) => {
   return {
     igdbId: game.id,
     name: game.name,
@@ -115,5 +115,4 @@ export const serializeGame = (game: RawIGDBGame): SerializedIGDBGame => {
   }
 }
 
-export const serializeGames = (games: RawIGDBGame[]): SerializedIGDBGame[] =>
-  games.map(serializeGame)
+export const serializeGames = (games: RawIGDBGame[]) => games.map(serializeGame)

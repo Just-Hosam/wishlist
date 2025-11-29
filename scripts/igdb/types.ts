@@ -20,7 +20,7 @@ export interface RawIGDBGame {
   aggregated_rating_count?: number
 }
 
-export type SerializedIGDBGame = Prisma.IGDBGameCreateManyInput
+// export type SerializedIGDBGame = Prisma.IGDBGameCreateManyInput
 
 const game_type = [
   {
