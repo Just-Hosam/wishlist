@@ -12,9 +12,21 @@ interface GameData {
   category: GameCategory
   platforms?: Platform[]
   nowPlaying?: boolean
-  igdbGameId?: string
-  coverImageUrl?: string
-  description?: string
+
+  // IGDB metadata fields
+  igdbId?: number
+  igdbName?: string
+  igdbSlug?: string
+  igdbSummary?: string
+  igdbCoverImageId?: string
+  igdbScreenshotIds?: string[]
+  igdbVideoId?: string | null
+  igdbPlatformIds?: number[]
+  igdbFirstReleaseDate?: number
+  igdbNintendoUrlSegment?: string | null
+  igdbPlaystationUrlSegment?: string | null
+  igdbSteamUrlSegment?: string | null
+
   nintendo?: {
     nsuid: string
     storeUrl?: string
@@ -83,9 +95,18 @@ export async function createGame(data: GameData) {
     nintendo,
     playstation,
     nowPlaying,
-    igdbGameId,
-    coverImageUrl,
-    description
+    igdbId,
+    igdbName,
+    igdbSlug,
+    igdbSummary,
+    igdbCoverImageId,
+    igdbScreenshotIds,
+    igdbVideoId,
+    igdbPlatformIds,
+    igdbFirstReleaseDate,
+    igdbNintendoUrlSegment,
+    igdbPlaystationUrlSegment,
+    igdbSteamUrlSegment
   } = data
 
   // Validate required fields
@@ -110,15 +131,23 @@ export async function createGame(data: GameData) {
 
   const game = await prisma.game.create({
     data: {
-      name,
       length: length ? parseInt(length) : null,
       category: gameCategory,
       userId: user.id,
       platforms: platforms ?? [],
       nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false,
-      igdbGameId: igdbGameId || null,
-      coverImageUrl: coverImageUrl || null,
-      description: description || null
+      igdbId: igdbId || null,
+      igdbName: igdbName || null,
+      igdbSlug: igdbSlug || null,
+      igdbSummary: igdbSummary || null,
+      igdbCoverImageId: igdbCoverImageId || null,
+      igdbScreenshotIds: igdbScreenshotIds || [],
+      igdbVideoId: igdbVideoId || null,
+      igdbPlatformIds: igdbPlatformIds || [],
+      igdbFirstReleaseDate: igdbFirstReleaseDate || null,
+      igdbNintendoUrlSegment: igdbNintendoUrlSegment || null,
+      igdbPlaystationUrlSegment: igdbPlaystationUrlSegment || null,
+      igdbSteamUrlSegment: igdbSteamUrlSegment || null
     }
   })
 
@@ -179,9 +208,18 @@ export async function updateGame(id: string, data: GameData) {
     nintendo,
     playstation,
     nowPlaying,
-    igdbGameId,
-    coverImageUrl,
-    description
+    igdbId,
+    igdbName,
+    igdbSlug,
+    igdbSummary,
+    igdbCoverImageId,
+    igdbScreenshotIds,
+    igdbVideoId,
+    igdbPlatformIds,
+    igdbFirstReleaseDate,
+    igdbNintendoUrlSegment,
+    igdbPlaystationUrlSegment,
+    igdbSteamUrlSegment
   } = data
 
   // Validate required fields
@@ -217,7 +255,6 @@ export async function updateGame(id: string, data: GameData) {
   const nextCategory = category || existingGame.category
 
   const updateData: any = {
-    name,
     length: length ? parseInt(length) : null,
     category: nextCategory,
     nowPlaying:
@@ -227,14 +264,41 @@ export async function updateGame(id: string, data: GameData) {
   }
 
   // Only update IGDB fields if explicitly provided (don't overwrite with undefined)
-  if (igdbGameId !== undefined) {
-    updateData.igdbGameId = igdbGameId
+  if (igdbId !== undefined) {
+    updateData.igdbId = igdbId
   }
-  if (coverImageUrl !== undefined) {
-    updateData.coverImageUrl = coverImageUrl
+  if (igdbName !== undefined) {
+    updateData.igdbName = igdbName
   }
-  if (description !== undefined) {
-    updateData.description = description
+  if (igdbSlug !== undefined) {
+    updateData.igdbSlug = igdbSlug
+  }
+  if (igdbSummary !== undefined) {
+    updateData.igdbSummary = igdbSummary
+  }
+  if (igdbCoverImageId !== undefined) {
+    updateData.igdbCoverImageId = igdbCoverImageId
+  }
+  if (igdbScreenshotIds !== undefined) {
+    updateData.igdbScreenshotIds = igdbScreenshotIds
+  }
+  if (igdbVideoId !== undefined) {
+    updateData.igdbVideoId = igdbVideoId
+  }
+  if (igdbPlatformIds !== undefined) {
+    updateData.igdbPlatformIds = igdbPlatformIds
+  }
+  if (igdbFirstReleaseDate !== undefined) {
+    updateData.igdbFirstReleaseDate = igdbFirstReleaseDate
+  }
+  if (igdbNintendoUrlSegment !== undefined) {
+    updateData.igdbNintendoUrlSegment = igdbNintendoUrlSegment
+  }
+  if (igdbPlaystationUrlSegment !== undefined) {
+    updateData.igdbPlaystationUrlSegment = igdbPlaystationUrlSegment
+  }
+  if (igdbSteamUrlSegment !== undefined) {
+    updateData.igdbSteamUrlSegment = igdbSteamUrlSegment
   }
 
   if (platforms !== undefined) {

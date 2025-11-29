@@ -273,9 +273,8 @@ function extractStoreSegments(websites: { type: number; url: string }[]): {
   playstationUrlSegment: string | null
   steamUrlSegment: string | null
 } {
-  // IGDB website type codes: 13=Steam, 16=Nintendo, 17=PlayStation
-  const nintendo = websites.find((w) => w.type === 16)
-  const playstation = websites.find((w) => w.type === 17)
+  const nintendo = websites.find((w) => w.type === 24)
+  const playstation = websites.find((w) => w.type === 23)
   const steam = websites.find((w) => w.type === 13)
 
   return {
@@ -411,6 +410,79 @@ export async function searchIGDBGamesDirect(
   } catch (error) {
     console.error("Error searching IGDB API:", error)
     throw new Error("Failed to search IGDB API")
+  }
+}
+
+/**
+ * Get a single IGDB game by ID
+ */
+export async function getIGDBGameById(
+  igdbId: number
+): Promise<IGDBGame | null> {
+  const CLIENT_ID = process.env.IGDB_CLIENT_ID
+  const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
+
+  if (!CLIENT_ID || !ACCESS_TOKEN) {
+    throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
+  }
+
+  try {
+    const response = await fetch("https://api.igdb.com/v4/games", {
+      method: "POST",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "text/plain"
+      },
+      body: `
+        fields 
+          name, slug,
+          summary,
+          first_release_date,
+          websites.type, websites.url,
+          platforms.id,
+          cover.image_id, screenshots.image_id, videos.video_id, videos.name,
+          hypes, rating, rating_count, aggregated_rating, aggregated_rating_count;
+
+        where id = ${igdbId};
+      `.trim()
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`IGDB API error (${response.status}): ${errorText}`)
+    }
+
+    const rawGames: RawIGDBAPIGame[] = await response.json()
+
+    if (rawGames.length === 0) {
+      return null
+    }
+
+    const game = rawGames[0]
+    const storeSegments = extractStoreSegments(game.websites || [])
+
+    return {
+      id: game.id.toString(),
+      igdbId: game.id,
+      name: game.name,
+      slug: game.slug,
+      summary: game.summary || "",
+      coverImageId: game.cover?.image_id || "",
+      screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
+      videoId: chooseVideoId(game.videos),
+      platforms: transformIGDBPlatforms(game.platforms?.map((p) => p.id) || []),
+      firstReleaseDate: game.first_release_date || 0,
+      rating: game.rating || null,
+      ratingCount: game.rating_count || null,
+      aggregatedRating: game.aggregated_rating || null,
+      aggregatedRatingCount: game.aggregated_rating_count || null,
+      hypes: game.hypes || null,
+      ...storeSegments
+    }
+  } catch (error) {
+    console.error("Error fetching IGDB game by ID:", error)
+    throw new Error("Failed to fetch IGDB game")
   }
 }
 

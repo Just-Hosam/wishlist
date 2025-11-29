@@ -1,6 +1,7 @@
 "use server"
 
 import prisma from "@/lib/prisma"
+import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { GameCategory } from "@prisma/client"
 import { unstable_cache } from "next/cache"
 
@@ -18,10 +19,12 @@ export const getCachedWishlistGames = async (userId: string) => {
 
       return games.map((game) => ({
         id: game.id,
-        name: game.name,
+        name: game.igdbName || "Untitled Game",
         length: game.length,
         category: game.category,
-        coverImageUrl: game.coverImageUrl,
+        coverImageUrl: game.igdbCoverImageId
+          ? buildIGDBImageUrl(game.igdbCoverImageId)
+          : null,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString(),
         prices: game.prices.map((price) => ({
@@ -60,10 +63,12 @@ export const getCachedLibraryGames = async (userId: string) => {
 
       return games.map((game) => ({
         id: game.id,
-        name: game.name,
+        name: game.igdbName || "Untitled Game",
         length: game.length,
         category: game.category,
-        coverImageUrl: game.coverImageUrl,
+        coverImageUrl: game.igdbCoverImageId
+          ? buildIGDBImageUrl(game.igdbCoverImageId)
+          : null,
         platforms: game.platforms,
         nowPlaying: game.nowPlaying,
         createdAt: game.createdAt.toISOString(),
@@ -91,10 +96,12 @@ export const getCachedCompletedGames = async (userId: string) => {
 
       return games.map((game) => ({
         id: game.id,
-        name: game.name,
+        name: game.igdbName || "Untitled Game",
         length: game.length,
         category: game.category,
-        coverImageUrl: game.coverImageUrl,
+        coverImageUrl: game.igdbCoverImageId
+          ? buildIGDBImageUrl(game.igdbCoverImageId)
+          : null,
         platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
@@ -121,10 +128,12 @@ export const getCachedArchivedGames = async (userId: string) => {
 
       return games.map((game) => ({
         id: game.id,
-        name: game.name,
+        name: game.igdbName || "Untitled Game",
         length: game.length,
         category: game.category,
-        coverImageUrl: game.coverImageUrl,
+        coverImageUrl: game.igdbCoverImageId
+          ? buildIGDBImageUrl(game.igdbCoverImageId)
+          : null,
         platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
