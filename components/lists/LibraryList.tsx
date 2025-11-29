@@ -84,7 +84,7 @@ interface LibraryGameCardProps {
 
 const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
   <div
-    className="mx-[-24px] flex gap-4 px-[24px] pb-6 pt-1 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+    className="mx-[-24px] flex gap-4 px-[24px] pb-4 pt-2 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
     style={{
       animationDelay: `${index * 50}ms`,
       animationFillMode: "backwards"
