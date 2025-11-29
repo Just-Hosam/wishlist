@@ -145,8 +145,7 @@ export default function GameForm({
         )
       }
 
-      console.log("game :>>", game)
-
+       // Set existing platform data if available
       // Set existing platform data if available
       if (game.prices) {
         const nintendoPrice = game.prices.find(
