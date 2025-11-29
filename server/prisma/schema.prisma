@@ -87,7 +87,7 @@ model Game {
   nowPlaying                Boolean       @default(false)
 
   // IGDB metadata
-  igdbId                    Int?         @unique
+  igdbId                    Int?
   igdbName                  String?      
   igdbSlug                  String?      
   igdbSummary               String?      @db.Text
