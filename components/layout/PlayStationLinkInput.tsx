@@ -75,11 +75,7 @@ export default function PlayStationLinkInput({
       setError(null)
     } catch (error) {
       console.error("Error fetching PlayStation game info:", error)
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to fetch game information"
-      )
+      setError("Failed to fetch game information")
       setPriceData(null)
     } finally {
       setIsLoading(false)

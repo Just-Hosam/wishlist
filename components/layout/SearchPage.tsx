@@ -3,7 +3,7 @@
 import { PageHeader } from "@/components/layout/PageHeader"
 import { Input } from "@/components/ui/input"
 import Spinner from "@/components/ui/spinner"
-import { searchIGDBGames, type IGDBSearchResult } from "@/server/actions/igdb"
+import { IGDBGame, searchIGDBGamesDirect } from "@/server/actions/igdb"
 import { Platform } from "@prisma/client"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
@@ -12,7 +12,7 @@ import { useRef, useState } from "react"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
-  const [results, setResults] = useState<IGDBSearchResult[]>([])
+  const [results, setResults] = useState<IGDBGame[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -29,7 +29,7 @@ export function SearchPage() {
     setIsLoading(true)
     setHasSearched(true)
     try {
-      const searchResults = await searchIGDBGames(query, 20)
+      const searchResults = await searchIGDBGamesDirect(query)
       setResults(searchResults)
     } catch (error) {
       console.error("Search error:", error)

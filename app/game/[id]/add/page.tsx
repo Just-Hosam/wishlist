@@ -1,6 +1,6 @@
 import GameForm from "@/components/layout/GameForm"
-import prisma from "@/lib/prisma"
-import { buildIGDBImageUrl, getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
+import { getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
+import { getIGDBGameById } from "@/server/actions/igdb"
 import { GameCategory } from "@prisma/client"
 import { notFound } from "next/navigation"
 
@@ -15,36 +15,40 @@ export default async function AddFromSearch({ params }: Props) {
     notFound()
   }
 
-  // Fetch IGDB game data
-  const igdbGame = await prisma.iGDBGame.findUnique({
-    where: { igdbId: parseInt(id) },
-    select: {
-      id: true,
-      igdbId: true,
-      name: true,
-      summary: true,
-      coverImageId: true,
-      platforms: true,
-      nintendoUrlSegment: true,
-      playstationUrlSegment: true
-    }
-  })
+  // Fetch IGDB game data from API
+  const igdbGame = await getIGDBGameById(parseInt(id))
 
   if (!igdbGame) {
     notFound()
   }
 
   // Build store URLs for Canada
-  const storeUrls = getStoreUrlsFromIGDB(igdbGame, "CA")
+  const storeUrls = getStoreUrlsFromIGDB(
+    {
+      nintendoUrlSegment: igdbGame.nintendoUrlSegment,
+      playstationUrlSegment: igdbGame.playstationUrlSegment,
+      steamUrlSegment: igdbGame.steamUrlSegment
+    },
+    "CA"
+  )
 
   // Transform IGDB data to Game shape for the form
   const gameData = {
-    name: igdbGame.name,
-    description: igdbGame.summary,
-    coverImageUrl: buildIGDBImageUrl(igdbGame.coverImageId),
+    igdbId: igdbGame.igdbId,
+    igdbName: igdbGame.name,
+    igdbSlug: igdbGame.slug,
+    igdbSummary: igdbGame.summary,
+    igdbCoverImageId: igdbGame.coverImageId,
+    igdbScreenshotIds: igdbGame.screenshotImageIds,
+    igdbVideoId: igdbGame.videoId,
+    igdbPlatformIds: [], // We don't have platform IDs in IGDBGame interface
+    igdbFirstReleaseDate: igdbGame.firstReleaseDate,
+    igdbNintendoUrlSegment: igdbGame.nintendoUrlSegment,
+    igdbPlaystationUrlSegment: igdbGame.playstationUrlSegment,
+    igdbSteamUrlSegment: igdbGame.steamUrlSegment,
     category: GameCategory.WISHLIST,
-    igdbGameId: igdbGame.igdbId.toString(),
-    // Pre-populate store URLs if available
+    // DON'T pre-populate user platforms - let user select what they own
+    // Pre-populate store URLs if available (for display/fetching prices)
     storeUrls: {
       nintendo: storeUrls.nintendo,
       playstation: storeUrls.playstation

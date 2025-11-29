@@ -5,13 +5,17 @@ import Link from "next/link"
 export default function ListEmptyState() {
   return (
     <div className="mt-20 flex flex-col items-center justify-center text-center">
-      <SearchX size={100} strokeWidth={0.9} className="mb-7" />
-      <h3 className="mb-3 text-2xl font-medium">No games yet</h3>
-      <p className="mb-8 text-sm text-gray-600">
-        Get started by adding a game.
+      <SearchX
+        size={64}
+        className="mb-4 text-muted-foreground"
+        strokeWidth={1}
+      />
+      <h3 className="mb-1 text-lg font-semibold">No games yet</h3>
+      <p className="text-sm text-muted-foreground">
+        Start by adding your first game
       </p>
       <Link href="/search">
-        <Button size="lg">
+        <Button className="mt-6">
           <PlusIcon />
           Add Game
         </Button>

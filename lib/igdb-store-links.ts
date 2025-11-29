@@ -13,7 +13,12 @@ interface IGDBStoreSegments {
 
 /**
  * Build Nintendo eShop URL for a given country
- * @param urlSegment - The Nintendo URL segment from IGDB
+ *
+ * Nintendo URL segments can be in two formats:
+ * - "games/detail/slug" - Used in US store (can also use store/products)
+ * - "store/products/slug" - Used in CA/US store
+ *
+ * @param urlSegment - The Nintendo URL segment from IGDB (e.g., "games/detail/slug" or "store/products/slug")
  * @param country - Country code (default: 'CA' for Canada)
  * @returns Full Nintendo eShop URL
  */
@@ -25,7 +30,18 @@ export function buildNintendoStoreUrl(
     CA: "en-ca",
     US: "en-us"
   }
-  return `https://www.nintendo.com/${countryMap[country]}/store/products/${urlSegment}`
+
+  const locale = countryMap[country]
+
+  // If segment is "games/detail/slug", convert to "store/products/slug" for CA
+  // US can accept both formats, but CA only accepts "store/products"
+  if (country === "CA" && urlSegment.startsWith("games/detail/")) {
+    const slug = urlSegment.replace("games/detail/", "")
+    return `https://www.nintendo.com/${locale}/store/products/${slug}`
+  }
+
+  // Otherwise, use the segment as-is
+  return `https://www.nintendo.com/${locale}/${urlSegment}`
 }
 
 /**
@@ -42,7 +58,7 @@ export function buildPlayStationStoreUrl(
     CA: "en-ca",
     US: "en-us"
   }
-  return `https://store.playstation.com/${countryMap[country]}/concept/${urlSegment}`
+  return `https://store.playstation.com/${countryMap[country]}/${urlSegment}`
 }
 
 /**
