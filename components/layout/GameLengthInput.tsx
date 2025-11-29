@@ -73,8 +73,8 @@ export default function GameLengthInput({
 
 const loadingState = () => {
   return (
-    <div className="mt-2 flex min-h-10 items-center justify-center">
-      <Spinner size={32} className="my-0" />
+    <div className="mt-2 flex items-center justify-start">
+      <Spinner size={20} className="m-0" />
     </div>
   )
 }
