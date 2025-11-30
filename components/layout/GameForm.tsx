@@ -137,7 +137,11 @@ export default function GameForm({
       const gameName = game.igdbName || game.name || ""
       dispatch({ field: "name", value: gameName })
       dispatch({ field: "length", value: game.length?.toString() || "" })
-      dispatch({ field: "category", value: game.category })
+      // Only use game.category when editing an existing game
+      // For new games from IGDB, use the activeTab context
+      if (isEdit) {
+        dispatch({ field: "category", value: game.category })
+      }
       setNowPlaying(!!game.nowPlaying)
       if (game.platforms && Array.isArray(game.platforms)) {
         game.platforms.forEach((p) =>
@@ -145,7 +149,7 @@ export default function GameForm({
         )
       }
 
-       // Set existing platform data if available
+      // Set existing platform data if available
       // Set existing platform data if available
       if (game.prices) {
         const nintendoPrice = game.prices.find(
