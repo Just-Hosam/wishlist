@@ -23,7 +23,7 @@ export default function NavigationPopover() {
       </PopoverTrigger>
       <PopoverContent className="mr-4 w-fit">
         <div className="flex flex-col">
-          <Link href="/about">
+          <Link href="/more/about">
             <Button
               className="w-full justify-start"
               variant="ghost"
