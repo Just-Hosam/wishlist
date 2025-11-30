@@ -3,7 +3,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
 import { GameCategory } from "@/types/game"
-import { Archive, CheckCircle2, FolderCheck, Heart } from "lucide-react"
+import { FolderCheck, Heart } from "lucide-react"
 
 export default function NavigationTabs() {
   const { activeTab, setActiveTab } = useTabContext()
@@ -16,28 +16,14 @@ export default function NavigationTabs() {
           value={GameCategory.WISHLIST}
         >
           <Heart />
-          {activeTab === GameCategory.WISHLIST && <>Wishlist</>}
+          Wishlist
         </TabsTrigger>
         <TabsTrigger
           onClick={() => setActiveTab(GameCategory.LIBRARY)}
           value={GameCategory.LIBRARY}
         >
           <FolderCheck />
-          {activeTab === GameCategory.LIBRARY && <>Library</>}
-        </TabsTrigger>
-        <TabsTrigger
-          onClick={() => setActiveTab(GameCategory.COMPLETED)}
-          value={GameCategory.COMPLETED}
-        >
-          <CheckCircle2 />
-          {activeTab === GameCategory.COMPLETED && <>Completed</>}
-        </TabsTrigger>
-        <TabsTrigger
-          onClick={() => setActiveTab(GameCategory.ARCHIVED)}
-          value={GameCategory.ARCHIVED}
-        >
-          <Archive />
-          {activeTab === GameCategory.ARCHIVED && <>Archived</>}
+          Library
         </TabsTrigger>
       </TabsList>
     </Tabs>
