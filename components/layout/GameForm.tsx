@@ -13,7 +13,7 @@ import { type GamePrice } from "@/lib/playstation-price"
 import { createGame, updateGame } from "@/server/actions/game"
 import { GameCategory, Platform } from "@/types/game"
 import clsx from "clsx"
-import { Archive, CheckCircle2, FolderCheck, Heart, Save } from "lucide-react"
+import { CheckCircle2, FolderCheck, Heart, Save } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useReducer, useState, useTransition } from "react"
@@ -415,13 +415,6 @@ export default function GameForm({
                 <span className="md:hidden">Completed</span>
               )}
               <span className="hidden md:block">Completed</span>
-            </TabsTrigger>
-            <TabsTrigger value={GameCategory.ARCHIVED}>
-              <Archive />
-              {formData.category === GameCategory.ARCHIVED && (
-                <span className="md:hidden">Archived</span>
-              )}
-              <span className="hidden md:block">Archived</span>
             </TabsTrigger>
           </TabsList>
         </Tabs>

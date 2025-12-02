@@ -114,35 +114,3 @@ export const getCachedCompletedGames = async (userId: string) => {
     }
   )()
 }
-
-export const getCachedArchivedGames = async (userId: string) => {
-  return unstable_cache(
-    async () => {
-      const games = await prisma.game.findMany({
-        where: {
-          userId,
-          category: GameCategory.ARCHIVED
-        },
-        orderBy: { updatedAt: "desc" }
-      })
-
-      return games.map((game) => ({
-        id: game.id,
-        name: game.igdbName || "Untitled Game",
-        length: game.length,
-        category: game.category,
-        coverImageUrl: game.igdbCoverImageId
-          ? buildIGDBImageUrl(game.igdbCoverImageId)
-          : null,
-        platforms: game.platforms,
-        createdAt: game.createdAt.toISOString(),
-        updatedAt: game.updatedAt.toISOString()
-      }))
-    },
-    [userId],
-    {
-      tags: [`user-archived-games-${userId}`],
-      revalidate: 1800 // 30 minutes
-    }
-  )()
-}

@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { Archive, CheckCircle2, Info, Menu } from "lucide-react"
+import { CheckCircle2, Info, Menu } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -41,16 +41,6 @@ export default function NavigationPopover() {
             >
               <CheckCircle2 />
               Completed
-            </Button>
-          </Link>
-          <Link href="/more/archived">
-            <Button
-              className="w-full justify-start"
-              variant="ghost"
-              onClick={() => setPopoverOpen(false)}
-            >
-              <Archive />
-              Archived
             </Button>
           </Link>
           <SignOutButton />

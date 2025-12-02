@@ -150,13 +150,6 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
                 buttonText="To Completed"
                 icon={<ArrowRight />}
               />
-              <MoveGameButton
-                gameId={game.id}
-                fromCategory={GameCategory.LIBRARY}
-                toCategory={GameCategory.ARCHIVED}
-                buttonText="To Archived"
-                icon={<ArrowRight />}
-              />
               <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
               <Link href={`/game/${game.id}/edit`}>
                 <Button className="w-full justify-start" variant="ghost">
