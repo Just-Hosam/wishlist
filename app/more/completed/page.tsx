@@ -25,9 +25,6 @@ export default async function CompletedList() {
 
   return (
     <>
-      <PageHeader>
-        <h2 className="text-lg">Completed Games</h2>
-      </PageHeader>
       {games.length === 0 ? (
         <ListEmptyState />
       ) : (
