@@ -216,7 +216,6 @@ export function SearchPage() {
           )}
         </form>
       </PageHeader>
-      <Button onClick={() => inputRef.current?.focus()}>Test Focus</Button>
 
       {/* Search Results Area */}
       {!hasSearched && !isLoading && renderEmptyState()}
