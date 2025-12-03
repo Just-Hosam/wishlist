@@ -9,6 +9,7 @@ import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
+import { Button } from "../ui/button"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
@@ -215,6 +216,7 @@ export function SearchPage() {
           )}
         </form>
       </PageHeader>
+      <Button onClick={() => inputRef.current?.focus()}>Test Focus</Button>
 
       {/* Search Results Area */}
       {!hasSearched && !isLoading && renderEmptyState()}
