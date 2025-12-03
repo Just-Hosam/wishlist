@@ -1,10 +1,10 @@
 import AuthCheck from "@/components/layout/AuthCheck"
 import AuthProvider from "@/components/layout/AuthProvider"
-import NavigationPopover from "@/components/layout/NavigationPopover"
+import NavigationBar from "@/components/layout/NavigationBar"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
-import { Gamepad2, Menu } from "lucide-react"
+import { Gamepad2, Plus } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import "../styles/globals.css"
@@ -176,17 +176,18 @@ export default async function RootLayout({
                   Playward
                 </h1>
               </Link>
-              <AuthCheck
-                fallback={
-                  <Button variant="ghost" size="icon">
-                    <Menu />
-                  </Button>
-                }
-              >
-                <NavigationPopover />
-              </AuthCheck>
             </nav>
             <div className="m-auto max-w-[700px] px-6 pb-20">{children}</div>
+            <AuthCheck>
+              <footer className="sticky bottom-0 z-40 m-auto flex max-w-[700px] items-center gap-4 p-7">
+                <NavigationBar className="flex-1" />
+                <Link href="/search">
+                  <Button size="icon">
+                    <Plus />
+                  </Button>
+                </Link>
+              </footer>
+            </AuthCheck>
             <Toaster position="top-center" />
           </body>
         </html>

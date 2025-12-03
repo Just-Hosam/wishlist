@@ -1,13 +1,12 @@
 import { PageHeader } from "@/components/layout/PageHeader"
 import { Button } from "@/components/ui/button"
 import {
-  Github,
-  Linkedin,
+  ExternalLink,
   FileText,
   Gamepad2,
-  User,
-  ExternalLink,
-  ArrowLeft
+  Github,
+  Linkedin,
+  User
 } from "lucide-react"
 import Link from "next/link"
 
