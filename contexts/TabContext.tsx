@@ -1,11 +1,12 @@
 "use client"
 
-import { GameCategory } from "@/types/game"
-import { createContext, useContext, useState, ReactNode } from "react"
+import { createContext, ReactNode, useContext, useState } from "react"
+
+type TabType = "WISHLIST" | "LIBRARY" | "MORE"
 
 interface TabContextType {
-  activeTab: GameCategory
-  setActiveTab: (tab: GameCategory) => void
+  activeTab: TabType
+  setActiveTab: (tab: TabType) => void
   reset: () => void
 }
 
@@ -13,14 +14,14 @@ const TabContext = createContext<TabContextType | undefined>(undefined)
 
 export function TabProvider({
   children,
-  initial = GameCategory.WISHLIST
+  initial = "WISHLIST" as TabType
 }: {
   children: ReactNode
-  initial?: GameCategory
+  initial?: TabType
 }) {
-  const [activeTab, setActiveTab] = useState<GameCategory>(initial)
+  const [activeTab, setActiveTab] = useState<TabType>(initial)
 
-  const reset = () => setActiveTab(GameCategory.WISHLIST)
+  const reset = () => setActiveTab("WISHLIST")
 
   return (
     <TabContext.Provider value={{ activeTab, setActiveTab, reset }}>
