@@ -3,6 +3,15 @@
 # Exit on error
 set -e
 
+# Check if we're on the main branch
+CURRENT_BRANCH=$(git branch --show-current)
+if [ "$CURRENT_BRANCH" != "main" ]; then
+    echo "❌ Error: Not on main branch!"
+    echo "Current branch: $CURRENT_BRANCH"
+    echo "Please switch to main branch before deploying: git checkout main"
+    exit 1
+fi
+
 # Check if .env.local exists
 if [ ! -f .env.local ]; then
     echo "❌ Error: .env.local file not found!"
