@@ -50,7 +50,7 @@ RESPONSE=$(curl -s -X POST "$VERCEL_DEPLOY_HOOK")
 if echo "$RESPONSE" | grep -q "job"; then
     echo "✅ Deployment triggered successfully!"
     echo ""
-    echo "📊 Check deployment status at: https://vercel.com/just-hosam/wishlist"
+    echo "📊 Check deployment status at: https://vercel.com/just-hosams-projects/wishlist/deployments"
 else
     echo "⚠️  Deployment may have been triggered, but response was unexpected:"
     echo "$RESPONSE"
