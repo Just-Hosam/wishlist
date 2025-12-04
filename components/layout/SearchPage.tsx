@@ -25,6 +25,8 @@ export function SearchPage() {
       return
     }
 
+    inputRef.current?.blur()
+
     setIsLoading(true)
     setHasSearched(true)
     try {
