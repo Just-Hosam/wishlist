@@ -125,10 +125,16 @@ export default function GameForm({
     }
   }
 
+  const getInitialCategory = (): GameCategory => {
+    if (activeTab === "WISHLIST") return GameCategory.WISHLIST
+    if (activeTab === "LIBRARY") return GameCategory.LIBRARY
+    return GameCategory.WISHLIST
+  }
+
   const [formData, dispatch] = useReducer(formReducer, {
     name: "",
     length: "",
-    category: activeTab
+    category: getInitialCategory()
   })
 
   useEffect(() => {
