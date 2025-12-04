@@ -177,7 +177,10 @@ export default async function RootLayout({
                 </h1>
               </Link>
             </nav>
-            <div className="m-auto h-full max-w-[700px] overflow-y-auto px-6 pb-28 pt-[68px]">
+            <div
+              className="m-auto mt-[68px] max-w-[700px] overflow-y-auto px-6 pb-28"
+              style={{ height: "calc(100% - 68px)" }}
+            >
               {children}
             </div>
             <AuthCheck>
