@@ -6,26 +6,31 @@ import Link from "next/link"
 export default function MorePage() {
   return (
     <>
-      <div className="flex flex-col gap-2 p-4">
-        <Link href="/more/about">
-          <Button className="w-full justify-start" variant="ghost">
-            <Info />
-            About
-          </Button>
-        </Link>
-        <Link href="/more/completed">
-          <Button className="w-full justify-start" variant="ghost">
-            <CheckCircle2 />
-            Completed
-          </Button>
-        </Link>
+      <Link
+        href="/more/about"
+        className="duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
+      >
+        <Button className="w-full justify-start" variant="ghost">
+          <Info />
+          About
+        </Button>
+      </Link>
+      <Link
+        href="/more/completed"
+        className="duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        style={{ animationDelay: "50ms", animationFillMode: "backwards" }}
+      >
+        <Button className="w-full justify-start" variant="ghost">
+          <CheckCircle2 />
+          Completed
+        </Button>
+      </Link>
+      <div
+        className="duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+      >
         <SignOutButton />
-
-        <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
-
-        <div className="text-center text-xs text-gray-500">
-          version {process.env.APP_VERSION}
-        </div>
       </div>
     </>
   )

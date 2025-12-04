@@ -107,6 +107,15 @@ export default function AboutPage() {
           </Link>
         </div>
       </section>
+
+      <section
+        className="mt-8 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+      >
+        <div className="text-center text-xs text-muted-foreground">
+          version {process.env.APP_VERSION}
+        </div>
+      </section>
     </>
   )
 }
