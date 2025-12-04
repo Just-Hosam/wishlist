@@ -1,6 +1,13 @@
 "use client"
 
-import { createContext, ReactNode, useContext, useState } from "react"
+import { usePathname } from "next/navigation"
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 
 type TabType = "WISHLIST" | "LIBRARY" | "MORE"
 
@@ -20,6 +27,24 @@ export function TabProvider({
   initial?: TabType
 }) {
   const [activeTab, setActiveTab] = useState<TabType>(initial)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname === "/lists") {
+      setActiveTab((prev) => {
+        if (prev !== "WISHLIST" && prev !== "LIBRARY") {
+          return "WISHLIST"
+        }
+        return prev
+      })
+      return
+    }
+
+    if (pathname.startsWith("/more")) {
+      setActiveTab((prev) => (prev !== "MORE" ? "MORE" : prev))
+      return
+    }
+  }, [pathname])
 
   const reset = () => setActiveTab("WISHLIST")
 
