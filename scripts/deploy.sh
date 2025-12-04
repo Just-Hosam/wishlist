@@ -33,6 +33,15 @@ if [ -z "$VERCEL_DEPLOY_HOOK" ] || [ "$VERCEL_DEPLOY_HOOK" = "https://api.vercel
     exit 1
 fi
 
+# Run build check to catch errors before deploying
+echo "🔨 Running production build check..."
+if npm run build; then
+    echo "✅ Build successful!"
+else
+    echo "❌ Build failed! Fix errors before deploying."
+    exit 1
+fi
+
 echo "📦 Starting deployment process..."
 echo ""
 
