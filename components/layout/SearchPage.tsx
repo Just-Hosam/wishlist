@@ -182,7 +182,7 @@ export function SearchPage() {
 
   return (
     <div>
-      <PageHeader>
+      <div className="sticky top-[68px] z-40 mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4">
         <form onSubmit={handleSubmit} className="relative flex-1">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
@@ -215,7 +215,7 @@ export function SearchPage() {
             </button>
           )}
         </form>
-      </PageHeader>
+      </div>
 
       {/* Search Results Area */}
       {!hasSearched && !isLoading && renderEmptyState()}

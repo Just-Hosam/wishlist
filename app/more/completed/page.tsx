@@ -1,7 +1,6 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
-import { PageHeader } from "@/components/layout/PageHeader"
 import { Button } from "@/components/ui/button"
 import {
   Popover,

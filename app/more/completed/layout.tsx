@@ -7,9 +7,8 @@ export default async function ListsLayout({
 }) {
   return (
     <>
-      <PageHeader>
-        <h2 className="text-lg">Completed Games</h2>
-      </PageHeader>
+      <PageHeader />
+
       {children}
     </>
   )
