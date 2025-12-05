@@ -16,12 +16,12 @@ export default function AboutPage() {
       <PageHeader pageName="About" showBackButton />
 
       <section
-        className="mb-7 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+        className="mb-7 mt-4 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
         style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
       >
         <div className="mb-3 flex items-center gap-3">
           <Gamepad2 size={24} className="text-primary" />
-          <h2 className="text-xl font-semibold">About Playward</h2>
+          <h2 className="text-xl font-medium">Playward</h2>
         </div>
         <p className="text-sm">
           Playward helps you organize and track your video game collection and
@@ -35,7 +35,7 @@ export default function AboutPage() {
       >
         <div className="mb-3 flex items-center gap-3">
           <User size={24} className="text-primary" />
-          <h2 className="text-xl font-semibold">About the Developer</h2>
+          <h2 className="text-xl font-medium">About the Developer</h2>
         </div>
         <div className="space-y-4 text-sm">
           <p>

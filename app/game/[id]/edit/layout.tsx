@@ -9,12 +9,7 @@ export default async function EditLayout({
 }) {
   return (
     <>
-      <PageHeader pageName="Edit" showBackButton>
-        <Button type="submit">
-          <Save />
-          Save
-        </Button>
-      </PageHeader>
+      <PageHeader pageName="Edit" showBackButton />
 
       {children}
     </>

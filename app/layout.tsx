@@ -1,10 +1,9 @@
-import AuthCheck from "@/components/layout/AuthCheck"
 import AuthProvider from "@/components/layout/AuthProvider"
 import NavigationBar from "@/components/layout/NavigationBar"
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
-import { Gamepad2, Plus } from "lucide-react"
+import { Search } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import "../styles/globals.css"
@@ -170,16 +169,16 @@ export default async function RootLayout({
           </head>
           <body>
             <div
-              className="m-auto mt-[68px] max-w-[700px] overflow-y-auto px-6 pb-28"
+              className="m-auto mt-[68px] max-w-[700px] overflow-y-auto px-6 pb-28 pt-2"
               style={{ height: "calc(100% - 68px)" }}
             >
               {children}
             </div>
-            <footer className="absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 px-8 py-7">
+            <footer className="via- via- absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 bg-gradient-to-t from-white via-white/[98%] via-55% to-transparent px-8 pb-7 pt-2">
               <NavigationBar className="flex-1" />
               <Link href="/search">
                 <Button size="icon">
-                  <Plus />
+                  <Search />
                 </Button>
               </Link>
             </footer>

@@ -95,7 +95,7 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div>
+    <div className="-mt-4">
       {results.map((game, index) => (
         <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
           <div
