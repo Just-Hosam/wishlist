@@ -174,7 +174,7 @@ export default async function RootLayout({
             >
               {children}
             </div>
-            <footer className="via- via- absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 bg-gradient-to-t from-white via-white/[98%] via-55% to-transparent px-8 pb-7 pt-2">
+            <footer className="absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 bg-gradient-to-t from-white via-white/[98%] via-55% to-transparent px-7 pb-7 pt-2">
               <NavigationBar className="flex-1" />
               <Link href="/search">
                 <Button size="icon">

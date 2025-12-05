@@ -13,19 +13,11 @@ import { type GamePrice } from "@/lib/playstation-price"
 import { createGame, updateGame } from "@/server/actions/game"
 import { GameCategory, Platform } from "@/types/game"
 import clsx from "clsx"
-import {
-  CheckCircle2,
-  FolderCheck,
-  Heart,
-  Loader,
-  LoaderCircle,
-  Save
-} from "lucide-react"
+import { CheckCircle2, FolderCheck, Heart } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useReducer, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { PageHeader } from "./PageHeader"
 
 interface Game {
   id?: string
@@ -339,8 +331,7 @@ export default function GameForm({
         type="submit"
         disabled={isPending}
       >
-        {isPending ? <LoaderCircle className="animate-spin" /> : <Save />}
-        {/* {isPending ? "Saving..." : "Save"} */}
+        {isPending ? "Saving..." : "Save"}
       </Button>
       {/* Cover Image Display for IGDB Games */}
       {isFromIGDB && game?.igdbCoverImageId && (
