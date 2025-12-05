@@ -1,23 +1,26 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { BackButton } from "./BackButton"
 
 interface PageHeaderProps {
+  pageName: string
+  showBackButton?: boolean
   children?: React.ReactNode
-  className?: string
 }
 
-export function PageHeader({ children, className }: PageHeaderProps) {
+export function PageHeader({
+  pageName,
+  showBackButton,
+  children
+}: PageHeaderProps) {
   return (
-    <div
-      className={cn(
-        "sticky top-0 z-30 mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4",
-        className
-      )}
-    >
-      <BackButton />
+    <nav className="absolute left-0 right-0 top-0 z-30 m-auto flex min-h-[68px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 pb-4 pt-3">
+      <div className="flex items-center gap-2">
+        {showBackButton && <BackButton />}
+        <h1 className="text-2xl font-medium">{pageName || "Playward"}</h1>
+      </div>
+
       {children}
-    </div>
+    </nav>
   )
 }

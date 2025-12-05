@@ -13,7 +13,7 @@ import Link from "next/link"
 export default function AboutPage() {
   return (
     <>
-      <PageHeader />
+      <PageHeader pageName="About" showBackButton />
 
       <section
         className="mb-7 duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"

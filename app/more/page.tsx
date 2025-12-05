@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/layout/PageHeader"
 import { SignOutButton } from "@/components/layout/SignoutButton"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Info } from "lucide-react"
@@ -6,6 +7,8 @@ import Link from "next/link"
 export default function MorePage() {
   return (
     <>
+      <PageHeader pageName="More" />
+
       <Link
         href="/more/about"
         className="duration-500 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"

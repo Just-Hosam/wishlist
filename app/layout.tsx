@@ -169,30 +169,20 @@ export default async function RootLayout({
             ></script> */}
           </head>
           <body>
-            <nav className="absolute left-0 right-0 top-0 z-30 m-auto flex min-h-[68px] max-w-[1200px] items-center justify-between gap-6 bg-white px-6 pb-4 pt-3">
-              <Link href="/lists" aria-label="Home">
-                <h1 className="flex items-center gap-2 text-xl">
-                  <Gamepad2 />
-                  Playward
-                </h1>
-              </Link>
-            </nav>
             <div
               className="m-auto mt-[68px] max-w-[700px] overflow-y-auto px-6 pb-28"
               style={{ height: "calc(100% - 68px)" }}
             >
               {children}
             </div>
-            <AuthCheck>
-              <footer className="absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 px-8 py-7">
-                <NavigationBar className="flex-1" />
-                <Link href="/search">
-                  <Button size="icon">
-                    <Plus />
-                  </Button>
-                </Link>
-              </footer>
-            </AuthCheck>
+            <footer className="absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 px-8 py-7">
+              <NavigationBar className="flex-1" />
+              <Link href="/search">
+                <Button size="icon">
+                  <Plus />
+                </Button>
+              </Link>
+            </footer>
             <Toaster position="top-center" />
           </body>
         </html>

@@ -327,7 +327,7 @@ export default function GameForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <PageHeader>
+      <PageHeader pageName={isEdit ? "Edit" : "Add"} showBackButton>
         <Button className="ml-auto" type="submit" disabled={isPending}>
           <Save />
           {isPending ? "Saving..." : "Save"}
