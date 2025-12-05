@@ -8,6 +8,7 @@ import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
+import { PageHeader } from "./PageHeader"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
@@ -182,8 +183,8 @@ export function SearchPage() {
 
   return (
     <div>
-      <div className="sticky top-0 z-30 mx-[-24px] flex min-h-[60px] items-center gap-3 bg-white px-[24px] pb-4 pt-1">
-        <form onSubmit={handleSubmit} className="relative flex-1">
+      <PageHeader showBackButton>
+        <form onSubmit={handleSubmit} className="relative w-full">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
             aria-hidden
@@ -215,7 +216,7 @@ export function SearchPage() {
             </button>
           )}
         </form>
-      </div>
+      </PageHeader>
 
       {/* Search Results Area */}
       {!hasSearched && !isLoading && renderEmptyState()}

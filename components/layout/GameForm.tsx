@@ -326,14 +326,7 @@ export default function GameForm({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <PageHeader pageName={isEdit ? "Edit" : "Add"} showBackButton>
-        <Button className="ml-auto" type="submit" disabled={isPending}>
-          <Save />
-          {isPending ? "Saving..." : "Save"}
-        </Button>
-      </PageHeader>
-
+    <form onSubmit={handleSubmit} className="mt-8">
       {/* Cover Image Display for IGDB Games */}
       {isFromIGDB && game?.igdbCoverImageId && (
         <div
