@@ -62,7 +62,7 @@ export function SearchPage() {
 
   // Empty state - before any search
   const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-12 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
+    <div className="flex flex-col items-center justify-center pt-16 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
       <Search className="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
       <h2 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-300">
         Search for games
@@ -75,14 +75,14 @@ export function SearchPage() {
 
   // Loading state
   const renderLoadingState = () => (
-    <div className="duration-1000 animate-in fade-in">
-      <Spinner className="my-16" />
+    <div className="pt-12 duration-1000 animate-in fade-in">
+      <Spinner />
     </div>
   )
 
   // No results state
   const renderNoResultsState = () => (
-    <div className="flex flex-col items-center justify-center py-12 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
+    <div className="flex flex-col items-center justify-center pt-16 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
       <Search className="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
       <h2 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-300">
         No games found

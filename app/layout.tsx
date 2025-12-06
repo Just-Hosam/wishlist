@@ -169,12 +169,12 @@ export default async function RootLayout({
           </head>
           <body>
             <div
-              className="m-auto mt-[68px] max-w-[700px] overflow-y-auto px-6 pb-28 pt-2"
-              style={{ height: "calc(100% - 68px)" }}
+              className="m-auto mt-[74px] max-w-[700px] overflow-y-auto px-6 pb-28 pt-3"
+              style={{ height: "calc(100% - 74px)" }}
             >
               {children}
             </div>
-            <footer className="absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 bg-gradient-to-t from-white via-white/[98%] via-55% to-transparent px-7 pb-7 pt-2">
+            <footer className="absolute bottom-0 left-0 right-0 z-30 m-auto flex max-w-[450px] items-center gap-4 bg-gradient-to-t from-white via-white/[98%] via-55% to-transparent px-7 pb-7 pt-3">
               <NavigationBar className="flex-1" />
               <Link href="/search">
                 <Button size="icon">

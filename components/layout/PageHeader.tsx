@@ -18,7 +18,13 @@ export function PageHeader({
       {(showBackButton || pageName) && (
         <div className="flex items-center gap-3">
           {showBackButton && <BackButton />}
-          {pageName && <h1 className="text-3xl font-semibold">{pageName}</h1>}
+          {pageName && (
+            <h1
+              className={`${showBackButton ? "text-lg" : "text-4xl font-semibold"}`}
+            >
+              {pageName}
+            </h1>
+          )}
         </div>
       )}
 

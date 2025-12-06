@@ -7,7 +7,7 @@ export default async function SearchLayout({
 }) {
   return (
     <>
-      <PageHeader pageName="Search" showBackButton />
+      <PageHeader showBackButton />
 
       {children}
     </>
