@@ -169,8 +169,8 @@ export default async function RootLayout({
           </head>
           <body>
             <div
-              className="m-auto mt-[74px] max-w-[700px] overflow-y-auto px-6 pb-28 pt-3"
-              style={{ height: "calc(100% - 74px)" }}
+              className="m-auto mt-[72px] max-w-[700px] overflow-y-auto px-6 pb-28 pt-3"
+              style={{ height: "calc(100% - 72px)" }}
             >
               {children}
             </div>
