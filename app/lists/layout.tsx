@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/layout/PageHeader"
+import { DynamicListsHeader } from "@/components/layout/DynamicListsHeader"
 
 export default async function ListsLayout({
   children
@@ -7,7 +7,7 @@ export default async function ListsLayout({
 }) {
   return (
     <>
-      <PageHeader pageName="Lists" />
+      <DynamicListsHeader />
 
       {children}
     </>
