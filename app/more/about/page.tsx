@@ -15,13 +15,13 @@ export default function AboutPage() {
     <>
       <PageHeader pageName="About" showBackButton />
 
-      <Gamepad2 size={140} className="mx-auto" />
+      <Gamepad2 size={130} strokeWidth={1.45} className="mx-auto -mt-3" />
       <h1 className="mb-2 text-center text-4xl font-semibold">Playward</h1>
-      <div className="mb-8 text-center text-sm text-muted-foreground">
+      <div className="mb-8 text-center text-xs text-muted-foreground">
         version {process.env.APP_VERSION}
       </div>
 
-      <div className="mb-6 space-y-4 text-sm text-muted-foreground">
+      <div className="mb-6 space-y-4 text-muted-foreground">
         <p>
           Hey! I'm Sam, I made Playward as a personal project to track the games
           I play.
