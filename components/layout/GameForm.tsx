@@ -327,7 +327,7 @@ export default function GameForm({
   return (
     <form onSubmit={handleSubmit} className="pt-2">
       <Button
-        className="absolute right-6 top-4 z-40"
+        className="absolute right-6 top-5 z-40"
         type="submit"
         disabled={isPending}
       >
