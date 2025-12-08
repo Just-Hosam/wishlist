@@ -29,13 +29,13 @@ export default function PriceLayout({
 
   return (
     <div className={"flex items-center " + className}>
-      <span className="text-xs font-medium">{formatPrice(currentPrice)}</span>
+      <span className="text-sm font-medium">{formatPrice(currentPrice)}</span>
       {onSale && regularPrice && currentPrice !== regularPrice && (
         <>
-          <span className="ml-1 text-xs font-light text-muted-foreground line-through">
+          <span className="ml-[6px] text-xs font-light text-muted-foreground line-through">
             {formatPrice(regularPrice)}
           </span>
-          <span className="ml-[6px] rounded bg-red-600 px-1 py-[2px] text-xs text-white">
+          <span className="ml-2 rounded bg-red-600 px-1 py-[2px] text-xs text-white">
             -{Math.round(((regularPrice - currentPrice) / regularPrice) * 100)}%
           </span>
         </>
