@@ -95,26 +95,26 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div className="-mt-4">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
       {results.map((game, index) => (
         <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
           <div
-            className="mx-[-24px] flex cursor-pointer gap-4 border-gray-200 px-[24px] py-5 transition-all duration-500 animate-in fade-in slide-in-from-top-3 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800/50"
+            className="flex cursor-pointer flex-col transition-all duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3 hover:opacity-80"
             style={{
               animationDelay: `${index * 50}ms`,
               animationFillMode: "backwards"
             }}
           >
-            {/* Cover Image */}
-            <div className="h-[104px] w-[78px] flex-shrink-0 overflow-hidden rounded-md bg-gray-200 shadow-lg dark:bg-gray-700">
+            {/* Cover Image - Takes ~half of vertical space */}
+            <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-200 shadow-md dark:bg-gray-700">
               {game.coverImageId ? (
                 <Image
                   src={getImageUrl(game.coverImageId)}
                   alt={game.name}
-                  width={78}
-                  height={104}
-                  className="h-full w-full object-cover"
-                  priority={index < 5}
+                  fill
+                  className="object-cover"
+                  priority={index < 8}
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-gray-400">
@@ -123,22 +123,23 @@ export function SearchPage() {
               )}
             </div>
 
-            {/* Game Info */}
-            <div className="flex flex-1 flex-col">
-              <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
+            {/* Game Info Section */}
+            <div className="flex flex-1 flex-col px-1">
+              {/* Game Name */}
+              <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 dark:text-gray-100 md:text-lg">
                 {game.name}
               </h3>
 
               {/* Release Date */}
               {game.firstReleaseDate && (
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="mt-1 text-xs text-muted-foreground md:text-sm">
                   {formatReleaseDate(game.firstReleaseDate)}
                 </p>
               )}
 
               {/* Platforms - Show unique platform icons */}
               {game.platforms && game.platforms.length > 0 && (
-                <div className="mt-auto flex items-center gap-2 pb-1">
+                <div className="mt-auto flex items-center gap-2 pt-3">
                   {game.platforms.includes(Platform.PLAYSTATION) && (
                     <Image
                       src="/logos/playstation.svg"
@@ -175,7 +176,6 @@ export function SearchPage() {
               )}
             </div>
           </div>
-          <div className="mx-[-24px] rounded-full border-[0.5px] px-[24px]"></div>
         </Link>
       ))}
     </div>
