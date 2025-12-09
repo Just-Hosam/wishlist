@@ -63,11 +63,11 @@ export function SearchPage() {
   // Empty state - before any search
   const renderEmptyState = () => (
     <div className="flex flex-col items-center justify-center pt-20 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
-      <Search className="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
-      <h2 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-300">
+      <Search className="mb-4 h-16 w-16 text-gray-300" />
+      <h2 className="mb-2 text-xl font-semibold text-gray-700">
         Search for games
       </h2>
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-gray-500">
         Start typing to find games to track
       </p>
     </div>
@@ -83,11 +83,11 @@ export function SearchPage() {
   // No results state
   const renderNoResultsState = () => (
     <div className="flex flex-col items-center justify-center pt-20 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
-      <Search className="mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
-      <h2 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-300">
+      <Search className="mb-4 h-16 w-16 text-gray-300" />
+      <h2 className="mb-2 text-xl font-semibold text-gray-700">
         No games found
       </h2>
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-gray-500">
         Try a different search term for "{query}"
       </p>
     </div>
@@ -99,14 +99,14 @@ export function SearchPage() {
       {results.map((game, index) => (
         <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
           <div
-            className="flex cursor-pointer flex-col transition-all duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3 hover:opacity-80"
+            className="flex cursor-pointer flex-col transition-all duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
             style={{
               animationDelay: `${index * 50}ms`,
               animationFillMode: "backwards"
             }}
           >
             {/* Cover Image - Takes ~half of vertical space */}
-            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md dark:bg-gray-700">
+            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
               {game.coverImageId ? (
                 <Image
                   src={getImageUrl(game.coverImageId)}
@@ -126,7 +126,7 @@ export function SearchPage() {
             {/* Game Info Section */}
             <div className="flex flex-1 flex-col px-1">
               {/* Game Name */}
-              <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 dark:text-gray-100 md:text-lg">
+              <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 md:text-lg">
                 {game.name}
               </h3>
 
@@ -186,7 +186,7 @@ export function SearchPage() {
       <PageHeader showBackButton>
         <form onSubmit={handleSubmit} className="relative w-full">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
             aria-hidden
             size={16}
           />

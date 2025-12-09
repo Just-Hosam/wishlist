@@ -95,7 +95,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
     }}
   >
     {/* Cover Image - Takes ~half of vertical space */}
-    <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-200 shadow-md dark:bg-gray-700">
+    <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-200 shadow-md">
       {game.coverImageUrl && (
         <Image
           src={game.coverImageUrl}
@@ -114,7 +114,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
       <div className="flex gap-2">
         <div className="flex-1">
           {/* Game Name */}
-          <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 dark:text-gray-100 md:text-lg">
+          <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 md:text-lg">
             {game.name}
           </h3>
 

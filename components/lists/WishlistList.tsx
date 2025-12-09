@@ -68,7 +68,7 @@ export default function WishlistList({ games }: WishlistListProps) {
             >
               {/* Cover Image */}
               {game.coverImageUrl && (
-                <div className="h-[140px] w-[105px] flex-shrink-0 overflow-hidden rounded-xl bg-gray-200 shadow-lg dark:bg-gray-700">
+                <div className="h-[140px] w-[105px] flex-shrink-0 overflow-hidden rounded-xl bg-gray-200 shadow-lg">
                   <Image
                     src={game.coverImageUrl}
                     alt={`${game.name} cover`}
