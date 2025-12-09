@@ -406,7 +406,7 @@ export async function searchIGDBGamesDirect(
     // Apply ranking algorithm
     const rankedGames = rankGamesByQuality(games)
 
-    return rankedGames.slice(0, 20)
+    return rankedGames.slice(0, 30)
   } catch (error) {
     console.error("Error searching IGDB API:", error)
     throw new Error("Failed to search IGDB API")
