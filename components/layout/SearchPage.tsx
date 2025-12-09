@@ -106,7 +106,7 @@ export function SearchPage() {
             }}
           >
             {/* Cover Image - Takes ~half of vertical space */}
-            <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md dark:bg-gray-700">
+            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md dark:bg-gray-700">
               {game.coverImageId ? (
                 <Image
                   src={getImageUrl(game.coverImageId)}
