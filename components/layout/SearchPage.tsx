@@ -7,7 +7,7 @@ import { Platform } from "@prisma/client"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { PageHeader } from "./PageHeader"
 
 export function SearchPage() {
@@ -16,6 +16,18 @@ export function SearchPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const handleFocusSearch = () => {
+      inputRef.current?.focus()
+    }
+
+    window.addEventListener("focus-search-input", handleFocusSearch)
+
+    return () => {
+      window.removeEventListener("focus-search-input", handleFocusSearch)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,7 +61,7 @@ export function SearchPage() {
   }
 
   const getImageUrl = (imageId: string) => {
-    return `https://images.igdb.com/igdb/image/upload/t_cover_big/${imageId}.jpg`
+    return `https://images.igdb.com/igdb/image/upload/t_720p/${imageId}.jpg`
   }
 
   const formatReleaseDate = (timestamp: number) => {

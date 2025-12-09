@@ -1,11 +1,8 @@
 import AuthProvider from "@/components/layout/AuthProvider"
-import NavigationBar from "@/components/layout/NavigationBar"
-import { Button } from "@/components/ui/button"
+import Footer from "@/components/layout/Footer"
 import { Toaster } from "@/components/ui/sonner"
 import { TabProvider } from "@/contexts/TabContext"
-import { Search } from "lucide-react"
 import type { Metadata } from "next"
-import Link from "next/link"
 import "../styles/globals.css"
 
 export const metadata: Metadata = {
@@ -174,20 +171,7 @@ export default async function RootLayout({
             >
               {children}
             </div>
-            <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[98%] via-55% to-transparent px-7 pb-7 pt-3">
-              <div className="m-auto flex max-w-[450px] items-center gap-4">
-                <NavigationBar className="flex-1" />
-                <Link href="/search">
-                  <Button
-                    size="icon"
-                    variant="link"
-                    className="h-[52px] w-[52px] rounded-full bg-white text-black shadow-xl"
-                  >
-                    <Search />
-                  </Button>
-                </Link>
-              </div>
-            </footer>
+            <Footer />
             <Toaster position="top-center" />
           </body>
         </html>
