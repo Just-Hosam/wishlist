@@ -95,7 +95,7 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
+    <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4">
       {results.map((game, index) => (
         <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
           <div
@@ -106,7 +106,7 @@ export function SearchPage() {
             }}
           >
             {/* Cover Image - Takes ~half of vertical space */}
-            <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-200 shadow-md dark:bg-gray-700">
+            <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md dark:bg-gray-700">
               {game.coverImageId ? (
                 <Image
                   src={getImageUrl(game.coverImageId)}
