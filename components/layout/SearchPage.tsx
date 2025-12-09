@@ -95,7 +95,7 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
       {results.map((game, index) => (
         <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
           <div
