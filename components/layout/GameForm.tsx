@@ -9,9 +9,10 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
-import { type GamePrice } from "@/lib/playstation-price"
+
 import { createGame, updateGame } from "@/server/actions/game"
-import { GameCategory, Platform } from "@/types/game"
+import { Game, GameCategory, Platform, Price } from "@/types"
+
 import clsx from "clsx"
 import { CheckCircle2, FolderCheck, Heart } from "lucide-react"
 import Image from "next/image"
@@ -19,73 +20,26 @@ import { useRouter } from "next/navigation"
 import { useEffect, useReducer, useState, useTransition } from "react"
 import { toast } from "sonner"
 
-interface Game {
-  id?: string
-
-  // IGDB fields (stored directly on Game model now)
-  igdbId?: number
-  igdbName?: string
-  igdbSlug?: string
-  igdbSummary?: string
-  igdbCoverImageId?: string
-  igdbScreenshotIds?: string[]
-  igdbVideoId?: string | null
-  igdbPlatformIds?: number[]
-  igdbFirstReleaseDate?: number
-  igdbNintendoUrlSegment?: string | null
-  igdbPlaystationUrlSegment?: string | null
-  igdbSteamUrlSegment?: string | null
-
-  // Legacy fields for backward compatibility
-  name?: string
-  length?: number | null
-  category: GameCategory
-  platforms?: Platform[]
-  nowPlaying?: boolean
-
-  // Store URLs (computed from URL segments, used for display)
-  storeUrls?: {
-    nintendo: string | null
-    playstation: string | null
-  }
-
-  // Price data
-  prices?: {
-    platform: Platform
-    externalId: string
-    storeUrl: string | null
-    countryCode: string | null
-    currencyCode: string | null
-    regularPrice: number | null
-    currentPrice: number | null
-  }[]
-}
-
-interface GameFormProps {
+interface Props {
   game?: Game
   isEdit?: boolean
   isFromIGDB?: boolean
 }
 
-interface PlatformState {
-  [Platform.PLAYSTATION]: boolean
-  [Platform.NINTENDO]: boolean
-  [Platform.XBOX]: boolean
-  [Platform.PC]: boolean
-}
+type PlatformState = Record<Platform, boolean>
 
 export default function GameForm({
   game,
   isEdit = false,
   isFromIGDB = false
-}: GameFormProps) {
+}: Props) {
   const router = useRouter()
   const { activeTab } = useTabContext()
   const [isPending, startTransition] = useTransition()
   const [nintendoInfo, setNintendoInfo] = useState<NintendoGameInfo | null>(
     null
   )
-  const [playstationInfo, setPlaystationInfo] = useState<GamePrice | null>(null)
+  const [playstationInfo, setPlaystationInfo] = useState<Price | null>(null)
   const [nowPlaying, setNowPlaying] = useState(false)
   const [isDataLoaded, setIsDataLoaded] = useState(false)
 
@@ -193,7 +147,7 @@ export default function GameForm({
           const currentPrice = playstationPrice.currentPrice || 0
 
           const gameName = game.igdbName || game.name || ""
-          const playstationInfo: GamePrice = {
+          const playstationInfo: Price = {
             name: gameName,
             storeUrl: playstationPrice.storeUrl || "",
             currency: playstationPrice.currencyCode || "",
