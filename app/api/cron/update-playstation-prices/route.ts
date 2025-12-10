@@ -1,6 +1,6 @@
 import { getPlayStationGamePrice } from "@/lib/playstation-price"
 import prisma from "@/lib/prisma"
-import { Platform, GameCategory } from "@prisma/client"
+import { GameCategory, Platform } from "@/types"
 import { NextResponse } from "next/server"
 
 const BATCH_SIZE = 5

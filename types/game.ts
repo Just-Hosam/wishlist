@@ -1,22 +1,36 @@
-/**
- * Game-related enums and types
- * These mirror the Prisma schema enums
- */
+import { GameCategory, Platform } from "./enums"
 
-export const GameCategory = {
-  WISHLIST: "WISHLIST",
-  LIBRARY: "LIBRARY",
-  COMPLETED: "COMPLETED",
-  ARCHIVED: "ARCHIVED"
-} as const
-
-export type GameCategory = (typeof GameCategory)[keyof typeof GameCategory]
-
-export const Platform = {
-  NINTENDO: "NINTENDO",
-  PLAYSTATION: "PLAYSTATION",
-  XBOX: "XBOX",
-  PC: "PC"
-} as const
-
-export type Platform = (typeof Platform)[keyof typeof Platform]
+export interface GameFormData {
+  name: string
+  length?: string
+  category: GameCategory
+  platforms?: Platform[]
+  nowPlaying?: boolean
+  igdbId?: number
+  igdbName?: string
+  igdbSlug?: string
+  igdbSummary?: string
+  igdbCoverImageId?: string
+  igdbScreenshotIds?: string[]
+  igdbVideoId?: string | null
+  igdbPlatformIds?: number[]
+  igdbFirstReleaseDate?: number
+  igdbNintendoUrlSegment?: string | null
+  igdbPlaystationUrlSegment?: string | null
+  igdbSteamUrlSegment?: string | null
+  nintendo?: {
+    nsuid: string
+    storeUrl?: string
+    countryCode?: string
+    currencyCode?: string
+    regularPrice?: number
+    currentPrice?: number
+  }
+  playstation?: {
+    storeUrl?: string
+    countryCode?: string
+    currencyCode?: string
+    regularPrice?: number
+    currentPrice?: number
+  }
+}

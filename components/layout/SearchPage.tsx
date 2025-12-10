@@ -2,13 +2,13 @@
 
 import { Input } from "@/components/ui/input"
 import Spinner from "@/components/ui/spinner"
-import { IGDBGame, searchIGDBGamesDirect } from "@/server/actions/igdb"
-import { Platform } from "@prisma/client"
+import { searchIGDBGamesDirect } from "@/server/actions/igdb"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { PageHeader } from "./PageHeader"
+import { IGDBGame } from "@/types"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")

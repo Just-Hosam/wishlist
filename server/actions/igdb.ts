@@ -1,34 +1,6 @@
 "use server"
 
-import { Platform } from "@prisma/client"
-
-/**
- * IGDB game data structure
- */
-export interface IGDBGame {
-  id: string
-  igdbId: number
-  name: string
-  slug: string
-  summary: string
-  coverImageId: string
-  screenshotImageIds: string[]
-  videoId: string | null
-  platforms: Platform[]
-  firstReleaseDate: number
-
-  // Ranking metadata (optional, only used during search)
-  rating?: number | null
-  ratingCount?: number | null
-  aggregatedRating?: number | null
-  aggregatedRatingCount?: number | null
-  hypes?: number | null
-
-  // Store URL segments (for building full URLs)
-  nintendoUrlSegment?: string | null
-  playstationUrlSegment?: string | null
-  steamUrlSegment?: string | null
-}
+import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
 
 /**
  * Calculate recency weight based on release date
@@ -194,27 +166,6 @@ function rankGamesByQuality(games: IGDBGame[]): IGDBGame[] {
       qualityScore: calculateQualityScore(game)
     }))
     .sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0))
-}
-
-/**
- * Raw IGDB API response type
- */
-interface RawIGDBAPIGame {
-  id: number
-  name: string
-  slug: string
-  summary?: string
-  cover?: { image_id: string }
-  screenshots?: { image_id: string }[]
-  videos?: { video_id: string; name: string }[]
-  platforms?: { id: number }[]
-  first_release_date?: number
-  rating?: number
-  rating_count?: number
-  aggregated_rating?: number
-  aggregated_rating_count?: number
-  hypes?: number
-  websites?: { type: number; url: string }[]
 }
 
 /**

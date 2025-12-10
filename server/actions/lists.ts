@@ -2,8 +2,8 @@
 
 import prisma from "@/lib/prisma"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
-import { GameCategory } from "@prisma/client"
 import { unstable_cache } from "next/cache"
+import { GameCategory } from "@/types"
 
 export const getCachedWishlistGames = async (userId: string) => {
   return unstable_cache(

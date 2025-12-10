@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
-import { GameCategory, Platform } from "@prisma/client"
+import { GameCategory, Platform } from "@/types"
 import { getServerSession } from "next-auth"
 import { revalidateTag } from "next/cache"
 

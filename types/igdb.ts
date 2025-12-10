@@ -1,26 +1,74 @@
-import { Prisma } from "@prisma/client"
+import { Platform } from "./enums"
 
-export interface RawIGDBGame {
+export const IGDB_PLATFORM_MAP: Record<number, Platform> = {
+  6: Platform.PC,
+  48: Platform.PLAYSTATION,
+  167: Platform.PLAYSTATION,
+  130: Platform.NINTENDO,
+  508: Platform.NINTENDO,
+  169: Platform.XBOX
+}
+
+export enum IGDBWebsiteType {
+  OFFICIAL = 1,
+  WIKIA = 2,
+  WIKIPEDIA = 3,
+  FACEBOOK = 4,
+  TWITTER = 5,
+  TWITCH = 6,
+  INSTAGRAM = 8,
+  YOUTUBE = 9,
+  IPHONE = 10,
+  IPAD = 11,
+  ANDROID = 12,
+  STEAM = 13,
+  REDDIT = 14,
+  ITCH = 15,
+  EPIC_GAMES = 16,
+  GOG = 17,
+  DISCORD = 18,
+  PLAYSTATION = 23,
+  NINTENDO = 24
+}
+
+export interface IGDBGame {
+  id: string
+  igdbId: number
+  name: string
+  slug: string
+  summary: string
+  coverImageId: string
+  screenshotImageIds: string[]
+  videoId: string | null
+  platforms: Platform[]
+  firstReleaseDate: number
+  rating?: number | null
+  ratingCount?: number | null
+  aggregatedRating?: number | null
+  aggregatedRatingCount?: number | null
+  hypes?: number | null
+  nintendoUrlSegment?: string | null
+  playstationUrlSegment?: string | null
+  steamUrlSegment?: string | null
+}
+
+export interface RawIGDBAPIGame {
   id: number
   name: string
   slug: string
-  alternative_names?: { id: number; name: string }[]
   summary?: string
-  cover?: { image_id: string }
-  screenshots?: { image_id: string }[]
-  videos?: { id: number; video_id: string; name: string }[]
-  websites?: { id: number; url: string; type: number }[]
+  cover?: { id: string; image_id: string }
+  screenshots?: { id: string; image_id: string }[]
+  videos?: { id: string; video_id: string; name: string }[]
   platforms?: { id: number }[]
-  genres?: { id: number }[]
   first_release_date?: number
-  hypes?: number
   rating?: number
   rating_count?: number
   aggregated_rating?: number
   aggregated_rating_count?: number
+  hypes?: number
+  websites?: { id: string; type: number; url: string }[]
 }
-
-// export type SerializedIGDBGame = Prisma.IGDBGameCreateManyInput
 
 const game_type = [
   {

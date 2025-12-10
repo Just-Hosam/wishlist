@@ -1,6 +1,6 @@
 import { getNintendoGameInfo } from "@/lib/nintendo-price"
 import prisma from "@/lib/prisma"
-import { Platform, GameCategory } from "@prisma/client"
+import { GameCategory, Platform } from "@/types"
 import { NextResponse } from "next/server"
 
 const BATCH_SIZE = 5

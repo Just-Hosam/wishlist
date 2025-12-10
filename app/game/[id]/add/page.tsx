@@ -1,7 +1,7 @@
 import GameForm from "@/components/layout/GameForm"
 import { getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
 import { getIGDBGameById } from "@/server/actions/igdb"
-import { GameCategory } from "@prisma/client"
+import { GameCategory } from "@/types"
 import { notFound } from "next/navigation"
 
 interface Props {
