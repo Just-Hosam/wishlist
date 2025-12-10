@@ -103,7 +103,7 @@ model Game {
   // Relationships
   userId                    String
   user                      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  prices                    GamePrice[]
+  trackedPrices             Price[]       @relation("TrackedPrices")
   
   // bookkeeping
   createdAt                 DateTime      @default(now())
@@ -115,25 +115,38 @@ model Game {
   @@index([igdbId])
 }
 
-model GamePrice {
+enum PriceDescription {
+  STANDARD
+  FREE_TO_PLAY
+  PS_PLUS
+  PS_PLUS_EXTRA
+  PS_PLUS_PREMIUM
+}
+
+model Price {
   id            String   @id @default(cuid())
-  gameId        String
-  game          Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
+  // Fetching Data
+  storeUrl      String   @unique 
+  externalId    String?
   platform      Platform
-  externalId    String   // NSUID, etc.
-  storeUrl      String?  // Store URL for re-fetching prices
 
+  // Metadata
+  description   PriceDescription?
   countryCode   String?  @db.Char(2)
   currencyCode  String?  @db.Char(3)
 
+  // Prices
   regularPrice  Decimal? @db.Decimal(10, 2)
   currentPrice  Decimal? @db.Decimal(10, 2)
 
-  lastFetchedAt DateTime?
-  createdAt     DateTime @default(now())
+  // Bookkeeping
+  fetchedAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
 
-  @@unique([gameId, platform])
-  @@index([gameId])
+  // Relationships
+  trackedBy     Game[]   @relation("TrackedPrices")
+
+  @@index([platform, externalId])
 }
