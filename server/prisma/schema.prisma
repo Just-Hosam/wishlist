@@ -134,11 +134,10 @@ model Price {
   // Metadata
   description   PriceDescription?
   countryCode   String?  @db.Char(2)
-  currencyCode  String?  @db.Char(3)
 
   // Prices
-  regularPrice  Decimal? @db.Decimal(10, 2)
-  currentPrice  Decimal? @db.Decimal(10, 2)
+  regularPrice  Float?
+  currentPrice  Float?
 
   // Bookkeeping
   fetchedAt     DateTime @default(now())
