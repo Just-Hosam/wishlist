@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { moveGame } from "@/server/actions/game"
-import { GameCategory } from "@/types/game"
+import { GameCategory } from "@/types"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { toast } from "sonner"

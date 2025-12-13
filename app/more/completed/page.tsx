@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover"
 import { authOptions } from "@/lib/auth-options"
 import { getCachedCompletedGames } from "@/server/actions/lists"
-import { GameCategory, Platform } from "@/types/game"
+import { GameCategory, Platform } from "@/types"
 import { ArrowRight, Clock, EllipsisVertical, Pencil } from "lucide-react"
 import { getServerSession } from "next-auth"
 import Image from "next/image"

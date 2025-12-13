@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
-import { GameCategory } from "@/types/game"
+import { GameCategory } from "@/types"
 import { FolderCheck, Heart } from "lucide-react"
 
 export default function NavigationTabs() {

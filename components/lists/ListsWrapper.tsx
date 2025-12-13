@@ -2,7 +2,7 @@
 
 import WishlistList from "@/components/lists/WishlistList"
 import { useTabContext } from "@/contexts/TabContext"
-import { GameCategory } from "@/types/game"
+import { GameCategory } from "@/types"
 import LibraryList from "./LibraryList"
 
 interface ListsWrapperProps {

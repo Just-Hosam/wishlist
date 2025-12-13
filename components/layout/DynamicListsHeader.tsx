@@ -1,7 +1,7 @@
 "use client"
 
 import { useTabContext } from "@/contexts/TabContext"
-import { GameCategory } from "@/types/game"
+import { GameCategory } from "@/types"
 import { PageHeader } from "./PageHeader"
 
 export function DynamicListsHeader() {

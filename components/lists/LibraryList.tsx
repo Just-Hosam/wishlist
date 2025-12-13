@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { GameCategory, Platform } from "@/types/game"
+import { GameCategory, Platform } from "@/types"
 import {
   ArrowRight,
   Clock,

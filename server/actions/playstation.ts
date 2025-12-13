@@ -1,6 +1,6 @@
 "use server"
 
-import { getPlayStationGamePrice } from "@/lib/playstation-price"
+import { getPlayStationGamePrice } from "@/lib/playstation/playstation-price"
 
 export async function fetchPlayStationGameInfo(url: string) {
   try {
