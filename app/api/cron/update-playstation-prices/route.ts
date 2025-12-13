@@ -1,4 +1,4 @@
-import { getPlayStationGamePrice } from "@/lib/playstation-price"
+import { getPlayStationGamePrice } from "@/lib/playstation/playstation-price"
 import prisma from "@/lib/prisma"
 import { GameCategory, Platform } from "@/types"
 import { NextResponse } from "next/server"
@@ -20,15 +20,17 @@ export async function GET() {
   console.log("[CRON] Starting PlayStation price update job...")
 
   try {
-    const playstationPrices = await prisma.gamePrice.findMany({
+    const playstationPrices = await prisma.price.findMany({
       where: {
         platform: Platform.PLAYSTATION,
-        game: {
-          category: GameCategory.WISHLIST
+        trackedBy: {
+          some: {
+            category: GameCategory.WISHLIST
+          }
         }
       },
       include: {
-        game: true
+        trackedBy: true
       }
     })
 
@@ -61,21 +63,23 @@ export async function GET() {
             userAgents[Math.floor(Math.random() * userAgents.length)]
 
           const playstationData = await getPlayStationGamePrice(
-            gamePrice.storeUrl!,
+            gamePrice.storeUrl,
             { "User-Agent": randomUserAgent }
           )
 
           if (playstationData) {
-            // Convert prices to Decimal (remove currency symbols and parse)
-            const currentPrice = parseFloat(
-              playstationData.currentPrice.replace(/[^0-9.-]/g, "")
-            )
-            const regularPrice = parseFloat(
-              playstationData.basePrice.replace(/[^0-9.-]/g, "")
-            )
+            const currentPrice = playstationData.currentPrice
+            const regularPrice = playstationData.regularPrice
 
             // Validate that prices are valid numbers
-            if (isNaN(currentPrice) || isNaN(regularPrice)) {
+            if (
+              currentPrice === null ||
+              currentPrice === undefined ||
+              regularPrice === null ||
+              regularPrice === undefined ||
+              isNaN(currentPrice) ||
+              isNaN(regularPrice)
+            ) {
               console.error(
                 `[CRON] Invalid price data for game ID ${gamePrice.id}: currentPrice=${currentPrice}, regularPrice=${regularPrice}`
               )
@@ -83,13 +87,12 @@ export async function GET() {
               continue
             }
 
-            await prisma.gamePrice.update({
+            await prisma.price.update({
               where: { id: gamePrice.id },
               data: {
                 regularPrice,
                 currentPrice,
-                currencyCode: playstationData.currency,
-                lastFetchedAt: new Date(),
+                fetchedAt: new Date(),
                 updatedAt: new Date()
               }
             })

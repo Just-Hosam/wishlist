@@ -1,9 +1,8 @@
-export interface Price {
-  name: string
-  basePrice: string
-  currentPrice: string
-  savings: number
-  discount?: string
-  currency: string
-  storeUrl: string
-}
+import { Price } from "@prisma/client"
+
+export type PriceInput = Omit<
+  Price,
+  "id" | "createdAt" | "updatedAt" | "fetchedAt" | "trackedBy"
+>
+
+export type PriceOutput = Price

@@ -20,15 +20,17 @@ export async function GET() {
   console.log("[CRON] Starting Nintendo price update job...")
 
   try {
-    const nintendoPrices = await prisma.gamePrice.findMany({
+    const nintendoPrices = await prisma.price.findMany({
       where: {
         platform: Platform.NINTENDO,
-        game: {
-          category: GameCategory.WISHLIST
+        trackedBy: {
+          some: {
+            category: GameCategory.WISHLIST
+          }
         }
       },
       include: {
-        game: true
+        trackedBy: true
       }
     })
 
@@ -60,7 +62,7 @@ export async function GET() {
           const randomUserAgent =
             userAgents[Math.floor(Math.random() * userAgents.length)]
 
-          const nintendoData = await getNintendoGameInfo(gamePrice.storeUrl!)
+          const nintendoData = await getNintendoGameInfo(gamePrice.storeUrl)
 
           if (nintendoData) {
             // Use discounted price if on sale, otherwise use regular price
@@ -69,13 +71,12 @@ export async function GET() {
               : parseFloat(nintendoData.raw_price_value)
             const regularPrice = parseFloat(nintendoData.raw_price_value)
 
-            await prisma.gamePrice.update({
+            await prisma.price.update({
               where: { id: gamePrice.id },
               data: {
                 regularPrice,
                 currentPrice,
-                currencyCode: nintendoData.currency,
-                lastFetchedAt: new Date(),
+                fetchedAt: new Date(),
                 updatedAt: new Date()
               }
             })

@@ -8,7 +8,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { PageHeader } from "./PageHeader"
-import { IGDBGame } from "@/types"
+import { IGDBGame, Platform } from "@/types"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")

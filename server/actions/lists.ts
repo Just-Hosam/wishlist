@@ -14,7 +14,7 @@ export const getCachedWishlistGames = async (userId: string) => {
           category: GameCategory.WISHLIST
         },
         orderBy: { updatedAt: "desc" },
-        include: { prices: { orderBy: { lastFetchedAt: "desc" } } }
+        include: { trackedPrices: { orderBy: { fetchedAt: "desc" } } }
       })
 
       return games.map((game) => ({
@@ -27,16 +27,14 @@ export const getCachedWishlistGames = async (userId: string) => {
           : null,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString(),
-        prices: game.prices.map((price) => ({
+        prices: game.trackedPrices.map((price) => ({
           id: price.id,
-          gameId: price.gameId,
           platform: price.platform,
           externalId: price.externalId,
           countryCode: price.countryCode,
-          currencyCode: price.currencyCode,
           regularPrice: price.regularPrice?.toString() || null,
           currentPrice: price.currentPrice?.toString() || null,
-          lastFetchedAt: price.lastFetchedAt?.toISOString() || null,
+          fetchedAt: price.fetchedAt?.toISOString() || null,
           createdAt: price.createdAt.toISOString(),
           updatedAt: price.updatedAt.toISOString()
         }))
