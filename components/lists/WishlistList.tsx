@@ -25,14 +25,12 @@ type WishlistGame = {
   updatedAt: string
   prices: {
     id: string
-    gameId: string
     platform: Platform
     externalId: string | null
     countryCode: string | null
-    currencyCode: string | null
     regularPrice: string | null
     currentPrice: string | null
-    lastFetchedAt: string | null
+    fetchedAt: string | null
     createdAt: string
     updatedAt: string
   }[]
@@ -164,7 +162,7 @@ export default function WishlistList({ games }: WishlistListProps) {
                         regularPrice={Number(
                           playstationPrice.regularPrice || 0
                         )}
-                        currency={playstationPrice.currencyCode || "USD"}
+                        currency="USD"
                       />
                     </div>
                   )}
@@ -185,7 +183,7 @@ export default function WishlistList({ games }: WishlistListProps) {
                         }
                         currentPrice={Number(nintendoPrice.currentPrice || 0)}
                         regularPrice={Number(nintendoPrice.regularPrice || 0)}
-                        currency={nintendoPrice.currencyCode || "USD"}
+                        currency="USD"
                       />
                     </div>
                   )}

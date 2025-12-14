@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
-import { GameCategory, Platform } from "@/types"
+import { GameCategory, GameInput, GameOutput, Platform } from "@/types"
 import { getServerSession } from "next-auth"
 import { revalidateTag } from "next/cache"
 
@@ -31,14 +31,12 @@ interface GameData {
     nsuid: string
     storeUrl?: string
     countryCode?: string
-    currencyCode?: string
     regularPrice?: number
     currentPrice?: number
   }
   playstation?: {
     storeUrl?: string
     countryCode?: string
-    currencyCode?: string
     regularPrice?: number
     currentPrice?: number
   }
@@ -76,6 +74,99 @@ export async function deleteGame(id: string) {
   await prisma.game.delete({ where: { id: game.id } })
 
   revalidateGameCategory(game.category, userId)
+}
+
+export async function saveGame(
+  data: GameInput,
+  id?: string
+): Promise<GameOutput> {
+  const session = await getServerSession(authOptions)
+  const userId = session?.user?.id
+  if (!userId) throw new Error("Unauthorized.")
+
+  const {
+    length,
+    category,
+    platforms,
+    nowPlaying,
+    igdbId,
+    igdbName,
+    igdbSlug,
+    igdbSummary,
+    igdbCoverImageId,
+    igdbScreenshotIds,
+    igdbVideoId,
+    igdbPlatformIds,
+    igdbFirstReleaseDate,
+    igdbNintendoUrlSegment,
+    igdbPlaystationUrlSegment,
+    igdbSteamUrlSegment
+  } = data
+
+  // Validate required fields
+  if (!category) {
+    throw new Error("Missing category")
+  }
+
+  // Validate category
+  if (!Object.values(GameCategory).includes(category)) {
+    throw new Error("Invalid game category.")
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } })
+
+  if (!user) {
+    throw new Error("User not found.")
+  }
+
+  const gameCategory = category || GameCategory.WISHLIST
+
+  const game = await prisma.game.upsert({
+    where: { id: id || "" },
+    update: {
+      length: length || null,
+      category: gameCategory,
+      platforms: platforms ?? [],
+      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false,
+      igdbId: igdbId || null,
+      igdbName: igdbName || null,
+      igdbSlug: igdbSlug || null,
+      igdbSummary: igdbSummary || null,
+      igdbCoverImageId: igdbCoverImageId || null,
+      igdbScreenshotIds: igdbScreenshotIds || [],
+      igdbVideoId: igdbVideoId || null,
+      igdbPlatformIds: igdbPlatformIds || [],
+      igdbFirstReleaseDate: igdbFirstReleaseDate || null,
+      igdbNintendoUrlSegment: igdbNintendoUrlSegment || null,
+      igdbPlaystationUrlSegment: igdbPlaystationUrlSegment || null,
+      igdbSteamUrlSegment: igdbSteamUrlSegment || null
+    },
+    create: {
+      length: length || null,
+      category: gameCategory,
+      userId: user.id,
+      platforms: platforms ?? [],
+      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false,
+      igdbId: igdbId || null,
+      igdbName: igdbName || null,
+      igdbSlug: igdbSlug || null,
+      igdbSummary: igdbSummary || null,
+      igdbCoverImageId: igdbCoverImageId || null,
+      igdbScreenshotIds: igdbScreenshotIds || [],
+      igdbVideoId: igdbVideoId || null,
+      igdbPlatformIds: igdbPlatformIds || [],
+      igdbFirstReleaseDate: igdbFirstReleaseDate || null,
+      igdbNintendoUrlSegment: igdbNintendoUrlSegment || null,
+      igdbPlaystationUrlSegment: igdbPlaystationUrlSegment || null,
+      igdbSteamUrlSegment: igdbSteamUrlSegment || null
+    }
+  })
+
+  // TODO: Handle revalidation for both old and new categories if updating
+  // Revalidate the appropriate list page
+  revalidateGameCategory(game.category, userId)
+
+  return game
 }
 
 export async function createGame(data: GameData) {
@@ -151,36 +242,38 @@ export async function createGame(data: GameData) {
     }
   })
 
-  // If Nintendo data is provided, create a GamePrice record
-  if (nintendo && nintendo.nsuid) {
-    await prisma.gamePrice.create({
+  // If Nintendo data is provided, create a Price record
+  if (nintendo && nintendo.storeUrl && nintendo.nsuid) {
+    await prisma.price.create({
       data: {
-        gameId: game.id,
         platform: Platform.NINTENDO,
         externalId: nintendo.nsuid,
-        storeUrl: nintendo.storeUrl || null,
+        storeUrl: nintendo.storeUrl,
         countryCode: nintendo.countryCode || null,
-        currencyCode: nintendo.currencyCode || null,
         regularPrice: nintendo.regularPrice || null,
         currentPrice: nintendo.currentPrice || nintendo.regularPrice || null,
-        lastFetchedAt: new Date()
+        fetchedAt: new Date(),
+        trackedBy: {
+          connect: { id: game.id }
+        }
       }
     })
   }
 
-  if (playstation) {
-    await prisma.gamePrice.create({
+  if (playstation && playstation.storeUrl) {
+    await prisma.price.create({
       data: {
-        gameId: game.id,
         platform: Platform.PLAYSTATION,
         externalId: game.id, // Use game ID as external ID for PlayStation for now
-        storeUrl: playstation.storeUrl || null,
+        storeUrl: playstation.storeUrl,
         countryCode: playstation.countryCode || null,
-        currencyCode: playstation.currencyCode || null,
         regularPrice: playstation.regularPrice || null,
         currentPrice:
           playstation.currentPrice || playstation.regularPrice || null,
-        lastFetchedAt: new Date()
+        fetchedAt: new Date(),
+        trackedBy: {
+          connect: { id: game.id }
+        }
       }
     })
   }
@@ -313,113 +406,127 @@ export async function updateGame(id: string, data: GameData) {
   // Handle Nintendo price data
   if (nintendo && nintendo.nsuid) {
     // Check if a Nintendo price record already exists for this game
-    const existingPrice = await prisma.gamePrice.findFirst({
+    const existingPrice = await prisma.price.findFirst({
       where: {
-        gameId: id,
+        storeUrl: nintendo.storeUrl,
         platform: Platform.NINTENDO
       }
     })
 
     if (existingPrice) {
       // Update existing price record
-      await prisma.gamePrice.update({
+      await prisma.price.update({
         where: { id: existingPrice.id },
         data: {
           externalId: nintendo.nsuid,
-          storeUrl: nintendo.storeUrl || null,
+          storeUrl: nintendo.storeUrl!,
           countryCode: nintendo.countryCode || null,
-          currencyCode: nintendo.currencyCode || null,
           regularPrice: nintendo.regularPrice || null,
           currentPrice: nintendo.currentPrice || nintendo.regularPrice || null,
-          lastFetchedAt: new Date()
+          fetchedAt: new Date()
         }
       })
-    } else {
+    } else if (nintendo.storeUrl) {
       // Create new price record
-      await prisma.gamePrice.create({
+      await prisma.price.create({
         data: {
-          gameId: id,
           platform: Platform.NINTENDO,
           externalId: nintendo.nsuid,
-          storeUrl: nintendo.storeUrl || null,
+          storeUrl: nintendo.storeUrl,
           countryCode: nintendo.countryCode || null,
-          currencyCode: nintendo.currencyCode || null,
           regularPrice: nintendo.regularPrice || null,
           currentPrice: nintendo.currentPrice || nintendo.regularPrice || null,
-          lastFetchedAt: new Date()
+          fetchedAt: new Date(),
+          trackedBy: {
+            connect: { id }
+          }
         }
       })
     }
   } else {
-    // If Nintendo data is not provided, check if a price record exists and delete it
-    const existingPrice = await prisma.gamePrice.findFirst({
+    // If Nintendo data is not provided, check if a price record exists and disconnect it
+    const existingPrices = await prisma.price.findMany({
       where: {
-        gameId: id,
-        platform: Platform.NINTENDO
+        platform: Platform.NINTENDO,
+        trackedBy: {
+          some: { id }
+        }
       }
     })
 
-    if (existingPrice) {
-      await prisma.gamePrice.delete({
-        where: { id: existingPrice.id }
+    if (existingPrices.length > 0) {
+      await prisma.game.update({
+        where: { id },
+        data: {
+          trackedPrices: {
+            disconnect: existingPrices.map((p) => ({ id: p.id }))
+          }
+        }
       })
     }
   }
 
   // Handle PlayStation price data
-  if (playstation) {
+  if (playstation && playstation.storeUrl) {
     // Check if a PlayStation price record already exists for this game
-    const existingPrice = await prisma.gamePrice.findFirst({
+    const existingPrice = await prisma.price.findFirst({
       where: {
-        gameId: id,
+        storeUrl: playstation.storeUrl,
         platform: Platform.PLAYSTATION
       }
     })
 
     if (existingPrice) {
       // Update existing price record
-      await prisma.gamePrice.update({
+      await prisma.price.update({
         where: { id: existingPrice.id },
         data: {
           externalId: id, // Use game ID as external ID for PlayStation for now
-          storeUrl: playstation.storeUrl || null,
+          storeUrl: playstation.storeUrl,
           countryCode: playstation.countryCode || null,
-          currencyCode: playstation.currencyCode || null,
           regularPrice: playstation.regularPrice || null,
           currentPrice:
             playstation.currentPrice || playstation.regularPrice || null,
-          lastFetchedAt: new Date()
+          fetchedAt: new Date()
         }
       })
     } else {
       // Create new price record
-      await prisma.gamePrice.create({
+      await prisma.price.create({
         data: {
-          gameId: id,
           platform: Platform.PLAYSTATION,
           externalId: id, // Use game ID as external ID for PlayStation for now
-          storeUrl: playstation.storeUrl || null,
+          storeUrl: playstation.storeUrl,
           countryCode: playstation.countryCode || null,
-          currencyCode: playstation.currencyCode || null,
           regularPrice: playstation.regularPrice || null,
           currentPrice:
             playstation.currentPrice || playstation.regularPrice || null,
-          lastFetchedAt: new Date()
+          fetchedAt: new Date(),
+          trackedBy: {
+            connect: { id }
+          }
         }
       })
     }
   } else {
-    // If PlayStation data is not provided, check if a price record exists and delete it
-    const existingPrice = await prisma.gamePrice.findFirst({
+    // If PlayStation data is not provided, check if a price record exists and disconnect it
+    const existingPrices = await prisma.price.findMany({
       where: {
-        gameId: id,
-        platform: Platform.PLAYSTATION
+        platform: Platform.PLAYSTATION,
+        trackedBy: {
+          some: { id }
+        }
       }
     })
 
-    if (existingPrice) {
-      await prisma.gamePrice.delete({
-        where: { id: existingPrice.id }
+    if (existingPrices.length > 0) {
+      await prisma.game.update({
+        where: { id },
+        data: {
+          trackedPrices: {
+            disconnect: existingPrices.map((p) => ({ id: p.id }))
+          }
+        }
       })
     }
   }

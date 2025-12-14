@@ -150,3 +150,16 @@ export function extractPrice(html: string): ExtractedPrice | null {
 
   return null
 }
+
+export function buildPlayStationStoreUrl(
+  urlSegment: string,
+  country: "CA" | "US" = "CA"
+): string {
+  if (!urlSegment) return ""
+
+  const countryMap: Record<"CA" | "US", string> = {
+    CA: "en-ca",
+    US: "en-us"
+  }
+  return `https://store.playstation.com/${countryMap[country]}/${urlSegment}`
+}

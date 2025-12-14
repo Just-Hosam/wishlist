@@ -2,6 +2,7 @@ import GameForm from "@/components/layout/GameForm"
 import prisma from "@/lib/prisma"
 import { getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
 import { notFound } from "next/navigation"
+import { GameInput, GameOutput } from "@/types"
 
 interface Props {
   params: Promise<{ id: string }>
@@ -9,6 +10,7 @@ interface Props {
 
 export default async function EditGame({ params }: Props) {
   const { id } = await params
+  if (!id) notFound()
 
   // Fetch the game data with platform prices
   const gameData = await prisma.game.findUnique({
@@ -19,7 +21,6 @@ export default async function EditGame({ params }: Props) {
       category: true,
       platforms: true,
       nowPlaying: true,
-      // IGDB metadata
       igdbId: true,
       igdbName: true,
       igdbSlug: true,
@@ -32,60 +33,50 @@ export default async function EditGame({ params }: Props) {
       igdbNintendoUrlSegment: true,
       igdbPlaystationUrlSegment: true,
       igdbSteamUrlSegment: true,
-      prices: {
+      trackedPrices: {
         select: {
-          platform: true,
-          externalId: true,
-          storeUrl: true,
-          countryCode: true,
-          currencyCode: true,
-          regularPrice: true,
-          currentPrice: true
+          platform: true
         }
       }
     }
   })
 
-  if (!gameData) {
-    notFound()
+  if (!gameData) notFound()
+
+  const game: GameInput & { id: string } = {
+    id: gameData.id,
+    length: gameData.length,
+    category: gameData.category,
+    platforms: gameData.platforms,
+    nowPlaying: gameData.nowPlaying,
+    igdbId: gameData.igdbId || null,
+    igdbName: gameData.igdbName || null,
+    igdbSlug: gameData.igdbSlug || null,
+    igdbSummary: gameData.igdbSummary || null,
+    igdbCoverImageId: gameData.igdbCoverImageId || null,
+    igdbScreenshotIds: gameData.igdbScreenshotIds || null,
+    igdbVideoId: gameData.igdbVideoId || null,
+    igdbPlatformIds: gameData.igdbPlatformIds || null,
+    igdbFirstReleaseDate: gameData.igdbFirstReleaseDate || null,
+    igdbNintendoUrlSegment: gameData.igdbNintendoUrlSegment || null,
+    igdbPlaystationUrlSegment: gameData.igdbPlaystationUrlSegment || null,
+    igdbSteamUrlSegment: gameData.igdbSteamUrlSegment || null
   }
 
-  // Build store URLs from segments if available
-  const storeUrls = getStoreUrlsFromIGDB(
-    {
-      nintendoUrlSegment: gameData.igdbNintendoUrlSegment,
-      playstationUrlSegment: gameData.igdbPlaystationUrlSegment,
-      steamUrlSegment: gameData.igdbSteamUrlSegment
-    },
-    "CA"
+  const isPlayStationLinked = gameData.trackedPrices.some(
+    (price) => price.platform === "PLAYSTATION"
   )
 
-  // Convert Decimal values to numbers for serialization
-  const game = {
-    ...gameData,
-    igdbId: gameData.igdbId || undefined,
-    igdbName: gameData.igdbName || undefined,
-    igdbSlug: gameData.igdbSlug || undefined,
-    igdbSummary: gameData.igdbSummary || undefined,
-    igdbCoverImageId: gameData.igdbCoverImageId || undefined,
-    igdbScreenshotIds: gameData.igdbScreenshotIds || undefined,
-    igdbVideoId: gameData.igdbVideoId || undefined,
-    igdbPlatformIds: gameData.igdbPlatformIds || undefined,
-    igdbFirstReleaseDate: gameData.igdbFirstReleaseDate || undefined,
-    igdbNintendoUrlSegment: gameData.igdbNintendoUrlSegment || undefined,
-    igdbPlaystationUrlSegment: gameData.igdbPlaystationUrlSegment || undefined,
-    igdbSteamUrlSegment: gameData.igdbSteamUrlSegment || undefined,
-    storeUrls: {
-      nintendo: storeUrls.nintendo,
-      playstation: storeUrls.playstation
-    },
-    prices: gameData.prices.map((price) => ({
-      ...price,
-      storeUrl: price.storeUrl,
-      regularPrice: price.regularPrice ? Number(price.regularPrice) : null,
-      currentPrice: price.currentPrice ? Number(price.currentPrice) : null
-    }))
-  }
+  const isNintendoLinked = gameData.trackedPrices.some(
+    (price) => price.platform === "NINTENDO"
+  )
 
-  return <GameForm game={game} isEdit={true} isFromIGDB={!!gameData.igdbId} />
+  return (
+    <GameForm
+      game={game}
+      isEdit={true}
+      isPlayStationLinked={isPlayStationLinked}
+      isNintendoLinked={isNintendoLinked}
+    />
+  )
 }

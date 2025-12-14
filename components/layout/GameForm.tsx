@@ -9,9 +9,18 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { type NintendoGameInfo } from "@/lib/nintendo-price"
+import { buildPlayStationStoreUrl } from "@/lib/playstation/playstation-price"
 
-import { createGame, updateGame } from "@/server/actions/game"
-import { Game, GameCategory, Platform, Price } from "@/types"
+import { createGame, saveGame, updateGame } from "@/server/actions/game"
+import { linkPriceToGame, unlinkPriceFromGame } from "@/server/actions/price"
+import {
+  GameInput,
+  GameCategory,
+  Platform,
+  PriceInput,
+  PriceOutput,
+  GameOutput
+} from "@/types"
 
 import clsx from "clsx"
 import { CheckCircle2, FolderCheck, Heart } from "lucide-react"
@@ -21,9 +30,10 @@ import { useEffect, useReducer, useState, useTransition } from "react"
 import { toast } from "sonner"
 
 interface Props {
-  game?: Game
+  game?: GameInput & { id?: string }
   isEdit?: boolean
-  isFromIGDB?: boolean
+  isPlayStationLinked?: boolean | null
+  isNintendoLinked?: boolean | null
 }
 
 type PlatformState = Record<Platform, boolean>
@@ -31,7 +41,8 @@ type PlatformState = Record<Platform, boolean>
 export default function GameForm({
   game,
   isEdit = false,
-  isFromIGDB = false
+  isPlayStationLinked = false,
+  isNintendoLinked = false
 }: Props) {
   const router = useRouter()
   const { activeTab } = useTabContext()
@@ -39,7 +50,9 @@ export default function GameForm({
   const [nintendoInfo, setNintendoInfo] = useState<NintendoGameInfo | null>(
     null
   )
-  const [playstationInfo, setPlaystationInfo] = useState<Price | null>(null)
+  const [isPsLinked, setIsPsLinked] = useState<boolean | null>(
+    isPlayStationLinked
+  )
   const [nowPlaying, setNowPlaying] = useState(false)
   const [isDataLoaded, setIsDataLoaded] = useState(false)
 
@@ -92,8 +105,7 @@ export default function GameForm({
 
   useEffect(() => {
     if (game) {
-      // Use igdbName if available (from IGDB), otherwise use legacy name field
-      const gameName = game.igdbName || game.name || ""
+      const gameName = game.igdbName || ""
       dispatch({ field: "name", value: gameName })
       dispatch({ field: "length", value: game.length?.toString() || "" })
       // Only use game.category when editing an existing game
@@ -108,71 +120,13 @@ export default function GameForm({
         )
       }
 
-      // Set existing platform data if available
-      // Set existing platform data if available
-      if (game.prices) {
-        const nintendoPrice = game.prices.find(
-          (p) => p.platform === Platform.NINTENDO
-        )
-        const playstationPrice = game.prices.find(
-          (p) => p.platform === Platform.PLAYSTATION
-        )
-
-        if (nintendoPrice) {
-          // Create Nintendo game info from existing price data
-          const regularPrice = nintendoPrice.regularPrice || 0
-          const currentPrice = nintendoPrice.currentPrice || 0
-
-          const nintendoInfo: NintendoGameInfo = {
-            nsuid: nintendoPrice.externalId,
-            storeUrl: nintendoPrice.storeUrl || "",
-            country: nintendoPrice.countryCode || "",
-            currency: nintendoPrice.currencyCode || "",
-            raw_price_value: regularPrice.toString(),
-            discounted_price_value:
-              currentPrice !== regularPrice
-                ? currentPrice.toString()
-                : undefined,
-            raw_price: `$${regularPrice}`,
-            discounted_price:
-              currentPrice !== regularPrice ? `$${currentPrice}` : undefined,
-            onSale: currentPrice !== regularPrice
-          }
-          setNintendoInfo(nintendoInfo)
-        }
-
-        if (playstationPrice) {
-          // Create PlayStation game info from existing price data
-          const regularPrice = playstationPrice.regularPrice || 0
-          const currentPrice = playstationPrice.currentPrice || 0
-
-          const gameName = game.igdbName || game.name || ""
-          const playstationInfo: Price = {
-            name: gameName,
-            storeUrl: playstationPrice.storeUrl || "",
-            currency: playstationPrice.currencyCode || "",
-            basePrice: `$${regularPrice}`,
-            currentPrice: `$${currentPrice}`,
-            savings: regularPrice - currentPrice
-          }
-          setPlaystationInfo(playstationInfo)
-        }
-      }
-
-      // Handle IGDB store URLs (pre-populated from IGDB data)
-      if (game.storeUrls && isFromIGDB) {
-        // Note: We don't set price info for IGDB games initially
-        // The user can fetch prices later if they want
-        // Store URLs are just for display/reference
-      }
-
       // Mark data as loaded after all setup is complete
       setIsDataLoaded(true)
     } else {
       // For new games (not editing), mark as loaded immediately
       setIsDataLoaded(true)
     }
-  }, [game, isFromIGDB])
+  }, [game])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -194,9 +148,8 @@ export default function GameForm({
 
     startTransition(async () => {
       try {
-        const gameData = {
-          name: formData.name.trim(),
-          length: formData.length,
+        const gameData: GameInput = {
+          length: formData.length ? Number(formData.length) : null,
           category: formData.category,
           platforms: Object.entries(platforms)
             .filter(([, v]) => v)
@@ -204,61 +157,41 @@ export default function GameForm({
           nowPlaying:
             formData.category === GameCategory.LIBRARY ? nowPlaying : false,
           // IGDB metadata
-          igdbId: game?.igdbId,
-          igdbName: game?.igdbName,
-          igdbSlug: game?.igdbSlug,
-          igdbSummary: game?.igdbSummary,
-          igdbCoverImageId: game?.igdbCoverImageId,
-          igdbScreenshotIds: game?.igdbScreenshotIds,
-          igdbVideoId: game?.igdbVideoId,
-          igdbPlatformIds: game?.igdbPlatformIds,
-          igdbFirstReleaseDate: game?.igdbFirstReleaseDate,
-          igdbNintendoUrlSegment: game?.igdbNintendoUrlSegment,
-          igdbPlaystationUrlSegment: game?.igdbPlaystationUrlSegment,
-          igdbSteamUrlSegment: game?.igdbSteamUrlSegment,
-          nintendo: nintendoInfo
-            ? {
-                nsuid: nintendoInfo.nsuid,
-                storeUrl: nintendoInfo.storeUrl,
-                countryCode: nintendoInfo.country,
-                currencyCode: nintendoInfo.currency,
-                regularPrice: nintendoInfo.raw_price_value
-                  ? parseFloat(nintendoInfo.raw_price_value)
-                  : undefined,
-                currentPrice: nintendoInfo.discounted_price_value
-                  ? parseFloat(nintendoInfo.discounted_price_value)
-                  : nintendoInfo.raw_price_value
-                    ? parseFloat(nintendoInfo.raw_price_value)
-                    : undefined
-              }
-            : undefined,
-          playstation: playstationInfo
-            ? {
-                storeUrl: playstationInfo.storeUrl,
-                countryCode: undefined, // PlayStation API doesn't provide country code
-                currencyCode: playstationInfo.currency,
-                regularPrice: (() => {
-                  const cleaned = playstationInfo.basePrice.replace(
-                    /[^0-9.]/g,
-                    ""
-                  )
-                  return cleaned ? parseFloat(cleaned) : undefined
-                })(),
-                currentPrice: (() => {
-                  const cleaned = playstationInfo.currentPrice.replace(
-                    /[^0-9.]/g,
-                    ""
-                  )
-                  return cleaned ? parseFloat(cleaned) : undefined
-                })()
-              }
-            : undefined
+          igdbId: game?.igdbId || null,
+          igdbName: game?.igdbName || null,
+          igdbSlug: game?.igdbSlug || null,
+          igdbSummary: game?.igdbSummary || null,
+          igdbCoverImageId: game?.igdbCoverImageId || null,
+          igdbScreenshotIds: game?.igdbScreenshotIds || [],
+          igdbVideoId: game?.igdbVideoId || null,
+          igdbPlatformIds: game?.igdbPlatformIds || [],
+          igdbFirstReleaseDate: game?.igdbFirstReleaseDate || null,
+          igdbNintendoUrlSegment: game?.igdbNintendoUrlSegment || null,
+          igdbPlaystationUrlSegment: game?.igdbPlaystationUrlSegment || null,
+          igdbSteamUrlSegment: game?.igdbSteamUrlSegment || null
         }
 
-        if (isEdit && game?.id) {
-          await updateGame(game.id, gameData)
-        } else {
-          await createGame(gameData)
+        const savedGame = await saveGame(gameData, game?.id)
+
+        // Handle PlayStation price linking/unlinking
+        if (game?.igdbPlaystationUrlSegment) {
+          const playstationStoreUrl = buildPlayStationStoreUrl(
+            game.igdbPlaystationUrlSegment
+          )
+          console.log("isPsLinked :>>", isPsLinked)
+          if (isPsLinked) {
+            linkPriceToGame(savedGame.id, playstationStoreUrl).catch(
+              (error) => {
+                console.error("Error linking PlayStation price:", error)
+              }
+            )
+          } else {
+            unlinkPriceFromGame(savedGame.id, playstationStoreUrl).catch(
+              (error) => {
+                console.error("Error unlinking PlayStation price:", error)
+              }
+            )
+          }
         }
 
         toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
@@ -287,8 +220,8 @@ export default function GameForm({
       >
         {isPending ? "Saving..." : "Save"}
       </Button>
-      {/* Cover Image Display for IGDB Games */}
-      {isFromIGDB && game?.igdbCoverImageId && (
+
+      {game?.igdbCoverImageId && (
         <div
           className="mb-6 flex flex-col items-center text-center duration-500 animate-in fade-in slide-in-from-top-3"
           style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
@@ -296,34 +229,14 @@ export default function GameForm({
           <div className="mb-4 h-[160px] w-[120px] overflow-hidden rounded-xl bg-gray-200 shadow-lg">
             <Image
               src={buildIGDBImageUrl(game.igdbCoverImageId)}
-              alt={game.igdbName || game.name || "Game cover"}
+              alt={game.igdbName || "Game cover"}
               width={120}
               height={160}
             />
           </div>
           <h2 className="w-2/3 text-xl font-medium text-gray-900">
-            {game.igdbName || game.name}
+            {game.igdbName}
           </h2>
-        </div>
-      )}
-
-      {!isFromIGDB && (
-        <div
-          className="duration-500 animate-in fade-in slide-in-from-top-3"
-          style={{ animationDelay: "0ms", animationFillMode: "backwards" }}
-        >
-          <label className="text-sm font-semibold" htmlFor="name">
-            Game Name <span className="text-xs">*</span>
-          </label>
-          <Input
-            id="name"
-            type="text"
-            className="mt-2"
-            placeholder="e.g. The Last Faith"
-            value={formData.name}
-            onChange={(e) => dispatch({ field: "name", value: e.target.value })}
-            required
-          />
         </div>
       )}
 
@@ -389,20 +302,21 @@ export default function GameForm({
           </label>
           <div className="mt-3">
             <PlayStationLinkInput
-              onGameInfoFound={(gameInfo) => setPlaystationInfo(gameInfo)}
-              onGameInfoCleared={() => setPlaystationInfo(null)}
-              existingGameInfo={playstationInfo}
-              initialUrl={game?.storeUrls?.playstation || null}
+              onLinked={(isLinked) => setIsPsLinked(isLinked)}
+              url={buildPlayStationStoreUrl(
+                game?.igdbPlaystationUrlSegment || ""
+              )}
+              isInitiallyLinked={isPlayStationLinked || false}
             />
           </div>
-          <div className="mt-3">
+          {/* <div className="mt-3">
             <NintendoLinkInput
               onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
               onGameInfoCleared={() => setNintendoInfo(null)}
               existingGameInfo={nintendoInfo}
-              initialUrl={game?.storeUrls?.nintendo || null}
+              initialUrl={game?.igdbNintendoUrlSegment || null}
             />
-          </div>
+          </div> */}
         </div>
       )}
 

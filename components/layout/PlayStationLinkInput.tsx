@@ -1,59 +1,36 @@
 "use client"
 
 import { Switch } from "@/components/ui/switch"
-import { type GamePrice } from "@/lib/playstation-price"
 import { fetchPlayStationGameInfo } from "@/server/actions/playstation"
+import { PriceInput } from "@/types"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import PriceLayout from "./PriceLayout"
 
 interface PlayStationLinkInputProps {
-  onGameInfoFound: (gameInfo: GamePrice) => void
-  onGameInfoCleared: () => void
-  className?: string
-  existingGameInfo?: GamePrice | null
-  initialUrl?: string | null
+  url: string | null
+  onLinked: (isLinked: boolean | null) => void
+  isInitiallyLinked?: boolean | null
 }
 
 export default function PlayStationLinkInput({
-  onGameInfoFound,
-  onGameInfoCleared,
-  className,
-  existingGameInfo,
-  initialUrl
+  url,
+  onLinked,
+  isInitiallyLinked = false
 }: PlayStationLinkInputProps) {
-  const [url, setUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [priceData, setPriceData] = useState<GamePrice | null>(null)
-  const [isLinked, setIsLinked] = useState(false)
+  const [priceData, setPriceData] = useState<PriceInput | null>(null)
+  const [isLinked, setIsLinked] = useState(isInitiallyLinked)
   const [error, setError] = useState<string | null>(null)
 
-  // Initialize with existing game info if provided
   useEffect(() => {
-    if (existingGameInfo) {
-      setPriceData(existingGameInfo)
-      setIsLinked(true)
-      // Set URL from existing game info so the unlink button isn't disabled
-      if (existingGameInfo.storeUrl) {
-        setUrl(existingGameInfo.storeUrl)
-      }
-    }
-  }, [existingGameInfo])
-
-  // Initialize URL from initialUrl prop and auto-fetch
-  useEffect(() => {
-    if (initialUrl && !url) {
-      setUrl(initialUrl)
-      // Auto-fetch price data if we have an initial URL and not already linked
-      if (!existingGameInfo) {
-        fetchPriceData(initialUrl)
-      }
-    }
-  }, [initialUrl, existingGameInfo])
+    fetchPriceData(url || "")
+  }, [url])
 
   const fetchPriceData = async (urlToFetch: string) => {
     if (!urlToFetch.trim()) {
+      setError("URL is required")
       return
     }
 
@@ -62,7 +39,7 @@ export default function PlayStationLinkInput({
       !urlToFetch.includes("playstation.com") &&
       !urlToFetch.includes("store.playstation.com")
     ) {
-      setError("Please enter a valid PlayStation store URL")
+      setError("Invalid PlayStation store URL")
       return
     }
 
@@ -82,34 +59,16 @@ export default function PlayStationLinkInput({
     }
   }
 
-  const handleLink = () => {
-    if (priceData) {
-      setIsLinked(true)
-      onGameInfoFound?.(priceData)
-    }
-  }
-
-  const handleUnlink = () => {
-    setIsLinked(false)
-    onGameInfoCleared()
-  }
-
   const handleToggle = (checked: boolean) => {
-    if (checked) {
-      handleLink()
-    } else {
-      handleUnlink()
-    }
+    setIsLinked(checked)
+    onLinked(checked)
   }
 
   const Price = () => {
     if (!priceData) return null
 
-    // Extract numeric values from price strings
-    const currentPrice = parseFloat(
-      priceData.currentPrice.replace(/[^0-9.]/g, "")
-    )
-    const regularPrice = parseFloat(priceData.basePrice.replace(/[^0-9.]/g, ""))
+    const currentPrice = priceData.currentPrice || 0
+    const regularPrice = priceData.regularPrice || 0
     const isOnSale = currentPrice < regularPrice
 
     return (
@@ -117,13 +76,13 @@ export default function PlayStationLinkInput({
         onSale={isOnSale}
         currentPrice={currentPrice}
         regularPrice={regularPrice}
-        currency={priceData.currency}
+        currency="USD"
       />
     )
   }
 
   return (
-    <div className={className}>
+    <div>
       <div className="flex items-center">
         {/* Store Label */}
         <Image
@@ -148,17 +107,10 @@ export default function PlayStationLinkInput({
           {!isLoading && error && (
             <span className="text-sm text-red-600">{error}</span>
           )}
-
-          {!isLoading && !priceData && !error && !url && (
-            <span className="text-sm text-muted-foreground">
-              No store URL available
-            </span>
-          )}
         </div>
 
-        {/* Link/Unlink Switch */}
         <Switch
-          checked={isLinked}
+          checked={isLinked ?? false}
           onCheckedChange={handleToggle}
           disabled={
             !url ||

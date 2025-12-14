@@ -1,7 +1,6 @@
 import GameForm from "@/components/layout/GameForm"
-import { getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
 import { getIGDBGameById } from "@/server/actions/igdb"
-import { GameCategory } from "@/types"
+import { GameCategory, GameInput } from "@/types"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -10,30 +9,12 @@ interface Props {
 
 export default async function AddFromSearch({ params }: Props) {
   const { id } = await params
+  if (!id) notFound()
 
-  if (!id) {
-    notFound()
-  }
-
-  // Fetch IGDB game data from API
   const igdbGame = await getIGDBGameById(parseInt(id))
+  if (!igdbGame) notFound()
 
-  if (!igdbGame) {
-    notFound()
-  }
-
-  // Build store URLs for Canada
-  const storeUrls = getStoreUrlsFromIGDB(
-    {
-      nintendoUrlSegment: igdbGame.nintendoUrlSegment,
-      playstationUrlSegment: igdbGame.playstationUrlSegment,
-      steamUrlSegment: igdbGame.steamUrlSegment
-    },
-    "CA"
-  )
-
-  // Transform IGDB data to Game shape for the form
-  const gameData = {
+  const gameData: GameInput = {
     igdbId: igdbGame.igdbId,
     igdbName: igdbGame.name,
     igdbSlug: igdbGame.slug,
@@ -41,19 +22,16 @@ export default async function AddFromSearch({ params }: Props) {
     igdbCoverImageId: igdbGame.coverImageId,
     igdbScreenshotIds: igdbGame.screenshotImageIds,
     igdbVideoId: igdbGame.videoId,
-    igdbPlatformIds: [], // We don't have platform IDs in IGDBGame interface
+    igdbPlatformIds: [],
     igdbFirstReleaseDate: igdbGame.firstReleaseDate,
-    igdbNintendoUrlSegment: igdbGame.nintendoUrlSegment,
-    igdbPlaystationUrlSegment: igdbGame.playstationUrlSegment,
-    igdbSteamUrlSegment: igdbGame.steamUrlSegment,
+    igdbNintendoUrlSegment: igdbGame.nintendoUrlSegment || null,
+    igdbPlaystationUrlSegment: igdbGame.playstationUrlSegment || null,
+    igdbSteamUrlSegment: igdbGame.steamUrlSegment || null,
     category: GameCategory.WISHLIST,
-    // DON'T pre-populate user platforms - let user select what they own
-    // Pre-populate store URLs if available (for display/fetching prices)
-    storeUrls: {
-      nintendo: storeUrls.nintendo,
-      playstation: storeUrls.playstation
-    }
+    platforms: [],
+    length: null,
+    nowPlaying: false
   }
 
-  return <GameForm game={gameData} isFromIGDB={true} />
+  return <GameForm game={gameData} />
 }
