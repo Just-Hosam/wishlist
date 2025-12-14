@@ -178,19 +178,10 @@ export default function GameForm({
           const playstationStoreUrl = buildPlayStationStoreUrl(
             game.igdbPlaystationUrlSegment
           )
-          console.log("isPsLinked :>>", isPsLinked)
           if (isPsLinked) {
-            linkPriceToGame(savedGame.id, playstationStoreUrl).catch(
-              (error) => {
-                console.error("Error linking PlayStation price:", error)
-              }
-            )
+            await linkPriceToGame(savedGame.id, playstationStoreUrl)
           } else {
-            unlinkPriceFromGame(savedGame.id, playstationStoreUrl).catch(
-              (error) => {
-                console.error("Error unlinking PlayStation price:", error)
-              }
-            )
+            await unlinkPriceFromGame(savedGame.id, playstationStoreUrl)
           }
         }
 
