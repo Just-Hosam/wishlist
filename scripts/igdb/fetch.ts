@@ -1,4 +1,4 @@
-import { RawIGDBGame } from "./types"
+import { RawIGDBAPIGame } from "@/types"
 
 const IGDB_API_URL = "https://api.igdb.com/v4/games"
 const CLIENT_ID = process.env.IGDB_CLIENT_ID
@@ -7,7 +7,7 @@ const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
 export const fetchGamesBatch = async (
   limit = 500,
   offset = 0
-): Promise<RawIGDBGame[]> => {
+): Promise<RawIGDBAPIGame[]> => {
   if (!CLIENT_ID || !ACCESS_TOKEN) {
     throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
   }
@@ -57,5 +57,5 @@ export const fetchGamesBatch = async (
     throw new Error(`IGDB API error (${response.status}): ${errorText}`)
   }
 
-  return (await response.json()) as RawIGDBGame[]
+  return (await response.json()) as RawIGDBAPIGame[]
 }

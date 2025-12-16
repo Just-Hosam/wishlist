@@ -1,5 +1,5 @@
+import { RawIGDBAPIGame } from "@/types"
 import { Platform } from "@prisma/client"
-import { RawIGDBGame } from "./types"
 
 const platformMap: Record<number, Platform> = {
   6: Platform.PC,
@@ -20,7 +20,9 @@ const VIDEO_NAME_RANKING = [
   "Game Intro"
 ]
 
-const chooseVideoId = (videos: RawIGDBGame["videos"] = []): string | null => {
+const chooseVideoId = (
+  videos: RawIGDBAPIGame["videos"] = []
+): string | null => {
   if (videos.length === 0) {
     return null
   }
@@ -63,7 +65,7 @@ const segmentSteamURL = (url: string): string | null => {
   return match ? match[1] : null
 }
 
-const mapPlatforms = (platforms: RawIGDBGame["platforms"]): Platform[] => {
+const mapPlatforms = (platforms: RawIGDBAPIGame["platforms"]): Platform[] => {
   if (!platforms) {
     return []
   }
@@ -74,7 +76,7 @@ const mapPlatforms = (platforms: RawIGDBGame["platforms"]): Platform[] => {
 }
 
 const findWebsiteByType = (
-  websites: RawIGDBGame["websites"],
+  websites: RawIGDBAPIGame["websites"],
   type: number
 ): string | null => {
   if (!websites) {
@@ -84,20 +86,17 @@ const findWebsiteByType = (
   return websites.find((website) => website.type === type)?.url ?? null
 }
 
-export const serializeGame = (game: RawIGDBGame) => {
+export const serializeGame = (game: RawIGDBAPIGame) => {
   return {
     igdbId: game.id,
     name: game.name,
     slug: game.slug,
-    alternativeNames:
-      game.alternative_names?.map((alt) => alt.name).filter(Boolean) ?? [],
     summary: game.summary ?? "",
     coverImageId: game.cover?.image_id ?? "",
     screenshotImageIds:
       game.screenshots?.slice(0, 5).map((screenshot) => screenshot.image_id) ??
       [],
     videoId: chooseVideoId(game.videos),
-    genreIds: game.genres?.map((genre) => genre.id) ?? [],
     platforms: mapPlatforms(game.platforms),
     firstReleaseDate: game.first_release_date ?? 0,
     hypes: game.hypes ?? 0,
@@ -115,4 +114,5 @@ export const serializeGame = (game: RawIGDBGame) => {
   }
 }
 
-export const serializeGames = (games: RawIGDBGame[]) => games.map(serializeGame)
+export const serializeGames = (games: RawIGDBAPIGame[]) =>
+  games.map(serializeGame)
