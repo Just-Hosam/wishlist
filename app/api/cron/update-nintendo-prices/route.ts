@@ -43,14 +43,6 @@ export async function GET() {
     let updated = 0
     let errors = 0
 
-    // User-Agent rotation
-    const userAgents = [
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
-    ]
-
     for (const [batchIndex, batch] of batches.entries()) {
       console.log(
         `[CRON] Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} games)`
@@ -58,24 +50,14 @@ export async function GET() {
 
       for (const gamePrice of batch) {
         try {
-          // Random User-Agent for each request
-          const randomUserAgent =
-            userAgents[Math.floor(Math.random() * userAgents.length)]
-
           const nintendoData = await getNintendoGameInfo(gamePrice.storeUrl)
 
           if (nintendoData) {
-            // Use discounted price if on sale, otherwise use regular price
-            const currentPrice = nintendoData.onSale
-              ? parseFloat(nintendoData.discounted_price_value!)
-              : parseFloat(nintendoData.raw_price_value)
-            const regularPrice = parseFloat(nintendoData.raw_price_value)
-
             await prisma.price.update({
               where: { id: gamePrice.id },
               data: {
-                regularPrice,
-                currentPrice,
+                regularPrice: nintendoData.regularPrice,
+                currentPrice: nintendoData.currentPrice,
                 fetchedAt: new Date(),
                 updatedAt: new Date()
               }
