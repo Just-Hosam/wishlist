@@ -1,5 +1,7 @@
 // Nintendo price scraping utilities
 
+import { Platform, PriceDescription, PriceInput } from "@/types"
+
 export const getNSUID = async (url: string): Promise<string | null> => {
   try {
     const response = await fetch(url, {
@@ -145,7 +147,7 @@ export async function getCurrentPrice(
 
 export async function getNintendoGameInfo(
   url: string
-): Promise<NintendoGameInfo | null> {
+): Promise<PriceInput | null> {
   const nsuid = await getNSUID(url)
   if (!nsuid) {
     return null
@@ -156,8 +158,17 @@ export async function getNintendoGameInfo(
     return null
   }
 
+  // Transform NintendoPriceData to PriceInput
   return {
-    ...gameInfo,
-    storeUrl: url
+    storeUrl: url,
+    externalId: gameInfo.nsuid,
+    platform: Platform.NINTENDO,
+    description: PriceDescription.STANDARD,
+    countryCode: gameInfo.country,
+    regularPrice: parseFloat(gameInfo.raw_price_value),
+    currentPrice:
+      gameInfo.onSale && gameInfo.discounted_price_value
+        ? parseFloat(gameInfo.discounted_price_value)
+        : parseFloat(gameInfo.raw_price_value)
   }
 }

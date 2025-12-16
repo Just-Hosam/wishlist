@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
-import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
-import { type NintendoGameInfo } from "@/lib/nintendo-price"
+import {
+  buildIGDBImageUrl,
+  buildNintendoStoreUrl
+} from "@/lib/igdb-store-links"
 import { buildPlayStationStoreUrl } from "@/lib/playstation/playstation-price"
 
 import { createGame, saveGame, updateGame } from "@/server/actions/game"
@@ -47,12 +49,10 @@ export default function GameForm({
   const router = useRouter()
   const { activeTab } = useTabContext()
   const [isPending, startTransition] = useTransition()
-  const [nintendoInfo, setNintendoInfo] = useState<NintendoGameInfo | null>(
-    null
-  )
   const [isPsLinked, setIsPsLinked] = useState<boolean | null>(
     isPlayStationLinked
   )
+  const [isNsLinked, setIsNsLinked] = useState<boolean | null>(isNintendoLinked)
   const [nowPlaying, setNowPlaying] = useState(false)
   const [isDataLoaded, setIsDataLoaded] = useState(false)
 
@@ -185,6 +185,18 @@ export default function GameForm({
           }
         }
 
+        // Handle Nintendo price linking/unlinking
+        if (game?.igdbNintendoUrlSegment) {
+          const nintendoStoreUrl = buildNintendoStoreUrl(
+            game.igdbNintendoUrlSegment
+          )
+          if (isNsLinked) {
+            await linkPriceToGame(savedGame.id, nintendoStoreUrl)
+          } else {
+            await unlinkPriceFromGame(savedGame.id, nintendoStoreUrl)
+          }
+        }
+
         toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
         router.push("/lists")
       } catch (error) {
@@ -300,14 +312,13 @@ export default function GameForm({
               isInitiallyLinked={isPlayStationLinked || false}
             />
           </div>
-          {/* <div className="mt-3">
+          <div className="mt-3">
             <NintendoLinkInput
-              onGameInfoFound={(gameInfo) => setNintendoInfo(gameInfo)}
-              onGameInfoCleared={() => setNintendoInfo(null)}
-              existingGameInfo={nintendoInfo}
-              initialUrl={game?.igdbNintendoUrlSegment || null}
+              onLinked={(isLinked) => setIsNsLinked(isLinked)}
+              url={buildNintendoStoreUrl(game?.igdbNintendoUrlSegment || "")}
+              isInitiallyLinked={isNintendoLinked || false}
             />
-          </div> */}
+          </div>
         </div>
       )}
 
