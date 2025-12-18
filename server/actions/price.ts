@@ -80,15 +80,21 @@ export async function linkPriceToGame(
 
   if (!game) throw new Error("Game not found or unauthorized.")
 
-  await prisma.price.update({
-    where: { storeUrl: url },
-    data: {
-      trackedBy: {
-        connect: { id: gameId }
-      },
-      updatedAt: new Date()
-    }
+  const priceExists = await prisma.price.findUnique({
+    where: { storeUrl: url }
   })
+
+  if (priceExists) {
+    await prisma.price.update({
+      where: { storeUrl: url },
+      data: {
+        trackedBy: {
+          connect: { id: gameId }
+        },
+        updatedAt: new Date()
+      }
+    })
+  }
 }
 
 export async function unlinkPriceFromGame(
@@ -106,13 +112,19 @@ export async function unlinkPriceFromGame(
 
   if (!game) throw new Error("Game not found or unauthorized.")
 
-  await prisma.price.update({
-    where: { storeUrl: url },
-    data: {
-      trackedBy: {
-        disconnect: { id: gameId }
-      },
-      updatedAt: new Date()
-    }
+  const priceExists = await prisma.price.findUnique({
+    where: { storeUrl: url }
   })
+
+  if (priceExists) {
+    await prisma.price.update({
+      where: { storeUrl: url },
+      data: {
+        trackedBy: {
+          disconnect: { id: gameId }
+        },
+        updatedAt: new Date()
+      }
+    })
+  }
 }
