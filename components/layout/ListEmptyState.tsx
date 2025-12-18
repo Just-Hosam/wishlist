@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { PlusIcon, SearchX } from "lucide-react"
+import { PlusIcon, Search, SearchX } from "lucide-react"
 import Link from "next/link"
 
 export default function ListEmptyState() {
@@ -12,12 +12,12 @@ export default function ListEmptyState() {
       />
       <h3 className="mb-1 text-lg font-semibold">No games yet</h3>
       <p className="text-sm text-muted-foreground">
-        Start by adding your first game
+        Start by searching for your first game
       </p>
       <Link href="/search">
         <Button className="mt-6">
-          <PlusIcon />
-          Add Game
+          <Search />
+          Search
         </Button>
       </Link>
     </div>
