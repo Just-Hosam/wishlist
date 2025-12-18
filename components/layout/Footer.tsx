@@ -8,14 +8,12 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export default function Footer() {
-  const pathname = usePathname()
   const { activeTab, setActiveTab } = useTabContext()
 
   const handleSearchClick = (e: React.MouseEvent) => {
-    if (pathname === "/search") {
-      e.preventDefault()
+    setTimeout(() => {
       window.dispatchEvent(new CustomEvent("focus-search-input"))
-    }
+    }, 300)
   }
 
   return (
