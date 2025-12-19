@@ -29,12 +29,8 @@ export default function NintendoLinkInput({
   }, [url])
 
   const fetchPriceData = async (urlToFetch: string) => {
-    if (!urlToFetch.trim()) {
-      setError("URL is required")
-      return
-    }
+    if (!urlToFetch.trim()) return
 
-    // Basic URL validation for Nintendo store
     if (!urlToFetch.includes("nintendo.com")) {
       setError("Invalid Nintendo store URL")
       return
@@ -96,11 +92,17 @@ export default function NintendoLinkInput({
           {isLoading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="hidden sm:inline">Fetching price...</span>
+              <span>Fetching price...</span>
             </div>
           )}
 
           {!isLoading && priceData && <Price />}
+
+          {!isLoading && !error && !url && (
+            <span className="text-sm text-muted-foreground">
+              Not available on Nintendo
+            </span>
+          )}
 
           {!isLoading && error && (
             <span className="text-sm text-red-600">{error}</span>

@@ -29,12 +29,8 @@ export default function PlayStationLinkInput({
   }, [url])
 
   const fetchPriceData = async (urlToFetch: string) => {
-    if (!urlToFetch.trim()) {
-      setError("URL is required")
-      return
-    }
+    if (!urlToFetch.trim()) return
 
-    // Basic URL validation for PlayStation store
     if (
       !urlToFetch.includes("playstation.com") &&
       !urlToFetch.includes("store.playstation.com")
@@ -98,11 +94,17 @@ export default function PlayStationLinkInput({
           {isLoading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="hidden sm:inline">Fetching price...</span>
+              <span>Fetching price...</span>
             </div>
           )}
 
           {!isLoading && priceData && <Price />}
+
+          {!isLoading && !error && !url && (
+            <span className="text-sm text-muted-foreground">
+              Not available on Playstation
+            </span>
+          )}
 
           {!isLoading && error && (
             <span className="text-sm text-red-600">{error}</span>
