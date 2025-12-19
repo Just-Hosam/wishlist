@@ -178,10 +178,12 @@ export default function GameForm({
           const playstationStoreUrl = buildPlayStationStoreUrl(
             game.igdbPlaystationUrlSegment
           )
-          if (isPsLinked) {
-            await linkPriceToGame(savedGame.id, playstationStoreUrl)
-          } else {
-            await unlinkPriceFromGame(savedGame.id, playstationStoreUrl)
+          if (!!playstationStoreUrl) {
+            if (isPsLinked) {
+              await linkPriceToGame(savedGame.id, playstationStoreUrl)
+            } else {
+              await unlinkPriceFromGame(savedGame.id, playstationStoreUrl)
+            }
           }
         }
 
@@ -190,10 +192,12 @@ export default function GameForm({
           const nintendoStoreUrl = buildNintendoStoreUrl(
             game.igdbNintendoUrlSegment
           )
-          if (isNsLinked) {
-            await linkPriceToGame(savedGame.id, nintendoStoreUrl)
-          } else {
-            await unlinkPriceFromGame(savedGame.id, nintendoStoreUrl)
+          if (!!nintendoStoreUrl) {
+            if (isNsLinked) {
+              await linkPriceToGame(savedGame.id, nintendoStoreUrl)
+            } else {
+              await unlinkPriceFromGame(savedGame.id, nintendoStoreUrl)
+            }
           }
         }
 

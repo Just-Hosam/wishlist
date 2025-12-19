@@ -45,6 +45,7 @@ export default function NintendoLinkInput({
 
     try {
       const info = await fetchNintendoGameInfo(urlToFetch)
+      console.log("info :>>", info)
       setPriceData(info)
       setError(null)
     } catch (error) {

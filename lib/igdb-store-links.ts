@@ -25,7 +25,9 @@ interface IGDBStoreSegments {
 export function buildNintendoStoreUrl(
   urlSegment: string,
   country: Country = "CA"
-): string {
+): string | null {
+  if (!urlSegment) return null
+
   const countryMap: Record<Country, string> = {
     CA: "en-ca",
     US: "en-us"
@@ -53,7 +55,9 @@ export function buildNintendoStoreUrl(
 export function buildPlayStationStoreUrl(
   urlSegment: string,
   country: Country = "CA"
-): string {
+): string | null {
+  if (!urlSegment) return null
+
   const countryMap: Record<Country, string> = {
     CA: "en-ca",
     US: "en-us"
