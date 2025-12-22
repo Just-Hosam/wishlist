@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils"
+
 const currencyMap = {
   USD: "$",
   CAD: "$",
@@ -10,6 +12,7 @@ interface PriceLayoutProps {
   currentPrice: number
   regularPrice: number
   currency: string
+  inverted?: boolean
   className?: string
 }
 
@@ -18,6 +21,7 @@ export default function PriceLayout({
   currentPrice,
   regularPrice,
   currency,
+  inverted = false,
   className
 }: PriceLayoutProps) {
   const currencySymbol =
@@ -27,15 +31,29 @@ export default function PriceLayout({
     return `${currencySymbol}${price.toFixed(2)}`
   }
 
+  const currentPriceTextClass = inverted
+    ? "text-primary-foreground"
+    : "text-foreground"
+  const regularPriceTextClass = inverted
+    ? "text-primary-foreground/70"
+    : "text-muted-foreground"
+
   return (
-    <div className={"flex items-center " + className}>
-      <span className="text-sm font-medium">{formatPrice(currentPrice)}</span>
+    <div className={cn("flex items-center", className)}>
+      <span className={cn("text-lg font-medium", currentPriceTextClass)}>
+        {formatPrice(currentPrice)}
+      </span>
       {onSale && regularPrice && currentPrice !== regularPrice && (
         <>
-          <span className="ml-[6px] text-xs font-light text-muted-foreground line-through">
+          <span
+            className={cn(
+              "ml-[6px] text-sm font-light line-through",
+              regularPriceTextClass
+            )}
+          >
             {formatPrice(regularPrice)}
           </span>
-          <span className="ml-2 rounded bg-red-600 px-1 py-[2px] text-xs text-white">
+          <span className="ml-2 rounded bg-red-600 px-1 py-[2px] text-sm text-primary-foreground">
             -{Math.round(((regularPrice - currentPrice) / regularPrice) * 100)}%
           </span>
         </>
