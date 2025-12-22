@@ -23,7 +23,7 @@ export const getCachedWishlistGames = async (userId: string) => {
         length: game.length,
         category: game.category,
         coverImageUrl: game.igdbCoverImageId
-          ? buildIGDBImageUrl(game.igdbCoverImageId)
+          ? buildIGDBImageUrl(game.igdbCoverImageId, "t_720p")
           : null,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString(),
