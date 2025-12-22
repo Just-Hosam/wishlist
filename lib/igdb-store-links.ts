@@ -97,11 +97,12 @@ export function getStoreUrlsFromIGDB(
 export function buildIGDBImageUrl(
   coverImageId: string,
   size:
-    | "t_cover_small"
-    | "t_cover_big"
-    | "t_screenshot_med"
-    | "t_screenshot_big"
-    | "t_720p" = "t_cover_big"
+    | "cover_small"
+    | "cover_big"
+    | "screenshot_med"
+    | "screenshot_big"
+    | "720p"
+    | "1080p" = "cover_big"
 ): string {
-  return `https://images.igdb.com/igdb/image/upload/${size}/${coverImageId}.jpg`
+  return `https://images.igdb.com/igdb/image/upload/t_${size}/${coverImageId}.jpg`
 }

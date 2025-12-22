@@ -23,7 +23,7 @@ export const getCachedWishlistGames = async (userId: string) => {
         length: game.length,
         category: game.category,
         coverImageUrl: game.igdbCoverImageId
-          ? buildIGDBImageUrl(game.igdbCoverImageId, "t_720p")
+          ? buildIGDBImageUrl(game.igdbCoverImageId, "1080p")
           : null,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString(),
@@ -65,7 +65,7 @@ export const getCachedLibraryGames = async (userId: string) => {
         length: game.length,
         category: game.category,
         coverImageUrl: game.igdbCoverImageId
-          ? buildIGDBImageUrl(game.igdbCoverImageId, "t_720p")
+          ? buildIGDBImageUrl(game.igdbCoverImageId, "1080p")
           : null,
         platforms: game.platforms,
         nowPlaying: game.nowPlaying,
@@ -98,7 +98,7 @@ export const getCachedCompletedGames = async (userId: string) => {
         length: game.length,
         category: game.category,
         coverImageUrl: game.igdbCoverImageId
-          ? buildIGDBImageUrl(game.igdbCoverImageId, "t_720p")
+          ? buildIGDBImageUrl(game.igdbCoverImageId, "1080p")
           : null,
         platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
