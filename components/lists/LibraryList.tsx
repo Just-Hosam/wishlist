@@ -52,8 +52,8 @@ export default function LibraryList({ games }: LibraryListProps) {
     <>
       {hasNowPlaying && (
         <>
-          <div className="flex items-center gap-2 pb-3 pt-1 font-medium">
-            <PlayCircle size={17} /> Now Playing
+          <div className="flex items-center gap-2 pb-4 pt-1 text-xl font-medium">
+            <PlayCircle size={21} /> Now Playing
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
             {nowPlayingGames.map((game, index) => (
@@ -65,8 +65,8 @@ export default function LibraryList({ games }: LibraryListProps) {
       {hasBacklog && (
         <>
           {hasNowPlaying && (
-            <div className="mt-6 flex items-center gap-2 pb-3 pt-2 font-medium">
-              <Layers size={17} />
+            <div className="mt-6 flex items-center gap-2 pb-4 pt-2 text-xl font-medium">
+              <Layers size={21} />
               Backlog
             </div>
           )}
