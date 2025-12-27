@@ -4,7 +4,6 @@ import GameLengthInput from "@/components/layout/GameLengthInput"
 import NintendoLinkInput from "@/components/layout/NintendoLinkInput"
 import PlayStationLinkInput from "@/components/layout/PlayStationLinkInput"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTabContext } from "@/contexts/TabContext"
 import {
@@ -13,16 +12,9 @@ import {
 } from "@/lib/igdb-store-links"
 import { buildPlayStationStoreUrl } from "@/lib/playstation/playstation-price"
 
-import { createGame, saveGame, updateGame } from "@/server/actions/game"
+import { saveGame } from "@/server/actions/game"
 import { linkPriceToGame, unlinkPriceFromGame } from "@/server/actions/price"
-import {
-  GameInput,
-  GameCategory,
-  Platform,
-  PriceInput,
-  PriceOutput,
-  GameOutput
-} from "@/types"
+import { GameCategory, GameInput, Platform } from "@/types"
 
 import clsx from "clsx"
 import { CheckCircle2, FolderCheck, Heart } from "lucide-react"
