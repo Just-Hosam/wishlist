@@ -66,23 +66,21 @@ export default function WishlistList({ games }: WishlistListProps) {
             >
               {/* Cover Image */}
               {game.coverImageUrl && (
-                <div className="h-[187px] w-[140px] flex-shrink-0 overflow-hidden bg-gray-200">
+                <div className="h-[194px] w-[145px] flex-shrink-0 overflow-hidden bg-gray-200">
                   <Image
                     src={game.coverImageUrl}
                     alt={`${game.name} cover`}
-                    width={140}
-                    height={187}
+                    width={145}
+                    height={194}
                     className="h-full w-full object-cover"
                     priority={index < 5}
                   />
                 </div>
               )}
 
-              {/* Main Content */}
               <div className="flex min-w-0 flex-1 flex-col px-4 py-2">
-                {/* Header with title and menu */}
                 <header className="items-start justify-between">
-                  <h3 className="mb-1 line-clamp-2 text-lg font-semibold">
+                  <h3 className="mb-1 line-clamp-2 text-lg font-medium">
                     {game.name}
                   </h3>
                   <p className="flex items-center gap-1 text-xs font-normal text-muted-foreground">
@@ -95,7 +93,6 @@ export default function WishlistList({ games }: WishlistListProps) {
                   </p>
                 </header>
 
-                {/* Prices */}
                 <div className="mt-auto flex flex-col gap-1 pb-1 pt-3 empty:pt-0">
                   {playstationPrice && (
                     <div className="flex items-center">
