@@ -202,7 +202,7 @@ export default function GameForm({
         }
 
         toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
-        router.push("/lists")
+        router.push("/wishlist")
       } catch (error) {
         console.error(`Error ${isEdit ? "updating" : "creating"} game:`, error)
         toast.error(

@@ -1,5 +1,3 @@
-"use client"
-
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import MoveGameButton from "@/components/layout/MoveGameButton"
@@ -10,7 +8,9 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { GameCategory, Platform } from "@/types"
+import { authOptions } from "@/lib/auth-options"
+import { getCachedLibraryGames } from "@/server/actions/lists"
+import { GameCategory } from "@/types"
 import {
   ArrowRight,
   Clock,
@@ -19,28 +19,19 @@ import {
   Pencil,
   PlayCircle
 } from "lucide-react"
+import { getServerSession } from "next-auth"
 import Image from "next/image"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
-type LibraryGame = {
-  id: string
-  name: string
-  length: number | null
-  category: GameCategory
-  coverImageUrl: string | null
-  platforms: Platform[] | null
-  nowPlaying: boolean
-  createdAt: string
-  updatedAt: string
-}
+export default async function LibraryPage() {
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) redirect("/")
 
-interface LibraryListProps {
-  games: LibraryGame[]
-}
+  const libraryGames = await getCachedLibraryGames(session.user.id)
 
-export default function LibraryList({ games }: LibraryListProps) {
-  const nowPlayingGames = games.filter((game) => game.nowPlaying)
-  const backlogGames = games.filter((game) => !game.nowPlaying)
+  const nowPlayingGames = libraryGames.filter((game) => game.nowPlaying)
+  const backlogGames = libraryGames.filter((game) => !game.nowPlaying)
   const hasNowPlaying = nowPlayingGames.length > 0
   const hasBacklog = backlogGames.length > 0
 
@@ -82,7 +73,13 @@ export default function LibraryList({ games }: LibraryListProps) {
 }
 
 interface LibraryGameCardProps {
-  game: LibraryGame
+  game: {
+    id: string
+    name: string
+    length: number | null
+    coverImageUrl: string | null
+    nowPlaying: boolean
+  }
   index: number
 }
 

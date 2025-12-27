@@ -2,14 +2,20 @@
 
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useTabContext } from "@/contexts/TabContext"
 import { AlignJustify, FolderCheck, Heart, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export default function Footer() {
   const pathname = usePathname()
-  const { activeTab, setActiveTab } = useTabContext()
+  const activeTab =
+    pathname === "/wishlist"
+      ? "WISHLIST"
+      : pathname === "/library"
+        ? "LIBRARY"
+        : pathname.startsWith("/more")
+          ? "MORE"
+          : "WISHLIST"
 
   const handleSearchClick = (e: React.MouseEvent) => {
     if (pathname === "/search") {
@@ -23,18 +29,16 @@ export default function Footer() {
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <Tabs value={activeTab} className="flex-1">
           <TabsList className="w-full justify-around rounded-full bg-white p-[6px] shadow-lg">
-            <Link href="/lists" className="flex-1">
+            <Link href="/wishlist" className="flex-1">
               <TabsTrigger
-                onClick={() => setActiveTab("WISHLIST")}
                 value="WISHLIST"
                 className="h-10 w-full rounded-full data-[state=active]:bg-secondary"
               >
                 <Heart />
               </TabsTrigger>
             </Link>
-            <Link href="/lists" className="flex-1">
+            <Link href="/library" className="flex-1">
               <TabsTrigger
-                onClick={() => setActiveTab("LIBRARY")}
                 value="LIBRARY"
                 className="h-10 w-full rounded-full data-[state=active]:bg-secondary"
               >
@@ -43,7 +47,6 @@ export default function Footer() {
             </Link>
             <Link href="/more" className="flex-1">
               <TabsTrigger
-                onClick={() => setActiveTab("MORE")}
                 value="MORE"
                 className="h-10 w-full rounded-full data-[state=active]:bg-secondary"
               >

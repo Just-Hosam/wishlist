@@ -30,13 +30,13 @@ export function TabProvider({
   const pathname = usePathname()
 
   useEffect(() => {
-    if (pathname === "/lists") {
-      setActiveTab((prev) => {
-        if (prev !== "WISHLIST" && prev !== "LIBRARY") {
-          return "WISHLIST"
-        }
-        return prev
-      })
+    if (pathname === "/wishlist") {
+      setActiveTab("WISHLIST")
+      return
+    }
+
+    if (pathname === "/library") {
+      setActiveTab("LIBRARY")
       return
     }
 
