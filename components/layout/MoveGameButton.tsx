@@ -31,7 +31,14 @@ export default function MoveGameButton({
       try {
         await moveGame(gameId, toCategory)
         toast.success("Game moved successfully!")
-        router.refresh()
+
+        if (fromCategory === GameCategory.WISHLIST) {
+          router.push(`/wishlist`)
+        } else if (fromCategory === GameCategory.LIBRARY) {
+          router.push(`/library`)
+        } else if (fromCategory === GameCategory.COMPLETED) {
+          router.push(`/more/completed`)
+        }
       } catch (error) {
         console.error("Error moving game:", error)
         toast.error("Failed to move game")
