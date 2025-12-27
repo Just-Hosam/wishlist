@@ -58,7 +58,7 @@ export default function WishlistList({ games }: WishlistListProps) {
           return (
             <div
               key={game.id}
-              className="mx-[-24px] flex gap-4 px-[24px] pb-6 duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+              className="flex overflow-hidden rounded-2xl border duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
               style={{
                 animationDelay: `${index * 50}ms`,
                 animationFillMode: "backwards"
@@ -66,12 +66,12 @@ export default function WishlistList({ games }: WishlistListProps) {
             >
               {/* Cover Image */}
               {game.coverImageUrl && (
-                <div className="h-[140px] w-[105px] flex-shrink-0 overflow-hidden rounded-xl bg-gray-200 shadow-lg">
+                <div className="h-[187px] w-[140px] flex-shrink-0 overflow-hidden bg-gray-200">
                   <Image
                     src={game.coverImageUrl}
                     alt={`${game.name} cover`}
-                    width={105}
-                    height={140}
+                    width={140}
+                    height={187}
                     className="h-full w-full object-cover"
                     priority={index < 5}
                   />
@@ -79,64 +79,20 @@ export default function WishlistList({ games }: WishlistListProps) {
               )}
 
               {/* Main Content */}
-              <div className="flex min-w-0 flex-1 flex-col">
+              <div className="flex min-w-0 flex-1 flex-col px-4 py-2">
                 {/* Header with title and menu */}
-                <header className="flex items-start justify-between gap-2">
-                  <div className="flex-1">
-                    <h3 className="mb-1 line-clamp-2 text-lg font-medium text-gray-900">
-                      {game.name}
-                    </h3>
-                    {game.length && (
-                      <p className="mt-1 flex items-center gap-1 text-xs font-normal text-gray-600">
-                        <Clock
-                          size={12}
-                          strokeWidth={1.75}
-                          className="mt-[-0.5px]"
-                        />
-                        {game?.length} hours
-                      </p>
-                    )}
-                  </div>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="mr-[-4px] mt-[-4px] self-start px-2"
-                      >
-                        <EllipsisVertical />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="mr-4 w-fit md:mr-0">
-                      <div className="flex flex-col">
-                        <MoveGameButton
-                          gameId={game.id}
-                          fromCategory={GameCategory.WISHLIST}
-                          toCategory={GameCategory.LIBRARY}
-                          buttonText="To Library"
-                          icon={<ArrowRight />}
-                        />
-                        <MoveGameButton
-                          gameId={game.id}
-                          fromCategory={GameCategory.WISHLIST}
-                          toCategory={GameCategory.COMPLETED}
-                          buttonText="To Completed"
-                          icon={<ArrowRight />}
-                        />
-                        <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
-                        <Link href={`/game/${game.id}/edit`}>
-                          <Button
-                            className="w-full justify-start"
-                            variant="ghost"
-                          >
-                            <Pencil />
-                            Edit
-                          </Button>
-                        </Link>
-                        <DeleteGameButton gameId={game.id} />
-                      </div>
-                    </PopoverContent>
-                  </Popover>
+                <header className="items-start justify-between">
+                  <h3 className="mb-1 line-clamp-2 text-lg font-semibold">
+                    {game.name}
+                  </h3>
+                  <p className="flex items-center gap-1 text-xs font-normal text-muted-foreground">
+                    <Clock
+                      size={12}
+                      strokeWidth={1.75}
+                      className="mt-[-0.5px]"
+                    />
+                    {game?.length ? `${game?.length} hours` : "-"}
+                  </p>
                 </header>
 
                 {/* Prices */}
