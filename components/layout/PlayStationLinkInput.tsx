@@ -10,14 +10,16 @@ import PriceLayout from "./PriceLayout"
 
 interface PlayStationLinkInputProps {
   url: string | null
-  onLinked: (isLinked: boolean | null) => void
+  onLinked: ((isLinked: boolean | null) => void) | null
   isInitiallyLinked?: boolean | null
+  hideSwitch?: boolean
 }
 
 export default function PlayStationLinkInput({
   url,
   onLinked,
-  isInitiallyLinked = false
+  isInitiallyLinked = false,
+  hideSwitch = false
 }: PlayStationLinkInputProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [priceData, setPriceData] = useState<PriceInput | null>(null)
@@ -57,24 +59,7 @@ export default function PlayStationLinkInput({
 
   const handleToggle = (checked: boolean) => {
     setIsLinked(checked)
-    onLinked(checked)
-  }
-
-  const Price = () => {
-    if (!priceData) return null
-
-    const currentPrice = priceData.currentPrice || 0
-    const regularPrice = priceData.regularPrice || 0
-    const isOnSale = currentPrice < regularPrice
-
-    return (
-      <PriceLayout
-        onSale={isOnSale}
-        currentPrice={currentPrice}
-        regularPrice={regularPrice}
-        currency="USD"
-      />
-    )
+    onLinked?.(checked)
   }
 
   return (
@@ -98,7 +83,16 @@ export default function PlayStationLinkInput({
             </div>
           )}
 
-          {!isLoading && priceData && <Price />}
+          {!isLoading && priceData && (
+            <PriceLayout
+              onSale={
+                (priceData.currentPrice || 0) < (priceData.regularPrice || 0)
+              }
+              currentPrice={priceData.currentPrice || 0}
+              regularPrice={priceData.regularPrice || 0}
+              currency="CAD"
+            />
+          )}
 
           {!isLoading && !error && !url && (
             <span className="text-sm text-muted-foreground">
@@ -111,17 +105,19 @@ export default function PlayStationLinkInput({
           )}
         </div>
 
-        <Switch
-          checked={isLinked ?? false}
-          onCheckedChange={handleToggle}
-          disabled={
-            !url ||
-            isLoading ||
-            (!priceData && !error) ||
-            (!!error && !isLinked)
-          }
-          className="data-[state=checked]:bg-blue-600"
-        />
+        {!hideSwitch && (
+          <Switch
+            checked={isLinked ?? false}
+            onCheckedChange={handleToggle}
+            disabled={
+              !url ||
+              isLoading ||
+              (!priceData && !error) ||
+              (!!error && !isLinked)
+            }
+            className="data-[state=checked]:bg-blue-600"
+          />
+        )}
       </div>
     </div>
   )

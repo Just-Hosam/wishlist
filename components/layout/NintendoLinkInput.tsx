@@ -10,14 +10,16 @@ import PriceLayout from "./PriceLayout"
 
 interface NintendoLinkInputProps {
   url: string | null
-  onLinked: (isLinked: boolean | null) => void
+  onLinked: ((isLinked: boolean | null) => void) | null
   isInitiallyLinked?: boolean | null
+  hideSwitch?: boolean
 }
 
 export default function NintendoLinkInput({
   url,
   onLinked,
-  isInitiallyLinked = false
+  isInitiallyLinked = false,
+  hideSwitch = false
 }: NintendoLinkInputProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [priceData, setPriceData] = useState<PriceInput | null>(null)
@@ -41,7 +43,6 @@ export default function NintendoLinkInput({
 
     try {
       const info = await fetchNintendoGameInfo(urlToFetch)
-      console.log("info :>>", info)
       setPriceData(info)
       setError(null)
     } catch (error) {
@@ -55,30 +56,12 @@ export default function NintendoLinkInput({
 
   const handleToggle = (checked: boolean) => {
     setIsLinked(checked)
-    onLinked(checked)
-  }
-
-  const Price = () => {
-    if (!priceData) return null
-
-    const currentPrice = priceData.currentPrice || 0
-    const regularPrice = priceData.regularPrice || 0
-    const isOnSale = currentPrice < regularPrice
-
-    return (
-      <PriceLayout
-        onSale={isOnSale}
-        currentPrice={currentPrice}
-        regularPrice={regularPrice}
-        currency="CAD"
-      />
-    )
+    onLinked?.(checked)
   }
 
   return (
     <div>
       <div className="flex items-center">
-        {/* Store Label */}
         <Image
           src="/logos/nintendo-switch.svg"
           alt="Nintendo Switch Logo"
@@ -87,7 +70,6 @@ export default function NintendoLinkInput({
           className="mr-3"
         />
 
-        {/* Spinner or Price Info */}
         <div className="flex min-w-0 flex-1 items-center gap-2">
           {isLoading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -96,7 +78,16 @@ export default function NintendoLinkInput({
             </div>
           )}
 
-          {!isLoading && priceData && <Price />}
+          {!isLoading && priceData && (
+            <PriceLayout
+              onSale={
+                (priceData.currentPrice || 0) < (priceData.regularPrice || 0)
+              }
+              currentPrice={priceData.currentPrice || 0}
+              regularPrice={priceData.regularPrice || 0}
+              currency="CAD"
+            />
+          )}
 
           {!isLoading && !error && !url && (
             <span className="text-sm text-muted-foreground">
@@ -109,17 +100,19 @@ export default function NintendoLinkInput({
           )}
         </div>
 
-        <Switch
-          checked={isLinked ?? false}
-          onCheckedChange={handleToggle}
-          disabled={
-            !url ||
-            isLoading ||
-            (!priceData && !error) ||
-            (!!error && !isLinked)
-          }
-          className="data-[state=checked]:bg-red-600"
-        />
+        {!hideSwitch && (
+          <Switch
+            checked={isLinked ?? false}
+            onCheckedChange={handleToggle}
+            disabled={
+              !url ||
+              isLoading ||
+              (!priceData && !error) ||
+              (!!error && !isLinked)
+            }
+            className="data-[state=checked]:bg-red-600"
+          />
+        )}
       </div>
     </div>
   )
