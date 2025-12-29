@@ -20,7 +20,7 @@ export default async function WishlistPage() {
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3">
       {wishlistGames.map((game, index) => {
         const nintendoPrice = game?.prices?.find(
           ({ platform }) => Platform.NINTENDO === platform
@@ -33,19 +33,19 @@ export default async function WishlistPage() {
         return (
           <Link key={game.id} href={`/game/${game.id}`}>
             <div
-              className="flex overflow-hidden rounded-2xl border duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+              className="flex overflow-hidden rounded-3xl border duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
               style={{
                 animationDelay: `${index * 50}ms`,
                 animationFillMode: "backwards"
               }}
             >
               {game.coverImageUrl && (
-                <div className="h-[194px] w-[145px] flex-shrink-0 overflow-hidden bg-gray-200">
+                <div className="h-[174px] w-[130px] flex-shrink-0 overflow-hidden bg-gray-200">
                   <Image
                     src={game.coverImageUrl}
                     alt={`${game.name} cover`}
-                    width={145}
-                    height={194}
+                    width={130}
+                    height={174}
                     className="h-full w-full object-cover"
                     priority={index < 5}
                   />
@@ -54,9 +54,7 @@ export default async function WishlistPage() {
 
               <div className="flex min-w-0 flex-1 flex-col px-4 py-3">
                 <header className="items-start justify-between">
-                  <h3 className="mb-1 line-clamp-2 text-lg font-medium">
-                    {game.name}
-                  </h3>
+                  <h3 className="mb-1 line-clamp-2 font-medium">{game.name}</h3>
                   <p className="flex items-center gap-1 text-xs font-normal text-muted-foreground">
                     <Clock
                       size={12}
