@@ -1,0 +1,15 @@
+import { PageHeader } from "@/components/layout/PageHeader"
+
+export default async function CompletedGameLayout({
+  children
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <>
+      <PageHeader showBackButton />
+
+      {children}
+    </>
+  )
+}
