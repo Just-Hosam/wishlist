@@ -138,7 +138,7 @@ export function SearchPage() {
             {/* Game Info Section */}
             <div className="flex flex-1 flex-col px-1">
               {/* Game Name */}
-              <h3 className="line-clamp-2 text-sm font-medium leading-tight text-gray-900 md:text-lg">
+              <h3 className="line-clamp-2 text-sm font-medium leading-tight md:text-lg">
                 {game.name}
               </h3>
 

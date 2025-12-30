@@ -233,9 +233,7 @@ export default function GameForm({
               height={160}
             />
           </div>
-          <h2 className="w-2/3 text-xl font-medium text-gray-900">
-            {game.igdbName}
-          </h2>
+          <h2 className="w-2/3 text-xl font-medium">{game.igdbName}</h2>
         </div>
       )}
 
