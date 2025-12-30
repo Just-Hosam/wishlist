@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { deleteGame } from "@/server/actions/game"
+import { useCategoryNavigation } from "@/lib/use-category-navigation"
 import { Trash2 } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -22,7 +22,7 @@ interface Props {
 }
 
 export default function DeleteGameButton({ gameId }: Props) {
-  const router = useRouter()
+  const { navigateToActiveTab } = useCategoryNavigation()
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
@@ -30,7 +30,7 @@ export default function DeleteGameButton({ gameId }: Props) {
     startTransition(async () => {
       try {
         await deleteGame(gameId)
-        router.refresh()
+        navigateToActiveTab()
         toast.success("Game deleted successfully!")
         setIsOpen(false)
       } catch (error) {

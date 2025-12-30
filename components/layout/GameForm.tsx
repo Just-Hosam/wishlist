@@ -11,6 +11,7 @@ import {
   buildNintendoStoreUrl
 } from "@/lib/igdb-store-links"
 import { buildPlayStationStoreUrl } from "@/lib/playstation/playstation-price"
+import { useCategoryNavigation } from "@/lib/use-category-navigation"
 
 import { saveGame } from "@/server/actions/game"
 import { linkPriceToGame, unlinkPriceFromGame } from "@/server/actions/price"
@@ -19,7 +20,6 @@ import { GameCategory, GameInput, Platform } from "@/types"
 import clsx from "clsx"
 import { CheckCircle2, FolderCheck, Heart } from "lucide-react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import { useEffect, useReducer, useState, useTransition } from "react"
 import { toast } from "sonner"
 
@@ -38,8 +38,8 @@ export default function GameForm({
   isPlayStationLinked = false,
   isNintendoLinked = false
 }: Props) {
-  const router = useRouter()
   const { activeTab } = useTabContext()
+  const { navigateToActiveTab } = useCategoryNavigation()
   const [isPending, startTransition] = useTransition()
   const [isPsLinked, setIsPsLinked] = useState<boolean | null>(
     isPlayStationLinked
@@ -194,7 +194,7 @@ export default function GameForm({
         }
 
         toast.success(`Game ${isEdit ? "updated" : "added"} successfully!`)
-        router.push("/wishlist")
+        navigateToActiveTab()
       } catch (error) {
         console.error(`Error ${isEdit ? "updating" : "creating"} game:`, error)
         toast.error(
