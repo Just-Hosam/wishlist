@@ -76,12 +76,12 @@ export default async function GamePage({ params }: Props) {
       </Popover>
 
       <header className="mx-auto flex flex-col items-center text-center">
-        <div className="mb-5 h-[267px] w-[200px] overflow-hidden rounded-2xl bg-gray-200 shadow-lg">
+        <div className="mb-5 h-[240px] w-[180px] overflow-hidden rounded-2xl bg-gray-200 shadow-lg">
           <Image
             src={buildIGDBImageUrl(game.igdbCoverImageId || "", "1080p")}
             alt={game.igdbName || "Game cover"}
-            width={200}
-            height={267}
+            width={180}
+            height={240}
           />
         </div>
         <h1 className="text-2xl font-medium">{game.igdbName}</h1>
@@ -91,7 +91,7 @@ export default async function GamePage({ params }: Props) {
         </p>
       </header>
 
-      <div className="mt-6">
+      <div className="mt-8">
         <label className="font-medium">Prices</label>
         <div className="mt-3 space-y-3">
           <PlayStationLinkInput
