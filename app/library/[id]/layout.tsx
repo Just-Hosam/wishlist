@@ -4,7 +4,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export default async function WishlistGameLayout({ children }: Props) {
+export default async function LibraryGameLayout({ children }: Props) {
   return (
     <>
       <PageHeader showBackButton />

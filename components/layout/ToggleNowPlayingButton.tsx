@@ -28,7 +28,7 @@ export default function ToggleNowPlayingButton({
       try {
         const nextNowPlaying = await toggleNowPlaying(gameId)
         toast.success(nextNowPlaying ? "Started playing." : "Stopped playing.")
-        router.refresh()
+        router.push("/library")
       } catch (error) {
         console.error("Error toggling now playing status:", error)
         toast.error("Failed to update now playing status.")
