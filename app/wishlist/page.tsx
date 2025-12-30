@@ -31,7 +31,7 @@ export default async function WishlistPage() {
         )
 
         return (
-          <Link key={game.id} href={`/game/${game.id}`}>
+          <Link key={game.id} href={`/wishlist/${game.id}`}>
             <div
               className="flex overflow-hidden rounded-3xl border duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
               style={{

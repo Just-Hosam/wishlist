@@ -1,10 +1,10 @@
 import { PageHeader } from "@/components/layout/PageHeader"
 
-export default async function GameLayout({
-  children
-}: {
+interface Props {
   children: React.ReactNode
-}) {
+}
+
+export default async function WishlistLayout({ children }: Props) {
   return (
     <>
       <PageHeader showBackButton />
