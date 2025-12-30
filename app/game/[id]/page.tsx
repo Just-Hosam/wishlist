@@ -118,11 +118,7 @@ export default async function GamePage({ params }: Props) {
 
       <div className="mt-6">
         <label className="font-medium">Summary</label>
-        <ExpandableText
-          text={game.igdbSummary!}
-          lineClamp={4}
-          className="mt-2 text-sm text-muted-foreground"
-        />
+        <p className="mt-2 text-sm text-muted-foreground">{game.igdbSummary}</p>
       </div>
     </div>
   )
