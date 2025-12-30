@@ -90,7 +90,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
       </div>
 
       <div className="pl-1 pr-2">
-        <h3 className="line-clamp-2 font-semibold leading-tight text-gray-900 md:text-lg">
+        <h3 className="line-clamp-2 font-medium leading-tight text-gray-900 md:text-lg">
           {game.name}
         </h3>
 
