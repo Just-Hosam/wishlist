@@ -42,12 +42,12 @@ export function Game({
           />
         </div>
         <h1 className="text-2xl font-medium">{name}</h1>
-        <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+        <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
           <Clock size={12} strokeWidth={1.75} className="mt-[-0.5px]" />
-          <Suspense fallback={<Skeleton className="h-3 w-16" />}>
+          <Suspense fallback={<Skeleton className="h-5 w-16" />}>
             <TimeToBeat length={length || null} igdbId={igdbId || null} />
           </Suspense>
-        </p>
+        </div>
       </header>
 
       <div className="mt-8">
