@@ -5,17 +5,28 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AlignJustify, FolderCheck, Heart, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function Footer() {
   const pathname = usePathname()
-  const activeTab =
-    pathname === "/wishlist"
-      ? "WISHLIST"
-      : pathname === "/library"
-        ? "LIBRARY"
-        : pathname.startsWith("/more")
-          ? "MORE"
-          : "WISHLIST"
+  const [activeTab, setActiveTab] = useState("")
+
+  useEffect(() => {
+    if (pathname.startsWith("/wishlist")) {
+      setActiveTab("WISHLIST")
+      return
+    }
+
+    if (pathname.startsWith("/library")) {
+      setActiveTab("LIBRARY")
+      return
+    }
+
+    if (pathname.startsWith("/more")) {
+      setActiveTab("MORE")
+      return
+    }
+  }, [pathname])
 
   const handleSearchClick = (e: React.MouseEvent) => {
     if (pathname === "/search") {
