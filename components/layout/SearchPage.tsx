@@ -109,7 +109,7 @@ export function SearchPage() {
   const renderResults = () => (
     <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
       {results.map((game, index) => (
-        <Link href={`/game/${game.igdbId}/add`} passHref key={game.id}>
+        <Link href={`/search/${game.igdbId}`} passHref key={game.id}>
           <div
             className="flex cursor-pointer flex-col transition-all duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
             style={{
