@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { fetchGameTimeToBeats } from "@/server/actions/igdb"
+import { fetchTimeToBeat } from "@/server/actions/igdb"
 import { useEffect, useState } from "react"
 import Spinner from "../ui/spinner"
 
@@ -36,9 +36,9 @@ export default function GameLengthInput({
       }
 
       try {
-        const timeData = await fetchGameTimeToBeats(igdbGameId)
-        if (!cancelled && timeData?.normallyHours) {
-          onChange(timeData.normallyHours.toString())
+        const time = await fetchTimeToBeat(igdbGameId)
+        if (!cancelled && time) {
+          onChange(time.toString())
           setHasFetched(true)
           setState("fetched")
           return

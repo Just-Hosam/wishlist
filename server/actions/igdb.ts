@@ -441,9 +441,11 @@ export interface GameTimeToBeat {
   normallyHours: number
 }
 
-export async function fetchGameTimeToBeats(
-  igdbGameId: string
-): Promise<GameTimeToBeat | null> {
+export async function fetchTimeToBeat(
+  igdbGameId: string | null
+): Promise<number | null> {
+  if (!igdbGameId) return null
+
   const CLIENT_ID = process.env.IGDB_CLIENT_ID
   const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
 
@@ -479,9 +481,7 @@ export async function fetchGameTimeToBeats(
       ? Math.round(timeData.normally / 3600)
       : 0
 
-    return {
-      normallyHours
-    }
+    return normallyHours
   } catch (error) {
     console.error("Error fetching game time to beat:", error)
     throw error
