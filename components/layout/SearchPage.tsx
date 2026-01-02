@@ -107,7 +107,7 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
         <Link href={`/search/${game.igdbId}`} passHref key={game.id}>
           <div
@@ -117,8 +117,7 @@ export function SearchPage() {
               animationFillMode: "backwards"
             }}
           >
-            {/* Cover Image - Takes ~half of vertical space */}
-            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
+            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
               {game.coverImageId ? (
                 <Image
                   src={getImageUrl(game.coverImageId)}
@@ -138,7 +137,7 @@ export function SearchPage() {
             {/* Game Info Section */}
             <div className="flex flex-1 flex-col px-1">
               {/* Game Name */}
-              <h3 className="line-clamp-2 text-sm font-medium leading-tight md:text-lg">
+              <h3 className="line-clamp-2 text-sm font-medium leading-tight">
                 {game.name}
               </h3>
 
@@ -151,7 +150,7 @@ export function SearchPage() {
 
               {/* Platforms - Show unique platform icons */}
               {game.platforms && game.platforms.length > 0 && (
-                <div className="mt-auto flex items-center gap-2 pt-3">
+                <div className="mt-3 flex items-center gap-2">
                   {game.platforms.includes(Platform.PLAYSTATION) && (
                     <Image
                       src="/logos/playstation.svg"
