@@ -1,4 +1,5 @@
 import { Game } from "@/components/layout/Game"
+import ToWishlistButton from "@/components/layout/ToWishlistButton"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -35,9 +36,14 @@ export default async function SearchGamePage({ params }: Props) {
         </PopoverTrigger>
         <PopoverContent className="mr-4 w-fit md:mr-0">
           <div className="flex flex-col">
-            <Button className="w-full justify-start" variant="ghost">
+            <ToWishlistButton
+              igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || null}
+              igdbNintendoUrlSegment={igdbGame.nintendoUrlSegment || null}
+              timeToBeat={timeToBeat || null}
+              igdbGame={igdbGame}
+            >
               To Wishlist
-            </Button>
+            </ToWishlistButton>
             <Button className="w-full justify-start" variant="ghost">
               To Library
             </Button>
