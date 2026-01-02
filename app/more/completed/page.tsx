@@ -46,7 +46,7 @@ const CompletedGameCard = ({ game, index }: CompletedGameCardProps) => (
       }}
     >
       {/* Cover Image - Takes ~half of vertical space */}
-      <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-200 shadow-md">
+      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
         {game.coverImageUrl && (
           <Image
             src={game.coverImageUrl}
@@ -59,8 +59,8 @@ const CompletedGameCard = ({ game, index }: CompletedGameCardProps) => (
         )}
       </div>
 
-      <div className="pl-1 pr-2">
-        <h3 className="leading-tigh line-clamp-2 font-medium md:text-lg">
+      <div className="px-1">
+        <h3 className="line-clamp-2 text-sm font-medium leading-tight">
           {game.name}
         </h3>
 
