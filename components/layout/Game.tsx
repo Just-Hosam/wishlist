@@ -1,15 +1,11 @@
-import { Clock } from "lucide-react"
-import Image from "next/image"
-import PlayStationLinkInput from "./PlayStationLinkInput"
-import {
-  buildIGDBImageUrl,
-  buildNintendoStoreUrl,
-  buildPlayStationStoreUrl
-} from "@/lib/igdb-store-links"
-import NintendoLinkInput from "./NintendoLinkInput"
-import { Suspense } from "react"
+import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { fetchTimeToBeat } from "@/server/actions/igdb"
+import { Clock, Loader2 } from "lucide-react"
+import Image from "next/image"
+import { Suspense } from "react"
 import { Skeleton } from "../ui/skeleton"
+import NintendoPrice from "./NintendoPrice"
+import PlaystationPrice from "./PlaystationPrice"
 
 interface Props {
   imageId: string
@@ -33,12 +29,12 @@ export function Game({
   return (
     <div>
       <header className="mx-auto flex flex-col items-center text-center">
-        <div className="mb-5 h-[213px] w-[160px] overflow-hidden rounded-2xl bg-gray-200 shadow-xl">
+        <div className="mb-5 h-[233px] w-[175px] overflow-hidden rounded-3xl bg-gray-200">
           <Image
             src={buildIGDBImageUrl(imageId || "", "1080p")}
             alt={name || "Game cover"}
-            width={160}
-            height={213}
+            width={175}
+            height={233}
           />
         </div>
         <h1 className="text-2xl font-medium">{name}</h1>
@@ -53,23 +49,49 @@ export function Game({
       <div className="mt-8">
         <label className="font-medium">Prices</label>
         <div className="mt-3 space-y-3">
-          <PlayStationLinkInput
-            url={buildPlayStationStoreUrl(igdbPlaystationUrlSegment || "")}
-            onLinked={null}
-            isInitiallyLinked={!!igdbPlaystationUrlSegment}
-            hideSwitch
-          />
+          <div className="flex items-center">
+            <Image
+              src="/logos/playstation.svg"
+              alt="PlayStation Logo"
+              width={20}
+              height={20}
+              className="mr-3"
+            />
+            <Suspense
+              fallback={
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Fetching price...</span>
+                </div>
+              }
+            >
+              <PlaystationPrice
+                igdbPlaystationUrlSegment={igdbPlaystationUrlSegment || null}
+              />
+            </Suspense>
+          </div>
 
-          <NintendoLinkInput
-            url={
-              igdbNintendoUrlSegment
-                ? buildNintendoStoreUrl(igdbNintendoUrlSegment)
-                : ""
-            }
-            onLinked={null}
-            isInitiallyLinked={!!igdbNintendoUrlSegment}
-            hideSwitch
-          />
+          <div className="flex items-center">
+            <Image
+              src="/logos/nintendo-switch.svg"
+              alt="Nintendo Switch Logo"
+              width={20}
+              height={20}
+              className="mr-3"
+            />
+            <Suspense
+              fallback={
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Fetching price...</span>
+                </div>
+              }
+            >
+              <NintendoPrice
+                igdbNintendoUrlSegment={igdbNintendoUrlSegment || null}
+              />
+            </Suspense>
+          </div>
         </div>
       </div>
 
