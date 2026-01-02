@@ -26,20 +26,20 @@ export default async function SearchGamePage({ params }: Props) {
     <div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="absolute right-6 top-5 z-40">Add Game</Button>
+          <Button className="absolute right-6 top-5 z-40">
+            <Plus />
+            Add
+          </Button>
         </PopoverTrigger>
-        <PopoverContent className="mr-6 w-fit md:mr-0">
+        <PopoverContent className="mr-4 w-fit md:mr-0">
           <div className="flex flex-col">
             <Button className="w-full justify-start" variant="ghost">
-              <Plus />
               To Wishlist
             </Button>
             <Button className="w-full justify-start" variant="ghost">
-              <Plus />
               To Library
             </Button>
             <Button className="w-full justify-start" variant="ghost">
-              <Plus />
               To Completed
             </Button>
           </div>
