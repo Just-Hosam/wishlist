@@ -1,6 +1,7 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import { authOptions } from "@/lib/auth-options"
 import { getCachedLibraryGames } from "@/server/actions/lists"
+import { Platform } from "@/types"
 import { Clock, Layers, PlayCircle } from "lucide-react"
 import { getServerSession } from "next-auth"
 import Image from "next/image"
@@ -25,26 +26,26 @@ export default async function LibraryPage() {
   return (
     <>
       {hasNowPlaying && (
-        <>
-          <div className="flex items-center gap-2 pb-4 pt-1 text-xl font-medium">
-            <PlayCircle size={21} /> Now Playing
+        <div className="relative">
+          <div className="-pt-3 sticky -top-3 z-30 mb-1 flex items-center gap-2 bg-background pb-4 font-semibold">
+            <PlayCircle size={17} strokeWidth={2.5} /> Now Playing
           </div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
             {nowPlayingGames.map((game, index) => (
               <LibraryGameCard game={game} index={index} key={game.id} />
             ))}
           </div>
-        </>
+        </div>
       )}
       {hasBacklog && (
         <>
           {hasNowPlaying && (
-            <div className="mt-6 flex items-center gap-2 pb-4 pt-2 text-xl font-medium">
-              <Layers size={21} />
+            <div className="sticky -top-3 z-30 mb-1 mt-5 flex items-center gap-2 bg-background pb-4 font-semibold">
+              <Layers size={17} strokeWidth={2.5} />
               Backlog
             </div>
           )}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
             {backlogGames.map((game, index) => (
               <LibraryGameCard game={game} index={index} key={game.id} />
             ))}
@@ -62,6 +63,7 @@ interface LibraryGameCardProps {
     length: number | null
     coverImageUrl: string | null
     nowPlaying: boolean
+    platforms: Platform[]
   }
   index: number
 }
@@ -76,7 +78,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
       }}
     >
       {/* Cover Image - Takes ~half of vertical space */}
-      <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-200 shadow-md">
+      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
         {game.coverImageUrl && (
           <Image
             src={game.coverImageUrl}
@@ -89,8 +91,8 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
         )}
       </div>
 
-      <div className="pl-1 pr-2">
-        <h3 className="line-clamp-2 font-medium leading-tight md:text-lg">
+      <div className="px-1">
+        <h3 className="line-clamp-2 text-sm font-medium leading-tight">
           {game.name}
         </h3>
 
@@ -98,6 +100,39 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
           <Clock size={11} />
           {game.length ? `${game.length} hours` : "-"}
         </p>
+
+        {/* Platforms - Show unique platform icons */}
+        {game.platforms && game.platforms.length > 0 && (
+          <div className="mt-3 flex items-center gap-2">
+            {game.platforms.includes(Platform.PLAYSTATION) && (
+              <Image
+                src="/logos/playstation.svg"
+                alt="PlayStation"
+                width={13}
+                height={13}
+              />
+            )}
+            {game.platforms.includes(Platform.NINTENDO) && (
+              <Image
+                src="/logos/nintendo-switch.svg"
+                alt="Nintendo Switch"
+                width={13}
+                height={13}
+              />
+            )}
+            {game.platforms.includes(Platform.PC) && (
+              <Image
+                src="/logos/windows-10.svg"
+                alt="PC"
+                width={13}
+                height={13}
+              />
+            )}
+            {game.platforms.includes(Platform.XBOX) && (
+              <Image src="/logos/xbox.svg" alt="Xbox" width={13} height={13} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   </Link>
