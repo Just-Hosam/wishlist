@@ -4,7 +4,9 @@ import { getNintendoGameInfo } from "@/lib/nintendo-price"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
 
-export async function fetchNintendoGameInfo(url: string): Promise<PriceInput> {
+export async function fetchNintendoGameInfo(
+  url: string | null
+): Promise<PriceInput> {
   try {
     if (!url) {
       throw new Error("URL is required")

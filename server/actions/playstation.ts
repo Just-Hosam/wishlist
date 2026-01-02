@@ -5,7 +5,7 @@ import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
 
 export async function fetchPlayStationGameInfo(
-  url: string
+  url: string | null
 ): Promise<PriceInput> {
   try {
     if (!url) {
