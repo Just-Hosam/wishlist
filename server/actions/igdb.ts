@@ -368,7 +368,7 @@ export async function searchIGDBGamesDirect(
  * Get a single IGDB game by ID
  */
 export async function getIGDBGameById(
-  igdbId: number
+  igdbId: string
 ): Promise<IGDBGame | null> {
   const CLIENT_ID = process.env.IGDB_CLIENT_ID
   const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN

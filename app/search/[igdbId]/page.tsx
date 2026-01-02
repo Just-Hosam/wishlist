@@ -17,10 +17,12 @@ export default async function SearchGamePage({ params }: Props) {
   const { igdbId } = await params
   if (!igdbId) notFound()
 
-  const igdbGame = await getIGDBGameById(parseInt(igdbId))
-  if (!igdbGame) notFound()
+  const [igdbGame, timeToBeat] = await Promise.all([
+    getIGDBGameById(igdbId),
+    fetchTimeToBeat(igdbId)
+  ])
 
-  const timeToBeat = await fetchTimeToBeat(igdbId)
+  if (!igdbGame) notFound()
 
   return (
     <div>
