@@ -11,7 +11,7 @@ export default async function AddFromSearch({ params }: Props) {
   const { id } = await params
   if (!id) notFound()
 
-  const igdbGame = await getIGDBGameById(parseInt(id))
+  const igdbGame = await getIGDBGameById(id)
   if (!igdbGame) notFound()
 
   const gameData: GameInput = {
