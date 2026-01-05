@@ -1,6 +1,7 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
 import MoveGameButton from "@/components/layout/MoveGameButton"
+import MoveToWishlist from "@/components/layout/Wishlist/MoveToWishlist"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -21,10 +22,7 @@ export default async function CompletedGamePage({ params }: Props) {
   const { id } = await params
   if (!id) notFound()
 
-  const game = await prisma.game.findUnique({
-    where: { id }
-  })
-
+  const game = await prisma.game.findUnique({ where: { id } })
   if (!game) notFound()
 
   return (
@@ -37,13 +35,15 @@ export default async function CompletedGamePage({ params }: Props) {
         </PopoverTrigger>
         <PopoverContent className="mr-4 w-fit md:mr-0">
           <div className="flex flex-col">
-            <MoveGameButton
+            <MoveToWishlist
+              igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment || null}
+              igdbNintendoUrlSegment={game.igdbNintendoUrlSegment || null}
               gameId={game.id}
-              fromCategory={GameCategory.COMPLETED}
-              toCategory={GameCategory.WISHLIST}
-              buttonText="To Wishlist"
-              icon={<ArrowRight />}
-            />
+            >
+              <ArrowRight />
+              To Wishlist
+            </MoveToWishlist>
+
             <MoveGameButton
               gameId={game.id}
               fromCategory={GameCategory.COMPLETED}
