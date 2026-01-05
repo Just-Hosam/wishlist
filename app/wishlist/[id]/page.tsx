@@ -1,5 +1,6 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
+import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
 import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
 import {
@@ -41,13 +42,10 @@ export default async function WishlistGamePage({ params }: Props) {
         </PopoverTrigger>
         <PopoverContent className="mr-4 w-fit md:mr-0">
           <div className="flex flex-col">
-            <MoveGameButton
-              gameId={game.id}
-              fromCategory={GameCategory.WISHLIST}
-              toCategory={GameCategory.LIBRARY}
-              buttonText="To Library"
-              icon={<ArrowRight />}
-            />
+            <MoveToLibrary game={game}>
+              <ArrowRight />
+              To Library
+            </MoveToLibrary>
             <MoveGameButton
               gameId={game.id}
               fromCategory={GameCategory.WISHLIST}

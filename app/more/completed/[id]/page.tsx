@@ -1,5 +1,6 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
+import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
 import MoveGameButton from "@/components/layout/MoveGameButton"
 import MoveToWishlist from "@/components/layout/Wishlist/MoveToWishlist"
 import { Button } from "@/components/ui/button"
@@ -43,14 +44,10 @@ export default async function CompletedGamePage({ params }: Props) {
               <ArrowRight />
               To Wishlist
             </MoveToWishlist>
-
-            <MoveGameButton
-              gameId={game.id}
-              fromCategory={GameCategory.COMPLETED}
-              toCategory={GameCategory.LIBRARY}
-              buttonText="To Library"
-              icon={<ArrowRight />}
-            />
+            <MoveToLibrary game={game}>
+              <ArrowRight />
+              To Library
+            </MoveToLibrary>
             <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
             <Link href={`/game/${game.id}/edit`}>
               <Button className="w-full justify-start" variant="ghost">
