@@ -50,12 +50,12 @@ export default function MoveToWishlist({
   const handleSave = async () => {
     setIsSaving(true)
 
-    await moveGame(gameId, GameCategory.WISHLIST)
-
-    let playstationPromise
-    let nintendoPromise
-
     try {
+      await moveGame(gameId, GameCategory.WISHLIST)
+
+      let playstationPromise
+      let nintendoPromise
+
       if (playStationLinked && igdbPlaystationUrlSegment) {
         const playstationStoreUrl = buildPlayStationStoreUrl(
           igdbPlaystationUrlSegment
