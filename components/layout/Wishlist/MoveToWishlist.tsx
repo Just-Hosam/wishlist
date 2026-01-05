@@ -99,10 +99,8 @@ export default function MoveToWishlist({
       <DrawerContent>
         <div className="px-2">
           <DrawerHeader>
-            <DrawerTitle>Track Prices</DrawerTitle>
-            <DrawerDescription>
-              Choose which prices to track for this game
-            </DrawerDescription>
+            <DrawerTitle>Move to Wishlist</DrawerTitle>
+            <DrawerDescription>Track prices for this game</DrawerDescription>
           </DrawerHeader>
           <form className="space-y-3 px-4 pb-5 pt-3">
             <div className="flex items-center">
