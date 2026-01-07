@@ -20,7 +20,7 @@ export default async function WishlistPage() {
   }
 
   return (
-    <div className="grid gap-3">
+    <div className="slide-fade-in grid gap-3">
       {wishlistGames.map((game, index) => {
         const nintendoPrice = game?.prices?.find(
           ({ platform }) => Platform.NINTENDO === platform
@@ -32,13 +32,7 @@ export default async function WishlistPage() {
 
         return (
           <Link key={game.id} href={`/wishlist/${game.id}`}>
-            <div
-              className="flex overflow-hidden rounded-3xl border duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
-              style={{
-                animationDelay: `${index * 50}ms`,
-                animationFillMode: "backwards"
-              }}
-            >
+            <div className="flex overflow-hidden rounded-3xl border">
               {game.coverImageUrl && (
                 <div className="h-[174px] w-[130px] flex-shrink-0 overflow-hidden bg-gray-200">
                   <Image

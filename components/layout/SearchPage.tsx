@@ -107,11 +107,11 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+    <div className="slide-fade-in grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
         <Link href={`/search/${game.igdbId}`} passHref key={game.id}>
           <div
-            className="flex cursor-pointer flex-col transition-all duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+            className="flex cursor-pointer flex-col"
             style={{
               animationDelay: `${index * 50}ms`,
               animationFillMode: "backwards"

@@ -26,7 +26,7 @@ export default async function LibraryPage() {
   return (
     <>
       {hasNowPlaying && (
-        <div className="relative">
+        <div className="slide-fade-in relative">
           <div className="-pt-3 sticky -top-3 z-30 mb-1 flex items-center gap-2 bg-background pb-4 font-semibold">
             <PlayCircle size={17} strokeWidth={2.5} /> Now Playing
           </div>
@@ -40,12 +40,12 @@ export default async function LibraryPage() {
       {hasBacklog && (
         <>
           {hasNowPlaying && (
-            <div className="sticky -top-3 z-30 mb-1 mt-5 flex items-center gap-2 bg-background pb-4 font-semibold">
+            <div className="slide-fade-in sticky -top-3 z-30 mb-1 mt-5 flex items-center gap-2 bg-background pb-4 font-semibold">
               <Layers size={17} strokeWidth={2.5} />
               Backlog
             </div>
           )}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
+          <div className="slide-fade-in grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
             {backlogGames.map((game, index) => (
               <LibraryGameCard game={game} index={index} key={game.id} />
             ))}
@@ -70,13 +70,7 @@ interface LibraryGameCardProps {
 
 const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
   <Link href={`/library/${game.id}`}>
-    <div
-      className="flex flex-col duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
-      style={{
-        animationDelay: `${index * 50}ms`,
-        animationFillMode: "backwards"
-      }}
-    >
+    <div className="flex flex-col">
       {/* Cover Image - Takes ~half of vertical space */}
       <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
         {game.coverImageUrl && (

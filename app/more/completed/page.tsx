@@ -18,7 +18,7 @@ export default async function CompletedList() {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
+    <div className="slide-fade-in grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-6">
       {games.map((game, index) => (
         <CompletedGameCard game={game} index={index} key={game.id} />
       ))}
@@ -39,7 +39,7 @@ interface CompletedGameCardProps {
 const CompletedGameCard = ({ game, index }: CompletedGameCardProps) => (
   <Link href={`/more/completed/${game.id}`}>
     <div
-      className="flex flex-col duration-300 animate-in fade-in fade-out slide-in-from-top-3 slide-out-to-top-3"
+      className="flex flex-col"
       style={{
         animationDelay: `${index * 50}ms`,
         animationFillMode: "backwards"
