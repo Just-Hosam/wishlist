@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { Badge } from "./badge"
+import { useState } from "react"
 
 const CLAMP_CLASSES: Record<number, string> = {
   1: "line-clamp-1",
