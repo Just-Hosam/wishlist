@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/lib/utils"
 import { AlignJustify, FolderCheck, Heart, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -24,6 +25,11 @@ export default function Footer() {
 
     if (pathname.startsWith("/more")) {
       setActiveTab("MORE")
+      return
+    }
+
+    if (pathname.startsWith("/search")) {
+      setActiveTab("SEARCH")
       return
     }
   }, [pathname])
@@ -70,9 +76,16 @@ export default function Footer() {
           <Button
             size="icon"
             variant="link"
-            className="h-[52px] w-[52px] rounded-full bg-white text-black shadow-xl"
+            className="h-[52px] w-[52px] rounded-full bg-white p-[5px] text-black shadow-xl"
           >
-            <Search />
+            <div
+              className={cn(
+                "flex h-full w-full items-center justify-center rounded-full",
+                activeTab === "SEARCH" && "bg-secondary"
+              )}
+            >
+              <Search />
+            </div>
           </Button>
         </Link>
       </div>
