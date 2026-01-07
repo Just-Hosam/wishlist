@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
 import { GameCategory } from "@/types"
-import { ArrowRight, EllipsisVertical, Pencil } from "lucide-react"
+import { ArrowRight, EllipsisVertical, Pencil, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -60,7 +60,15 @@ export default async function WishlistGamePage({ params }: Props) {
                 Edit
               </Button>
             </Link>
-            <DeleteGameButton gameId={game.id} />
+            <DeleteGameButton gameId={game.id}>
+              <Button
+                className="justify-start text-destructive"
+                variant="ghost"
+              >
+                <Trash2 />
+                Delete
+              </Button>
+            </DeleteGameButton>
           </div>
         </PopoverContent>
       </Popover>

@@ -1,7 +1,6 @@
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
 import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
-import MoveGameButton from "@/components/layout/MoveGameButton"
 import MoveToWishlist from "@/components/layout/Wishlist/MoveToWishlist"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,8 +9,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
-import { GameCategory } from "@/types"
-import { ArrowRight, EllipsisVertical, Pencil } from "lucide-react"
+import { ArrowRight, EllipsisVertical, Pencil, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -55,7 +53,15 @@ export default async function CompletedGamePage({ params }: Props) {
                 Edit
               </Button>
             </Link>
-            <DeleteGameButton gameId={game.id} />
+            <DeleteGameButton gameId={game.id}>
+              <Button
+                className="justify-start text-destructive"
+                variant="ghost"
+              >
+                <Trash2 />
+                Delete
+              </Button>
+            </DeleteGameButton>
           </div>
         </PopoverContent>
       </Popover>

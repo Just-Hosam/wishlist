@@ -1,27 +1,27 @@
 "use client"
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { deleteGame } from "@/server/actions/game"
 import { useCategoryNavigation } from "@/lib/use-category-navigation"
-import { Trash2 } from "lucide-react"
+import { deleteGame } from "@/server/actions/game"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from "../ui/drawer"
 
 interface Props {
   gameId: string
+  children: React.ReactNode
 }
 
-export default function DeleteGameButton({ gameId }: Props) {
+export default function DeleteGameButton({ gameId, children }: Props) {
   const { navigateToActiveTab } = useCategoryNavigation()
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -43,32 +43,32 @@ export default function DeleteGameButton({ gameId }: Props) {
   }
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger asChild>
-        <Button className="justify-start text-destructive" variant="ghost">
-          <Trash2 />
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the game
-            from your list.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <Button
-            disabled={isPending}
-            variant="destructive"
-            onClick={handleDelete}
-          >
-            {isPending ? "Deleting..." : "Delete Game"}
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <Drawer open={isOpen} onOpenChange={(next) => setIsOpen(next)}>
+      <DrawerTrigger asChild onClick={() => setIsOpen(true)}>
+        {children}
+      </DrawerTrigger>
+      <DrawerContent>
+        <div className="px-2">
+          <DrawerHeader>
+            <DrawerTitle>Delete Game</DrawerTitle>
+            <DrawerDescription>
+              Are you sure you want to delete this game?
+            </DrawerDescription>
+          </DrawerHeader>
+          <DrawerFooter>
+            <Button
+              disabled={isPending}
+              onClick={handleDelete}
+              variant="destructive"
+            >
+              {isPending ? "Deleting..." : "Delete"}
+            </Button>
+            <DrawerClose asChild>
+              <Button variant="ghost">Cancel</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
   )
 }
