@@ -1,4 +1,5 @@
 import { Game } from "@/components/layout/Game"
+import AddToCompleted from "@/components/layout/Completed/AddToCompleted"
 import AddToLibrary from "@/components/layout/Library/AddToLibrary"
 import AddToWishlist from "@/components/layout/Wishlist/AddToWishlist"
 import { Button } from "@/components/ui/button"
@@ -50,9 +51,9 @@ export default async function SearchGamePage({ params }: Props) {
               To Library
             </AddToLibrary>
 
-            <Button className="w-full justify-start" variant="ghost">
+            <AddToCompleted timeToBeat={timeToBeat || null} igdbGame={igdbGame}>
               To Completed
-            </Button>
+            </AddToCompleted>
           </div>
         </PopoverContent>
       </Popover>
