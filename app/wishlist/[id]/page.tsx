@@ -29,7 +29,7 @@ export default async function WishlistGamePage({ params }: Props) {
   if (!game) notFound()
 
   return (
-    <div className="slide-fade-in">
+    <>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -81,6 +81,6 @@ export default async function WishlistGamePage({ params }: Props) {
         igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment || undefined}
         igdbNintendoUrlSegment={game.igdbNintendoUrlSegment || undefined}
       />
-    </div>
+    </>
   )
 }

@@ -27,7 +27,7 @@ export function Game({
   igdbId
 }: Props) {
   return (
-    <div>
+    <div className="slide-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
         <div className="mb-5 h-[233px] w-[175px] overflow-hidden rounded-3xl bg-gray-200">
           <Image

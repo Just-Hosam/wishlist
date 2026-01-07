@@ -28,7 +28,7 @@ export default async function SearchGamePage({ params }: Props) {
   if (!igdbGame) notFound()
 
   return (
-    <div className="slide-fade-in">
+    <>
       <Popover>
         <PopoverTrigger asChild>
           <Button className="absolute right-6 top-5 z-40">
@@ -66,6 +66,6 @@ export default async function SearchGamePage({ params }: Props) {
         igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || undefined}
         igdbNintendoUrlSegment={igdbGame.nintendoUrlSegment || undefined}
       />
-    </div>
+    </>
   )
 }
