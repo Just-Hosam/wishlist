@@ -45,11 +45,11 @@ export default function Footer() {
     <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[98%] via-55% to-transparent px-7 pb-7 pt-3">
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <Tabs value={activeTab} className="flex-1">
-          <TabsList className="w-full justify-around rounded-full bg-white p-[6px] shadow-lg">
+          <TabsList className="w-full justify-around rounded-full bg-white p-2 shadow-lg">
             <Link href="/wishlist" className="flex-1">
               <TabsTrigger
                 value="WISHLIST"
-                className="h-10 w-full rounded-full data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full transition-transform duration-150 active:scale-90 data-[state=active]:bg-secondary"
               >
                 <Heart />
               </TabsTrigger>
@@ -57,7 +57,7 @@ export default function Footer() {
             <Link href="/library" className="flex-1">
               <TabsTrigger
                 value="LIBRARY"
-                className="h-10 w-full rounded-full data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full transition-transform duration-150 active:scale-90 data-[state=active]:bg-secondary"
               >
                 <FolderCheck />
               </TabsTrigger>
@@ -65,7 +65,7 @@ export default function Footer() {
             <Link href="/more" className="flex-1">
               <TabsTrigger
                 value="MORE"
-                className="h-10 w-full rounded-full data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full transition-transform duration-150 active:scale-90 data-[state=active]:bg-secondary"
               >
                 <AlignJustify />
               </TabsTrigger>
@@ -76,7 +76,7 @@ export default function Footer() {
           <Button
             size="icon"
             variant="link"
-            className="h-[52px] w-[52px] rounded-full bg-white p-[5px] text-black shadow-xl"
+            className="h-16 w-16 rounded-full bg-white p-[7px] text-black shadow-lg transition-transform duration-150 active:scale-90"
           >
             <div
               className={cn(
