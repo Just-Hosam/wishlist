@@ -34,10 +34,31 @@ export default function Footer() {
     }
   }, [pathname])
 
-  const handleSearchClick = (e: React.MouseEvent) => {
+  const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
     if (pathname === "/search") {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent("focus-search-input"))
+    }
+  }
+
+  const handleWishlistClickOnWishlistPage = (e: React.MouseEvent) => {
+    if (pathname === "/wishlist") {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent("scroll-to-top"))
+    }
+  }
+
+  const handleLibraryClickOnLibraryPage = (e: React.MouseEvent) => {
+    if (pathname === "/library") {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent("scroll-to-top"))
+    }
+  }
+
+  const handleCompletedClickOnCompletedPage = (e: React.MouseEvent) => {
+    if (pathname === "/more/completed") {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent("scroll-to-top"))
     }
   }
 
@@ -46,7 +67,11 @@ export default function Footer() {
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <Tabs value={activeTab} className="flex-1">
           <TabsList className="w-full justify-around rounded-full bg-white p-2 shadow-lg">
-            <Link href="/wishlist" className="flex-1">
+            <Link
+              href="/wishlist"
+              className="flex-1"
+              onClick={handleWishlistClickOnWishlistPage}
+            >
               <TabsTrigger
                 value="WISHLIST"
                 className="h-12 w-full rounded-full transition-transform duration-150 active:scale-90 data-[state=active]:bg-secondary"
@@ -54,7 +79,11 @@ export default function Footer() {
                 <Heart />
               </TabsTrigger>
             </Link>
-            <Link href="/library" className="flex-1">
+            <Link
+              href="/library"
+              className="flex-1"
+              onClick={handleLibraryClickOnLibraryPage}
+            >
               <TabsTrigger
                 value="LIBRARY"
                 className="h-12 w-full rounded-full transition-transform duration-150 active:scale-90 data-[state=active]:bg-secondary"
@@ -62,7 +91,11 @@ export default function Footer() {
                 <FolderCheck />
               </TabsTrigger>
             </Link>
-            <Link href="/more" className="flex-1">
+            <Link
+              href="/more"
+              className="flex-1"
+              onClick={handleCompletedClickOnCompletedPage}
+            >
               <TabsTrigger
                 value="MORE"
                 className="h-12 w-full rounded-full transition-transform duration-150 active:scale-90 data-[state=active]:bg-secondary"
@@ -72,7 +105,7 @@ export default function Footer() {
             </Link>
           </TabsList>
         </Tabs>
-        <Link href="/search" onClick={handleSearchClick}>
+        <Link href="/search" onClick={handleSearchClickOnSearchPage}>
           <Button
             size="icon"
             variant="link"
