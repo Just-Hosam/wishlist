@@ -49,7 +49,7 @@ export default async function WishlistGamePage({ params }: Props) {
               <ArrowRight />
               To Completed
             </MoveToCompleted>
-            <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
+            <div className="-mx-3 my-2 rounded-full border-[0.5px]"></div>
             <Link href={`/game/${game.id}/edit`}>
               <Button className="w-full justify-start" variant="ghost">
                 <Pencil />
