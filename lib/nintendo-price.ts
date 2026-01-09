@@ -2,7 +2,7 @@
 
 import { Platform, PriceDescription, PriceInput } from "@/types"
 
-export const getNSUID = async (url: string): Promise<string | null> => {
+const getNSUID = async (url: string): Promise<string | null> => {
   try {
     const response = await fetch(url, {
       headers: {
@@ -69,18 +69,6 @@ export const getNSUID = async (url: string): Promise<string | null> => {
 const COUNTRY = "CA"
 const LANG = "en"
 
-export interface NintendoGameInfo {
-  nsuid: string
-  raw_price: string
-  raw_price_value: string // The clean numeric value
-  discounted_price?: string
-  discounted_price_value?: string // The clean numeric value
-  country: string
-  currency: string
-  onSale: boolean
-  storeUrl: string
-}
-
 export interface NintendoPriceData {
   nsuid: string
   raw_price: string
@@ -92,7 +80,7 @@ export interface NintendoPriceData {
   onSale: boolean
 }
 
-export async function getCurrentPrice(
+async function getCurrentPrice(
   nsuid: string,
   country = COUNTRY,
   lang = LANG
