@@ -96,9 +96,7 @@ export default function AddToLibrary({
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Add to Library</DrawerTitle>
-            <DrawerDescription>
-              Choose your settings before adding this game.
-            </DrawerDescription>
+            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <form className="space-y-6 px-4 pb-5 pt-3">
             <div className="flex items-end justify-between">

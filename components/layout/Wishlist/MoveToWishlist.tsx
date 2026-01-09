@@ -100,57 +100,63 @@ export default function MoveToWishlist({
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Move to Wishlist</DrawerTitle>
-            <DrawerDescription>Track prices for this game</DrawerDescription>
+            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
-          <form className="space-y-3 px-4 pb-5 pt-3">
-            <div className="flex items-center">
-              <Image
-                src="/logos/playstation.svg"
-                alt="PlayStation Logo"
-                width={20}
-                height={20}
-                className="mr-3"
-              />
-              <PlaystationPriceClient
-                igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
-                onFetchDone={(status) => {
-                  if (status === "success") {
-                    setPsSwitchDisabled(false)
-                  }
-                }}
-              />
+          <form className="px-4 pb-5 pt-3">
+            <label className="text-sm font-medium">Prices</label>
+            <p className="text-xs text-muted-foreground">
+              Track prices for these stores.
+            </p>
+            <div className="mt-3 space-y-3">
+              <div className="flex items-center">
+                <Image
+                  src="/logos/playstation.svg"
+                  alt="PlayStation Logo"
+                  width={20}
+                  height={20}
+                  className="mr-3"
+                />
+                <PlaystationPriceClient
+                  igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
+                  onFetchDone={(status) => {
+                    if (status === "success") {
+                      setPsSwitchDisabled(false)
+                    }
+                  }}
+                />
 
-              <Switch
-                checked={playStationLinked}
-                onCheckedChange={setPlayStationLinked}
-                disabled={psSwitchDisabled}
-                className="ml-auto data-[state=checked]:bg-blue-600"
-              />
-            </div>
-            <div className="flex items-center">
-              <Image
-                src="/logos/nintendo-switch.svg"
-                alt="Nintendo Switch Logo"
-                width={20}
-                height={20}
-                className="mr-3"
-              />
+                <Switch
+                  checked={playStationLinked}
+                  onCheckedChange={setPlayStationLinked}
+                  disabled={psSwitchDisabled}
+                  className="ml-auto data-[state=checked]:bg-blue-600"
+                />
+              </div>
+              <div className="flex items-center">
+                <Image
+                  src="/logos/nintendo-switch.svg"
+                  alt="Nintendo Switch Logo"
+                  width={20}
+                  height={20}
+                  className="mr-3"
+                />
 
-              <NintendoPriceClient
-                igdbNintendoUrlSegment={igdbNintendoUrlSegment}
-                onFetchDone={(status) => {
-                  if (status === "success") {
-                    setNtSwitchDisabled(false)
-                  }
-                }}
-              />
+                <NintendoPriceClient
+                  igdbNintendoUrlSegment={igdbNintendoUrlSegment}
+                  onFetchDone={(status) => {
+                    if (status === "success") {
+                      setNtSwitchDisabled(false)
+                    }
+                  }}
+                />
 
-              <Switch
-                checked={nintendoLinked}
-                onCheckedChange={setNintendoLinked}
-                disabled={ntSwitchDisabled}
-                className="ml-auto data-[state=checked]:bg-red-600"
-              />
+                <Switch
+                  checked={nintendoLinked}
+                  onCheckedChange={setNintendoLinked}
+                  disabled={ntSwitchDisabled}
+                  className="ml-auto data-[state=checked]:bg-red-600"
+                />
+              </div>
             </div>
           </form>
 
