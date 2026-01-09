@@ -108,6 +108,7 @@ export default function MoveToLibrary({ game, children }: Props) {
               </p>
               <ButtonGroup className="mt-3 w-full">
                 <Button
+                  size="lg"
                   type="button"
                   className="flex-1"
                   variant={playstationSelected ? "default" : "outline"}
@@ -124,6 +125,7 @@ export default function MoveToLibrary({ game, children }: Props) {
                   </span>
                 </Button>
                 <Button
+                  size="lg"
                   type="button"
                   className="flex-1"
                   variant={steamSelected ? "default" : "outline"}
@@ -140,6 +142,7 @@ export default function MoveToLibrary({ game, children }: Props) {
                   </span>
                 </Button>
                 <Button
+                  size="lg"
                   type="button"
                   className="flex-1"
                   variant={nintendoSelected ? "default" : "outline"}

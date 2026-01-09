@@ -125,6 +125,7 @@ export default function AddToLibrary({
               </p>
               <ButtonGroup className="mt-3 w-full">
                 <Button
+                  size="lg"
                   type="button"
                   className="flex-1"
                   variant={playstationSelected ? "default" : "outline"}
@@ -141,6 +142,7 @@ export default function AddToLibrary({
                   </span>
                 </Button>
                 <Button
+                  size="lg"
                   type="button"
                   className="flex-1"
                   variant={steamSelected ? "default" : "outline"}
@@ -157,6 +159,7 @@ export default function AddToLibrary({
                   </span>
                 </Button>
                 <Button
+                  size="lg"
                   type="button"
                   className="flex-1"
                   variant={nintendoSelected ? "default" : "outline"}
