@@ -8,9 +8,11 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
+type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
+
 export default function Footer() {
   const pathname = usePathname()
-  const [activeTab, setActiveTab] = useState("")
+  const [activeTab, setActiveTab] = useState<Tab>("")
 
   useEffect(() => {
     if (pathname.startsWith("/wishlist")) {
@@ -62,7 +64,7 @@ export default function Footer() {
   }
 
   const handleCompletedClickOnCompletedPage = (e: React.MouseEvent) => {
-    setActiveTab("COMPLETED")
+    setActiveTab("MORE")
 
     if (pathname === "/more/completed") {
       e.preventDefault()
