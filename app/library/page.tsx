@@ -1,5 +1,4 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
-import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
 import { authOptions } from "@/lib/auth-options"
 import { getCachedLibraryGames } from "@/server/actions/lists"
 import { Platform } from "@/types"
@@ -26,7 +25,6 @@ export default async function LibraryPage() {
 
   return (
     <>
-      <ScrollToTopListener />
       {hasNowPlaying && (
         <div className="slide-fade-in relative">
           <div className="-pt-3 sticky -top-3 z-30 mb-1 flex items-center gap-2 bg-background pb-4 font-semibold">
