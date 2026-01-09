@@ -9,7 +9,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { fetchTimeToBeat, getIGDBGameById } from "@/server/actions/igdb"
-import { Plus } from "lucide-react"
+import { CheckCircle2, FolderCheck, Heart, Plus } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -33,7 +33,7 @@ export default async function SearchGamePage({ params }: Props) {
         <PopoverTrigger asChild>
           <Button className="absolute right-6 top-5 z-40">
             <Plus />
-            Add
+            Add to
           </Button>
         </PopoverTrigger>
         <PopoverContent className="mr-4 w-fit md:mr-0">
@@ -45,15 +45,18 @@ export default async function SearchGamePage({ params }: Props) {
               timeToBeat={timeToBeat || null}
               igdbGame={igdbGame}
             >
-              To Wishlist
+              <Heart />
+              Wishlist
             </AddToWishlist>
 
             <AddToLibrary timeToBeat={timeToBeat || null} igdbGame={igdbGame}>
-              To Library
+              <FolderCheck />
+              Library
             </AddToLibrary>
 
             <AddToCompleted timeToBeat={timeToBeat || null} igdbGame={igdbGame}>
-              To Completed
+              <CheckCircle2 />
+              Completed
             </AddToCompleted>
           </div>
         </PopoverContent>
