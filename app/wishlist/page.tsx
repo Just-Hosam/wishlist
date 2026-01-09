@@ -33,6 +33,10 @@ export default async function WishlistPage() {
             ({ platform }) => Platform.PLAYSTATION === platform
           )
 
+          const steamPrice = game?.prices?.find(
+            ({ platform }) => Platform.PC === platform
+          )
+
           return (
             <Link key={game.id} href={`/wishlist/${game.id}`}>
               <div className="flex overflow-hidden rounded-3xl border">
@@ -86,6 +90,27 @@ export default async function WishlistPage() {
                           regularPrice={Number(
                             playstationPrice.regularPrice || 0
                           )}
+                          currency="USD"
+                        />
+                      </div>
+                    )}
+                    {steamPrice && (
+                      <div className="flex items-center">
+                        <Image
+                          src="/logos/steam.svg"
+                          alt="Steam Logo"
+                          width={16}
+                          height={16}
+                          className="mr-2"
+                        />
+                        <PriceLayout
+                          onSale={
+                            steamPrice.currentPrice !==
+                              steamPrice.regularPrice &&
+                            !!steamPrice.regularPrice
+                          }
+                          currentPrice={Number(steamPrice.currentPrice || 0)}
+                          regularPrice={Number(steamPrice.regularPrice || 0)}
                           currency="USD"
                         />
                       </div>
