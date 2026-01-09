@@ -35,6 +35,8 @@ export default function Footer() {
   }, [pathname])
 
   const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
+    setActiveTab("SEARCH")
+
     if (pathname === "/search") {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent("focus-search-input"))
@@ -42,6 +44,8 @@ export default function Footer() {
   }
 
   const handleWishlistClickOnWishlistPage = (e: React.MouseEvent) => {
+    setActiveTab("WISHLIST")
+
     if (pathname === "/wishlist") {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent("scroll-to-top"))
@@ -49,6 +53,8 @@ export default function Footer() {
   }
 
   const handleLibraryClickOnLibraryPage = (e: React.MouseEvent) => {
+    setActiveTab("LIBRARY")
+
     if (pathname === "/library") {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent("scroll-to-top"))
@@ -56,6 +62,8 @@ export default function Footer() {
   }
 
   const handleCompletedClickOnCompletedPage = (e: React.MouseEvent) => {
+    setActiveTab("COMPLETED")
+
     if (pathname === "/more/completed") {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent("scroll-to-top"))
