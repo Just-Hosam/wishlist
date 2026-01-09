@@ -149,9 +149,11 @@ export function SearchPage() {
               )}
 
               {/* Platforms - Show unique platform icons */}
-              {game.platforms && game.platforms.length > 0 && (
+              {(game.steamUrlSegment ||
+                game.playstationUrlSegment ||
+                game.nintendoUrlSegment) && (
                 <div className="mt-3 flex items-center gap-2">
-                  {game.platforms.includes(Platform.PLAYSTATION) && (
+                  {game.playstationUrlSegment && (
                     <Image
                       src="/logos/playstation.svg"
                       alt="PlayStation"
@@ -159,7 +161,7 @@ export function SearchPage() {
                       height={13}
                     />
                   )}
-                  {game.platforms.includes(Platform.NINTENDO) && (
+                  {game.nintendoUrlSegment && (
                     <Image
                       src="/logos/nintendo-switch.svg"
                       alt="Nintendo Switch"
@@ -167,15 +169,15 @@ export function SearchPage() {
                       height={13}
                     />
                   )}
-                  {game.platforms.includes(Platform.PC) && (
+                  {game.steamUrlSegment && (
                     <Image
-                      src="/logos/windows-10.svg"
-                      alt="PC"
+                      src="/logos/steam.svg"
+                      alt="Steam"
                       width={13}
                       height={13}
                     />
                   )}
-                  {game.platforms.includes(Platform.XBOX) && (
+                  {game.platforms?.includes(Platform.XBOX) && (
                     <Image
                       src="/logos/xbox.svg"
                       alt="Xbox"
