@@ -5,9 +5,9 @@ import {
   buildPlayStationStoreUrl,
   buildSteamStoreUrl
 } from "@/lib/igdb-store-links"
-import { moveGame } from "@/server/actions/game"
+import { saveGame } from "@/server/actions/game"
 import { linkPriceToGame } from "@/server/actions/price"
-import { GameCategory } from "@/types"
+import { GameCategory, GameInput, GameOutput } from "@/types"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -32,7 +32,7 @@ interface Props {
   igdbPlaystationUrlSegment: string | null
   igdbNintendoUrlSegment: string | null
   igdbSteamUrlSegment: string | null
-  gameId: string
+  game: GameOutput
   children: React.ReactNode
 }
 
@@ -40,7 +40,7 @@ export default function MoveToWishlist({
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
-  gameId,
+  game,
   children
 }: Props) {
   const router = useRouter()
@@ -57,7 +57,17 @@ export default function MoveToWishlist({
     setIsSaving(true)
 
     try {
-      await moveGame(gameId, GameCategory.WISHLIST)
+      const oldCategory = game.category
+      const newCategory = GameCategory.WISHLIST
+
+      const gameInput: GameInput = {
+        ...game,
+        category: newCategory,
+        platforms: [],
+        nowPlaying: false
+      }
+
+      await saveGame(gameInput, game.id, [oldCategory, newCategory])
 
       let playstationPromise
       let nintendoPromise
@@ -68,21 +78,21 @@ export default function MoveToWishlist({
           igdbPlaystationUrlSegment
         )
         if (playstationStoreUrl) {
-          playstationPromise = linkPriceToGame(gameId, playstationStoreUrl)
+          playstationPromise = linkPriceToGame(game.id, playstationStoreUrl)
         }
       }
 
       if (nintendoLinked && igdbNintendoUrlSegment) {
         const nintendoStoreUrl = buildNintendoStoreUrl(igdbNintendoUrlSegment)
         if (nintendoStoreUrl) {
-          nintendoPromise = linkPriceToGame(gameId, nintendoStoreUrl)
+          nintendoPromise = linkPriceToGame(game.id, nintendoStoreUrl)
         }
       }
 
       if (steamLinked && igdbSteamUrlSegment) {
         const steamStoreUrl = buildSteamStoreUrl(igdbSteamUrlSegment)
         if (steamStoreUrl) {
-          steamPromise = linkPriceToGame(gameId, steamStoreUrl)
+          steamPromise = linkPriceToGame(game.id, steamStoreUrl)
         }
       }
 

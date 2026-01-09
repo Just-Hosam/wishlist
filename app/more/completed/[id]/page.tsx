@@ -38,7 +38,7 @@ export default async function CompletedGamePage({ params }: Props) {
               igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment || null}
               igdbNintendoUrlSegment={game.igdbNintendoUrlSegment || null}
               igdbSteamUrlSegment={game.igdbSteamUrlSegment || null}
-              gameId={game.id}
+              game={game}
             >
               <ArrowRight />
               To Wishlist
@@ -47,7 +47,7 @@ export default async function CompletedGamePage({ params }: Props) {
               <ArrowRight />
               To Library
             </MoveToLibrary>
-            <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
+            <div className="-mx-3 my-2 rounded-full border-[0.5px]"></div>
             <Link href={`/game/${game.id}/edit`}>
               <Button className="w-full justify-start" variant="ghost">
                 <Pencil />

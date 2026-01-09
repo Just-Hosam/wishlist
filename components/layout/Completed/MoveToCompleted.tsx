@@ -1,7 +1,8 @@
 "use client"
 
 import { saveGame } from "@/server/actions/game"
-import { GameCategory, GameInput, IGDBGame } from "@/types"
+import { GameCategory, GameInput, GameOutput } from "@/types"
+import { revalidateTag } from "next/cache"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -18,16 +19,11 @@ import {
 } from "../../ui/drawer"
 
 interface Props {
-  igdbGame: IGDBGame
-  timeToBeat: number | null
+  game: GameOutput
   children: React.ReactNode
 }
 
-export default function AddToLibrary({
-  igdbGame,
-  timeToBeat,
-  children
-}: Props) {
+export default function MoveToCompleted({ game, children }: Props) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
@@ -36,33 +32,23 @@ export default function AddToLibrary({
     setIsSaving(true)
 
     try {
-      const game: GameInput = {
-        igdbId: igdbGame.igdbId,
-        igdbName: igdbGame.name,
-        igdbSlug: igdbGame.slug,
-        igdbSummary: igdbGame.summary,
-        igdbCoverImageId: igdbGame.coverImageId,
-        igdbScreenshotIds: igdbGame.screenshotImageIds,
-        igdbVideoId: igdbGame.videoId,
-        igdbPlatformIds: [],
-        igdbFirstReleaseDate: igdbGame.firstReleaseDate,
-        igdbNintendoUrlSegment: igdbGame.nintendoUrlSegment || null,
-        igdbPlaystationUrlSegment: igdbGame.playstationUrlSegment || null,
-        igdbSteamUrlSegment: igdbGame.steamUrlSegment || null,
-        category: GameCategory.COMPLETED,
-        platforms: [],
-        length: timeToBeat || null,
+      const oldCategory = game.category
+      const newCategory = GameCategory.COMPLETED
+
+      const gameInput: GameInput = {
+        ...game,
+        category: newCategory,
         nowPlaying: false
       }
 
-      await saveGame(game)
+      await saveGame(gameInput, game.id, [oldCategory, newCategory])
 
-      toast.success("Game added to completed!")
+      toast.success("Game moved to completed!")
       setOpen(false)
       router.push("/more/completed")
     } catch (error) {
-      console.error("Error saving game to completed:", error)
-      toast.error("Failed to add game to completed.")
+      console.error("Error moving game to completed:", error)
+      toast.error("Failed to move game to completed.")
     } finally {
       setIsSaving(false)
     }
@@ -82,12 +68,12 @@ export default function AddToLibrary({
       <DrawerContent>
         <div className="px-2">
           <DrawerHeader>
-            <DrawerTitle>Add to Completed</DrawerTitle>
+            <DrawerTitle>Move to Completed</DrawerTitle>
             <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
             <Button disabled={isSaving} onClick={handleSave}>
-              {isSaving ? "Adding..." : "Add to Completed"}
+              {isSaving ? "Moving..." : "Move to Completed"}
             </Button>
             <DrawerClose asChild>
               <Button variant="ghost">Cancel</Button>

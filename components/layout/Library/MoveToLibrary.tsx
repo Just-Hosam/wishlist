@@ -39,6 +39,8 @@ export default function MoveToLibrary({ game, children }: Props) {
     setIsSaving(true)
 
     try {
+      const oldCategory = game.category
+      const newCategory = GameCategory.LIBRARY
       const platforms: Platform[] = []
       if (playstationSelected) platforms.push(Platform.PLAYSTATION)
       if (nintendoSelected) platforms.push(Platform.NINTENDO)
@@ -46,12 +48,12 @@ export default function MoveToLibrary({ game, children }: Props) {
 
       const gameInput: GameInput = {
         ...game,
-        category: GameCategory.LIBRARY,
+        category: newCategory,
         platforms,
         nowPlaying
       }
 
-      await saveGame(gameInput, game.id)
+      await saveGame(gameInput, game.id, [oldCategory, newCategory])
 
       toast.success("Game moved to library!")
       setOpen(false)

@@ -1,7 +1,7 @@
+import MoveToCompleted from "@/components/layout/Completed/MoveToCompleted"
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
 import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
-import MoveGameButton from "@/components/layout/MoveGameButton"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -9,7 +9,6 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
-import { GameCategory } from "@/types"
 import { ArrowRight, EllipsisVertical, Pencil, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -46,13 +45,10 @@ export default async function WishlistGamePage({ params }: Props) {
               <ArrowRight />
               To Library
             </MoveToLibrary>
-            <MoveGameButton
-              gameId={game.id}
-              fromCategory={GameCategory.WISHLIST}
-              toCategory={GameCategory.COMPLETED}
-              buttonText="To Completed"
-              icon={<ArrowRight />}
-            />
+            <MoveToCompleted game={game}>
+              <ArrowRight />
+              To Completed
+            </MoveToCompleted>
             <div className="mx-[-12px] my-2 rounded-full border-[0.5px]"></div>
             <Link href={`/game/${game.id}/edit`}>
               <Button className="w-full justify-start" variant="ghost">
