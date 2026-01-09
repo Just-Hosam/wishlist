@@ -41,6 +41,7 @@ export default async function SearchGamePage({ params }: Props) {
             <AddToWishlist
               igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || null}
               igdbNintendoUrlSegment={igdbGame.nintendoUrlSegment || null}
+              igdbSteamUrlSegment={igdbGame.steamUrlSegment || null}
               timeToBeat={timeToBeat || null}
               igdbGame={igdbGame}
             >

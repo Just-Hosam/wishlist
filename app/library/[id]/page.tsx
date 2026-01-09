@@ -44,6 +44,7 @@ export default async function WishlistGamePage({ params }: Props) {
             <MoveToWishlist
               igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment || null}
               igdbNintendoUrlSegment={game.igdbNintendoUrlSegment || null}
+              igdbSteamUrlSegment={game.igdbSteamUrlSegment || null}
               gameId={game.id}
             >
               <ArrowRight />

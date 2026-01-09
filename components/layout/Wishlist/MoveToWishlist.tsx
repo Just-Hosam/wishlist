@@ -2,11 +2,12 @@
 
 import {
   buildNintendoStoreUrl,
-  buildPlayStationStoreUrl
+  buildPlayStationStoreUrl,
+  buildSteamStoreUrl
 } from "@/lib/igdb-store-links"
-import { moveGame, saveGame } from "@/server/actions/game"
+import { moveGame } from "@/server/actions/game"
 import { linkPriceToGame } from "@/server/actions/price"
-import { GameCategory, GameInput, GameOutput, IGDBGame } from "@/types"
+import { GameCategory } from "@/types"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -25,10 +26,12 @@ import {
 import { Switch } from "../../ui/switch"
 import NintendoPriceClient from "../NintendoPriceClient"
 import PlaystationPriceClient from "../PlaystationPriceClient"
+import SteamPriceClient from "../SteamPriceClient"
 
 interface Props {
   igdbPlaystationUrlSegment: string | null
   igdbNintendoUrlSegment: string | null
+  igdbSteamUrlSegment: string | null
   gameId: string
   children: React.ReactNode
 }
@@ -36,6 +39,7 @@ interface Props {
 export default function MoveToWishlist({
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
+  igdbSteamUrlSegment,
   gameId,
   children
 }: Props) {
@@ -46,6 +50,8 @@ export default function MoveToWishlist({
   const [psSwitchDisabled, setPsSwitchDisabled] = useState(true)
   const [nintendoLinked, setNintendoLinked] = useState(false)
   const [ntSwitchDisabled, setNtSwitchDisabled] = useState(true)
+  const [steamLinked, setSteamLinked] = useState(false)
+  const [steamSwitchDisabled, setSteamSwitchDisabled] = useState(true)
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -55,6 +61,7 @@ export default function MoveToWishlist({
 
       let playstationPromise
       let nintendoPromise
+      let steamPromise
 
       if (playStationLinked && igdbPlaystationUrlSegment) {
         const playstationStoreUrl = buildPlayStationStoreUrl(
@@ -72,7 +79,14 @@ export default function MoveToWishlist({
         }
       }
 
-      await Promise.all([playstationPromise, nintendoPromise])
+      if (steamLinked && igdbSteamUrlSegment) {
+        const steamStoreUrl = buildSteamStoreUrl(igdbSteamUrlSegment)
+        if (steamStoreUrl) {
+          steamPromise = linkPriceToGame(gameId, steamStoreUrl)
+        }
+      }
+
+      await Promise.all([playstationPromise, nintendoPromise, steamPromise])
 
       toast.success("Game added to wishlist!")
       setOpen(false)
@@ -155,6 +169,31 @@ export default function MoveToWishlist({
                   onCheckedChange={setNintendoLinked}
                   disabled={ntSwitchDisabled}
                   className="ml-auto data-[state=checked]:bg-red-600"
+                />
+              </div>
+              <div className="flex items-center">
+                <Image
+                  src="/logos/steam.svg"
+                  alt="Steam Logo"
+                  width={20}
+                  height={20}
+                  className="mr-3"
+                />
+
+                <SteamPriceClient
+                  igdbSteamUrlSegment={igdbSteamUrlSegment}
+                  onFetchDone={(status) => {
+                    if (status === "success") {
+                      setSteamSwitchDisabled(false)
+                    }
+                  }}
+                />
+
+                <Switch
+                  checked={steamLinked}
+                  onCheckedChange={setSteamLinked}
+                  disabled={steamSwitchDisabled}
+                  className="ml-auto data-[state=checked]:bg-slate-600"
                 />
               </div>
             </div>
