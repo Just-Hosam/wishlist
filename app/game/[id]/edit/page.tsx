@@ -1,8 +1,7 @@
 import GameForm from "@/components/layout/GameForm"
 import prisma from "@/lib/prisma"
-import { getStoreUrlsFromIGDB } from "@/lib/igdb-store-links"
+import { GameInput } from "@/types"
 import { notFound } from "next/navigation"
-import { GameInput, GameOutput } from "@/types"
 
 interface Props {
   params: Promise<{ id: string }>

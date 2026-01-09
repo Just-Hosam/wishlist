@@ -66,26 +66,20 @@ export function buildPlayStationStoreUrl(
 }
 
 /**
- * Build all available store URLs from IGDB game data
- * @param igdbGame - IGDB game data with store URL segments
+ * Build Steam Store URL for a given country
+ * @param urlSegment - The Steam URL segment from IGDB
  * @param country - Country code (default: 'CA' for Canada)
- * @returns Object with all available store URLs
+ * @returns Full Steam Store URL
  */
-export function getStoreUrlsFromIGDB(
-  igdbGame: IGDBStoreSegments,
+export function buildSteamStoreUrl(
+  urlSegment: string,
   country: Country = "CA"
-): {
-  nintendo: string | null
-  playstation: string | null
-} {
-  return {
-    nintendo: igdbGame.nintendoUrlSegment
-      ? buildNintendoStoreUrl(igdbGame.nintendoUrlSegment, country)
-      : null,
-    playstation: igdbGame.playstationUrlSegment
-      ? buildPlayStationStoreUrl(igdbGame.playstationUrlSegment, country)
-      : null
-  }
+): string | null {
+  if (!urlSegment) return null
+
+  const appId = urlSegment.split("/")[1]
+
+  return `https://store.steampowered.com/api/appdetails?appids=${appId}&cc=${country.toLowerCase()}&l=en`
 }
 
 /**
