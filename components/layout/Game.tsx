@@ -6,15 +6,17 @@ import { Suspense } from "react"
 import { Skeleton } from "../ui/skeleton"
 import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
+import SteamPrice from "./SteamPrice"
 
 interface Props {
   imageId: string
   name: string
   length?: number
   summary?: string
+  igdbId?: string | null
   igdbPlaystationUrlSegment?: string
   igdbNintendoUrlSegment?: string
-  igdbId?: string | null
+  igdbSteamUrlSegment?: string
 }
 
 export function Game({
@@ -22,9 +24,10 @@ export function Game({
   name,
   length,
   summary,
+  igdbId,
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
-  igdbId
+  igdbSteamUrlSegment
 }: Props) {
   return (
     <div className="slide-fade-in">
@@ -71,6 +74,25 @@ export function Game({
             </Suspense>
           </div>
 
+          <div className="flex items-center">
+            <Image
+              src="/logos/steam.svg"
+              alt="Steam Logo"
+              width={20}
+              height={20}
+              className="mr-3"
+            />
+            <Suspense
+              fallback={
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Fetching price...</span>
+                </div>
+              }
+            >
+              <SteamPrice igdbSteamUrlSegment={igdbSteamUrlSegment || null} />
+            </Suspense>
+          </div>
           <div className="flex items-center">
             <Image
               src="/logos/nintendo-switch.svg"
