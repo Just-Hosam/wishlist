@@ -69,6 +69,27 @@ export default async function WishlistPage() {
                   </header>
 
                   <div className="mt-auto flex flex-col gap-1 pt-3 empty:pt-0">
+                    {steamPrice && (
+                      <div className="flex items-center">
+                        <Image
+                          src="/logos/steam.svg"
+                          alt="Steam Logo"
+                          width={16}
+                          height={16}
+                          className="mr-2"
+                        />
+                        <PriceLayout
+                          onSale={
+                            steamPrice.currentPrice !==
+                              steamPrice.regularPrice &&
+                            !!steamPrice.regularPrice
+                          }
+                          currentPrice={Number(steamPrice.currentPrice || 0)}
+                          regularPrice={Number(steamPrice.regularPrice || 0)}
+                          currency="USD"
+                        />
+                      </div>
+                    )}
                     {playstationPrice && (
                       <div className="flex items-center">
                         <Image
@@ -90,27 +111,6 @@ export default async function WishlistPage() {
                           regularPrice={Number(
                             playstationPrice.regularPrice || 0
                           )}
-                          currency="USD"
-                        />
-                      </div>
-                    )}
-                    {steamPrice && (
-                      <div className="flex items-center">
-                        <Image
-                          src="/logos/steam.svg"
-                          alt="Steam Logo"
-                          width={16}
-                          height={16}
-                          className="mr-2"
-                        />
-                        <PriceLayout
-                          onSale={
-                            steamPrice.currentPrice !==
-                              steamPrice.regularPrice &&
-                            !!steamPrice.regularPrice
-                          }
-                          currentPrice={Number(steamPrice.currentPrice || 0)}
-                          regularPrice={Number(steamPrice.regularPrice || 0)}
                           currency="USD"
                         />
                       </div>

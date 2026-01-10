@@ -54,6 +54,25 @@ export function Game({
         <div className="mt-3 space-y-3">
           <div className="flex items-center">
             <Image
+              src="/logos/steam.svg"
+              alt="Steam Logo"
+              width={20}
+              height={20}
+              className="mr-3"
+            />
+            <Suspense
+              fallback={
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Fetching price...</span>
+                </div>
+              }
+            >
+              <SteamPrice igdbSteamUrlSegment={igdbSteamUrlSegment || null} />
+            </Suspense>
+          </div>
+          <div className="flex items-center">
+            <Image
               src="/logos/playstation.svg"
               alt="PlayStation Logo"
               width={20}
@@ -71,26 +90,6 @@ export function Game({
               <PlaystationPrice
                 igdbPlaystationUrlSegment={igdbPlaystationUrlSegment || null}
               />
-            </Suspense>
-          </div>
-
-          <div className="flex items-center">
-            <Image
-              src="/logos/steam.svg"
-              alt="Steam Logo"
-              width={20}
-              height={20}
-              className="mr-3"
-            />
-            <Suspense
-              fallback={
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Fetching price...</span>
-                </div>
-              }
-            >
-              <SteamPrice igdbSteamUrlSegment={igdbSteamUrlSegment || null} />
             </Suspense>
           </div>
           <div className="flex items-center">

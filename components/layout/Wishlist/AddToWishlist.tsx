@@ -148,6 +148,31 @@ export default function ToWishlistButton({
             <div className="mt-3 space-y-3">
               <div className="flex items-center">
                 <Image
+                  src="/logos/steam.svg"
+                  alt="Steam Logo"
+                  width={20}
+                  height={20}
+                  className="mr-3"
+                />
+
+                <SteamPriceClient
+                  igdbSteamUrlSegment={igdbSteamUrlSegment}
+                  onFetchDone={(status) => {
+                    if (status === "success") {
+                      setSteamSwitchDisabled(false)
+                    }
+                  }}
+                />
+
+                <Switch
+                  checked={steamLinked}
+                  onCheckedChange={setSteamLinked}
+                  disabled={steamSwitchDisabled}
+                  className="ml-auto data-[state=checked]:bg-[#134376]"
+                />
+              </div>
+              <div className="flex items-center">
+                <Image
                   src="/logos/playstation.svg"
                   alt="PlayStation Logo"
                   width={20}
@@ -193,31 +218,6 @@ export default function ToWishlistButton({
                   onCheckedChange={setNintendoLinked}
                   disabled={ntSwitchDisabled}
                   className="ml-auto data-[state=checked]:bg-red-600"
-                />
-              </div>
-              <div className="flex items-center">
-                <Image
-                  src="/logos/steam.svg"
-                  alt="Steam Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                />
-
-                <SteamPriceClient
-                  igdbSteamUrlSegment={igdbSteamUrlSegment}
-                  onFetchDone={(status) => {
-                    if (status === "success") {
-                      setSteamSwitchDisabled(false)
-                    }
-                  }}
-                />
-
-                <Switch
-                  checked={steamLinked}
-                  onCheckedChange={setSteamLinked}
-                  disabled={steamSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-[#134376]"
                 />
               </div>
             </div>

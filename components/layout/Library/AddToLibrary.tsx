@@ -126,29 +126,12 @@ export default function AddToLibrary({
                   size="lg"
                   type="button"
                   className="flex-1"
-                  variant={playstationSelected ? "default" : "outline"}
-                  onClick={() => setPlaystationSelected(!playstationSelected)}
-                >
-                  <Image
-                    src="/logos/playstation.svg"
-                    alt="PlayStation"
-                    width={18}
-                    height={18}
-                  />
-                  <span className="hidden text-sm font-normal sm:inline-block">
-                    Playstation
-                  </span>
-                </Button>
-                <Button
-                  size="lg"
-                  type="button"
-                  className="flex-1"
                   variant={steamSelected ? "default" : "outline"}
                   onClick={() => setSteamSelected(!steamSelected)}
                 >
                   <Image
                     src="/logos/steam.svg"
-                    alt="Steam"
+                    alt="Steam Logo"
                     width={18}
                     height={18}
                   />
@@ -160,12 +143,29 @@ export default function AddToLibrary({
                   size="lg"
                   type="button"
                   className="flex-1"
+                  variant={playstationSelected ? "default" : "outline"}
+                  onClick={() => setPlaystationSelected(!playstationSelected)}
+                >
+                  <Image
+                    src="/logos/playstation.svg"
+                    alt="PlayStation Logo"
+                    width={18}
+                    height={18}
+                  />
+                  <span className="hidden text-sm font-normal sm:inline-block">
+                    Playstation
+                  </span>
+                </Button>
+                <Button
+                  size="lg"
+                  type="button"
+                  className="flex-1"
                   variant={nintendoSelected ? "default" : "outline"}
                   onClick={() => setNintendoSelected(!nintendoSelected)}
                 >
                   <Image
                     src="/logos/nintendo-switch.svg"
-                    alt="Nintendo"
+                    alt="Nintendo Logo"
                     width={18}
                     height={18}
                   />

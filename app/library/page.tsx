@@ -100,10 +100,18 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
         {/* Platforms - Show unique platform icons */}
         {game.platforms && game.platforms.length > 0 && (
           <div className="mt-3 flex items-center gap-2">
+            {game.platforms.includes(Platform.PC) && (
+              <Image
+                src="/logos/steam.svg"
+                alt="Steam Logo"
+                width={13}
+                height={13}
+              />
+            )}
             {game.platforms.includes(Platform.PLAYSTATION) && (
               <Image
                 src="/logos/playstation.svg"
-                alt="PlayStation"
+                alt="PlayStation Logo"
                 width={13}
                 height={13}
               />
@@ -111,15 +119,7 @@ const LibraryGameCard = ({ game, index }: LibraryGameCardProps) => (
             {game.platforms.includes(Platform.NINTENDO) && (
               <Image
                 src="/logos/nintendo-switch.svg"
-                alt="Nintendo Switch"
-                width={13}
-                height={13}
-              />
-            )}
-            {game.platforms.includes(Platform.PC) && (
-              <Image
-                src="/logos/windows-10.svg"
-                alt="PC"
+                alt="Nintendo Switch Logo"
                 width={13}
                 height={13}
               />

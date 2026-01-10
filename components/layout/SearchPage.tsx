@@ -153,10 +153,18 @@ export function SearchPage() {
                 game.playstationUrlSegment ||
                 game.nintendoUrlSegment) && (
                 <div className="mt-3 flex items-center gap-2">
+                  {game.steamUrlSegment && (
+                    <Image
+                      src="/logos/steam.svg"
+                      alt="Steam Logo"
+                      width={13}
+                      height={13}
+                    />
+                  )}
                   {game.playstationUrlSegment && (
                     <Image
                       src="/logos/playstation.svg"
-                      alt="PlayStation"
+                      alt="PlayStation Logo"
                       width={13}
                       height={13}
                     />
@@ -164,15 +172,15 @@ export function SearchPage() {
                   {game.nintendoUrlSegment && (
                     <Image
                       src="/logos/nintendo-switch.svg"
-                      alt="Nintendo Switch"
+                      alt="Nintendo Switch Logo"
                       width={13}
                       height={13}
                     />
                   )}
-                  {game.steamUrlSegment && (
+                  {game.platforms?.includes(Platform.PC) && (
                     <Image
-                      src="/logos/steam.svg"
-                      alt="Steam"
+                      src="/logos/windows-10.svg"
+                      alt="Windows Logo"
                       width={13}
                       height={13}
                     />
@@ -180,7 +188,7 @@ export function SearchPage() {
                   {game.platforms?.includes(Platform.XBOX) && (
                     <Image
                       src="/logos/xbox.svg"
-                      alt="Xbox"
+                      alt="Xbox Logo"
                       width={13}
                       height={13}
                     />
