@@ -16,7 +16,7 @@ const batchArr = (arr: any[], batchSize: number) => {
   return result
 }
 
-export async function GET() {
+export async function runNintendoPriceUpdate() {
   console.log("[CRON] Starting Nintendo price update job...")
 
   try {
@@ -94,9 +94,18 @@ export async function GET() {
     }
 
     console.log("[CRON] Nintendo price update completed:", result)
-    return NextResponse.json(result)
+    return result
   } catch (error) {
     console.error("[CRON] Nintendo price update failed:", error)
+    throw error
+  }
+}
+
+export async function GET() {
+  try {
+    const result = await runNintendoPriceUpdate()
+    return NextResponse.json(result)
+  } catch (error) {
     return NextResponse.json(
       {
         error: "Nintendo price update failed",

@@ -19,7 +19,7 @@ const chunk = <T>(items: T[], size: number) => {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export async function GET() {
+export async function runSteamPriceUpdate() {
   console.log("[CRON] Starting Steam price update job...")
 
   try {
@@ -157,9 +157,18 @@ export async function GET() {
     }
 
     console.log("[CRON] Steam price update completed:", result)
-    return NextResponse.json(result)
+    return result
   } catch (error) {
     console.error("[CRON] Steam price update failed:", error)
+    throw error
+  }
+}
+
+export async function GET() {
+  try {
+    const result = await runSteamPriceUpdate()
+    return NextResponse.json(result)
+  } catch (error) {
     return NextResponse.json(
       {
         error: "Steam price update failed",
