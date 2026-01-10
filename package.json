@@ -9,6 +9,7 @@
     "lint": "next lint",
     "update-playstation-prices": "curl -X POST http://localhost:3000/api/cron/update-playstation-prices",
     "update-nintendo-prices": "curl -X POST http://localhost:3000/api/cron/update-nintendo-prices",
+    "update-steam-prices": "curl -X POST http://localhost:3000/api/cron/update-steam-prices",
     "igdb-execute": "tsx --env-file=.env scripts/igdb/execute.ts",
     "igdb-token": "tsx --env-file=.env scripts/igdb/token.ts",
     "deploy": "./scripts/deploy.sh"
