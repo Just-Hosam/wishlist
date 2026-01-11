@@ -1,6 +1,6 @@
-import { runNintendoPriceUpdate } from "../update-nintendo-prices/route"
-import { runPlayStationPriceUpdate } from "../update-playstation-prices/route"
-import { runSteamPriceUpdate } from "../update-steam-prices/route"
+import { runNintendoPriceUpdate } from "@/server/cron/nintendo"
+import { runPlayStationPriceUpdate } from "@/server/cron/playstation"
+import { runSteamPriceUpdate } from "@/server/cron/steam"
 import { NextResponse } from "next/server"
 
 const jobs = [
