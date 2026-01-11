@@ -1,28 +1,36 @@
-# Wishlist App
+# Playward
 
-An application to manage video games wishlists with hours needed to complete them and their current price of various platforms.
+Track the games you want to play, estimate how long they will take, and keep an eye on prices across major storefronts.
 
-## Overview
+Playward is a focused backlog app: search for a game, add it to your wishlist or library, set a time estimate, and move it through to completion.
 
-This app helps you:
+## Highlights
 
-- Create and manage video game wishlists
-- Track completion hours needed for each game
-- Monitor current prices across various gaming platforms
-- Organize games by priority and completion status
+- Search and add games (powered by IGDB)
+- Organize by status: Wishlist, Library, Completed
+- Track time-to-beat with a per-game length estimate
+- Monitor prices across supported platforms (Steam / Nintendo / PlayStation)
+- Sign in with Google for a personal, persistent list
 
-## Features
+## Screenshots
 
-- **Google Authentication:** Secure login using your Google account
-- **Game Wishlist Management:** Create, edit, and organize your video game wishlists
-- **Completion Tracking:** Track hours needed to complete each game
-- **Price Monitoring:** Monitor current prices across different gaming platforms
-- **Priority System:** Organize games by priority and completion status
+<p align="center">
+	<img src="public/screenshots/Wishlist.PNG" alt="Wishlist view" width="32%" />
+	<img src="public/screenshots/Library.PNG" alt="Library" width="32%" />
+	<img src="public/screenshots/Seach.PNG" alt="Search" width="32%" />
+</p>
 
-## Technical Stack
+<p align="center">
+	<img src="public/screenshots/Game.PNG" alt="Game details" width="32%" />
+	<img src="public/screenshots/Add_to_wishlist.PNG" alt="Add to wishlist" width="32%" />
+	<img src="public/screenshots/Add_to_library.PNG" alt="Add to library" width="32%" />
+</p>
 
-- Next.js 15
-- TypeScript
-- Prisma with PostgreSQL
-- NextAuth.js for authentication
-- Tailwind CSS for styling
+## Built with
+
+- Next.js (App Router) + TypeScript
+- Prisma + PostgreSQL
+- NextAuth (Google provider)
+- Tailwind CSS + Radix UI primitives
+- IGDB API (game data)
+- Vercel (hosting)
