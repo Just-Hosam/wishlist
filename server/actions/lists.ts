@@ -42,7 +42,7 @@ export const getCachedWishlistGames = async (userId: string) => {
     },
     [userId],
     {
-      tags: [`user-wishlist-games-${userId}`],
+      tags: [`user-wishlist-games-${userId}`, "wishlist"],
       revalidate: 1800 // 30 minutes
     }
   )()
