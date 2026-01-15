@@ -1,6 +1,7 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import PriceLayout from "@/components/layout/PriceLayout"
 import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
+import { Skeleton } from "@/components/ui/skeleton"
 import { authOptions } from "@/lib/auth-options"
 import { getCachedWishlistGames } from "@/server/actions/lists"
 import { Platform } from "@/types"
@@ -9,8 +10,19 @@ import { getServerSession } from "next-auth"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
 export default async function WishlistPage() {
+  return (
+    <div className="slide-fade-in">
+      <Suspense fallback={<WishlistSkeleton />}>
+        <Wishlist />
+      </Suspense>
+    </div>
+  )
+}
+
+async function Wishlist() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) redirect("/")
 
@@ -23,7 +35,7 @@ export default async function WishlistPage() {
   return (
     <>
       <ScrollToTopListener />
-      <div className="slide-fade-in grid gap-3">
+      <div className="grid gap-3">
         {wishlistGames.map((game, index) => {
           const nintendoPrice = game?.prices?.find(
             ({ platform }) => Platform.NINTENDO === platform
@@ -144,5 +156,39 @@ export default async function WishlistPage() {
         })}
       </div>
     </>
+  )
+}
+
+function WishlistSkeleton() {
+  return (
+    <div className="grid gap-3">
+      {Array.from({ length: 7 }).map((_, index) => (
+        <div key={index} className="flex overflow-hidden rounded-3xl border">
+          {/* Game cover skeleton */}
+          <Skeleton className="h-[174px] w-[130px] flex-shrink-0" />
+
+          <div className="flex min-w-0 flex-1 flex-col px-4 py-3">
+            <header className="items-start justify-between">
+              {/* Title skeleton */}
+              <Skeleton className="mb-1 h-6 w-3/4" />
+              {/* Time info skeleton */}
+              <Skeleton className="h-4 w-20" />
+            </header>
+
+            <div className="mt-auto flex flex-col gap-1 pt-3">
+              {/* Price skeletons */}
+              <div className="flex items-center">
+                <Skeleton className="mr-2 h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+              <div className="flex items-center">
+                <Skeleton className="mr-2 h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
