@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     APP_VERSION: process.env.npm_package_version
   },
   images: {
+    minimumCacheTTL: 10_368_000, // 4 months
     remotePatterns: [
       {
         protocol: "https",
