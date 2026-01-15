@@ -92,7 +92,7 @@ body {
   }
 }
 
-.custom-custom-slide-fade-in {
+.custom-slide-fade-in {
   animation: slideFadeIn 300ms ease-in-out;
 }
 
