@@ -1,19 +1,18 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
-import { authOptions } from "@/lib/auth-options"
 import { getCachedLibraryGames } from "@/server/actions/lists"
 import { Platform } from "@/types"
 import { Clock, Layers, PlayCircle } from "lucide-react"
-import { getServerSession } from "next-auth"
+import { headers } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function LibraryPage() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect("/")
+  const userId = (await headers()).get("x-user-id")
+  if (!userId) redirect("/")
 
-  const libraryGames = await getCachedLibraryGames(session.user.id)
+  const libraryGames = await getCachedLibraryGames(userId)
 
   const nowPlayingGames = libraryGames.filter((game) => game.nowPlaying)
   const backlogGames = libraryGames.filter((game) => !game.nowPlaying)
