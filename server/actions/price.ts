@@ -6,10 +6,6 @@ import { PriceInput, PriceOutput } from "@/types"
 import { getServerSession } from "next-auth"
 
 export async function getPrice(url: string): Promise<PriceOutput | null> {
-  const session = await getServerSession(authOptions)
-  const userId = session?.user?.id
-
-  if (!userId) throw new Error("Unauthorized.")
   if (!url) throw new Error("URL is required")
 
   const price = (await prisma.price.findFirst({
@@ -34,11 +30,6 @@ export async function getPrice(url: string): Promise<PriceOutput | null> {
 }
 
 export async function savePrice(priceData: PriceInput): Promise<PriceOutput> {
-  const session = await getServerSession(authOptions)
-  const userId = session?.user?.id
-
-  if (!userId) throw new Error("Unauthorized.")
-
   const price = await prisma.price.upsert({
     where: { storeUrl: priceData.storeUrl },
     update: {
