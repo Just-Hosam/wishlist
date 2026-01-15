@@ -1,20 +1,19 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import PriceLayout from "@/components/layout/PriceLayout"
 import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
-import { authOptions } from "@/lib/auth-options"
 import { getCachedWishlistGames } from "@/server/actions/lists"
 import { Platform } from "@/types"
 import { Clock } from "lucide-react"
-import { getServerSession } from "next-auth"
+import { headers } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function WishlistPage() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect("/")
+  const userId = (await headers()).get("x-user-id")
+  if (!userId) redirect("/")
 
-  const wishlistGames = await getCachedWishlistGames(session.user.id)
+  const wishlistGames = await getCachedWishlistGames(userId)
 
   if (wishlistGames.length === 0) {
     return <ListEmptyState />

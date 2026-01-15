@@ -1,18 +1,17 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
 import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
-import { authOptions } from "@/lib/auth-options"
 import { getCachedCompletedGames } from "@/server/actions/lists"
 import { Clock } from "lucide-react"
-import { getServerSession } from "next-auth"
+import { headers } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function CompletedList() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) return redirect("/")
+  const userId = (await headers()).get("x-user-id")
+  if (!userId) redirect("/")
 
-  const games = await getCachedCompletedGames(session.user.id)
+  const games = await getCachedCompletedGames(userId)
 
   if (games.length === 0) {
     return <ListEmptyState />
