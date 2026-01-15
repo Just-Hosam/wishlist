@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Loading() {
   return (
-    <div className="slide-fade-in grid gap-3">
+    <div className="custom-slide-fade-in grid gap-3">
       {Array.from({ length: 7 }).map((_, index) => (
         <div key={index} className="flex overflow-hidden rounded-3xl border">
           {/* Game cover skeleton */}

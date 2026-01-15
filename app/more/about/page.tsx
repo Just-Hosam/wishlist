@@ -15,7 +15,7 @@ export default function AboutPage() {
     <>
       <PageHeader pageName="About" showBackButton />
 
-      <div className="slide-fade-in">
+      <div className="custom-slide-fade-in">
         <Gamepad2
           size={130}
           strokeWidth={1.45}

@@ -9,7 +9,7 @@ export default function MorePage() {
     <>
       <PageHeader pageName="More" />
 
-      <div className="slide-fade-in">
+      <div className="custom-slide-fade-in">
         <Link
           href="/more/about"
           style={{ animationDelay: "0ms", animationFillMode: "backwards" }}

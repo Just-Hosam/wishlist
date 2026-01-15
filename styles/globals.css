@@ -92,6 +92,6 @@ body {
   }
 }
 
-.slide-fade-in {
+.custom-custom-slide-fade-in {
   animation: slideFadeIn 300ms ease-in-out;
 }

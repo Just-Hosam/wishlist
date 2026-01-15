@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export default function NotFoundPage() {
   return (
-    <div className="slide-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
+    <div className="custom-slide-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
       <h1 className="text-6xl font-semibold">404</h1>
       <h2 className="mt-4 text-3xl font-semibold">Page not found</h2>
       <p className="mt-6 max-w-md text-sm text-muted-foreground">
