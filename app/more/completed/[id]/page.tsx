@@ -53,7 +53,7 @@ export default async function CompletedGamePage({ params }: Props) {
               <Pencil />
               Edit
             </EditFromCompleted>
-            <DeleteGameButton gameId={game.id}>
+            <DeleteGameButton gameId={game.id} navigateTo="/more/completed">
               <Button
                 className="justify-start text-destructive"
                 variant="ghost"

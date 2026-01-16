@@ -59,7 +59,7 @@ export default async function WishlistGamePage({ params }: Props) {
               <Pencil />
               Edit
             </EditFromLibrary>
-            <DeleteGameButton gameId={game.id}>
+            <DeleteGameButton gameId={game.id} navigateTo="/library">
               <Button
                 className="justify-start text-destructive"
                 variant="ghost"

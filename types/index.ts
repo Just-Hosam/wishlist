@@ -1,7 +1,5 @@
 export * from "./enums"
 export * from "./game"
 export * from "./igdb"
-// export * from "./nintendo"
-// export * from "./playstation"
 export * from "./price"
 export * from "./time-to-beat"

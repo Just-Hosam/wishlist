@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useCategoryNavigation } from "@/lib/use-category-navigation"
 import { deleteGame } from "@/server/actions/game"
+import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import {
@@ -18,11 +18,16 @@ import {
 
 interface Props {
   gameId: string
+  navigateTo: string
   children: React.ReactNode
 }
 
-export default function DeleteGameButton({ gameId, children }: Props) {
-  const { navigateToActiveTab } = useCategoryNavigation()
+export default function DeleteGameButton({
+  gameId,
+  navigateTo,
+  children
+}: Props) {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
@@ -30,9 +35,9 @@ export default function DeleteGameButton({ gameId, children }: Props) {
     startTransition(async () => {
       try {
         await deleteGame(gameId)
-        navigateToActiveTab()
-        toast.success("Game deleted successfully!")
+        router.push(navigateTo)
         setIsOpen(false)
+        toast.success("Game deleted successfully!")
       } catch (error) {
         console.error("Error deleting game:", error)
         toast.error(
