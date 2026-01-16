@@ -19,6 +19,12 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "../../ui/drawer"
+import { unlinkPriceFromGame } from "@/server/actions/price"
+import {
+  buildNintendoStoreUrl,
+  buildPlayStationStoreUrl,
+  buildSteamStoreUrl
+} from "@/lib/igdb-store-links"
 
 interface Props {
   game: GameOutput
@@ -54,6 +60,24 @@ export default function MoveToLibrary({ game, children }: Props) {
       }
 
       await saveGame(gameInput, game.id, [oldCategory, newCategory])
+
+      const links = [
+        game.igdbPlaystationUrlSegment
+          ? buildPlayStationStoreUrl(game.igdbPlaystationUrlSegment)
+          : null,
+        game.igdbNintendoUrlSegment
+          ? buildNintendoStoreUrl(game.igdbNintendoUrlSegment)
+          : null,
+        game.igdbSteamUrlSegment
+          ? buildSteamStoreUrl(game.igdbSteamUrlSegment)
+          : null
+      ]
+
+      const pricePromises = links
+        .filter(Boolean)
+        .map((url) => unlinkPriceFromGame(game.id, url!))
+
+      await Promise.all(pricePromises)
 
       toast.success("Game moved to library!")
       setOpen(false)
