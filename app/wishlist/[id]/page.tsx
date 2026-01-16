@@ -2,6 +2,7 @@ import MoveToCompleted from "@/components/layout/Completed/MoveToCompleted"
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
 import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
+import EditFromWishlist from "@/components/layout/Wishlist/EditFromWishlist"
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -50,12 +51,10 @@ export default async function WishlistGamePage({ params }: Props) {
               To Completed
             </MoveToCompleted>
             <div className="-mx-3 my-2 rounded-full border-[0.5px]"></div>
-            <Link href={`/game/${game.id}/edit`}>
-              <Button className="w-full justify-start" variant="ghost">
-                <Pencil />
-                Edit
-              </Button>
-            </Link>
+            <EditFromWishlist game={game}>
+              <Pencil />
+              Edit
+            </EditFromWishlist>
             <DeleteGameButton gameId={game.id}>
               <Button
                 className="justify-start text-destructive"

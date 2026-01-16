@@ -1,3 +1,4 @@
+import EditFromCompleted from "@/components/layout/Completed/EditFromCompleted"
 import DeleteGameButton from "@/components/layout/DeleteGameButton"
 import { Game } from "@/components/layout/Game"
 import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
@@ -48,12 +49,10 @@ export default async function CompletedGamePage({ params }: Props) {
               To Library
             </MoveToLibrary>
             <div className="-mx-3 my-2 rounded-full border-[0.5px]"></div>
-            <Link href={`/game/${game.id}/edit`}>
-              <Button className="w-full justify-start" variant="ghost">
-                <Pencil />
-                Edit
-              </Button>
-            </Link>
+            <EditFromCompleted game={game}>
+              <Pencil />
+              Edit
+            </EditFromCompleted>
             <DeleteGameButton gameId={game.id}>
               <Button
                 className="justify-start text-destructive"
