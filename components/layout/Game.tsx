@@ -34,7 +34,7 @@ export function Game({
       <header className="mx-auto flex flex-col items-center text-center">
         <div className="mb-5 h-[233px] w-[175px] overflow-hidden rounded-3xl bg-gray-200">
           <Image
-            src={buildIGDBImageUrl(imageId || "", "1080p")}
+            src={buildIGDBImageUrl(imageId || "")}
             alt={name || "Game cover"}
             width={175}
             height={233}
