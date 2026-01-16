@@ -12,24 +12,24 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
     exit 1
 fi
 
-# Check if .env.local exists
-if [ ! -f .env.local ]; then
-    echo "❌ Error: .env.local file not found!"
-    echo "Please create .env.local and add your VERCEL_DEPLOY_HOOK URL"
+# Check if .env exists
+if [ ! -f .env ]; then
+    echo "❌ Error: .env file not found!"
+    echo "Please create .env and add your VERCEL_DEPLOY_HOOK URL"
     exit 1
 fi
 
 # Load environment variables
-source .env.local
+source .env
 
 # Check if deploy hook is configured
 if [ -z "$VERCEL_DEPLOY_HOOK" ] || [ "$VERCEL_DEPLOY_HOOK" = "https://api.vercel.com/v1/integrations/deploy/prj_xxx/yyy" ]; then
-    echo "❌ Error: VERCEL_DEPLOY_HOOK not configured in .env.local"
+    echo "❌ Error: VERCEL_DEPLOY_HOOK not configured in .env!"
     echo ""
     echo "To set up:"
     echo "1. Go to Vercel Dashboard → Your Project → Settings → Git → Deploy Hooks"
     echo "2. Create a new deploy hook for the 'main' branch"
-    echo "3. Copy the URL and paste it in .env.local as VERCEL_DEPLOY_HOOK"
+    echo "3. Copy the URL and paste it in .env as VERCEL_DEPLOY_HOOK"
     exit 1
 fi
 
