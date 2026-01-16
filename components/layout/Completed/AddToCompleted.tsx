@@ -83,7 +83,6 @@ export default function AddToLibrary({
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Add to Completed</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
             <Button disabled={isSaving} onClick={handleSave}>

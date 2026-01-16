@@ -69,7 +69,6 @@ export default function MoveToCompleted({ game, children }: Props) {
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Move to Completed</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
             <Button disabled={isSaving} onClick={handleSave}>
