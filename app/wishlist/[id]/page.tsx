@@ -23,7 +23,10 @@ export default async function WishlistGamePage({ params }: Props) {
   if (!id) notFound()
 
   const game = await prisma.game.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      trackedPrices: true
+    }
   })
 
   if (!game) notFound()
