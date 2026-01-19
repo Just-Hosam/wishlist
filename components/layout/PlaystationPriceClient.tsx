@@ -9,10 +9,10 @@ import PriceLayout from "./PriceLayout"
 
 export default function PlaystationPrice({
   igdbPlaystationUrlSegment,
-  onFetchDone
+  onFetchSuccess
 }: {
   igdbPlaystationUrlSegment: string | null
-  onFetchDone: (status: "error" | "success") => void
+  onFetchSuccess: () => void
 }) {
   const [price, setPrice] = useState<PriceInput | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -42,14 +42,13 @@ export default function PlaystationPrice({
         if (cancelled) return
         setPrice(info)
         setError(null)
-        onFetchDone("success")
+        onFetchSuccess()
       })
       .catch((error) => {
         console.error("Error fetching PlayStation game info:", error)
         if (cancelled) return
         setPrice(null)
         setError("Failed to fetch game information")
-        onFetchDone("error")
       })
 
     return () => {

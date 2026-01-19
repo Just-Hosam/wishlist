@@ -143,11 +143,7 @@ export default function MoveToWishlist({
 
                 <SteamPriceClient
                   igdbSteamUrlSegment={igdbSteamUrlSegment}
-                  onFetchDone={(status) => {
-                    if (status === "success") {
-                      setSteamSwitchDisabled(false)
-                    }
-                  }}
+                  onFetchSuccess={() => setSteamSwitchDisabled(false)}
                 />
 
                 <Switch
@@ -167,11 +163,7 @@ export default function MoveToWishlist({
                 />
                 <PlaystationPriceClient
                   igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
-                  onFetchDone={(status) => {
-                    if (status === "success") {
-                      setPsSwitchDisabled(false)
-                    }
-                  }}
+                  onFetchSuccess={() => setPsSwitchDisabled(false)}
                 />
 
                 <Switch
@@ -192,11 +184,7 @@ export default function MoveToWishlist({
 
                 <NintendoPriceClient
                   igdbNintendoUrlSegment={igdbNintendoUrlSegment}
-                  onFetchDone={(status) => {
-                    if (status === "success") {
-                      setNtSwitchDisabled(false)
-                    }
-                  }}
+                  onFetchSuccess={() => setNtSwitchDisabled(false)}
                 />
 
                 <Switch

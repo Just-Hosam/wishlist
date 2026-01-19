@@ -9,10 +9,10 @@ import PriceLayout from "./PriceLayout"
 
 export default function NintendoPrice({
   igdbNintendoUrlSegment,
-  onFetchDone
+  onFetchSuccess
 }: {
   igdbNintendoUrlSegment: string | null
-  onFetchDone: (status: "error" | "success") => void
+  onFetchSuccess: () => void
 }) {
   const [price, setPrice] = useState<PriceInput | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -41,14 +41,13 @@ export default function NintendoPrice({
         if (cancelled) return
         setPrice(info)
         setError(null)
-        onFetchDone("success")
+        onFetchSuccess()
       })
       .catch((err) => {
         console.error("Error fetching Nintendo game info:", err)
         if (cancelled) return
         setPrice(null)
         setError("Failed to fetch game information")
-        onFetchDone("error")
       })
 
     return () => {
