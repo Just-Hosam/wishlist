@@ -39,12 +39,14 @@ export default async function RootLayout({
               src="//unpkg.com/react-scan/dist/auto.global.js"
             ></script> */}
       </head>
-      <body
-        className="m-auto mt-[76px] max-w-[700px] overflow-y-auto px-6 pb-32 pt-3"
-        style={{ height: "calc(100% - 76px)" }}
-        data-scroll-container
-      >
-        {children}
+      <body>
+        <div
+          className="m-auto mt-[76px] max-w-[700px] overflow-y-auto px-6 pb-32 pt-3"
+          style={{ height: "calc(100% - 76px)" }}
+          data-scroll-container
+        >
+          {children}
+        </div>
         <FooterWrapper />
         <Toaster position="top-center" />
       </body>
