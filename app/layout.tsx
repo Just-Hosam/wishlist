@@ -1,4 +1,4 @@
-import Footer from "@/components/layout/Footer"
+import FooterWrapper from "@/components/layout/FooterWrapper"
 import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import "../styles/globals.css"
@@ -47,7 +47,7 @@ export default async function RootLayout({
         >
           {children}
         </div>
-        <Footer />
+        <FooterWrapper />
         <Toaster position="top-center" />
       </body>
     </html>
