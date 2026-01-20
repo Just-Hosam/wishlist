@@ -6,13 +6,30 @@ import { cn } from "@/lib/utils"
 import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 
 export default function Footer() {
   const pathname = usePathname()
   const [activeTab, setActiveTab] = useState<Tab>("")
+  const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
+  const libraryTriggerRef = useRef<HTMLButtonElement>(null)
+  const moreTriggerRef = useRef<HTMLButtonElement>(null)
+  const searchButtonRef = useRef<HTMLButtonElement>(null)
+
+  const runScaleAnimation = (element: HTMLElement | null) => {
+    if (!element?.animate) return
+
+    element.animate(
+      [
+        { transform: "scale(1)" },
+        { transform: "scale(0.75)" },
+        { transform: "scale(1)" }
+      ],
+      { duration: 400, easing: "ease-in-out" }
+    )
+  }
 
   useEffect(() => {
     if (pathname.startsWith("/wishlist")) {
@@ -38,6 +55,7 @@ export default function Footer() {
 
   const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
     setActiveTab("SEARCH")
+    runScaleAnimation(searchButtonRef.current)
 
     if (pathname === "/search") {
       e.preventDefault()
@@ -47,6 +65,7 @@ export default function Footer() {
 
   const handleWishlistClickOnWishlistPage = (e: React.MouseEvent) => {
     setActiveTab("WISHLIST")
+    runScaleAnimation(wishlistTriggerRef.current)
 
     if (pathname === "/wishlist") {
       e.preventDefault()
@@ -56,6 +75,7 @@ export default function Footer() {
 
   const handleLibraryClickOnLibraryPage = (e: React.MouseEvent) => {
     setActiveTab("LIBRARY")
+    runScaleAnimation(libraryTriggerRef.current)
 
     if (pathname === "/library") {
       e.preventDefault()
@@ -65,6 +85,7 @@ export default function Footer() {
 
   const handleCompletedClickOnCompletedPage = (e: React.MouseEvent) => {
     setActiveTab("MORE")
+    runScaleAnimation(moreTriggerRef.current)
 
     if (pathname === "/more/completed") {
       e.preventDefault()
@@ -84,7 +105,8 @@ export default function Footer() {
             >
               <TabsTrigger
                 value="WISHLIST"
-                className="h-12 w-full rounded-full transition-transform duration-500 active:scale-50 data-[state=active]:bg-secondary"
+                ref={wishlistTriggerRef}
+                className="h-12 w-full rounded-full data-[state=active]:bg-secondary"
               >
                 <Heart />
               </TabsTrigger>
@@ -96,7 +118,8 @@ export default function Footer() {
             >
               <TabsTrigger
                 value="LIBRARY"
-                className="h-12 w-full rounded-full transition-transform duration-500 active:scale-50 data-[state=active]:bg-secondary"
+                ref={libraryTriggerRef}
+                className="h-12 w-full rounded-full data-[state=active]:bg-secondary"
               >
                 <LibraryBig strokeWidth={1.6} />
               </TabsTrigger>
@@ -108,7 +131,8 @@ export default function Footer() {
             >
               <TabsTrigger
                 value="MORE"
-                className="h-12 w-full rounded-full transition-transform duration-500 active:scale-50 data-[state=active]:bg-secondary"
+                ref={moreTriggerRef}
+                className="h-12 w-full rounded-full data-[state=active]:bg-secondary"
               >
                 <AlignJustify />
               </TabsTrigger>
@@ -119,7 +143,8 @@ export default function Footer() {
           <Button
             size="icon"
             variant="link"
-            className="h-16 w-16 rounded-full bg-white p-[7px] text-black shadow-lg transition-transform duration-500 active:scale-50"
+            ref={searchButtonRef}
+            className="h-16 w-16 rounded-full bg-white p-[7px] text-black shadow-lg transition-transform"
           >
             <div
               className={cn(
