@@ -204,7 +204,7 @@ export function SearchPage() {
 
   return (
     <div>
-      <PageHeader showBackButton>
+      <PageHeader>
         <form onSubmit={handleSubmit} className="relative w-full">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
