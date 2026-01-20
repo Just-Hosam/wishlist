@@ -1,6 +1,6 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate } from "@/lib/utils"
-import { Loader2 } from "lucide-react"
+import { Clock, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel"
@@ -48,11 +48,14 @@ export function Game({
         </div>
         <h1 className="mb-1 text-2xl font-bold">{name}</h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>{length ? `${length} hours` : "-"}</span>
-          <span className="font-bold">•</span>
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
           )}
+          <span className="font-bold">•</span>
+          <div className="flex items-center gap-1">
+            <Clock size={12} className="mt-[-0.5px]" />
+            <span>{length ? `${length} hours` : "-"}</span>
+          </div>
         </div>
       </header>
 
