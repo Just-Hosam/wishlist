@@ -1,15 +1,13 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
-import { fetchTimeToBeat } from "@/server/actions/igdb"
-import { Clock, Loader2 } from "lucide-react"
+import { formatReleaseDate } from "@/lib/utils"
+import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
-import { Skeleton } from "../ui/skeleton"
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel"
+import { ExpandableText } from "../ui/expandable-text"
 import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
-import { formatReleaseDate } from "@/lib/utils"
-import { Separator } from "../ui/separator"
-import { ExpandableText } from "../ui/expandable-text"
 
 interface Props {
   imageId: string
@@ -21,6 +19,7 @@ interface Props {
   igdbNintendoUrlSegment?: string
   igdbSteamUrlSegment?: string
   igdbFirstReleaseDate?: number
+  igdbScreenshotIds?: string[]
 }
 
 export function Game({
@@ -32,7 +31,8 @@ export function Game({
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
-  igdbFirstReleaseDate
+  igdbFirstReleaseDate,
+  igdbScreenshotIds
 }: Props) {
   return (
     <div className="custom-slide-fade-in">
@@ -47,7 +47,7 @@ export function Game({
         </div>
         <h1 className="mb-1 text-2xl font-bold">{name}</h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>{length ? `${length} hours` : "-"}</span>
+          <span>{length ? `${length} hours` : "-"}</span>
           <span className="font-bold">•</span>
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
@@ -129,6 +129,30 @@ export function Game({
           className="mt-2 text-sm text-muted-foreground"
         />
       </div>
+
+      {igdbScreenshotIds && (
+        <div className="mt-6 flex flex-col">
+          <label className="mb-3 font-medium">Screenshots</label>
+          <Carousel className="w-full">
+            <CarouselContent>
+              {igdbScreenshotIds.map((id, index) => {
+                if (index >= 6) return null
+                return (
+                  <CarouselItem key={id} className="max-w-[300px] basis-4/5">
+                    <Image
+                      src={buildIGDBImageUrl(id || "")}
+                      alt={name || "Game cover"}
+                      width={300}
+                      height={225}
+                      className="overflow-hidden rounded-xl"
+                    />
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+          </Carousel>
+        </div>
+      )}
     </div>
   )
 }

@@ -81,6 +81,7 @@ export default async function WishlistGamePage({ params }: Props) {
         igdbNintendoUrlSegment={game.igdbNintendoUrlSegment || undefined}
         igdbSteamUrlSegment={game.igdbSteamUrlSegment || undefined}
         igdbFirstReleaseDate={game.igdbFirstReleaseDate || undefined}
+        igdbScreenshotIds={game.igdbScreenshotIds}
       />
     </>
   )
