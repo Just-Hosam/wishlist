@@ -437,10 +437,6 @@ export async function getIGDBGameById(
   }
 }
 
-export interface GameTimeToBeat {
-  normallyHours: number
-}
-
 export async function fetchTimeToBeat(
   igdbGameId: string | null
 ): Promise<number | null> {

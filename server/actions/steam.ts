@@ -1,6 +1,5 @@
 "use server"
 
-import { getNintendoGameInfo } from "@/lib/nintendo-price"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
 import { getSteamGameInfo } from "@/lib/steam-price"
