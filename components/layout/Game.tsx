@@ -47,10 +47,7 @@ export function Game({
         </div>
         <h1 className="mb-1 text-2xl font-bold">{name}</h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Clock size={12} className="mt-[-0.5px]" />
             <span>{length ? `${length} hours` : "-"}</span>
-          </div>
           <span className="font-bold">•</span>
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
