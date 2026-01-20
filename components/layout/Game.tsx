@@ -43,6 +43,7 @@ export function Game({
             alt={name || "Game cover"}
             width={175}
             height={233}
+            sizes="175px"
           />
         </div>
         <h1 className="mb-1 text-2xl font-bold">{name}</h1>
@@ -133,17 +134,25 @@ export function Game({
       {igdbScreenshotIds && (
         <div className="mt-6 flex flex-col">
           <label className="mb-3 font-medium">Screenshots</label>
-          <Carousel className="w-full">
+          <Carousel
+            opts={{
+              align: "start"
+            }}
+          >
             <CarouselContent>
               {igdbScreenshotIds.map((id, index) => {
                 if (index >= 6) return null
                 return (
-                  <CarouselItem key={id} className="max-w-[300px] basis-4/5">
+                  <CarouselItem
+                    key={id}
+                    className="max-h-[180px] max-w-[336px] basis-[90%]"
+                  >
                     <Image
                       src={buildIGDBImageUrl(id || "")}
                       alt={name || "Game cover"}
-                      width={300}
-                      height={225}
+                      width={320}
+                      height={180}
+                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 320px"
                       className="overflow-hidden rounded-xl"
                     />
                   </CarouselItem>
