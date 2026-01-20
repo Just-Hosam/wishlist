@@ -27,7 +27,7 @@ export default function Footer() {
         { transform: "scale(0.75)" },
         { transform: "scale(1)" }
       ],
-      { duration: 400, easing: "ease-in-out" }
+      { duration: 300, easing: "ease-in-out" }
     )
   }
 
