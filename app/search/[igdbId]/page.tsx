@@ -1,5 +1,5 @@
-import { Game } from "@/components/layout/Game"
 import AddToCompleted from "@/components/layout/Completed/AddToCompleted"
+import { Game } from "@/components/layout/Game"
 import AddToLibrary from "@/components/layout/Library/AddToLibrary"
 import AddToWishlist from "@/components/layout/Wishlist/AddToWishlist"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { fetchTimeToBeat, getIGDBGameById } from "@/server/actions/igdb"
-import { CheckCircle2, FolderCheck, Heart, Plus } from "lucide-react"
+import { CheckCircle2, Heart, LibraryBig, Plus } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -50,7 +50,7 @@ export default async function SearchGamePage({ params }: Props) {
             </AddToWishlist>
 
             <AddToLibrary timeToBeat={timeToBeat || null} igdbGame={igdbGame}>
-              <FolderCheck />
+              <LibraryBig />
               Library
             </AddToLibrary>
 

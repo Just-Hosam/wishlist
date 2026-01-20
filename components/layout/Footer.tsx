@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
-import { AlignJustify, FolderCheck, Heart, Search } from "lucide-react"
+import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -84,7 +84,7 @@ export default function Footer() {
             >
               <TabsTrigger
                 value="WISHLIST"
-                className="h-12 w-full rounded-full transition-transform duration-300 active:scale-75 data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full transition-transform duration-200 active:scale-50 data-[state=active]:bg-secondary"
               >
                 <Heart />
               </TabsTrigger>
@@ -96,9 +96,9 @@ export default function Footer() {
             >
               <TabsTrigger
                 value="LIBRARY"
-                className="h-12 w-full rounded-full transition-transform duration-300 active:scale-75 data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full transition-transform duration-200 active:scale-50 data-[state=active]:bg-secondary"
               >
-                <FolderCheck />
+                <LibraryBig strokeWidth={1.6} />
               </TabsTrigger>
             </Link>
             <Link
@@ -108,7 +108,7 @@ export default function Footer() {
             >
               <TabsTrigger
                 value="MORE"
-                className="h-12 w-full rounded-full transition-transform duration-300 active:scale-75 data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full transition-transform duration-200 active:scale-50 data-[state=active]:bg-secondary"
               >
                 <AlignJustify />
               </TabsTrigger>
@@ -119,7 +119,7 @@ export default function Footer() {
           <Button
             size="icon"
             variant="link"
-            className="h-16 w-16 rounded-full bg-white p-[7px] text-black shadow-lg transition-transform duration-300 active:scale-75"
+            className="h-16 w-16 rounded-full bg-white p-[7px] text-black shadow-lg transition-transform duration-200 active:scale-50"
           >
             <div
               className={cn(
