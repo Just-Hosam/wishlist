@@ -22,7 +22,7 @@ export default async function WishlistPage() {
   return (
     <>
       <ScrollToTopListener />
-      <div className="custom-fade-in grid gap-3">
+      <div className="custom-slide-fade-in grid gap-3">
         {wishlistGames.map((game, index) => {
           const nintendoPrice = game?.prices?.find(
             ({ platform }) => Platform.NINTENDO === platform
