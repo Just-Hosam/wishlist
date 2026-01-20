@@ -9,6 +9,7 @@ import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
 import { formatReleaseDate } from "@/lib/utils"
 import { Separator } from "../ui/separator"
+import { ExpandableText } from "../ui/expandable-text"
 
 interface Props {
   imageId: string
@@ -47,7 +48,7 @@ export function Game({
         <h1 className="mb-1 text-2xl font-bold">{name}</h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
-            <Clock size={12} strokeWidth={1.85} className="mt-[-0.5px]" />
+            <Clock size={12} className="mt-[-0.5px]" />
             <span>{length ? `${length} hours` : "-"}</span>
           </div>
           <span className="font-bold">•</span>
@@ -126,7 +127,10 @@ export function Game({
 
       <div className="mt-6">
         <label className="font-medium">Summary</label>
-        <p className="mt-2 text-sm text-muted-foreground">{summary}</p>
+        <ExpandableText
+          text={summary || ""}
+          className="mt-2 text-sm text-muted-foreground"
+        />
       </div>
     </div>
   )
