@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { PageHeader } from "./PageHeader"
 import { IGDBGame, Platform } from "@/types"
+import { formatReleaseDate } from "@/lib/utils"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
@@ -62,14 +63,6 @@ export function SearchPage() {
 
   const getImageUrl = (imageId: string) => {
     return `https://images.igdb.com/igdb/image/upload/t_720p/${imageId}.jpg`
-  }
-
-  const formatReleaseDate = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    })
   }
 
   // Empty state - before any search

@@ -7,6 +7,8 @@ import { Skeleton } from "../ui/skeleton"
 import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
+import { formatReleaseDate } from "@/lib/utils"
+import { Separator } from "../ui/separator"
 
 interface Props {
   imageId: string
@@ -17,6 +19,7 @@ interface Props {
   igdbPlaystationUrlSegment?: string
   igdbNintendoUrlSegment?: string
   igdbSteamUrlSegment?: string
+  igdbFirstReleaseDate?: number
 }
 
 export function Game({
@@ -27,7 +30,8 @@ export function Game({
   igdbId,
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
-  igdbSteamUrlSegment
+  igdbSteamUrlSegment,
+  igdbFirstReleaseDate
 }: Props) {
   return (
     <div className="custom-slide-fade-in">
@@ -40,12 +44,16 @@ export function Game({
             height={233}
           />
         </div>
-        <h1 className="text-2xl font-medium">{name}</h1>
-        <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-          <Clock size={12} strokeWidth={1.75} className="mt-[-0.5px]" />
-          <Suspense fallback={<Skeleton className="h-5 w-16" />}>
-            <TimeToBeat length={length || null} igdbId={igdbId || null} />
-          </Suspense>
+        <h1 className="mb-1 text-2xl font-bold">{name}</h1>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Clock size={12} strokeWidth={1.85} className="mt-[-0.5px]" />
+            <span>{length ? `${length} hours` : "-"}</span>
+          </div>
+          <span className="font-bold">•</span>
+          {igdbFirstReleaseDate && (
+            <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
+          )}
         </div>
       </header>
 
@@ -122,21 +130,4 @@ export function Game({
       </div>
     </div>
   )
-}
-
-async function TimeToBeat({
-  length,
-  igdbId
-}: {
-  length: number | null
-  igdbId: string | null
-}) {
-  if (length) return <span>{length} hours</span>
-
-  if (!igdbId) return <span>-</span>
-
-  const timeToBeat = await fetchTimeToBeat(igdbId)
-  if (!timeToBeat) return <span>-</span>
-
-  return <span>{timeToBeat} hours</span>
 }
