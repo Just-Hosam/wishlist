@@ -1,10 +1,9 @@
 import ListEmptyState from "@/components/layout/ListEmptyState"
-import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
+import { Link } from "@/components/navigation"
 import { getCachedCompletedGames } from "@/server/actions/lists"
 import { Clock } from "lucide-react"
 import { headers } from "next/headers"
 import Image from "next/image"
-import { Link } from "@/components/navigation"
 import { redirect } from "next/navigation"
 
 export default async function CompletedList() {
@@ -18,14 +17,11 @@ export default async function CompletedList() {
   }
 
   return (
-    <>
-      <ScrollToTopListener />
-      <div className="custom-slide-fade-in grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
-        {games.map((game, index) => (
-          <CompletedGameCard game={game} index={index} key={game.id} />
-        ))}
-      </div>
-    </>
+    <div className="custom-slide-fade-in grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
+      {games.map((game, index) => (
+        <CompletedGameCard game={game} index={index} key={game.id} />
+      ))}
+    </div>
   )
 }
 

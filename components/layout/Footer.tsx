@@ -86,11 +86,6 @@ export default function Footer() {
   const handleCompletedClickOnCompletedPage = (e: React.MouseEvent) => {
     setActiveTab("MORE")
     runScaleAnimation(moreTriggerRef.current)
-
-    if (pathname === "/more/completed") {
-      e.preventDefault()
-      window.dispatchEvent(new CustomEvent("scroll-to-top"))
-    }
   }
 
   return (
