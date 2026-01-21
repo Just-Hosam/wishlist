@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import "../styles/globals.css"
 import { Header } from "@/components/layout/Header"
-import { ClientLayout } from "@/components/navigation/ClientLayout"
+import { NavigationProvider } from "@/components/navigation/NavigationProvider"
 import { GlobalLoader } from "@/components/navigation/GlobalLoader"
 
 export const metadata: Metadata = {
@@ -43,7 +43,7 @@ export default async function RootLayout({
             ></script> */}
       </head>
       <body>
-        <ClientLayout>
+        <NavigationProvider>
           <Header />
           <div
             className="m-auto mt-[76px] max-w-[700px] overflow-y-auto px-6 pb-40 pt-3"
@@ -54,7 +54,7 @@ export default async function RootLayout({
           </div>
           <FooterWrapper />
           <Toaster position="top-center" />
-        </ClientLayout>
+        </NavigationProvider>
       </body>
     </html>
   )
