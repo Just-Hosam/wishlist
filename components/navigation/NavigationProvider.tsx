@@ -29,6 +29,17 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     setIsNavigating(false)
   }, [pathname])
 
+  // Timeout to prevent spinner from showing indefinitely
+  useEffect(() => {
+    if (isNavigating) {
+      const timeoutId = setTimeout(() => {
+        setIsNavigating(false)
+      }, 5000) // 5 seconds
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [isNavigating])
+
   const startNavigation = useCallback(() => {
     setIsNavigating(true)
   }, [])
