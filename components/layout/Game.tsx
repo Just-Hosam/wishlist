@@ -8,6 +8,7 @@ import { ExpandableText } from "../ui/expandable-text"
 import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
+import { YoutubeVideo } from "./YoutubeVideo"
 
 interface Props {
   imageId: string
@@ -20,6 +21,7 @@ interface Props {
   igdbSteamUrlSegment?: string
   igdbFirstReleaseDate?: number
   igdbScreenshotIds?: string[]
+  igdbVideoId?: string
 }
 
 export function Game({
@@ -32,7 +34,8 @@ export function Game({
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
   igdbFirstReleaseDate,
-  igdbScreenshotIds
+  igdbScreenshotIds,
+  igdbVideoId
 }: Props) {
   return (
     <div className="custom-slide-fade-in">
@@ -59,9 +62,10 @@ export function Game({
         </div>
       </header>
 
+      {/* PRICES */}
       <div className="mt-8">
         <label className="font-medium">Prices</label>
-        <div className="mt-3 space-y-3">
+        <div className="mt-3 space-y-3 pl-1">
           <div className="flex items-center">
             <Image
               src="/logos/steam.svg"
@@ -126,17 +130,21 @@ export function Game({
         </div>
       </div>
 
-      <div className="mt-6">
-        <label className="font-medium">Summary</label>
-        <ExpandableText
-          text={summary || ""}
-          className="mt-2 text-sm text-muted-foreground"
-        />
-      </div>
+      {/* SUMMARY */}
+      {summary && (
+        <div className="mt-8">
+          <label className="font-medium">Summary</label>
+          <ExpandableText
+            text={summary}
+            className="mt-2 text-sm text-muted-foreground"
+          />
+        </div>
+      )}
 
+      {/* SCREENSHOTS */}
       {igdbScreenshotIds && (
-        <div className="mt-6 flex flex-col">
-          <label className="mb-3 font-medium">Screenshots</label>
+        <div className="mt-8 flex flex-col">
+          <label className="mb-4 font-medium">Screenshots</label>
           <Carousel
             opts={{
               align: "start"
@@ -156,13 +164,24 @@ export function Game({
                       width={320}
                       height={180}
                       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 320px"
-                      className="overflow-hidden rounded-xl"
+                      className="overflow-hidden rounded-2xl"
                     />
                   </CarouselItem>
                 )
               })}
             </CarouselContent>
           </Carousel>
+        </div>
+      )}
+
+      {/* VIDEO */}
+      {igdbVideoId && (
+        <div className="mt-8 flex flex-col">
+          <label className="mb-4 font-medium">Video</label>
+          <YoutubeVideo
+            videoId={igdbVideoId}
+            className="w-full max-w-[382px]"
+          />
         </div>
       )}
     </div>
