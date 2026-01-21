@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/components/navigation"
 import { cn } from "@/lib/utils"
 
 interface BackButtonProps {

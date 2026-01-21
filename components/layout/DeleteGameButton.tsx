@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { deleteGame } from "@/server/actions/game"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/components/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import {

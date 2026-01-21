@@ -6,7 +6,7 @@ import {
   Github,
   Linkedin
 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 
 export default function AboutPage() {
   return (

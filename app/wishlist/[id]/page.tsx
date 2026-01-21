@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
 import { ArrowRight, EllipsisVertical, Pencil, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 import { notFound } from "next/navigation"
 
 interface Props {

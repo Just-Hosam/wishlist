@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 

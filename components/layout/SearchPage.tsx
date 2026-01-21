@@ -7,7 +7,7 @@ import { searchIGDBGamesDirect } from "@/server/actions/igdb"
 import { IGDBGame, Platform } from "@/types"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Nav } from "./Nav"
 

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { PlusIcon, Search, SearchX } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 
 export default function ListEmptyState() {
   return (

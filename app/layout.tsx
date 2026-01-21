@@ -3,6 +3,8 @@ import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import "../styles/globals.css"
 import { Header } from "@/components/layout/Header"
+import { ClientLayout } from "@/components/navigation/ClientLayout"
+import { GlobalLoader } from "@/components/navigation/GlobalLoader"
 
 export const metadata: Metadata = {
   title: "Playward",
@@ -41,16 +43,18 @@ export default async function RootLayout({
             ></script> */}
       </head>
       <body>
-        <Header />
-        <div
-          className="m-auto mt-[76px] max-w-[700px] overflow-y-auto px-6 pb-40 pt-3"
-          style={{ height: "calc(100% - 76px)" }}
-          data-scroll-container
-        >
-          {children}
-        </div>
-        <FooterWrapper />
-        <Toaster position="top-center" />
+        <ClientLayout>
+          <Header />
+          <div
+            className="m-auto mt-[76px] max-w-[700px] overflow-y-auto px-6 pb-40 pt-3"
+            style={{ height: "calc(100% - 76px)" }}
+            data-scroll-container
+          >
+            <GlobalLoader>{children}</GlobalLoader>
+          </div>
+          <FooterWrapper />
+          <Toaster position="top-center" />
+        </ClientLayout>
       </body>
     </html>
   )

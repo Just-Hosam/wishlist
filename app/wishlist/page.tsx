@@ -6,7 +6,7 @@ import { Platform } from "@/types"
 import { Clock } from "lucide-react"
 import { headers } from "next/headers"
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 import { redirect } from "next/navigation"
 
 export default async function WishlistPage() {

@@ -2,7 +2,7 @@
 
 import { saveGame } from "@/server/actions/game"
 import { GameInput, GameOutput, GameOutputWithPrices, Platform } from "@/types"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/components/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"

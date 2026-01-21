@@ -1,7 +1,7 @@
 import { SignOutButton } from "@/components/layout/SignoutButton"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Info } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/components/navigation"
 
 export default function MorePage() {
   return (

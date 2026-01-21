@@ -45,7 +45,7 @@ function MoreHeader() {
 }
 
 function SearchHeader() {
-  return <BackButton />
+  return null
 }
 
 function AboutHeader() {
