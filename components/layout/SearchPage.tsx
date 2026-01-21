@@ -2,14 +2,14 @@
 
 import { Input } from "@/components/ui/input"
 import Spinner from "@/components/ui/spinner"
+import { formatReleaseDate } from "@/lib/utils"
 import { searchIGDBGamesDirect } from "@/server/actions/igdb"
+import { IGDBGame, Platform } from "@/types"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import { PageHeader } from "./PageHeader"
-import { IGDBGame, Platform } from "@/types"
-import { formatReleaseDate } from "@/lib/utils"
+import { Nav } from "./Nav"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
@@ -197,7 +197,7 @@ export function SearchPage() {
 
   return (
     <div>
-      <PageHeader>
+      <Nav>
         <form onSubmit={handleSubmit} className="relative w-full">
           <Search
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -230,7 +230,7 @@ export function SearchPage() {
             </button>
           )}
         </form>
-      </PageHeader>
+      </Nav>
 
       {/* Search Results Area */}
       {!hasSearched && !isLoading && renderEmptyState()}
