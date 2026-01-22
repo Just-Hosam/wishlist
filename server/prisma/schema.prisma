@@ -94,7 +94,7 @@ model Game {
   igdbCoverImageId          String?      
   igdbScreenshotIds         String[]     
   igdbVideoId               String?
-  igdbVideos                Json?    
+  igdbVideoIds              String[]    
   igdbPlatformIds           Int[]        
   igdbFirstReleaseDate      Int?        
   igdbNintendoUrlSegment    String?
