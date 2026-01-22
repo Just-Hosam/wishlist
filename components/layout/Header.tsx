@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { Gamepad2 } from "lucide-react"
 import { Nav } from "./Nav"
 import { ReactNode } from "react"
+import { useNavigation } from "../navigation/NavigationProvider"
 
 const ROUTE_CONFIG: Record<string, ReactNode> = {
   "/": <SigninHeader />,
@@ -18,7 +19,9 @@ const ROUTE_CONFIG: Record<string, ReactNode> = {
 
 export function Header() {
   const pathname = usePathname()
-  const config = ROUTE_CONFIG[pathname]
+  const { pendingPathname } = useNavigation()
+  const activePathname = pendingPathname ?? pathname
+  const config = ROUTE_CONFIG[activePathname]
 
   return <Nav>{config || <DefaultHeader />}</Nav>
 }

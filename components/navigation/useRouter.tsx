@@ -13,7 +13,7 @@ export function useRouter() {
     (href: string, options?: { scroll?: boolean }) => {
       // Only start navigation if we're going to a different route
       if (href !== pathname) {
-        startNavigation()
+        startNavigation(href)
       }
       router.push(href, options)
     },
@@ -24,7 +24,7 @@ export function useRouter() {
     (href: string, options?: { scroll?: boolean }) => {
       // Only start navigation if we're going to a different route
       if (href !== pathname) {
-        startNavigation()
+        startNavigation(href)
       }
       router.replace(href, options)
     },

@@ -28,7 +28,7 @@ export function Link({ children, onClick, href, ...props }: NavLinkProps) {
       e.button === 0 && // left click
       !isSameRoute
     ) {
-      startNavigation()
+      startNavigation(targetPath)
     }
 
     onClick?.(e)

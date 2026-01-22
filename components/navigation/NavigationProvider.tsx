@@ -12,7 +12,8 @@ import { usePathname } from "next/navigation"
 
 interface NavigationContextType {
   isNavigating: boolean
-  startNavigation: () => void
+  pendingPathname: string | null
+  startNavigation: (targetPathname: string) => void
   endNavigation: () => void
 }
 
@@ -22,11 +23,13 @@ const NavigationContext = createContext<NavigationContextType | undefined>(
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
   const [isNavigating, setIsNavigating] = useState(false)
+  const [pendingPathname, setPendingPathname] = useState<string | null>(null)
   const pathname = usePathname()
 
   // Auto-end navigation when pathname changes
   useEffect(() => {
     setIsNavigating(false)
+    setPendingPathname(null)
   }, [pathname])
 
   // Timeout to prevent spinner from showing indefinitely
@@ -34,13 +37,15 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     if (isNavigating) {
       const timeoutId = setTimeout(() => {
         setIsNavigating(false)
+        setPendingPathname(null)
       }, 5000) // 5 seconds
 
       return () => clearTimeout(timeoutId)
     }
   }, [isNavigating])
 
-  const startNavigation = useCallback(() => {
+  const startNavigation = useCallback((targetPathname: string) => {
+    setPendingPathname(targetPathname)
     setIsNavigating(true)
   }, [])
 
@@ -50,7 +55,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
 
   return (
     <NavigationContext.Provider
-      value={{ isNavigating, startNavigation, endNavigation }}
+      value={{ isNavigating, pendingPathname, startNavigation, endNavigation }}
     >
       {children}
     </NavigationContext.Provider>
