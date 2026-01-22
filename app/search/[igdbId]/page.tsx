@@ -72,7 +72,7 @@ export default async function SearchGamePage({ params }: Props) {
         igdbSteamUrlSegment={igdbGame.steamUrlSegment || undefined}
         igdbFirstReleaseDate={igdbGame.firstReleaseDate || undefined}
         igdbScreenshotIds={igdbGame.screenshotImageIds}
-        igdbVideoId={igdbGame.videoId || undefined}
+        igdbVideoIds={igdbGame.videoIds}
       />
     </>
   )

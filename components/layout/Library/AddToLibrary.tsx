@@ -57,6 +57,7 @@ export default function AddToLibrary({
         igdbCoverImageId: igdbGame.coverImageId,
         igdbScreenshotIds: igdbGame.screenshotImageIds,
         igdbVideoId: igdbGame.videoId,
+        igdbVideoIds: igdbGame.videoIds,
         igdbPlatformIds: [],
         igdbFirstReleaseDate: igdbGame.firstReleaseDate,
         igdbNintendoUrlSegment: igdbGame.nintendoUrlSegment || null,

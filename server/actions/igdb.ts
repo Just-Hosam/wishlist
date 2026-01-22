@@ -217,6 +217,39 @@ function chooseVideoId(
 }
 
 /**
+ * Rank and sort the videos
+ */
+function sortVideos(
+  videos: { video_id: string; name: string }[] = []
+): string[] {
+  if (videos.length === 0) {
+    return []
+  }
+
+  const VIDEO_NAME_RANKING = [
+    "Launch Trailer",
+    "Trailer",
+    "Announcement Trailer",
+    "Gameplay Trailer",
+    "Release Date Trailer",
+    "Gameplay Video",
+    "Game Intro"
+  ]
+
+  const ranked = [...videos]
+    .sort((a, b) => {
+      const rankA = VIDEO_NAME_RANKING.indexOf(a.name)
+      const rankB = VIDEO_NAME_RANKING.indexOf(b.name)
+      const safeRankA = rankA === -1 ? Number.MAX_SAFE_INTEGER : rankA
+      const safeRankB = rankB === -1 ? Number.MAX_SAFE_INTEGER : rankB
+      return safeRankA - safeRankB
+    })
+    .map((video) => video.video_id)
+
+  return ranked
+}
+
+/**
  * Extract store URL segments from IGDB websites array
  */
 function extractStoreSegments(websites: { type: number; url: string }[]): {
@@ -341,6 +374,7 @@ export async function searchIGDBGamesDirect(
         coverImageId: game.cover?.image_id || "",
         screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
         videoId: chooseVideoId(game.videos),
+        videoIds: sortVideos(game.videos),
         platforms: transformIGDBPlatforms(
           game.platforms?.map((p) => p.id) || []
         ),
@@ -422,6 +456,7 @@ export async function getIGDBGameById(
       coverImageId: game.cover?.image_id || "",
       screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
       videoId: chooseVideoId(game.videos),
+      videoIds: sortVideos(game.videos),
       platforms: transformIGDBPlatforms(game.platforms?.map((p) => p.id) || []),
       firstReleaseDate: game.first_release_date || 0,
       rating: game.rating || null,

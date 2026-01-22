@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
 import { ArrowRight, EllipsisVertical, Pencil, Trash2 } from "lucide-react"
-import { Link } from "@/components/navigation"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -82,7 +81,7 @@ export default async function WishlistGamePage({ params }: Props) {
         igdbSteamUrlSegment={game.igdbSteamUrlSegment || undefined}
         igdbFirstReleaseDate={game.igdbFirstReleaseDate || undefined}
         igdbScreenshotIds={game.igdbScreenshotIds}
-        igdbVideoId={game.igdbVideoId || undefined}
+        igdbVideoIds={game.igdbVideoIds}
       />
     </>
   )

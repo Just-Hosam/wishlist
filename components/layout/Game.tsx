@@ -21,7 +21,7 @@ interface Props {
   igdbSteamUrlSegment?: string
   igdbFirstReleaseDate?: number
   igdbScreenshotIds?: string[]
-  igdbVideoId?: string
+  igdbVideoIds?: string[]
 }
 
 export function Game({
@@ -35,7 +35,7 @@ export function Game({
   igdbSteamUrlSegment,
   igdbFirstReleaseDate,
   igdbScreenshotIds,
-  igdbVideoId
+  igdbVideoIds
 }: Props) {
   return (
     <div className="custom-slide-fade-in">
@@ -150,13 +150,13 @@ export function Game({
               align: "start"
             }}
           >
-            <CarouselContent>
+            <CarouselContent className="-ml-3">
               {igdbScreenshotIds.map((id, index) => {
-                if (index >= 6) return null
+                if (index >= 8) return null
                 return (
                   <CarouselItem
                     key={id}
-                    className="max-h-[180px] max-w-[336px] basis-[90%]"
+                    className="max-w-[320px] basis-[90%] pl-3"
                   >
                     <Image
                       src={buildIGDBImageUrl(id || "")}
@@ -174,14 +174,29 @@ export function Game({
         </div>
       )}
 
-      {/* VIDEO */}
-      {igdbVideoId && (
+      {/* VIDEOS */}
+      {igdbVideoIds && igdbVideoIds.length > 0 && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-medium">Video</label>
-          <YoutubeVideo
-            videoId={igdbVideoId}
-            className="w-full max-w-[382px]"
-          />
+          <label className="mb-4 font-medium">Videos</label>
+          <Carousel
+            opts={{
+              align: "start"
+            }}
+          >
+            <CarouselContent className="-ml-3">
+              {igdbVideoIds.map((videoId, index) => {
+                if (index >= 6) return null
+                return (
+                  <CarouselItem
+                    key={videoId}
+                    className="max-w-[320px] basis-[90%] pl-3"
+                  >
+                    <YoutubeVideo videoId={videoId} />
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+          </Carousel>
         </div>
       )}
     </div>

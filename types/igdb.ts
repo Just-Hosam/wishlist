@@ -9,6 +9,7 @@ export interface IGDBGame {
   coverImageId: string
   screenshotImageIds: string[]
   videoId: string | null
+  videoIds: string[]
   platforms: Platform[]
   firstReleaseDate: number
   rating?: number | null
