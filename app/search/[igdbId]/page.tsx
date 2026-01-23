@@ -8,22 +8,26 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { fetchTimeToBeat, getIGDBGameById } from "@/server/actions/igdb"
+import {
+  fetchTimeToBeat,
+  getCachedSearchIGDBGamesDirect
+} from "@/server/actions/igdb"
 import { CheckCircle2, Heart, LibraryBig, Plus } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
   params: Promise<{ igdbId: string }>
+  searchParams: Promise<{ q: string }>
 }
 
-export default async function SearchGamePage({ params }: Props) {
-  const { igdbId } = await params
-  if (!igdbId) notFound()
+export default async function SearchGamePage({ params, searchParams }: Props) {
+  const [{ igdbId }, { q: query }] = await Promise.all([params, searchParams])
 
-  const [igdbGame, timeToBeat] = await Promise.all([
-    getIGDBGameById(igdbId),
-    fetchTimeToBeat(igdbId)
-  ])
+  if (!igdbId || !query) notFound()
+
+  const games = await getCachedSearchIGDBGamesDirect(query)
+  const igdbGame = games.find((game) => String(game.igdbId) === igdbId)
+  const timeToBeat = await fetchTimeToBeat(igdbId)
 
   if (!igdbGame) notFound()
 

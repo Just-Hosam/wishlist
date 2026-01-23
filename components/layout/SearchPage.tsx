@@ -1,13 +1,13 @@
 "use client"
 
+import { Link } from "@/components/navigation"
 import { Input } from "@/components/ui/input"
 import Spinner from "@/components/ui/spinner"
 import { formatReleaseDate } from "@/lib/utils"
-import { searchIGDBGamesDirect } from "@/server/actions/igdb"
+import { getCachedSearchIGDBGamesDirect } from "@/server/actions/igdb"
 import { IGDBGame, Platform } from "@/types"
 import { Search, X } from "lucide-react"
 import Image from "next/image"
-import { Link } from "@/components/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Nav } from "./Nav"
 
@@ -44,7 +44,7 @@ export function SearchPage() {
     setIsLoading(true)
     setHasSearched(true)
     try {
-      const searchResults = await searchIGDBGamesDirect(query)
+      const searchResults = await getCachedSearchIGDBGamesDirect(query)
       setResults(searchResults)
     } catch (error) {
       console.error("Search error:", error)
@@ -102,7 +102,11 @@ export function SearchPage() {
   const renderResults = () => (
     <div className="custom-slide-fade-in grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
-        <Link href={`/search/${game.igdbId}`} passHref key={game.id}>
+        <Link
+          href={`/search/${game.igdbId}?q=${encodeURIComponent(query)}`}
+          passHref
+          key={game.id}
+        >
           <div
             className="flex cursor-pointer flex-col"
             style={{

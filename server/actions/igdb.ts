@@ -1,6 +1,7 @@
 "use server"
 
 import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
+import { unstable_cache } from "next/cache"
 
 /**
  * Calculate recency weight based on release date
@@ -388,7 +389,6 @@ export async function searchIGDBGamesDirect(
       }
     })
 
-    // Apply ranking algorithm
     const rankedGames = rankGamesByQuality(games)
 
     return rankedGames.slice(0, 30)
@@ -517,4 +517,15 @@ export async function fetchTimeToBeat(
     console.error("Error fetching game time to beat:", error)
     throw error
   }
+}
+
+export const getCachedSearchIGDBGamesDirect = async (query: string) => {
+  return unstable_cache(
+    async () => await searchIGDBGamesDirect(query),
+    [query],
+    {
+      tags: [`search-${query}`],
+      revalidate: 10_800 // 3 hours
+    }
+  )()
 }
