@@ -126,7 +126,7 @@ export default function EditFromWishlist({ game, children }: Props) {
 
       toast.success("Game saved!")
       setOpen(false)
-      router.refresh()
+      router.push("/wishlist")
     } catch (error) {
       console.error("Error saving game to wishlist:", error)
       toast.error("Failed to add game to wishlist.")

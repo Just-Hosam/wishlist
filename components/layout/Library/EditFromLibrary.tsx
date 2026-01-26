@@ -58,7 +58,7 @@ export default function EditFromLibrary({ game, children }: Props) {
 
       toast.success("Game saved!")
       setOpen(false)
-      router.refresh()
+      router.push("/library")
     } catch (error) {
       console.error("Error saving game to library:", error)
       toast.error("Failed to add game to library.")

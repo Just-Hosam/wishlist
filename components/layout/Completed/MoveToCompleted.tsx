@@ -69,7 +69,9 @@ export default function MoveToCompleted({ game, children }: Props) {
 
       toast.success("Game moved to completed!")
       setOpen(false)
-      router.push("/more/completed")
+      if (oldCategory === GameCategory.WISHLIST) router.push("/wishlist")
+      else if (oldCategory === GameCategory.LIBRARY) router.push("/library")
+      else router.push("/more/completed")
     } catch (error) {
       console.error("Error moving game to completed:", error)
       toast.error("Failed to move game to completed.")
