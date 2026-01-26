@@ -3,6 +3,7 @@
 import { getNintendoGameInfo } from "@/lib/nintendo-price"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
+import { isPriceStale } from "@/lib/utils"
 
 export async function fetchNintendoGameInfo(
   url: string | null
@@ -22,7 +23,7 @@ export async function fetchNintendoGameInfo(
 
     if (cachedPrice && !isStale) return cachedPrice
 
-    const gameInfo = await getNintendoGameInfo(url)
+    const gameInfo = await getNintendoGameInfo(url, cachedPrice?.externalId)
 
     if (!gameInfo) {
       throw new Error("Failed to fetch game information from Nintendo store")

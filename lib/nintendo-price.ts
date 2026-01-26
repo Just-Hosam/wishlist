@@ -134,19 +134,15 @@ async function getCurrentPrice(
 }
 
 export async function getNintendoGameInfo(
-  url: string
+  url: string,
+  nsuid?: string | null
 ): Promise<PriceInput | null> {
-  const nsuid = await getNSUID(url)
-  if (!nsuid) {
-    return null
-  }
+  if (!nsuid) nsuid = await getNSUID(url)
+  if (!nsuid) return null
 
   const gameInfo = await getCurrentPrice(nsuid)
-  if (!gameInfo) {
-    return null
-  }
+  if (!gameInfo) return null
 
-  // Transform NintendoPriceData to PriceInput
   return {
     storeUrl: url,
     externalId: gameInfo.nsuid,
