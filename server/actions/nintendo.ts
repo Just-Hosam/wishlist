@@ -18,7 +18,9 @@ export async function fetchNintendoGameInfo(
     }
 
     const cachedPrice = await getPrice(url)
-    if (cachedPrice) return cachedPrice
+    const isStale = isPriceStale(cachedPrice)
+
+    if (cachedPrice && !isStale) return cachedPrice
 
     const gameInfo = await getNintendoGameInfo(url)
 

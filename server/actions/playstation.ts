@@ -3,6 +3,7 @@
 import { getPlayStationGamePrice } from "@/lib/playstation/playstation-price"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
+import { isPriceStale } from "@/lib/utils"
 
 export async function fetchPlayStationGameInfo(
   url: string | null
@@ -21,7 +22,9 @@ export async function fetchPlayStationGameInfo(
     }
 
     const cachedPrice = await getPrice(url)
-    if (cachedPrice) return cachedPrice
+    const isStale = isPriceStale(cachedPrice)
+
+    if (cachedPrice && !isStale) return cachedPrice
 
     const gameInfo = await getPlayStationGamePrice(url)
 

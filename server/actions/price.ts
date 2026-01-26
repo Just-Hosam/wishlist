@@ -14,18 +14,6 @@ export async function getPrice(url: string): Promise<PriceOutput | null> {
 
   if (!price) return null
 
-  const now = new Date()
-  const lastChecked = price.fetchedAt || new Date(0)
-  const twoAMToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    2
-  )
-
-  const isStale = lastChecked < twoAMToday
-  if (isStale) return null
-
   return price
 }
 

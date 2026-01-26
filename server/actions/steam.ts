@@ -3,6 +3,7 @@
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
 import { getSteamGameInfo } from "@/lib/steam-price"
+import { isPriceStale } from "@/lib/utils"
 
 export async function fetchSteamGameInfo(
   url: string | null
@@ -18,7 +19,9 @@ export async function fetchSteamGameInfo(
     }
 
     const cachedPrice = await getPrice(url)
-    if (cachedPrice) return cachedPrice
+    const isStale = isPriceStale(cachedPrice)
+
+    if (cachedPrice && !isStale) return cachedPrice
 
     const gameInfo = await getSteamGameInfo(url)
 
