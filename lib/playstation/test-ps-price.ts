@@ -2,22 +2,26 @@ import { extractPrice, getPlayStationGamePrice } from "./playstation-price"
 import * as fs from "fs"
 import * as path from "path"
 
-// Import HTML files
-const freeHTML = fs.readFileSync(path.join(__dirname, "ps-free.html"), "utf-8")
+// Import HTML files from fixtures
+const fixturesDir = path.join(__dirname, "../../fixtures/playstation")
+const freeHTML = fs.readFileSync(
+  path.join(fixturesDir, "ps-free.html"),
+  "utf-8"
+)
 const discountHTML = fs.readFileSync(
-  path.join(__dirname, "ps-discount.html"),
+  path.join(fixturesDir, "ps-discount.html"),
   "utf-8"
 )
 const extraHTML = fs.readFileSync(
-  path.join(__dirname, "ps-extra.html"),
+  path.join(fixturesDir, "ps-extra.html"),
   "utf-8"
 )
 const premiumHTML = fs.readFileSync(
-  path.join(__dirname, "ps-premium.html"),
+  path.join(fixturesDir, "ps-premium.html"),
   "utf-8"
 )
 const standardHTML = fs.readFileSync(
-  path.join(__dirname, "ps-standard.html"),
+  path.join(fixturesDir, "ps-standard.html"),
   "utf-8"
 )
 

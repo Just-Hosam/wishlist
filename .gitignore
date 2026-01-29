@@ -41,5 +41,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# html for price scraping
-/lib/**/*.html
+# test fixtures (html for price scraping, etc.)
+/fixtures/
