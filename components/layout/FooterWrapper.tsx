@@ -1,9 +1,12 @@
-import Footer from "@/components/layout/Footer"
-import { headers } from "next/headers"
+"use client"
 
-export default async function FooterWrapper() {
-  const userId = (await headers()).get("x-user-id")
-  if (!userId) return null
+import Footer from "@/components/layout/Footer"
+import { usePathname } from "next/navigation"
+
+export default function FooterWrapper() {
+  const pathname = usePathname()
+
+  if (pathname === "/") return null
 
   return <Footer />
 }
