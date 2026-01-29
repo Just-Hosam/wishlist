@@ -1,6 +1,6 @@
-import { extractPrice } from "@/server/platforms/playstation"
 import * as fs from "fs"
 import * as path from "path"
+import { extractPrice } from "./playstation"
 
 // Import HTML files from fixtures
 const fixturesDir = path.join(__dirname, "../../fixtures/playstation")

@@ -1,5 +1,5 @@
-import { getNintendoGameInfo } from "@/lib/nintendo-price"
 import prisma from "@/lib/prisma"
+import { getNintendoGameInfo } from "@/server/platforms/nintendo"
 import { GameCategory, Platform } from "@/types"
 
 const NINTENDO_BATCH_SIZE = 5

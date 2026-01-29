@@ -1,5 +1,5 @@
-import { getPlayStationGamePrice } from "@/lib/playstation/playstation-price"
 import prisma from "@/lib/prisma"
+import { getPlayStationGamePrice } from "@/server/platforms/playstation"
 import { GameCategory, Platform } from "@/types"
 
 const PLAYSTATION_BATCH_SIZE = 5

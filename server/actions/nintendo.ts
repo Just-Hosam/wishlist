@@ -1,9 +1,9 @@
 "use server"
 
-import { getNintendoGameInfo } from "@/lib/nintendo-price"
+import { isPriceStale } from "@/lib/utils"
+import { getNintendoGameInfo } from "@/server/platforms/nintendo"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
-import { isPriceStale } from "@/lib/utils"
 
 export async function fetchNintendoGameInfo(
   url: string | null

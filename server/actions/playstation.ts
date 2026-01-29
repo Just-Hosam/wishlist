@@ -1,9 +1,9 @@
 "use server"
 
-import { getPlayStationGamePrice } from "@/lib/playstation/playstation-price"
+import { isPriceStale } from "@/lib/utils"
+import { getPlayStationGamePrice } from "@/server/platforms/playstation"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
-import { isPriceStale } from "@/lib/utils"
 
 export async function fetchPlayStationGameInfo(
   url: string | null
