@@ -4,6 +4,11 @@ Track the games you want to play, estimate how long they will take, and keep an 
 
 Playward is a focused backlog app: search for a game, add it to your wishlist or library, set a time estimate, and move it through to completion.
 
+#### NOTES:
+
+- Playward is still actively being worked on — expect frequent updates, and occasional breaking changes.
+- The best experience is via the PWA: install it and add it to your Home Screen. (Add to Home Screen)
+
 ## Highlights
 
 - Search and add games (powered by IGDB)
@@ -15,13 +20,13 @@ Playward is a focused backlog app: search for a game, add it to your wishlist or
 ## Screenshots
 
 <p align="center">
-	<img src="public/screenshots/Wishlist.PNG" alt="Wishlist view" width="32%" />
+	<img src="public/screenshots/Wishlist.PNG" alt="Wishlist" width="32%" />
 	<img src="public/screenshots/Library.PNG" alt="Library" width="32%" />
 	<img src="public/screenshots/Seach.PNG" alt="Search" width="32%" />
 </p>
 
 <p align="center">
-	<img src="public/screenshots/Game.PNG" alt="Game details" width="32%" />
+	<img src="public/screenshots/Game.PNG" alt="Game page" width="32%" />
 	<img src="public/screenshots/Add_to_wishlist.PNG" alt="Add to wishlist" width="32%" />
 	<img src="public/screenshots/Add_to_library.PNG" alt="Add to library" width="32%" />
 </p>
