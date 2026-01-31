@@ -1,11 +1,12 @@
 import Footer from "@/components/layout/Footer"
+import { Header } from "@/components/layout/Header"
+import { GlobalLoader } from "@/components/navigation/GlobalLoader"
+import { NavigationProvider } from "@/components/navigation/NavigationProvider"
 import { Toaster } from "@/components/ui/sonner"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
 import "../styles/globals.css"
-import { Header } from "@/components/layout/Header"
-import { NavigationProvider } from "@/components/navigation/NavigationProvider"
-import { GlobalLoader } from "@/components/navigation/GlobalLoader"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Playward",
@@ -56,6 +57,7 @@ export default async function RootLayout({
           <Footer />
           <Toaster position="top-center" />
           <SpeedInsights />
+          <Analytics />
         </NavigationProvider>
       </body>
     </html>
