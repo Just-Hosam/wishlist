@@ -5,6 +5,7 @@ import "../styles/globals.css"
 import { Header } from "@/components/layout/Header"
 import { NavigationProvider } from "@/components/navigation/NavigationProvider"
 import { GlobalLoader } from "@/components/navigation/GlobalLoader"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Playward",
@@ -54,6 +55,7 @@ export default async function RootLayout({
           </div>
           <Footer />
           <Toaster position="top-center" />
+          <SpeedInsights />
         </NavigationProvider>
       </body>
     </html>
