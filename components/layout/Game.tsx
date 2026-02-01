@@ -1,15 +1,15 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate } from "@/lib/utils"
-import { Clock, Loader2 } from "lucide-react"
+import { Clock, ExternalLink, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
+import { Button } from "../ui/button"
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel"
 import { ExpandableText } from "../ui/expandable-text"
 import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
 import { YoutubeVideo } from "./YoutubeVideo"
-import { Link } from "../navigation"
 
 interface Props {
   imageId: string
@@ -38,6 +38,10 @@ export function Game({
   igdbScreenshotIds,
   igdbVideoIds
 }: Props) {
+  const buildYoutubeReviewSearchUrl = (gameName: string) => {
+    return `https://www.youtube.com/results?search_query=${encodeURIComponent(gameName + " review")}`
+  }
+
   const isUpcoming = igdbFirstReleaseDate
     ? igdbFirstReleaseDate * 1000 > Date.now()
     : false
@@ -61,11 +65,11 @@ export function Game({
           )}
           {!isUpcoming && (
             <>
-          <span className="font-bold">•</span>
-          <div className="flex items-center gap-1">
-            <Clock size={12} className="mt-[-0.5px]" />
-            <span>{length ? `${length} hours` : "-"}</span>
-          </div>
+              <span className="font-bold">•</span>
+              <div className="flex items-center gap-1">
+                <Clock size={12} className="mt-[-0.5px]" />
+                <span>{length ? `${length} hours` : "-"}</span>
+              </div>
             </>
           )}
         </div>
@@ -214,11 +218,28 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-4 font-medium">Miscellaneous</label>
           <a
+            href={buildYoutubeReviewSearchUrl(name)}
             target="_blank"
             rel="noopener noreferrer"
-            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(name + " review")}`}
+            className="flex-1"
           >
-            Reviews
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-auto w-full justify-between gap-3 p-4"
+            >
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/logos/youtube.svg"
+                  alt="YouTube logo"
+                  width={22}
+                  height={22}
+                  className="drop-shadow-2xl"
+                />
+                <span className="font-semibold">Watch reviews on Youtube</span>
+              </div>
+              <ExternalLink size={16} className="text-muted-foreground" />
+            </Button>
           </a>
         </div>
       )}
