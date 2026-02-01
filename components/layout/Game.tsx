@@ -9,6 +9,7 @@ import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
 import { YoutubeVideo } from "./YoutubeVideo"
+import { Link } from "../navigation"
 
 interface Props {
   imageId: string
@@ -197,6 +198,20 @@ export function Game({
               })}
             </CarouselContent>
           </Carousel>
+        </div>
+      )}
+
+      {/* MISC */}
+      {name && (
+        <div className="mt-8 flex flex-col">
+          <label className="mb-4 font-medium">Miscellaneous</label>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(name + " review")}`}
+          >
+            Reviews
+          </a>
         </div>
       )}
     </div>
