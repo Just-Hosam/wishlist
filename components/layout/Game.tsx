@@ -38,6 +38,10 @@ export function Game({
   igdbScreenshotIds,
   igdbVideoIds
 }: Props) {
+  const isUpcoming = igdbFirstReleaseDate
+    ? igdbFirstReleaseDate * 1000 > Date.now()
+    : false
+
   return (
     <div className="custom-slide-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
@@ -55,11 +59,15 @@ export function Game({
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
           )}
+          {!isUpcoming && (
+            <>
           <span className="font-bold">•</span>
           <div className="flex items-center gap-1">
             <Clock size={12} className="mt-[-0.5px]" />
             <span>{length ? `${length} hours` : "-"}</span>
           </div>
+            </>
+          )}
         </div>
       </header>
 
