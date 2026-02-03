@@ -27,7 +27,7 @@ export default async function LibraryPage() {
     <>
       <ScrollToTopListener />
       {hasNowPlaying && (
-        <div className="custom-slide-fade-in relative -mx-6 px-4">
+        <div className="custom-slide-fade-in">
           <div className="flex items-center gap-2 pb-4 font-semibold">
             <PlayCircle size={17} strokeWidth={2.5} /> Now Playing
           </div>
@@ -39,14 +39,14 @@ export default async function LibraryPage() {
         </div>
       )}
       {hasBacklog && (
-        <div className="custom-slide-fade-in -mx-6 px-4">
+        <div className="custom-slide-fade-in">
           {hasNowPlaying && (
             <div className="mt-8 flex items-center gap-2 bg-background pb-4 font-semibold">
               <Layers size={17} strokeWidth={2.5} />
               Backlog
             </div>
           )}
-          <div className="grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
             {backlogGames.map((game, index) => (
               <LibraryGameCard game={game} index={index} key={game.id} />
             ))}

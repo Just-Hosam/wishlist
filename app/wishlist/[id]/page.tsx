@@ -10,7 +10,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import prisma from "@/lib/prisma"
-import { ArrowRight, EllipsisVertical, Pencil, Trash2 } from "lucide-react"
+import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -37,9 +37,9 @@ export default async function WishlistGamePage({ params }: Props) {
           <Button
             size="icon"
             variant="secondary"
-            className="absolute right-6 top-3 z-40"
+            className="absolute right-5 top-3 z-40"
           >
-            <EllipsisVertical />
+            <Ellipsis />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="mr-4 w-fit md:mr-0">
