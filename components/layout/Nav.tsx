@@ -1,10 +1,16 @@
+import { cn } from "@/lib/utils"
+
 interface NavProps {
   children?: React.ReactNode
 }
 
 export function Nav({ children }: NavProps) {
   return (
-    <nav className="absolute left-0 right-0 top-0 z-30 m-auto flex min-h-[76px] max-w-[1200px] items-center gap-3 bg-[#fafafa] px-6 pb-4 pt-5">
+    <nav
+      className={cn(
+        "absolute left-0 right-0 top-0 z-30 m-auto flex min-h-[84px] max-w-[1200px] items-center gap-3 bg-gradient-to-b from-[#fafafa] via-[#fafafa]/[80%] via-20% to-transparent px-6 pb-6 pt-3"
+      )}
+    >
       {!!children && children}
     </nav>
   )

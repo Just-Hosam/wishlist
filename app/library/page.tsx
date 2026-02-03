@@ -28,7 +28,7 @@ export default async function LibraryPage() {
       <ScrollToTopListener />
       {hasNowPlaying && (
         <div className="custom-slide-fade-in relative">
-          <div className="-pt-3 sticky -top-3 z-30 mb-1 flex items-center gap-2 bg-background pb-4 font-semibold">
+          <div className="flex items-center gap-2 pb-4 font-semibold">
             <PlayCircle size={17} strokeWidth={2.5} /> Now Playing
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
@@ -41,7 +41,7 @@ export default async function LibraryPage() {
       {hasBacklog && (
         <>
           {hasNowPlaying && (
-            <div className="custom-slide-fade-in sticky -top-3 z-30 mb-1 mt-5 flex items-center gap-2 bg-background pb-4 font-semibold">
+            <div className="custom-slide-fade-in mt-8 flex items-center gap-2 bg-background pb-4 font-semibold">
               <Layers size={17} strokeWidth={2.5} />
               Backlog
             </div>

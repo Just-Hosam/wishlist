@@ -37,7 +37,7 @@ export default async function WishlistGamePage({ params }: Props) {
           <Button
             size="icon"
             variant="ghost"
-            className="absolute right-6 top-5 z-40"
+            className="absolute right-6 top-5 z-40 rounded-full bg-white p-6 shadow-md"
           >
             <EllipsisVertical />
           </Button>

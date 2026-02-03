@@ -35,7 +35,10 @@ export default async function SearchGamePage({ params, searchParams }: Props) {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="absolute right-6 top-5 z-40">
+          <Button
+            variant="ghost"
+            className="absolute right-6 top-5 z-40 rounded-full bg-white p-6 shadow-md"
+          >
             <Plus />
             Add to
           </Button>

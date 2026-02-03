@@ -48,7 +48,7 @@ export default async function RootLayout({
         <NavigationProvider>
           <Header />
           <div
-            className="m-auto mt-[76px] max-w-[700px] overflow-y-auto px-6 pb-40 pt-3"
+            className="m-auto max-w-[700px] overflow-y-auto px-6 pb-40 pt-[84px]"
             style={{ height: "calc(100% - 76px)" }}
             data-scroll-container
           >

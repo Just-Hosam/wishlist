@@ -1,11 +1,11 @@
 "use client"
 
-import { BackButton } from "./BackButton"
-import { usePathname } from "next/navigation"
 import { Gamepad2 } from "lucide-react"
-import { Nav } from "./Nav"
+import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
 import { useNavigation } from "../navigation/NavigationProvider"
+import { BackButton } from "./BackButton"
+import { Nav } from "./Nav"
 
 const ROUTE_CONFIG: Record<string, ReactNode> = {
   "/": <SigninHeader />,
@@ -36,15 +36,27 @@ function SigninHeader() {
 }
 
 function WishlistHeader() {
-  return <h1 className="text-3xl font-semibold">Wishlist</h1>
+  return (
+    <h1 className="flex h-14 items-center rounded-full bg-white px-6 text-3xl font-semibold shadow-md">
+      Wishlist
+    </h1>
+  )
 }
 
 function LibraryHeader() {
-  return <h1 className="text-3xl font-semibold">Library</h1>
+  return (
+    <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-2xl font-semibold shadow-md">
+      Library
+    </h1>
+  )
 }
 
 function MoreHeader() {
-  return <h1 className="text-3xl font-semibold">More</h1>
+  return (
+    <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-2xl font-semibold shadow-md">
+      More
+    </h1>
+  )
 }
 
 function SearchHeader() {
@@ -54,7 +66,10 @@ function SearchHeader() {
 function AboutHeader() {
   return (
     <>
-      <BackButton /> <span className="text-xl">About</span>
+      <BackButton />
+      <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-xl shadow-md">
+        About
+      </h1>
     </>
   )
 }
@@ -62,7 +77,10 @@ function AboutHeader() {
 function CompletedHeader() {
   return (
     <>
-      <BackButton /> <span className="text-xl">Completed</span>
+      <BackButton />
+      <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-xl shadow-md">
+        Completed
+      </h1>
     </>
   )
 }
