@@ -36,15 +36,15 @@ function SigninHeader() {
 }
 
 function WishlistHeader() {
-  return <h1 className="text-3xl font-semibold">Wishlist</h1>
+  return <h1 className="text-4xl font-semibold">Wishlist</h1>
 }
 
 function LibraryHeader() {
-  return <h1 className="text-3xl font-semibold">Library</h1>
+  return <h1 className="text-4xl font-semibold">Library</h1>
 }
 
 function MoreHeader() {
-  return <h1 className="text-3xl font-semibold">More</h1>
+  return <h1 className="text-4xl font-semibold">More</h1>
 }
 
 function SearchHeader() {
