@@ -100,7 +100,7 @@ export function SearchPage() {
 
   // Results list
   const renderResults = () => (
-    <div className="custom-slide-fade-in grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+    <div className="custom-slide-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
         <Link
           href={`/search/${game.igdbId}?q=${encodeURIComponent(query)}`}
