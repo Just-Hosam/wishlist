@@ -226,7 +226,7 @@ export function Game({
             <Button
               size="lg"
               variant="outline"
-              className="h-auto w-full justify-between gap-3 p-4"
+              className="h-auto w-full justify-between gap-3 px-6 py-4"
             >
               <div className="flex items-center gap-2">
                 <Image

@@ -204,9 +204,9 @@ export function SearchPage() {
       <Nav>
         <form onSubmit={handleSubmit} className="relative w-full">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
             aria-hidden
-            size={16}
+            size={18}
           />
 
           <Input
@@ -220,17 +220,17 @@ export function SearchPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for games..."
-            className="h-10 rounded-full pl-9 pr-9 transition-all duration-200"
+            className="pl-11 pr-12 transition-all duration-200"
           />
 
           {query && (
             <button
               type="button"
               onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-sm text-gray-500 hover:text-gray-700"
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-muted-foreground hover:text-muted-foreground/80"
               aria-label="Clear search"
             >
-              <X size={15} />
+              <X size={18} />
             </button>
           )}
         </form>

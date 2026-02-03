@@ -36,27 +36,15 @@ function SigninHeader() {
 }
 
 function WishlistHeader() {
-  return (
-    <h1 className="flex h-14 items-center rounded-full bg-white px-6 text-3xl font-semibold shadow-md">
-      Wishlist
-    </h1>
-  )
+  return <h1 className="text-3xl font-semibold">Wishlist</h1>
 }
 
 function LibraryHeader() {
-  return (
-    <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-2xl font-semibold shadow-md">
-      Library
-    </h1>
-  )
+  return <h1 className="text-3xl font-semibold">Library</h1>
 }
 
 function MoreHeader() {
-  return (
-    <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-2xl font-semibold shadow-md">
-      More
-    </h1>
-  )
+  return <h1 className="text-3xl font-semibold">More</h1>
 }
 
 function SearchHeader() {

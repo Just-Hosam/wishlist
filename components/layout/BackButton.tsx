@@ -15,10 +15,10 @@ export function BackButton({ className }: BackButtonProps) {
   return (
     <Button
       type="button"
-      variant="ghost"
+      variant="secondary"
       size="icon"
       onClick={() => router.back()}
-      className={cn("rounded-full bg-white p-6 shadow-md", className)}
+      className={className}
     >
       <ArrowLeft />
     </Button>
