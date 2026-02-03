@@ -48,7 +48,7 @@ export default async function RootLayout({
         <NavigationProvider>
           <Header />
           <div
-            className="m-auto h-full max-w-[700px] overflow-y-auto px-6 pb-40 pt-[84px]"
+            className="m-auto h-full max-w-[700px] overflow-y-auto px-4 pb-40 pt-[84px]"
             data-scroll-container
           >
             <GlobalLoader>{children}</GlobalLoader>
