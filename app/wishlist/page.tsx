@@ -38,7 +38,7 @@ export default async function WishlistPage() {
 
           return (
             <Link key={game.id} href={`/wishlist/${game.id}`}>
-              <div className="flex overflow-hidden rounded-3xl border bg-white shadow-md">
+              <div className="flex overflow-hidden rounded-3xl border">
                 {game.coverImageUrl && (
                   <div className="h-[200px] w-[150px] flex-shrink-0 overflow-hidden bg-gray-200">
                     <Image
