@@ -29,8 +29,8 @@ export function Header() {
 function SigninHeader() {
   return (
     <div className="flex items-center gap-3">
-      <Gamepad2 size={40} />
-      <h1 className="text-3xl font-semibold">Playward</h1>
+      <Gamepad2 size={48} />
+      <h1 className="text-4xl font-semibold">Playward</h1>
     </div>
   )
 }
@@ -55,9 +55,7 @@ function AboutHeader() {
   return (
     <>
       <BackButton />
-      <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-xl shadow-md">
-        About
-      </h1>
+      <h1 className="text-2xl font-semibold">About</h1>
     </>
   )
 }
@@ -66,9 +64,7 @@ function CompletedHeader() {
   return (
     <>
       <BackButton />
-      <h1 className="flex h-12 items-center rounded-full bg-white px-6 text-xl shadow-md">
-        Completed
-      </h1>
+      <h1 className="text-2xl font-semibold">Completed</h1>
     </>
   )
 }
