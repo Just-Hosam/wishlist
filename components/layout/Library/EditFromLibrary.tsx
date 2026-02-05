@@ -1,8 +1,12 @@
 "use client"
 
+import { useRouter } from "@/components/navigation"
+import { ButtonGroup } from "@/components/ui/button-group"
+import Counter from "@/components/ui/counter"
+import { Switch } from "@/components/ui/switch"
 import { saveGame } from "@/server/actions/game"
 import { GameInput, GameOutput, Platform } from "@/types"
-import { useRouter } from "@/components/navigation"
+import Image from "next/image"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"
@@ -16,10 +20,6 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "../../ui/drawer"
-import Counter from "@/components/ui/counter"
-import { ButtonGroup } from "@/components/ui/button-group"
-import Image from "next/image"
-import { Switch } from "@/components/ui/switch"
 
 interface Props {
   game: GameOutput
@@ -33,10 +33,16 @@ export default function EditFromLibrary({ game, children }: Props) {
 
   // Form
   const [timeToBeat, setTimeToBeat] = useState<number | null>(game.length)
-  const [nowPlaying, setNowPlaying] = useState(false)
-  const [playstationSelected, setPlaystationSelected] = useState(false)
-  const [nintendoSelected, setNintendoSelected] = useState(false)
-  const [steamSelected, setSteamSelected] = useState(false)
+  const [nowPlaying, setNowPlaying] = useState(game.nowPlaying)
+  const [playstationSelected, setPlaystationSelected] = useState(
+    game.platforms.includes(Platform.PLAYSTATION)
+  )
+  const [nintendoSelected, setNintendoSelected] = useState(
+    game.platforms.includes(Platform.NINTENDO)
+  )
+  const [steamSelected, setSteamSelected] = useState(
+    game.platforms.includes(Platform.PC)
+  )
 
   const handleSave = async () => {
     setIsSaving(true)
