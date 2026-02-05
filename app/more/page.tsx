@@ -33,8 +33,10 @@ export default function MorePage() {
           <ArrowRight className="ml-auto text-muted-foreground" />
         </Link>
       </Button>
-      <div className="-mx-6 my-6 border-[3px]"></div>
-      <SignOutButton />
+      <div className="-mx-4 my-6 border-[3px]"></div>
+      <div className="px-2">
+        <SignOutButton />
+      </div>
     </div>
   )
 }
