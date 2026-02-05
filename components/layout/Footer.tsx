@@ -139,18 +139,11 @@ export default function Footer() {
         <Link href="/search" onClick={handleSearchClickOnSearchPage}>
           <Button
             size="icon"
-            variant="link"
+            variant="accent"
             ref={searchButtonRef}
-            className="h-16 w-16 rounded-full bg-white p-[7px] text-black shadow-lg transition-transform"
+            className="h-16 w-16 rounded-full p-[7px] shadow-lg transition-transform"
           >
-            <div
-              className={cn(
-                "flex h-full w-full items-center justify-center rounded-full",
-                activeTab === "SEARCH" && "bg-secondary"
-              )}
-            >
-              <Search />
-            </div>
+            <Search />
           </Button>
         </Link>
       </div>
