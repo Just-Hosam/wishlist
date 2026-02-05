@@ -12,9 +12,6 @@ type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 
 export default function Footer() {
   const pathname = usePathname()
-
-  if (pathname === "/") return null
-
   const [activeTab, setActiveTab] = useState<Tab>("")
   const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
   const libraryTriggerRef = useRef<HTMLButtonElement>(null)
@@ -55,6 +52,8 @@ export default function Footer() {
       return
     }
   }, [pathname])
+
+  if (pathname === "/") return null
 
   const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
     setActiveTab("SEARCH")
