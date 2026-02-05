@@ -7,10 +7,19 @@ import { cn } from "@/lib/utils"
 
 type Props = {
   videoId: string // IGDB video_id (YouTube ID)
+  width?: number
+  height?: number
+  sizes?: string
   className?: string
 }
 
-export function YoutubeVideo({ videoId, className }: Props) {
+export function YoutubeVideo({
+  videoId,
+  width = 308,
+  height = 173,
+  sizes = "(max-width: 640px) 90vw, 308px",
+  className
+}: Props) {
   const encodedId = encodeURIComponent(videoId)
   const href = `https://youtu.be/${encodedId}`
   const maxres = `https://i.ytimg.com/vi/${encodedId}/maxresdefault.jpg`
@@ -33,9 +42,10 @@ export function YoutubeVideo({ videoId, className }: Props) {
         <Image
           src={thumbnailUrl}
           alt="YouTube thumbnail"
-          fill
-          sizes="(max-width: 768px) 100vw, 700px"
-          className="object-cover"
+          width={width}
+          height={height}
+          sizes={sizes}
+          className="h-full w-full object-cover"
           priority={false}
           onError={() => {
             if (thumbnailUrl !== hq) setThumbnailUrl(hq)

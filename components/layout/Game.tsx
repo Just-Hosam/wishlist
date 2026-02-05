@@ -208,7 +208,12 @@ export function Game({
                     // 330px = 308px (image) + 6px (horizontal padding) + 10px (first or last element, 16px - 6px)
                     className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
                   >
-                    <YoutubeVideo videoId={videoId} />
+                    <YoutubeVideo
+                      videoId={videoId}
+                      width={308}
+                      height={173}
+                      sizes="(max-width: 640px) 90vw, 308px"
+                    />
                   </div>
                 )
               })}
