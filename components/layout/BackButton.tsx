@@ -15,7 +15,6 @@ export function BackButton({ className }: BackButtonProps) {
   return (
     <Button
       type="button"
-      variant="secondary"
       size="icon"
       onClick={() => router.back()}
       className={className}

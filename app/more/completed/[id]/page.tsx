@@ -28,11 +28,7 @@ export default async function CompletedGamePage({ params }: Props) {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="absolute right-5 top-3 z-40"
-          >
+          <Button size="icon" className="absolute right-5 top-3 z-40">
             <Ellipsis />
           </Button>
         </PopoverTrigger>
