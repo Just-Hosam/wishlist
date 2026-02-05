@@ -157,25 +157,25 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-4 font-medium">Screenshots</label>
           <div
-            className="hide-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
             tabIndex={0}
             role="region"
             aria-label="Screenshots"
           >
-            <div className="flex gap-3">
+            <div className="flex">
               {igdbScreenshotIds.map((id, index) => {
                 if (index >= 8) return null
                 return (
                   <div
                     key={id}
-                    className="w-[90%] max-w-[308px] shrink-0 snap-start"
+                    className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
                   >
                     <Image
                       src={buildIGDBImageUrl(id || "")}
                       alt={name || "Game cover"}
                       width={320}
                       height={180}
-                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 320px"
+                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 324px"
                       className="overflow-hidden rounded-2xl"
                     />
                   </div>
