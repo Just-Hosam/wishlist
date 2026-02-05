@@ -254,11 +254,11 @@ export function Game({
             >
               <div className="flex items-center gap-2">
                 <Image
-                  src="/logos/youtube.svg"
+                  src="/logos/hltb.png"
                   alt="YouTube logo"
-                  width={22}
-                  height={22}
-                  className="drop-shadow-2xl"
+                  width={20}
+                  height={20}
+                  className="rounded-sm drop-shadow-2xl"
                 />
                 <span className="font-semibold">HLTB Time to Beat</span>
               </div>
