@@ -168,14 +168,16 @@ export function Game({
                 return (
                   <div
                     key={id}
+                    // 320px = 308px (image) + 12px (2x 6px horizontal padding)
+                    // 330px = 308px (image) + 6px (horizontal padding) + 10px (first or last element, 16px - 6px)
                     className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
                   >
                     <Image
                       src={buildIGDBImageUrl(id || "")}
                       alt={name || "Game cover"}
-                      width={320}
-                      height={180}
-                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 324px"
+                      width={308}
+                      height={173}
+                      sizes="(max-width: 640px) 90vw, 308px"
                       className="overflow-hidden rounded-2xl"
                     />
                   </div>
