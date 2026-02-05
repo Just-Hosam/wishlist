@@ -91,7 +91,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[98%] via-55% to-transparent px-5 pb-7 pt-3">
+    <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[80%] via-60% to-transparent px-5 pb-7 pt-3">
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <Tabs value={activeTab} className="flex-1">
           <TabsList className="w-full justify-around rounded-full bg-white p-2 shadow-lg">
