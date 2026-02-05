@@ -177,7 +177,7 @@ export default function AddToLibrary({
           </form>
 
           <DrawerFooter>
-            <Button disabled={isSaving} onClick={handleSave}>
+            <Button disabled={isSaving} variant="accent" onClick={handleSave}>
               {isSaving ? "Adding..." : "Add to Library"}
             </Button>
             <DrawerClose asChild>

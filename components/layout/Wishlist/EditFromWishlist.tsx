@@ -234,7 +234,7 @@ export default function EditFromWishlist({ game, children }: Props) {
           </form>
 
           <DrawerFooter>
-            <Button variant="accent" disabled={isSaving} onClick={handleSave}>
+            <Button disabled={isSaving} variant="accent" onClick={handleSave}>
               {isSaving ? "Saving..." : "Save"}
             </Button>
             <DrawerClose asChild>

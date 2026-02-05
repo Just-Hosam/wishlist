@@ -178,7 +178,7 @@ export default function EditFromLibrary({ game, children }: Props) {
           </form>
 
           <DrawerFooter>
-            <Button disabled={isSaving} onClick={handleSave}>
+            <Button disabled={isSaving} variant="accent" onClick={handleSave}>
               {isSaving ? "Saving..." : "Save"}
             </Button>
             <DrawerClose asChild>

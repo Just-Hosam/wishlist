@@ -211,7 +211,7 @@ export default function ToWishlistButton({
           </form>
 
           <DrawerFooter>
-            <Button disabled={isSaving} onClick={handleSave}>
+            <Button disabled={isSaving} variant="accent" onClick={handleSave}>
               {isSaving ? "Adding..." : "Add to Wishlist"}
             </Button>
             <DrawerClose asChild>
