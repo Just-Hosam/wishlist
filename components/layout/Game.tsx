@@ -37,9 +37,8 @@ export function Game({
   igdbScreenshotIds,
   igdbVideoIds
 }: Props) {
-  const buildYoutubeReviewSearchUrl = (gameName: string) => {
-    return `https://www.youtube.com/results?search_query=${encodeURIComponent(gameName + " review")}`
-  }
+  const youtubeReviewSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(name + " review")}`
+  const hltbSearchUrl = `https://howlongtobeat.com/?q=${encodeURIComponent(name)}`
 
   const isUpcoming = igdbFirstReleaseDate
     ? igdbFirstReleaseDate * 1000 > Date.now()
@@ -219,7 +218,7 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-4 font-medium">Miscellaneous</label>
           <a
-            href={buildYoutubeReviewSearchUrl(name)}
+            href={youtubeReviewSearchUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1"
@@ -237,7 +236,31 @@ export function Game({
                   height={22}
                   className="drop-shadow-2xl"
                 />
-                <span className="font-semibold">Watch reviews on Youtube</span>
+                <span className="font-semibold">Reviews on Youtube</span>
+              </div>
+              <ExternalLink size={16} className="text-muted-foreground" />
+            </Button>
+          </a>
+          <a
+            href={hltbSearchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 flex-1"
+          >
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-auto w-full justify-between gap-3 px-6 py-4"
+            >
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/logos/youtube.svg"
+                  alt="YouTube logo"
+                  width={22}
+                  height={22}
+                  className="drop-shadow-2xl"
+                />
+                <span className="font-semibold">HLTB Time to Beat</span>
               </div>
               <ExternalLink size={16} className="text-muted-foreground" />
             </Button>
