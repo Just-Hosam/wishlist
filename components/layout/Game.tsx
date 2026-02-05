@@ -191,18 +191,20 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-4 font-medium">Videos</label>
           <div
-            className="hide-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
             tabIndex={0}
             role="region"
             aria-label="Videos"
           >
-            <div className="flex gap-3">
+            <div className="flex">
               {igdbVideoIds.map((videoId, index) => {
                 if (index >= 6) return null
                 return (
                   <div
                     key={videoId}
-                    className="w-[90%] max-w-[308px] shrink-0 snap-start"
+                    // 320px = 308px (image) + 12px (2x 6px horizontal padding)
+                    // 330px = 308px (image) + 6px (horizontal padding) + 10px (first or last element, 16px - 6px)
+                    className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
                   >
                     <YoutubeVideo videoId={videoId} />
                   </div>
