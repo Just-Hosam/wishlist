@@ -11,7 +11,8 @@ import "../styles/globals.css"
 export const metadata: Metadata = {
   title: "Playward",
   description:
-    "Manage your game wishlists with ease. Track games you want to play, own, and have completed."
+    "Manage your game wishlists with ease. Track games you want to play, own, and have completed.",
+  manifest: "/manifest.json"
 }
 
 export default async function RootLayout({
@@ -187,7 +188,6 @@ function PWAConfig() {
         name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover"
       />
-      <link rel="manifest" href="manifest.json" />
     </>
   )
 }
