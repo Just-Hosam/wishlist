@@ -45,7 +45,7 @@ export function YoutubeVideo({
           width={width}
           height={height}
           sizes={sizes}
-          className="h-full w-full object-cover"
+          className="absolute h-full w-full object-cover"
           priority={false}
           onError={() => {
             if (thumbnailUrl !== hq) setThumbnailUrl(hq)
