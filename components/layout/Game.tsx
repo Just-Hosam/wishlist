@@ -158,18 +158,19 @@ export function Game({
       {igdbScreenshotIds && (
         <div className="mt-8 flex flex-col">
           <label className="mb-4 font-medium">Screenshots</label>
-          <Carousel
-            opts={{
-              align: "start"
-            }}
+          <div
+            className="hide-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            tabIndex={0}
+            role="region"
+            aria-label="Screenshots"
           >
-            <CarouselContent className="-ml-3">
+            <div className="flex gap-3">
               {igdbScreenshotIds.map((id, index) => {
                 if (index >= 8) return null
                 return (
-                  <CarouselItem
+                  <div
                     key={id}
-                    className="max-w-[320px] basis-[90%] pl-3"
+                    className="w-[90%] max-w-[308px] shrink-0 snap-start"
                   >
                     <Image
                       src={buildIGDBImageUrl(id || "")}
@@ -179,11 +180,11 @@ export function Game({
                       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 320px"
                       className="overflow-hidden rounded-2xl"
                     />
-                  </CarouselItem>
+                  </div>
                 )
               })}
-            </CarouselContent>
-          </Carousel>
+            </div>
+          </div>
         </div>
       )}
 
@@ -191,25 +192,26 @@ export function Game({
       {igdbVideoIds && igdbVideoIds.length > 0 && (
         <div className="mt-8 flex flex-col">
           <label className="mb-4 font-medium">Videos</label>
-          <Carousel
-            opts={{
-              align: "start"
-            }}
+          <div
+            className="hide-scrollbar snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            tabIndex={0}
+            role="region"
+            aria-label="Videos"
           >
-            <CarouselContent className="-ml-3">
+            <div className="flex gap-3">
               {igdbVideoIds.map((videoId, index) => {
                 if (index >= 6) return null
                 return (
-                  <CarouselItem
+                  <div
                     key={videoId}
-                    className="max-w-[320px] basis-[90%] pl-3"
+                    className="w-[90%] max-w-[308px] shrink-0 snap-start"
                   >
                     <YoutubeVideo videoId={videoId} />
-                  </CarouselItem>
+                  </div>
                 )
               })}
-            </CarouselContent>
-          </Carousel>
+            </div>
+          </div>
         </div>
       )}
 
