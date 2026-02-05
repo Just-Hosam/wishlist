@@ -1,11 +1,11 @@
 "use client"
 
+import { useRouter } from "@/components/navigation"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { Switch } from "@/components/ui/switch"
 import { saveGame } from "@/server/actions/game"
 import { GameCategory, GameInput, IGDBGame, Platform } from "@/types"
 import Image from "next/image"
-import { useRouter } from "@/components/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"
@@ -13,7 +13,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -97,7 +96,6 @@ export default function AddToLibrary({
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Add to Library</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <form className="space-y-6 px-4 pb-5 pt-3">
             <div className="flex items-end justify-between">

@@ -14,7 +14,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -88,7 +87,6 @@ export default function EditFromLibrary({ game, children }: Props) {
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Edit Game</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <form className="space-y-6 px-4 pb-5 pt-3">
             <div>

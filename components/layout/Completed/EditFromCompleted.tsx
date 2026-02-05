@@ -1,8 +1,9 @@
 "use client"
 
+import { useRouter } from "@/components/navigation"
+import Counter from "@/components/ui/counter"
 import { saveGame } from "@/server/actions/game"
 import { GameInput, GameOutput } from "@/types"
-import { useRouter } from "@/components/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"
@@ -10,13 +11,11 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger
 } from "../../ui/drawer"
-import Counter from "@/components/ui/counter"
 
 interface Props {
   game: GameOutput
@@ -66,7 +65,6 @@ export default function EditFromCompleted({ game, children }: Props) {
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Edit Game</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <form className="px-4 pb-5 pt-3">
             <label className="text-sm font-medium">Time to Beat</label>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "@/components/navigation"
 import {
   buildNintendoStoreUrl,
   buildPlayStationStoreUrl,
@@ -9,7 +10,6 @@ import { saveGame } from "@/server/actions/game"
 import { linkPriceToGame } from "@/server/actions/price"
 import { GameCategory, GameInput, GameOutput } from "@/types"
 import Image from "next/image"
-import { useRouter } from "@/components/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"
@@ -17,7 +17,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -124,7 +123,6 @@ export default function MoveToWishlist({
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Move to Wishlist</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <form className="px-4 pb-5 pt-3">
             <label className="text-sm font-medium">Prices</label>

@@ -1,8 +1,17 @@
 "use client"
 
-import { saveGame } from "@/server/actions/game"
-import { GameInput, GameOutput, GameOutputWithPrices, Platform } from "@/types"
 import { useRouter } from "@/components/navigation"
+import Counter from "@/components/ui/counter"
+import { Switch } from "@/components/ui/switch"
+import {
+  buildNintendoStoreUrl,
+  buildPlayStationStoreUrl,
+  buildSteamStoreUrl
+} from "@/lib/igdb-store-links"
+import { saveGame } from "@/server/actions/game"
+import { linkPriceToGame, unlinkPriceFromGame } from "@/server/actions/price"
+import { GameInput, GameOutputWithPrices, Platform } from "@/types"
+import Image from "next/image"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"
@@ -10,24 +19,14 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger
 } from "../../ui/drawer"
-import Counter from "@/components/ui/counter"
-import Image from "next/image"
-import { Switch } from "@/components/ui/switch"
 import NintendoPriceClient from "../NintendoPriceClient"
 import PlaystationPriceClient from "../PlaystationPriceClient"
 import SteamPriceClient from "../SteamPriceClient"
-import {
-  buildNintendoStoreUrl,
-  buildPlayStationStoreUrl,
-  buildSteamStoreUrl
-} from "@/lib/igdb-store-links"
-import { linkPriceToGame, unlinkPriceFromGame } from "@/server/actions/price"
 
 interface Props {
   game: GameOutputWithPrices
@@ -150,7 +149,6 @@ export default function EditFromWishlist({ game, children }: Props) {
         <div className="px-2">
           <DrawerHeader>
             <DrawerTitle>Edit Game</DrawerTitle>
-            <DrawerDescription>Configure your settings.</DrawerDescription>
           </DrawerHeader>
           <form className="space-y-6 px-4 pb-5 pt-3">
             <div>
@@ -236,7 +234,7 @@ export default function EditFromWishlist({ game, children }: Props) {
           </form>
 
           <DrawerFooter>
-            <Button disabled={isSaving} onClick={handleSave}>
+            <Button variant="accent" disabled={isSaving} onClick={handleSave}>
               {isSaving ? "Saving..." : "Save"}
             </Button>
             <DrawerClose asChild>
