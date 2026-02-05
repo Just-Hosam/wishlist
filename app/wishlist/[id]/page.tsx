@@ -42,7 +42,7 @@ export default async function WishlistGamePage({ params }: Props) {
             <Ellipsis />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="mr-4 w-fit md:mr-0">
+        <PopoverContent className="mr-3 w-fit">
           <div className="flex flex-col">
             <MoveToLibrary game={game}>
               <ArrowRight />
