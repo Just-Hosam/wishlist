@@ -126,11 +126,6 @@ function PWAConfig() {
       />
       <link
         rel="apple-touch-startup-image"
-        href="/pwa/apple-splash-1260-2736.jpg"
-        media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-      />
-      <link
-        rel="apple-touch-startup-image"
         href="/pwa/apple-splash-1290-2796.jpg"
         media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
       />
