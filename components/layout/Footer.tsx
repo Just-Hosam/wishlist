@@ -103,7 +103,7 @@ export default function Footer() {
               <TabsTrigger
                 value="WISHLIST"
                 ref={wishlistTriggerRef}
-                className="h-12 w-full rounded-full data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full data-[state=active]:bg-accent/40"
               >
                 <Heart />
               </TabsTrigger>
@@ -116,7 +116,7 @@ export default function Footer() {
               <TabsTrigger
                 value="LIBRARY"
                 ref={libraryTriggerRef}
-                className="h-12 w-full rounded-full data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full data-[state=active]:bg-accent/40"
               >
                 <LibraryBig strokeWidth={1.6} />
               </TabsTrigger>
@@ -129,7 +129,7 @@ export default function Footer() {
               <TabsTrigger
                 value="MORE"
                 ref={moreTriggerRef}
-                className="h-12 w-full rounded-full data-[state=active]:bg-secondary"
+                className="h-12 w-full rounded-full data-[state=active]:bg-accent/40"
               >
                 <AlignJustify />
               </TabsTrigger>
