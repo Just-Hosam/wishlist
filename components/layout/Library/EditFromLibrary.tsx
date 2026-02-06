@@ -125,7 +125,7 @@ export default function EditFromLibrary({ game, children }: Props) {
                 <Button
                   size="lg"
                   type="button"
-                  className="flex-1"
+                  className="flex-1 shadow-none"
                   variant={steamSelected ? "accent" : "outline"}
                   onClick={() => setSteamSelected(!steamSelected)}
                 >
@@ -142,7 +142,7 @@ export default function EditFromLibrary({ game, children }: Props) {
                 <Button
                   size="lg"
                   type="button"
-                  className="flex-1"
+                  className="flex-1 shadow-none"
                   variant={playstationSelected ? "accent" : "outline"}
                   onClick={() => setPlaystationSelected(!playstationSelected)}
                 >
@@ -159,7 +159,7 @@ export default function EditFromLibrary({ game, children }: Props) {
                 <Button
                   size="lg"
                   type="button"
-                  className="flex-1"
+                  className="flex-1 shadow-none"
                   variant={nintendoSelected ? "accent" : "outline"}
                   onClick={() => setNintendoSelected(!nintendoSelected)}
                 >
