@@ -94,7 +94,7 @@ export default function Footer() {
     <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[85%] via-60% to-transparent px-5 pb-7 pt-3">
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <Tabs value={activeTab} className="flex-1">
-          <TabsList className="min-h-[72px] w-full justify-around rounded-full bg-white px-[6px] py-0 shadow-lg">
+          <TabsList className="min-h-[68px] w-full justify-around rounded-full bg-white px-[6px] py-0 shadow-lg">
             <Link
               href="/wishlist"
               className="flex-1"
@@ -103,7 +103,7 @@ export default function Footer() {
               <TabsTrigger
                 value="WISHLIST"
                 ref={wishlistTriggerRef}
-                className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
+                className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
                 {activeTab === "WISHLIST" ? (
                   <Heart className="size-[18px] fill-accent text-accent" />
@@ -120,12 +120,12 @@ export default function Footer() {
               <TabsTrigger
                 value="LIBRARY"
                 ref={libraryTriggerRef}
-                className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
+                className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
                 {activeTab === "LIBRARY" ? (
                   <LibraryBig
                     strokeWidth={1.6}
-                    className="size-[18px] fill-accent text-accent"
+                    className="size-[18px] text-accent"
                   />
                 ) : (
                   <LibraryBig strokeWidth={1.6} className="size-[18px]" />
@@ -140,7 +140,7 @@ export default function Footer() {
               <TabsTrigger
                 value="MORE"
                 ref={moreTriggerRef}
-                className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
+                className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
                 {activeTab === "MORE" ? (
                   <AlignJustify className="size-[18px] text-accent" />
@@ -156,7 +156,7 @@ export default function Footer() {
             variant="accent"
             ref={searchButtonRef}
             className={cn(
-              "h-[72px] w-[72px] rounded-full shadow-lg transition-transform [&_svg]:size-[18px]",
+              "h-[68px] w-[68px] rounded-full shadow-lg transition-transform [&_svg]:size-[18px]",
               activeTab === "SEARCH" && "bg-accent/80"
             )}
           >
