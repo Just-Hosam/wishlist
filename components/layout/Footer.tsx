@@ -94,7 +94,7 @@ export default function Footer() {
     <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[85%] via-60% to-transparent px-5 pb-7 pt-3">
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <Tabs value={activeTab} className="flex-1">
-          <TabsList className="w-full justify-around rounded-full bg-white p-2 shadow-lg">
+          <TabsList className="min-h-[72px] w-full justify-around rounded-full bg-white px-[6px] py-0 shadow-lg">
             <Link
               href="/wishlist"
               className="flex-1"
@@ -103,9 +103,13 @@ export default function Footer() {
               <TabsTrigger
                 value="WISHLIST"
                 ref={wishlistTriggerRef}
-                className="h-12 w-full rounded-full data-[state=active]:bg-accent/40"
+                className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
-                <Heart />
+                {activeTab === "WISHLIST" ? (
+                  <Heart className="size-5 fill-accent text-accent" />
+                ) : (
+                  <Heart className="size-5" />
+                )}
               </TabsTrigger>
             </Link>
             <Link
@@ -116,9 +120,16 @@ export default function Footer() {
               <TabsTrigger
                 value="LIBRARY"
                 ref={libraryTriggerRef}
-                className="h-12 w-full rounded-full data-[state=active]:bg-accent/40"
+                className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
-                <LibraryBig strokeWidth={1.6} />
+                {activeTab === "LIBRARY" ? (
+                  <LibraryBig
+                    strokeWidth={1.6}
+                    className="size-5 fill-accent text-accent"
+                  />
+                ) : (
+                  <LibraryBig strokeWidth={1.6} className="size-5" />
+                )}
               </TabsTrigger>
             </Link>
             <Link
@@ -129,19 +140,22 @@ export default function Footer() {
               <TabsTrigger
                 value="MORE"
                 ref={moreTriggerRef}
-                className="h-12 w-full rounded-full data-[state=active]:bg-accent/40"
+                className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
-                <AlignJustify />
+                {activeTab === "MORE" ? (
+                  <AlignJustify className="size-5 text-accent" />
+                ) : (
+                  <AlignJustify className="size-5" />
+                )}
               </TabsTrigger>
             </Link>
           </TabsList>
         </Tabs>
         <Link href="/search" onClick={handleSearchClickOnSearchPage}>
           <Button
-            size="icon"
             variant="accent"
             ref={searchButtonRef}
-            className="h-16 w-16 rounded-full p-[7px] shadow-lg transition-transform"
+            className="h-[72px] w-[72px] rounded-full shadow-lg transition-transform [&_svg]:size-5"
           >
             <Search />
           </Button>
