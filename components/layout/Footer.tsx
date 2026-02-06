@@ -106,9 +106,9 @@ export default function Footer() {
                 className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
                 {activeTab === "WISHLIST" ? (
-                  <Heart className="size-5 fill-accent text-accent" />
+                  <Heart className="size-[18px] fill-accent text-accent" />
                 ) : (
-                  <Heart className="size-5" />
+                  <Heart className="size-[18px]" />
                 )}
               </TabsTrigger>
             </Link>
@@ -125,10 +125,10 @@ export default function Footer() {
                 {activeTab === "LIBRARY" ? (
                   <LibraryBig
                     strokeWidth={1.6}
-                    className="size-5 fill-accent text-accent"
+                    className="size-[18px] fill-accent text-accent"
                   />
                 ) : (
-                  <LibraryBig strokeWidth={1.6} className="size-5" />
+                  <LibraryBig strokeWidth={1.6} className="size-[18px]" />
                 )}
               </TabsTrigger>
             </Link>
@@ -143,9 +143,9 @@ export default function Footer() {
                 className="h-[60px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
                 {activeTab === "MORE" ? (
-                  <AlignJustify className="size-5 text-accent" />
+                  <AlignJustify className="size-[18px] text-accent" />
                 ) : (
-                  <AlignJustify className="size-5" />
+                  <AlignJustify className="size-[18px]" />
                 )}
               </TabsTrigger>
             </Link>
@@ -155,7 +155,10 @@ export default function Footer() {
           <Button
             variant="accent"
             ref={searchButtonRef}
-            className="h-[72px] w-[72px] rounded-full shadow-lg transition-transform [&_svg]:size-5"
+            className={cn(
+              "h-[72px] w-[72px] rounded-full shadow-lg transition-transform [&_svg]:size-[18px]",
+              activeTab === "SEARCH" && "bg-accent/80"
+            )}
           >
             <Search />
           </Button>

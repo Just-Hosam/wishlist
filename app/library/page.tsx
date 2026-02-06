@@ -19,9 +19,7 @@ export default async function LibraryPage() {
   const hasNowPlaying = nowPlayingGames.length > 0
   const hasBacklog = backlogGames.length > 0
 
-  if (!hasNowPlaying && !hasBacklog) {
-    return <ListEmptyState />
-  }
+  if (!hasNowPlaying && !hasBacklog) return <ListEmptyState />
 
   return (
     <>
