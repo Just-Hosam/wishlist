@@ -133,7 +133,7 @@ export default function MoveToLibrary({ game, children }: Props) {
                   size="lg"
                   type="button"
                   className="flex-1"
-                  variant={steamSelected ? "default" : "outline"}
+                  variant={steamSelected ? "accent" : "outline"}
                   onClick={() => setSteamSelected(!steamSelected)}
                 >
                   <Image
@@ -150,7 +150,7 @@ export default function MoveToLibrary({ game, children }: Props) {
                   size="lg"
                   type="button"
                   className="flex-1"
-                  variant={playstationSelected ? "default" : "outline"}
+                  variant={playstationSelected ? "accent" : "outline"}
                   onClick={() => setPlaystationSelected(!playstationSelected)}
                 >
                   <Image
@@ -167,7 +167,7 @@ export default function MoveToLibrary({ game, children }: Props) {
                   size="lg"
                   type="button"
                   className="flex-1"
-                  variant={nintendoSelected ? "default" : "outline"}
+                  variant={nintendoSelected ? "accent" : "outline"}
                   onClick={() => setNintendoSelected(!nintendoSelected)}
                 >
                   <Image
