@@ -6,8 +6,10 @@ import { Link } from "@/components/navigation"
 export default function ErrorPage() {
   return (
     <div className="custom-slide-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
-      <h1 className="text-6xl font-semibold">ERROR</h1>
-      <h2 className="mt-4 text-3xl font-semibold">Something went wrong</h2>
+      <h1 className="text-7xl font-bold text-destructive">ERROR</h1>
+      <h2 className="mt-4 text-3xl font-semibold text-destructive">
+        Something went wrong
+      </h2>
       <p className="mt-6 max-w-md text-sm text-muted-foreground">
         Head back to your wishlist or browse your library to keep tracking
         games.
@@ -18,7 +20,7 @@ export default function ErrorPage() {
           <Link href="/wishlist">Go to wishlist</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/library">Open library</Link>
+          <Link href="/library">Go to library</Link>
         </Button>
       </div>
     </div>
