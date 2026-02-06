@@ -97,11 +97,18 @@ export default function MoveToCompleted({ game, children }: Props) {
             <DrawerTitle>Move to Completed</DrawerTitle>
           </DrawerHeader>
           <DrawerFooter>
-            <Button disabled={isSaving} variant="accent" onClick={handleSave}>
+            <Button
+              size="lg"
+              disabled={isSaving}
+              variant="accent"
+              onClick={handleSave}
+            >
               {isSaving ? "Moving..." : "Move to Completed"}
             </Button>
             <DrawerClose asChild>
-              <Button variant="ghost">Cancel</Button>
+              <Button size="lg" variant="ghost">
+                Cancel
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>

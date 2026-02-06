@@ -91,7 +91,7 @@ export default function EditFromLibrary({ game, children }: Props) {
           <form className="space-y-6 px-4 pb-5 pt-3">
             <div>
               <label className="text-sm font-medium">Time to Beat</label>
-              <p className="mb-2 text-xs text-muted-foreground">
+              <p className="mb-3 text-xs text-muted-foreground">
                 Enter the length in hours.
               </p>
               <Counter
@@ -178,11 +178,18 @@ export default function EditFromLibrary({ game, children }: Props) {
           </form>
 
           <DrawerFooter>
-            <Button disabled={isSaving} variant="accent" onClick={handleSave}>
+            <Button
+              size="lg"
+              disabled={isSaving}
+              variant="accent"
+              onClick={handleSave}
+            >
               {isSaving ? "Saving..." : "Save"}
             </Button>
             <DrawerClose asChild>
-              <Button variant="ghost">Cancel</Button>
+              <Button size="lg" variant="ghost">
+                Cancel
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
