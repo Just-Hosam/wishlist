@@ -9,8 +9,8 @@ export default function NotFoundPage() {
         Page not found
       </h2>
       <p className="mt-6 max-w-md text-sm text-muted-foreground">
-        Something went wrong. Head back to your wishlist or browse your library
-        to keep tracking games.
+        This page does not exist. Head back to your wishlist or browse your
+        library to keep tracking games.
       </p>
 
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
