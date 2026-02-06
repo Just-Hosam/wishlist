@@ -4,19 +4,21 @@ import { Link } from "@/components/navigation"
 export default function NotFoundPage() {
   return (
     <div className="custom-slide-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
-      <h1 className="text-6xl font-semibold">404</h1>
-      <h2 className="mt-4 text-3xl font-semibold">Page not found</h2>
+      <h1 className="text-8xl font-bold text-destructive">404</h1>
+      <h2 className="mt-4 text-3xl font-semibold text-destructive">
+        Page not found
+      </h2>
       <p className="mt-6 max-w-md text-sm text-muted-foreground">
-        This page does not exist. Head back to your wishlist or browse your
-        library to keep tracking games.
+        Something went wrong. Head back to your wishlist or browse your library
+        to keep tracking games.
       </p>
 
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-        <Button asChild>
+        <Button variant="accent" asChild size="lg">
           <Link href="/wishlist">Go to wishlist</Link>
         </Button>
-        <Button asChild variant="outline">
-          <Link href="/library">Open library</Link>
+        <Button asChild size="lg">
+          <Link href="/library">Go to library</Link>
         </Button>
       </div>
     </div>
