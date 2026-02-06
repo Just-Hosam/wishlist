@@ -1,7 +1,11 @@
-import { NextResponse } from "next/server"
+import { requireCronAuth } from "@/server/cron/auth"
 import { runSteamPriceUpdate } from "@/server/cron/steam"
+import { NextResponse } from "next/server"
 
-export async function GET() {
+export async function GET(request: Request) {
+  const authResponse = requireCronAuth(request)
+  if (!authResponse.ok) return authResponse
+
   try {
     const result = await runSteamPriceUpdate()
     return NextResponse.json(result)

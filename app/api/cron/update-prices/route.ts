@@ -1,3 +1,4 @@
+import { requireCronAuth } from "@/server/cron/auth"
 import { runNintendoPriceUpdate } from "@/server/cron/nintendo"
 import { runPlayStationPriceUpdate } from "@/server/cron/playstation"
 import { runSteamPriceUpdate } from "@/server/cron/steam"
@@ -10,7 +11,10 @@ const jobs = [
   { platform: "Nintendo", run: runNintendoPriceUpdate }
 ]
 
-export async function GET() {
+export async function GET(request: Request) {
+  const authResponse = requireCronAuth(request)
+  if (!authResponse.ok) return authResponse
+
   console.log("[CRON] Starting combined price update job...")
 
   const results: Array<Record<string, unknown>> = []
