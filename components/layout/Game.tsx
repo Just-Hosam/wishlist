@@ -254,7 +254,7 @@ export function Game({
             href={hltbSearchUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex-1"
+            className="mt-3 flex-1"
           >
             <Button
               size="lg"

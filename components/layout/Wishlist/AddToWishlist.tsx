@@ -144,7 +144,7 @@ export default function ToWishlistButton({
             <p className="text-xs text-muted-foreground">
               Track prices for these stores.
             </p>
-            <div className="mt-3 space-y-3">
+            <div className="mt-3 space-y-2">
               <div className="flex items-center">
                 <Image
                   src="/logos/steam.svg"
