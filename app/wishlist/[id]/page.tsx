@@ -9,8 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { getCachedGameDetailWithPrices } from "@/server/actions/lists"
-import { GameCategory } from "@/types"
+import { getCachedGameDetail } from "@/server/actions/lists"
 import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
@@ -27,7 +26,7 @@ export default async function WishlistGamePage({ params }: Props) {
   if (!id) notFound()
   if (!userId) redirect("/")
 
-  const game = await getCachedGameDetailWithPrices(id, userId)
+  const game = await getCachedGameDetail(id, userId)
   if (!game) notFound()
 
   return (

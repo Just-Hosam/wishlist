@@ -2,6 +2,7 @@
 
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
+import { Platform } from "@prisma/client"
 import { PriceInput, PriceOutput } from "@/types"
 import { getServerSession } from "next-auth"
 import { revalidateTag } from "next/cache"
@@ -111,4 +112,27 @@ export async function unlinkPriceFromGame(
   }
 
   revalidateTag(`game-detail-${gameId}`)
+}
+
+export async function getTrackedPlatformsForGame(
+  gameId: string
+): Promise<Platform[]> {
+  const session = await getServerSession(authOptions)
+  const userId = session?.user?.id
+  if (!userId) throw new Error("Unauthorized.")
+
+  const game = await prisma.game.findFirst({
+    where: { id: gameId, userId },
+    select: {
+      trackedPrices: {
+        select: {
+          platform: true
+        }
+      }
+    }
+  })
+
+  if (!game) throw new Error("Game not found or unauthorized.")
+
+  return [...new Set(game.trackedPrices.map((price) => price.platform))]
 }
