@@ -88,7 +88,7 @@ export default function Footer() {
                 className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
               >
                 {activeTab === "WISHLIST" ? (
-                  <Heart className="size-[18px] text-accent" />
+                  <Heart className="size-[18px] fill-accent text-accent" />
                 ) : (
                   <Heart className="size-[18px]" />
                 )}

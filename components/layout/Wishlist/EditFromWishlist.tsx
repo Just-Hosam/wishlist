@@ -41,9 +41,6 @@ export default function EditFromWishlist({ game, children }: Props) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [isLoadingLinkedState, setIsLoadingLinkedState] = useState(false)
-  const [linkedStateLoaded, setLinkedStateLoaded] = useState(false)
-  const [linkedStateError, setLinkedStateError] = useState<string | null>(null)
 
   const [timeToBeat, setTimeToBeat] = useState<number | null>(game.length)
 
@@ -61,15 +58,12 @@ export default function EditFromWishlist({ game, children }: Props) {
   const [steamSwitchDisabled, setSteamSwitchDisabled] = useState(true)
 
   useEffect(() => {
-    if (!open || linkedStateLoaded) return
+    if (!open) return
 
     let cancelled = false
 
     // We defer this DB read until the drawer opens so page render stays fast.
     const loadLinkedState = async () => {
-      setIsLoadingLinkedState(true)
-      setLinkedStateError(null)
-
       try {
         const trackedPlatforms = await getTrackedPlatformsForGame(game.id)
         if (cancelled) return
@@ -85,16 +79,11 @@ export default function EditFromWishlist({ game, children }: Props) {
         setNintendoLinked(nintendoLinked)
         setSteamOriginallyLinked(steamLinked)
         setSteamLinked(steamLinked)
-
-        setLinkedStateLoaded(true)
       } catch (error) {
         console.error("Error loading tracked platforms:", error)
         if (cancelled) return
 
-        setLinkedStateError("Failed to load tracked stores. Close and retry.")
-      } finally {
-        if (cancelled) return
-        setIsLoadingLinkedState(false)
+        toast.error("Failed to load tracked stores. Close and retry.")
       }
     }
 
@@ -103,14 +92,9 @@ export default function EditFromWishlist({ game, children }: Props) {
     return () => {
       cancelled = true
     }
-  }, [game.id, linkedStateLoaded, open])
+  }, [game.id, open])
 
   const handleSave = async () => {
-    if (!linkedStateLoaded) {
-      toast.error("Price links are still loading. Try again in a moment.")
-      return
-    }
-
     setIsSaving(true)
 
     try {
@@ -228,11 +212,7 @@ export default function EditFromWishlist({ game, children }: Props) {
                   <Switch
                     checked={steamLinked}
                     onCheckedChange={setSteamLinked}
-                    disabled={
-                      steamSwitchDisabled ||
-                      isLoadingLinkedState ||
-                      !!linkedStateError
-                    }
+                    disabled={steamSwitchDisabled}
                     className="ml-auto data-[state=checked]:bg-slate-600"
                   />
                 </div>
@@ -252,11 +232,7 @@ export default function EditFromWishlist({ game, children }: Props) {
                   <Switch
                     checked={playStationLinked}
                     onCheckedChange={setPlayStationLinked}
-                    disabled={
-                      psSwitchDisabled ||
-                      isLoadingLinkedState ||
-                      !!linkedStateError
-                    }
+                    disabled={psSwitchDisabled}
                     className="ml-auto data-[state=checked]:bg-blue-600"
                   />
                 </div>
@@ -277,30 +253,18 @@ export default function EditFromWishlist({ game, children }: Props) {
                   <Switch
                     checked={nintendoLinked}
                     onCheckedChange={setNintendoLinked}
-                    disabled={
-                      ntSwitchDisabled ||
-                      isLoadingLinkedState ||
-                      !!linkedStateError
-                    }
+                    disabled={ntSwitchDisabled}
                     className="ml-auto data-[state=checked]:bg-red-600"
                   />
                 </div>
               </div>
-              {isLoadingLinkedState && (
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Loading your tracked store links...
-                </p>
-              )}
-              {linkedStateError && (
-                <p className="mt-2 text-xs text-red-600">{linkedStateError}</p>
-              )}
             </div>
           </form>
 
           <DrawerFooter>
             <Button
               size="lg"
-              disabled={isSaving || isLoadingLinkedState || !!linkedStateError}
+              disabled={isSaving}
               variant="accent"
               onClick={handleSave}
             >
