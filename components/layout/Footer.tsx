@@ -6,13 +6,21 @@ import { cn } from "@/lib/utils"
 import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { Link } from "@/components/navigation"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 
 type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 
 export default function Footer() {
   const pathname = usePathname()
-  const [activeTab, setActiveTab] = useState<Tab>("")
+  const activeTab: Tab = pathname.startsWith("/wishlist")
+    ? "WISHLIST"
+    : pathname.startsWith("/library")
+      ? "LIBRARY"
+      : pathname.startsWith("/more")
+        ? "MORE"
+        : pathname.startsWith("/search")
+          ? "SEARCH"
+          : ""
   const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
   const libraryTriggerRef = useRef<HTMLButtonElement>(null)
   const moreTriggerRef = useRef<HTMLButtonElement>(null)
@@ -31,32 +39,9 @@ export default function Footer() {
     )
   }
 
-  useEffect(() => {
-    if (pathname.startsWith("/wishlist")) {
-      setActiveTab("WISHLIST")
-      return
-    }
-
-    if (pathname.startsWith("/library")) {
-      setActiveTab("LIBRARY")
-      return
-    }
-
-    if (pathname.startsWith("/more")) {
-      setActiveTab("MORE")
-      return
-    }
-
-    if (pathname.startsWith("/search")) {
-      setActiveTab("SEARCH")
-      return
-    }
-  }, [pathname])
-
   if (pathname === "/") return null
 
   const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
-    setActiveTab("SEARCH")
     runScaleAnimation(searchButtonRef.current)
 
     if (pathname === "/search") {
@@ -66,7 +51,6 @@ export default function Footer() {
   }
 
   const handleWishlistClickOnWishlistPage = (e: React.MouseEvent) => {
-    setActiveTab("WISHLIST")
     runScaleAnimation(wishlistTriggerRef.current)
 
     if (pathname === "/wishlist") {
@@ -76,7 +60,6 @@ export default function Footer() {
   }
 
   const handleLibraryClickOnLibraryPage = (e: React.MouseEvent) => {
-    setActiveTab("LIBRARY")
     runScaleAnimation(libraryTriggerRef.current)
 
     if (pathname === "/library") {
@@ -85,8 +68,7 @@ export default function Footer() {
     }
   }
 
-  const handleCompletedClickOnCompletedPage = (e: React.MouseEvent) => {
-    setActiveTab("MORE")
+  const handleCompletedClickOnCompletedPage = () => {
     runScaleAnimation(moreTriggerRef.current)
   }
 
