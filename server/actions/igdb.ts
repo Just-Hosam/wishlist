@@ -3,6 +3,30 @@
 import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
+function escapeIGDBString(input: string): string {
+  return input
+    .trim()
+    .replace(/\\/g, "\\\\") // keep literal backslashes in the query
+    .replace(/"/g, '\\"') // keep literal double quotes in the query
+    .replace(/[\u0000-\u001F\u007F]/g, "") // remove non-printable control characters
+}
+
+function parsePositiveIGDBId(value: string, field: string): number {
+  const isDigitsOnly = /^\d+$/.test(value)
+  if (!isDigitsOnly) {
+    throw new Error(`Invalid ${field}`)
+  }
+
+  const parsed = Number(value)
+
+  const isPositiveInteger = Number.isSafeInteger(parsed) || parsed > 0
+  if (!isPositiveInteger) {
+    throw new Error(`Invalid ${field}`)
+  }
+
+  return parsed
+}
+
 /**
  * Calculate recency weight based on release date
  * Multi-tiered system with stronger drop-offs for older games
@@ -315,9 +339,9 @@ export async function searchIGDBGamesDirect(
     throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
   }
 
-  if (!query || query.trim().length === 0) {
-    return []
-  }
+  // Sanitize and limit query length to prevent abuse
+  const sanitizedQuery = escapeIGDBString(query).slice(0, 100)
+  if (!sanitizedQuery) return []
 
   try {
     const response = await fetch("https://api.igdb.com/v4/games", {
@@ -328,7 +352,7 @@ export async function searchIGDBGamesDirect(
         "Content-Type": "text/plain"
       },
       body: `
-        search "${query.trim()}";
+        search "${sanitizedQuery}";
         
         fields 
           name, slug,
@@ -411,6 +435,8 @@ export async function getIGDBGameById(
     throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
   }
 
+  const safeIgdbId = parsePositiveIGDBId(igdbId, "igdbId")
+
   try {
     const response = await fetch("https://api.igdb.com/v4/games", {
       method: "POST",
@@ -429,7 +455,7 @@ export async function getIGDBGameById(
           cover.image_id, screenshots.image_id, videos.video_id, videos.name,
           hypes, rating, rating_count, aggregated_rating, aggregated_rating_count;
 
-        where id = ${igdbId};
+        where id = ${safeIgdbId};
       `.trim()
     })
 
@@ -484,6 +510,8 @@ export async function fetchTimeToBeat(
     throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
   }
 
+  const safeGameId = parsePositiveIGDBId(igdbGameId, "igdbGameId")
+
   try {
     const response = await fetch("https://api.igdb.com/v4/game_time_to_beats", {
       method: "POST",
@@ -492,7 +520,7 @@ export async function fetchTimeToBeat(
         Authorization: `Bearer ${ACCESS_TOKEN}`,
         "Content-Type": "text/plain"
       },
-      body: `fields *; where game_id = ${igdbGameId};`
+      body: `fields *; where game_id = ${safeGameId};`
     })
 
     if (!response.ok) {
