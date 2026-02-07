@@ -55,7 +55,7 @@ export default async function RootLayout({
             <GlobalLoader>{children}</GlobalLoader>
           </div>
           <Footer />
-          <Toaster position="top-center" />
+          <Toaster position="top-center" duration={2500} />
           <SpeedInsights />
           <Analytics />
         </NavigationProvider>
