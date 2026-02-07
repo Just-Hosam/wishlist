@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { unstable_cache } from "next/cache"
-import { GameCategory } from "@/types"
+import { GameCategory, GameOutputWithPrices } from "@/types"
 
 export const getCachedWishlistGames = async (userId: string) => {
   return unstable_cache(
@@ -76,7 +76,7 @@ export const getCachedLibraryGames = async (userId: string) => {
     [userId],
     {
       tags: [`user-library-games-${userId}`],
-      revalidate: 1800 // 30 minutes
+      revalidate: 10_800 // 3 hours
     }
   )()
 }
@@ -108,7 +108,28 @@ export const getCachedCompletedGames = async (userId: string) => {
     [userId],
     {
       tags: [`user-completed-games-${userId}`],
-      revalidate: 1800 // 30 minutes
+      revalidate: 10_800 // 3 hours
+    }
+  )()
+}
+
+export const getCachedGameDetail = async (
+  gameId: string,
+  userId: string
+): Promise<GameOutputWithPrices | null> => {
+  return unstable_cache(
+    async () => {
+      return prisma.game.findFirst({
+        where: { id: gameId, userId },
+        include: {
+          trackedPrices: { orderBy: { fetchedAt: "desc" } }
+        }
+      })
+    },
+    [gameId, userId],
+    {
+      tags: [`game-detail-${gameId}`],
+      revalidate: 10_800 // 3 hours
     }
   )()
 }

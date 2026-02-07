@@ -10,6 +10,10 @@ function revalidateGameCategory(category: GameCategory, userId: string) {
   revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
 }
 
+function revalidateGameDetail(gameId: string) {
+  revalidateTag(`game-detail-${gameId}`)
+}
+
 export async function deleteGame(id: string) {
   const session = await getServerSession(authOptions)
   const userId = session?.user?.id
@@ -38,6 +42,7 @@ export async function deleteGame(id: string) {
   await prisma.game.delete({ where: { id: game.id } })
 
   revalidateGameCategory(game.category, userId)
+  revalidateGameDetail(game.id)
 }
 
 export async function saveGame(
@@ -79,7 +84,7 @@ export async function saveGame(
 
   const user = await prisma.user.findUnique({ where: { id: userId } })
 
-  if (!user) {
+  if (!user || !user.id) {
     throw new Error("User not found.")
   }
 
@@ -121,11 +126,13 @@ export async function saveGame(
 
   if (categoriesToRevalidate) {
     categoriesToRevalidate.forEach((category) =>
-      revalidateGameCategory(category, userId!)
+      revalidateGameCategory(category, userId)
     )
   } else {
     revalidateGameCategory(game.category, userId)
   }
+
+  revalidateGameDetail(game.id)
 
   return game
 }
@@ -173,6 +180,7 @@ export async function toggleNowPlaying(gameId: string) {
   })
 
   revalidateGameCategory(GameCategory.LIBRARY, userId)
+  revalidateGameDetail(gameId)
 
   return updatedGame.nowPlaying
 }

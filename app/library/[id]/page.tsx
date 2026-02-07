@@ -10,19 +10,25 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import prisma from "@/lib/prisma"
+import { getCachedGameDetail } from "@/server/actions/lists"
+import { GameCategory } from "@/types"
 import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
-import { notFound } from "next/navigation"
+import { headers } from "next/headers"
+import { notFound, redirect } from "next/navigation"
 
 interface Props {
   params: Promise<{ id: string }>
 }
 
-export default async function WishlistGamePage({ params }: Props) {
-  const { id } = await params
-  if (!id) notFound()
+export default async function LibraryGamePage({ params }: Props) {
+  const [headersTest, paramsTest] = await Promise.all([headers(), params])
+  const id = paramsTest.id
+  const userId = headersTest.get("x-user-id")
 
-  const game = await prisma.game.findUnique({ where: { id } })
+  if (!id) notFound()
+  if (!userId) redirect("/")
+
+  const game = await getCachedGameDetail(id, userId)
   if (!game) notFound()
 
   return (
