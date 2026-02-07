@@ -19,7 +19,7 @@ function parsePositiveIGDBId(value: string, field: string): number {
 
   const parsed = Number(value)
 
-  const isPositiveInteger = Number.isSafeInteger(parsed) || parsed > 0
+  const isPositiveInteger = Number.isSafeInteger(parsed) && parsed > 0
   if (!isPositiveInteger) {
     throw new Error(`Invalid ${field}`)
   }
