@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
-import { GameCategory, GameInput, GameOutput, Platform } from "@/types"
+import { GameCategory, GameInput, GameOutput } from "@/types"
 import { getServerSession } from "next-auth"
 import { revalidateTag } from "next/cache"
 
@@ -69,12 +69,10 @@ export async function saveGame(
     igdbSteamUrlSegment
   } = data
 
-  // Validate required fields
   if (!category) {
     throw new Error("Missing category")
   }
 
-  // Validate category
   if (!Object.values(GameCategory).includes(category)) {
     throw new Error("Invalid game category.")
   }
@@ -85,50 +83,41 @@ export async function saveGame(
     throw new Error("User not found.")
   }
 
-  const gameCategory = category || GameCategory.WISHLIST
+  const gameData = {
+    length: length || null,
+    category: category,
+    platforms: platforms ?? [],
+    nowPlaying: category === GameCategory.LIBRARY ? !!nowPlaying : false,
+    igdbId: igdbId || null,
+    igdbName: igdbName || null,
+    igdbSlug: igdbSlug || null,
+    igdbSummary: igdbSummary || null,
+    igdbCoverImageId: igdbCoverImageId || null,
+    igdbScreenshotIds: igdbScreenshotIds || [],
+    igdbVideoId: igdbVideoId || null,
+    igdbVideoIds: igdbVideoIds || [],
+    igdbPlatformIds: igdbPlatformIds || [],
+    igdbFirstReleaseDate: igdbFirstReleaseDate || null,
+    igdbNintendoUrlSegment: igdbNintendoUrlSegment || null,
+    igdbPlaystationUrlSegment: igdbPlaystationUrlSegment || null,
+    igdbSteamUrlSegment: igdbSteamUrlSegment || null
+  }
 
-  const game = await prisma.game.upsert({
-    where: { id: id || "" },
-    update: {
-      length: length || null,
-      category: gameCategory,
-      platforms: platforms ?? [],
-      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false,
-      igdbId: igdbId || null,
-      igdbName: igdbName || null,
-      igdbSlug: igdbSlug || null,
-      igdbSummary: igdbSummary || null,
-      igdbCoverImageId: igdbCoverImageId || null,
-      igdbScreenshotIds: igdbScreenshotIds || [],
-      igdbVideoId: igdbVideoId || null,
-      igdbVideoIds: igdbVideoIds || [],
-      igdbPlatformIds: igdbPlatformIds || [],
-      igdbFirstReleaseDate: igdbFirstReleaseDate || null,
-      igdbNintendoUrlSegment: igdbNintendoUrlSegment || null,
-      igdbPlaystationUrlSegment: igdbPlaystationUrlSegment || null,
-      igdbSteamUrlSegment: igdbSteamUrlSegment || null
-    },
-    create: {
-      length: length || null,
-      category: gameCategory,
-      userId: user.id,
-      platforms: platforms ?? [],
-      nowPlaying: gameCategory === GameCategory.LIBRARY ? !!nowPlaying : false,
-      igdbId: igdbId || null,
-      igdbName: igdbName || null,
-      igdbSlug: igdbSlug || null,
-      igdbSummary: igdbSummary || null,
-      igdbCoverImageId: igdbCoverImageId || null,
-      igdbScreenshotIds: igdbScreenshotIds || [],
-      igdbVideoId: igdbVideoId || null,
-      igdbVideoIds: igdbVideoIds || [],
-      igdbPlatformIds: igdbPlatformIds || [],
-      igdbFirstReleaseDate: igdbFirstReleaseDate || null,
-      igdbNintendoUrlSegment: igdbNintendoUrlSegment || null,
-      igdbPlaystationUrlSegment: igdbPlaystationUrlSegment || null,
-      igdbSteamUrlSegment: igdbSteamUrlSegment || null
-    }
-  })
+  let game: GameOutput
+
+  if (!id) {
+    game = await prisma.game.create({
+      data: {
+        ...gameData,
+        userId: user.id
+      }
+    })
+  } else {
+    game = await prisma.game.update({
+      where: { id, userId: user.id },
+      data: gameData
+    })
+  }
 
   if (categoriesToRevalidate) {
     categoriesToRevalidate.forEach((category) =>
