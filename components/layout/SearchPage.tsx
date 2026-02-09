@@ -6,10 +6,15 @@ import Spinner from "@/components/ui/spinner"
 import { formatReleaseDate } from "@/lib/utils"
 import { getCachedSearchIGDBGamesDirect } from "@/server/actions/igdb"
 import { IGDBGame, Platform } from "@/types"
-import { Search, X } from "lucide-react"
+import { CheckCircle2, Heart, LibraryBig, Plus, Search, X } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import { Button } from "../ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import AddToCompleted from "./Completed/AddToCompleted"
+import AddToLibrary from "./Library/AddToLibrary"
 import { Nav } from "./Nav"
+import AddToWishlist from "./Wishlist/AddToWishlist"
 
 export function SearchPage() {
   const [query, setQuery] = useState("")
@@ -102,99 +107,128 @@ export function SearchPage() {
   const renderResults = () => (
     <div className="custom-slide-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
-        <Link
-          href={`/search/${game.igdbId}?q=${encodeURIComponent(query)}`}
-          passHref
-          key={game.id}
-        >
-          <div
-            className="flex cursor-pointer flex-col"
-            style={{
-              animationDelay: `${index * 50}ms`,
-              animationFillMode: "backwards"
-            }}
+        <div className="relative" key={game.id}>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                size="icon"
+                className="absolute right-2 top-2 z-10 size-9"
+              >
+                <Plus />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-fit">
+              <div className="flex flex-col">
+                <AddToWishlist
+                  igdbPlaystationUrlSegment={game.playstationUrlSegment || null}
+                  igdbNintendoUrlSegment={game.nintendoUrlSegment || null}
+                  igdbSteamUrlSegment={game.steamUrlSegment || null}
+                  igdbGame={game}
+                >
+                  <Heart />
+                  Wishlist
+                </AddToWishlist>
+
+                <AddToLibrary igdbGame={game}>
+                  <LibraryBig />
+                  Library
+                </AddToLibrary>
+
+                <AddToCompleted igdbGame={game}>
+                  <CheckCircle2 />
+                  Completed
+                </AddToCompleted>
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          <Link
+            href={`/search/${game.igdbId}?q=${encodeURIComponent(query)}`}
+            passHref
           >
-            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
-              {game.coverImageId ? (
-                <Image
-                  src={getImageUrl(game.coverImageId)}
-                  alt={game.name}
-                  fill
-                  className="object-cover"
-                  priority={index < 8}
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-gray-400">
-                  <Search className="h-8 w-8" />
-                </div>
-              )}
+            <div className="flex cursor-pointer flex-col">
+              <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
+                {game.coverImageId ? (
+                  <Image
+                    src={getImageUrl(game.coverImageId)}
+                    alt={game.name}
+                    fill
+                    className="object-cover"
+                    priority={index < 8}
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-gray-400">
+                    <Search className="h-8 w-8" />
+                  </div>
+                )}
+              </div>
+
+              {/* Game Info Section */}
+              <div className="flex flex-1 flex-col px-1">
+                {/* Game Name */}
+                <h3 className="line-clamp-2 text-sm font-medium leading-tight">
+                  {game.name}
+                </h3>
+
+                {/* Release Date */}
+                {game.firstReleaseDate && (
+                  <p className="mt-1 text-xs text-muted-foreground md:text-sm">
+                    {formatReleaseDate(game.firstReleaseDate)}
+                  </p>
+                )}
+
+                {/* Platforms - Show unique platform icons */}
+                {(game.steamUrlSegment ||
+                  game.playstationUrlSegment ||
+                  game.nintendoUrlSegment) && (
+                  <div className="mt-3 flex items-center gap-2">
+                    {game.steamUrlSegment && (
+                      <Image
+                        src="/logos/steam.svg"
+                        alt="Steam Logo"
+                        width={13}
+                        height={13}
+                      />
+                    )}
+                    {game.playstationUrlSegment && (
+                      <Image
+                        src="/logos/playstation.svg"
+                        alt="PlayStation Logo"
+                        width={13}
+                        height={13}
+                      />
+                    )}
+                    {game.nintendoUrlSegment && (
+                      <Image
+                        src="/logos/nintendo-switch.svg"
+                        alt="Nintendo Switch Logo"
+                        width={13}
+                        height={13}
+                      />
+                    )}
+                    {game.platforms?.includes(Platform.PC) && (
+                      <Image
+                        src="/logos/windows-10.svg"
+                        alt="Windows Logo"
+                        width={13}
+                        height={13}
+                      />
+                    )}
+                    {game.platforms?.includes(Platform.XBOX) && (
+                      <Image
+                        src="/logos/xbox.svg"
+                        alt="Xbox Logo"
+                        width={13}
+                        height={13}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-
-            {/* Game Info Section */}
-            <div className="flex flex-1 flex-col px-1">
-              {/* Game Name */}
-              <h3 className="line-clamp-2 text-sm font-medium leading-tight">
-                {game.name}
-              </h3>
-
-              {/* Release Date */}
-              {game.firstReleaseDate && (
-                <p className="mt-1 text-xs text-muted-foreground md:text-sm">
-                  {formatReleaseDate(game.firstReleaseDate)}
-                </p>
-              )}
-
-              {/* Platforms - Show unique platform icons */}
-              {(game.steamUrlSegment ||
-                game.playstationUrlSegment ||
-                game.nintendoUrlSegment) && (
-                <div className="mt-3 flex items-center gap-2">
-                  {game.steamUrlSegment && (
-                    <Image
-                      src="/logos/steam.svg"
-                      alt="Steam Logo"
-                      width={13}
-                      height={13}
-                    />
-                  )}
-                  {game.playstationUrlSegment && (
-                    <Image
-                      src="/logos/playstation.svg"
-                      alt="PlayStation Logo"
-                      width={13}
-                      height={13}
-                    />
-                  )}
-                  {game.nintendoUrlSegment && (
-                    <Image
-                      src="/logos/nintendo-switch.svg"
-                      alt="Nintendo Switch Logo"
-                      width={13}
-                      height={13}
-                    />
-                  )}
-                  {game.platforms?.includes(Platform.PC) && (
-                    <Image
-                      src="/logos/windows-10.svg"
-                      alt="Windows Logo"
-                      width={13}
-                      height={13}
-                    />
-                  )}
-                  {game.platforms?.includes(Platform.XBOX) && (
-                    <Image
-                      src="/logos/xbox.svg"
-                      alt="Xbox Logo"
-                      width={13}
-                      height={13}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       ))}
     </div>
   )

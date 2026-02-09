@@ -2,6 +2,7 @@
 
 import { useRouter } from "@/components/navigation"
 import { ButtonGroup } from "@/components/ui/button-group"
+import Counter from "@/components/ui/counter"
 import { Switch } from "@/components/ui/switch"
 import { saveGame } from "@/server/actions/game"
 import { GameCategory, GameInput, IGDBGame, Platform } from "@/types"
@@ -34,7 +35,7 @@ export default function AddToLibrary({
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-
+  const [timeToBeat, setTimeToBeat] = useState<number | null>(null)
   const [nowPlaying, setNowPlaying] = useState(false)
   const [playstationSelected, setPlaystationSelected] = useState(false)
   const [nintendoSelected, setNintendoSelected] = useState(false)
@@ -99,6 +100,16 @@ export default function AddToLibrary({
             <DrawerTitle>Add to Library</DrawerTitle>
           </DrawerHeader>
           <form className="space-y-6 px-4 pb-5 pt-3">
+            <div>
+              <label className="text-sm font-medium">Time to Beat</label>
+              <p className="mb-3 text-xs text-muted-foreground">
+                Enter the length in hours.
+              </p>
+              <Counter
+                value={timeToBeat}
+                onChange={(value) => setTimeToBeat(value)}
+              />
+            </div>
             <div className="flex items-end justify-between">
               <div>
                 <label className="text-sm font-medium" htmlFor="now-playing">

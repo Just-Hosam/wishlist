@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "@/components/navigation"
+import Counter from "@/components/ui/counter"
 import {
   buildNintendoStoreUrl,
   buildPlayStationStoreUrl,
@@ -47,6 +48,7 @@ export default function AddToWishlist({
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [timeToBeat, setTimeToBeat] = useState<number | null>(null)
   const [playStationLinked, setPlayStationLinked] = useState(false)
   const [psSwitchDisabled, setPsSwitchDisabled] = useState(true)
   const [nintendoLinked, setNintendoLinked] = useState(false)
@@ -139,73 +141,85 @@ export default function AddToWishlist({
           <DrawerHeader>
             <DrawerTitle>Add to Wishlist</DrawerTitle>
           </DrawerHeader>
-          <form className="px-4 pb-5 pt-3">
-            <label className="text-sm font-medium">Prices</label>
-            <p className="text-xs text-muted-foreground">
-              Track prices for these stores.
-            </p>
-            <div className="mt-3 space-y-2">
-              <div className="flex items-center">
-                <Image
-                  src="/logos/steam.svg"
-                  alt="Steam Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                />
+          <form className="space-y-6 px-4 pb-5 pt-3">
+            <div>
+              <label className="text-sm font-medium">Time to Beat</label>
+              <p className="mb-3 text-xs text-muted-foreground">
+                Enter the length in hours.
+              </p>
+              <Counter
+                value={timeToBeat}
+                onChange={(value) => setTimeToBeat(value)}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Prices</label>
+              <p className="text-xs text-muted-foreground">
+                Track prices for these stores.
+              </p>
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center">
+                  <Image
+                    src="/logos/steam.svg"
+                    alt="Steam Logo"
+                    width={20}
+                    height={20}
+                    className="mr-3"
+                  />
 
-                <SteamPriceClient
-                  igdbSteamUrlSegment={igdbSteamUrlSegment}
-                  onFetchSuccess={() => setSteamSwitchDisabled(false)}
-                />
+                  <SteamPriceClient
+                    igdbSteamUrlSegment={igdbSteamUrlSegment}
+                    onFetchSuccess={() => setSteamSwitchDisabled(false)}
+                  />
 
-                <Switch
-                  checked={steamLinked}
-                  onCheckedChange={setSteamLinked}
-                  disabled={steamSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-[#134376]"
-                />
-              </div>
-              <div className="flex items-center">
-                <Image
-                  src="/logos/playstation.svg"
-                  alt="PlayStation Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                />
-                <PlaystationPriceClient
-                  igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
-                  onFetchSuccess={() => setPsSwitchDisabled(false)}
-                />
+                  <Switch
+                    checked={steamLinked}
+                    onCheckedChange={setSteamLinked}
+                    disabled={steamSwitchDisabled}
+                    className="ml-auto data-[state=checked]:bg-[#134376]"
+                  />
+                </div>
+                <div className="flex items-center">
+                  <Image
+                    src="/logos/playstation.svg"
+                    alt="PlayStation Logo"
+                    width={20}
+                    height={20}
+                    className="mr-3"
+                  />
+                  <PlaystationPriceClient
+                    igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
+                    onFetchSuccess={() => setPsSwitchDisabled(false)}
+                  />
 
-                <Switch
-                  checked={playStationLinked}
-                  onCheckedChange={setPlayStationLinked}
-                  disabled={psSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-blue-600"
-                />
-              </div>
-              <div className="flex items-center">
-                <Image
-                  src="/logos/nintendo-switch.svg"
-                  alt="Nintendo Switch Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                />
+                  <Switch
+                    checked={playStationLinked}
+                    onCheckedChange={setPlayStationLinked}
+                    disabled={psSwitchDisabled}
+                    className="ml-auto data-[state=checked]:bg-blue-600"
+                  />
+                </div>
+                <div className="flex items-center">
+                  <Image
+                    src="/logos/nintendo-switch.svg"
+                    alt="Nintendo Switch Logo"
+                    width={20}
+                    height={20}
+                    className="mr-3"
+                  />
 
-                <NintendoPriceClient
-                  igdbNintendoUrlSegment={igdbNintendoUrlSegment}
-                  onFetchSuccess={() => setNtSwitchDisabled(false)}
-                />
+                  <NintendoPriceClient
+                    igdbNintendoUrlSegment={igdbNintendoUrlSegment}
+                    onFetchSuccess={() => setNtSwitchDisabled(false)}
+                  />
 
-                <Switch
-                  checked={nintendoLinked}
-                  onCheckedChange={setNintendoLinked}
-                  disabled={ntSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-red-600"
-                />
+                  <Switch
+                    checked={nintendoLinked}
+                    onCheckedChange={setNintendoLinked}
+                    disabled={ntSwitchDisabled}
+                    className="ml-auto data-[state=checked]:bg-red-600"
+                  />
+                </div>
               </div>
             </div>
           </form>
