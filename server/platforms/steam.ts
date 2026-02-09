@@ -25,6 +25,19 @@ export const getSteamGameInfo = async (
 
   const steamId = Object.keys(json)[0]
 
+  const isFree = json[steamId]?.data?.is_free
+  if (isFree) {
+    return {
+      storeUrl: url,
+      countryCode: "CA",
+      regularPrice: 0,
+      currentPrice: 0,
+      description: PriceDescription.STANDARD,
+      platform: Platform.PC,
+      externalId: steamId
+    }
+  }
+
   const price: SteamPrice = json[steamId]?.data?.price_overview
   if (!price) return null
 
