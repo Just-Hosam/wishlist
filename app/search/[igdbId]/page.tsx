@@ -44,7 +44,7 @@ export default async function SearchGamePage({ params, searchParams }: Props) {
             Add to
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="mr-3 w-fit">
+        <PopoverContent className="w-fit" collisionPadding={12}>
           <div className="flex flex-col">
             <AddToWishlist
               igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || null}
