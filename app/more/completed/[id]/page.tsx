@@ -38,7 +38,7 @@ export default async function CompletedGamePage({ params }: Props) {
             <Ellipsis />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-fit" collisionPadding={12}>
+        <PopoverContent className="w-fit">
           <div className="flex flex-col">
             <MoveToWishlist
               igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment || null}

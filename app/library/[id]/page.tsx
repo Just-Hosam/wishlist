@@ -39,7 +39,7 @@ export default async function LibraryGamePage({ params }: Props) {
             <Ellipsis />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-fit" collisionPadding={12}>
+        <PopoverContent className="w-fit">
           <div className="flex flex-col">
             <ToggleNowPlayingButton
               gameId={game.id}
