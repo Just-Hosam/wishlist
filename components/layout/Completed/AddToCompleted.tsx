@@ -23,7 +23,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export default function AddToLibrary({
+export default function AddToCompleted({
   igdbGame,
   timeToBeat,
   children

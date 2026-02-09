@@ -137,10 +137,7 @@ export default function Footer() {
           <Button
             variant="accent"
             ref={searchButtonRef}
-            className={cn(
-              "h-[68px] w-[68px] rounded-full shadow-lg transition-transform [&_svg]:size-[18px]",
-              activeTab === "SEARCH" && "bg-accent/80"
-            )}
+            className="h-[68px] w-[68px] rounded-full shadow-lg transition-transform [&_svg]:size-[18px]"
           >
             <Search />
           </Button>

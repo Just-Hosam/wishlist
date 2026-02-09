@@ -36,7 +36,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export default function ToWishlistButton({
+export default function AddToWishlist({
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
