@@ -1,8 +1,8 @@
 "use client"
 
+import { useRouter } from "@/components/navigation"
 import { saveGame } from "@/server/actions/game"
 import { GameCategory, GameInput, IGDBGame } from "@/types"
-import { useRouter } from "@/components/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { Button } from "../../ui/button"
@@ -10,7 +10,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -19,13 +18,14 @@ import {
 
 interface Props {
   igdbGame: IGDBGame
-  timeToBeat: number | null
+  redirectTo?: string
+
   children: React.ReactNode
 }
 
 export default function AddToCompleted({
   igdbGame,
-  timeToBeat,
+  redirectTo,
   children
 }: Props) {
   const router = useRouter()
@@ -52,7 +52,7 @@ export default function AddToCompleted({
         igdbSteamUrlSegment: igdbGame.steamUrlSegment || null,
         category: GameCategory.COMPLETED,
         platforms: [],
-        length: timeToBeat || null,
+        length: null,
         nowPlaying: false
       }
 
@@ -60,7 +60,7 @@ export default function AddToCompleted({
 
       toast.success("Game added to completed!")
       setOpen(false)
-      router.push("/more/completed")
+      if (redirectTo) router.push(redirectTo)
     } catch (error) {
       console.error("Error saving game to completed:", error)
       toast.error("Failed to add game to completed.")

@@ -21,13 +21,14 @@ import {
 
 interface Props {
   igdbGame: IGDBGame
-  timeToBeat: number | null
+  redirectTo?: string
+
   children: React.ReactNode
 }
 
 export default function AddToLibrary({
   igdbGame,
-  timeToBeat,
+  redirectTo,
   children
 }: Props) {
   const router = useRouter()
@@ -72,7 +73,7 @@ export default function AddToLibrary({
 
       toast.success("Game added to library!")
       setOpen(false)
-      router.push("/library")
+      if (redirectTo) router.push(redirectTo)
     } catch (error) {
       console.error("Error saving game to library:", error)
       toast.error("Failed to add game to library.")

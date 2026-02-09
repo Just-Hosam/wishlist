@@ -32,7 +32,7 @@ interface Props {
   igdbNintendoUrlSegment: string | null
   igdbSteamUrlSegment: string | null
   igdbGame: IGDBGame
-  timeToBeat: number | null
+  redirectTo?: string
   children: React.ReactNode
 }
 
@@ -41,7 +41,7 @@ export default function AddToWishlist({
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
   igdbGame,
-  timeToBeat,
+  redirectTo,
   children
 }: Props) {
   const router = useRouter()
@@ -114,7 +114,7 @@ export default function AddToWishlist({
 
       toast.success("Game added to wishlist!")
       setOpen(false)
-      router.push("/wishlist")
+      if (redirectTo) router.push(redirectTo)
     } catch (error) {
       console.error("Error saving game to wishlist:", error)
       toast.error("Failed to add game to wishlist.")
