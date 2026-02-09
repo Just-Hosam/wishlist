@@ -40,10 +40,6 @@ export function Game({
   const youtubeReviewSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(name + " review")}`
   const hltbSearchUrl = `https://howlongtobeat.com/?q=${encodeURIComponent(name)}`
 
-  const isUpcoming = igdbFirstReleaseDate
-    ? igdbFirstReleaseDate * 1000 > Date.now()
-    : false
-
   return (
     <div className="custom-slide-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
@@ -60,15 +56,6 @@ export function Game({
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
-          )}
-          {!isUpcoming && (
-            <>
-              <span className="font-bold">•</span>
-              <div className="flex items-center gap-1">
-                <Clock size={12} className="mt-[-0.5px]" />
-                <span>{length ? `${length} hours` : "-"}</span>
-              </div>
-            </>
           )}
         </div>
       </header>

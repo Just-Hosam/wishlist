@@ -50,19 +50,18 @@ export default async function SearchGamePage({ params, searchParams }: Props) {
               igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || null}
               igdbNintendoUrlSegment={igdbGame.nintendoUrlSegment || null}
               igdbSteamUrlSegment={igdbGame.steamUrlSegment || null}
-              timeToBeat={timeToBeat || null}
               igdbGame={igdbGame}
             >
               <Heart />
               Wishlist
             </AddToWishlist>
 
-            <AddToLibrary timeToBeat={timeToBeat || null} igdbGame={igdbGame}>
+            <AddToLibrary igdbGame={igdbGame}>
               <LibraryBig />
               Library
             </AddToLibrary>
 
-            <AddToCompleted timeToBeat={timeToBeat || null} igdbGame={igdbGame}>
+            <AddToCompleted igdbGame={igdbGame}>
               <CheckCircle2 />
               Completed
             </AddToCompleted>
