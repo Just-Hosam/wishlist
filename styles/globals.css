@@ -17,6 +17,11 @@ body {
 
 @layer base {
   :root {
+    --accent-purple: 238.98 33.33% 65.29%;
+    --accent-orange: 27.95 93.59% 69.41%;
+    --accent-pink: 5.87 100% 71.96%;
+    --accent-blue: 201.88 80.19% 41.57%;
+
     --background: 0 0% 98%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -29,7 +34,7 @@ body {
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 238.98 33.33% 65.29%;
+    --accent: var(--accent-purple);
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -57,7 +62,7 @@ body {
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
+    --accent: 238.98 33.33% 65.29%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -69,6 +74,22 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+
+  [data-accent="PURPLE"] {
+    --accent: var(--accent-purple);
+  }
+
+  [data-accent="ORANGE"] {
+    --accent: var(--accent-orange);
+  }
+
+  [data-accent="PINK"] {
+    --accent: var(--accent-pink);
+  }
+
+  [data-accent="BLUE"] {
+    --accent: var(--accent-blue);
   }
 }
 
