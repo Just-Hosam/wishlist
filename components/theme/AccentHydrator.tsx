@@ -1,16 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
 import { ACCENT_STORAGE_KEY, Accent } from "@/types/theme"
+import { useLayoutEffect } from "react"
 
-/**
- * Minimal client-only hydration:
- * - Reads last chosen accent from localStorage.
- * - Applies it to <html data-accent=...> so CSS vars switch themes.
- * - No server roundtrips or DB writes in this V1.
- */
 export function AccentHydrator() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fallbackAccent = Accent.PURPLE
 
     try {
@@ -20,7 +14,6 @@ export function AccentHydrator() {
 
       document.documentElement.dataset.accent = nextAccent
 
-      // Keep storage clean so future reads are consistent.
       if (!isValidAccent) {
         window.localStorage.setItem(ACCENT_STORAGE_KEY, nextAccent)
       }
