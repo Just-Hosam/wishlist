@@ -1,6 +1,7 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate } from "@/lib/utils"
-import { Clock, ExternalLink, Loader2 } from "lucide-react"
+import { getCachedTimeToBeat } from "@/server/actions/igdb"
+import { ExternalLink, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
 import { Button } from "../ui/button"
@@ -8,8 +9,8 @@ import { ExpandableText } from "../ui/expandable-text"
 import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
+import TimeToBeat from "./TimeToBeat"
 import { YoutubeVideo } from "./YoutubeVideo"
-import IGDBTimeToBeat from "./IGDBTimeToBeat"
 
 interface Props {
   imageId: string
@@ -130,7 +131,7 @@ export function Game({
       {/* TIME TO BEAT */}
       <div className="mt-8 space-y-2">
         <label className="font-medium">Time to Beat</label>
-        <Suspense fallback={<div>LOADING</div>}>
+        <Suspense fallback={<TimeToBeat loading />}>
           <IGDBTimeToBeat igdbGameId={igdbId} />
         </Suspense>
       </div>
@@ -272,4 +273,25 @@ export function Game({
       )}
     </div>
   )
+}
+
+export default async function IGDBTimeToBeat({
+  igdbGameId
+}: {
+  igdbGameId: string
+}) {
+  try {
+    const timeToBeat = await getCachedTimeToBeat(igdbGameId)
+
+    return (
+      <TimeToBeat
+        story={timeToBeat?.story || 0}
+        extra={timeToBeat?.extra || 0}
+        complete={timeToBeat?.complete || 0}
+      />
+    )
+  } catch (error) {
+    console.error("Error fetching IGDB time to beat info:", error)
+    return <TimeToBeat />
+  }
 }
