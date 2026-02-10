@@ -16,10 +16,10 @@ export default function ErrorPage() {
       </p>
 
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-        <Button asChild>
+        <Button variant="accent" size="lg" asChild>
           <Link href="/wishlist">Go to wishlist</Link>
         </Button>
-        <Button asChild variant="outline">
+        <Button asChild size="lg">
           <Link href="/library">Go to library</Link>
         </Button>
       </div>
