@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from "@/lib/utils"
+import { useNavigation } from "@/components/navigation/NavigationProvider"
 import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { Link } from "@/components/navigation"
 import { usePathname } from "next/navigation"
@@ -12,13 +12,15 @@ type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 
 export default function Footer() {
   const pathname = usePathname()
-  const activeTab: Tab = pathname.startsWith("/wishlist")
+  const { pendingPathname } = useNavigation()
+  const activePathname = pendingPathname ?? pathname
+  const activeTab: Tab = activePathname.startsWith("/wishlist")
     ? "WISHLIST"
-    : pathname.startsWith("/library")
+    : activePathname.startsWith("/library")
       ? "LIBRARY"
-      : pathname.startsWith("/more")
+      : activePathname.startsWith("/more")
         ? "MORE"
-        : pathname.startsWith("/search")
+        : activePathname.startsWith("/search")
           ? "SEARCH"
           : ""
   const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
