@@ -43,13 +43,13 @@ export function Game({
   return (
     <div className="custom-slide-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
-        <div className="mb-5 h-[233px] w-[175px] overflow-hidden rounded-3xl bg-gray-200">
+        <div className="mb-5 h-[246px] w-[185px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image
             src={buildIGDBImageUrl(imageId || "")}
             alt={name || "Game cover"}
-            width={175}
-            height={233}
-            sizes="175px"
+            width={185}
+            height={246}
+            sizes="185px"
           />
         </div>
         <h1 className="mb-1 text-2xl font-bold">{name}</h1>
