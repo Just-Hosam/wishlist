@@ -1,4 +1,4 @@
-import ListEmptyState from "@/components/layout/ListEmptyState"
+import ListEmptyState from "@/components/game/ListEmptyState"
 import { Link } from "@/components/navigation"
 import { getCachedCompletedGames } from "@/server/actions/lists"
 import { Clock } from "lucide-react"

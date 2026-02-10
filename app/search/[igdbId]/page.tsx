@@ -1,7 +1,7 @@
-import AddToCompleted from "@/components/layout/Completed/AddToCompleted"
-import { Game } from "@/components/layout/Game"
-import AddToLibrary from "@/components/layout/Library/AddToLibrary"
-import AddToWishlist from "@/components/layout/Wishlist/AddToWishlist"
+import AddToCompleted from "@/components/game/Completed/AddToCompleted"
+import { Game } from "@/components/game/Game"
+import AddToLibrary from "@/components/game/Library/AddToLibrary"
+import AddToWishlist from "@/components/game/Wishlist/AddToWishlist"
 import { Button } from "@/components/ui/button"
 import {
   Popover,

@@ -1,4 +1,4 @@
-import { SearchPage } from "@/components/layout/SearchPage"
+import { SearchPage } from "@/components/game/SearchPage"
 
 export default function Search() {
   return <SearchPage />

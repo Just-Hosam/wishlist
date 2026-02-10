@@ -1,5 +1,5 @@
-import ListEmptyState from "@/components/layout/ListEmptyState"
-import PriceLayout from "@/components/layout/PriceLayout"
+import ListEmptyState from "@/components/game/ListEmptyState"
+import PriceLayout from "@/components/pricing/PriceLayout"
 import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
 import { getCachedWishlistGames } from "@/server/actions/lists"
 import { Platform } from "@/types"

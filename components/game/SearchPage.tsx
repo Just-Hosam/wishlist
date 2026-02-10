@@ -9,11 +9,11 @@ import { IGDBGame, Platform } from "@/types"
 import { CheckCircle2, Heart, LibraryBig, Plus, Search, X } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import { Nav } from "../layout/Nav"
 import { Button } from "../ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import AddToCompleted from "./Completed/AddToCompleted"
 import AddToLibrary from "./Library/AddToLibrary"
-import { Nav } from "./Nav"
 import AddToWishlist from "./Wishlist/AddToWishlist"
 
 export function SearchPage() {

@@ -1,8 +1,8 @@
-import MoveToCompleted from "@/components/layout/Completed/MoveToCompleted"
-import DeleteGameButton from "@/components/layout/DeleteGameButton"
-import { Game } from "@/components/layout/Game"
-import MoveToLibrary from "@/components/layout/Library/MoveToLibrary"
-import EditFromWishlist from "@/components/layout/Wishlist/EditFromWishlist"
+import MoveToCompleted from "@/components/game/Completed/MoveToCompleted"
+import DeleteGameButton from "@/components/game/DeleteGameButton"
+import { Game } from "@/components/game/Game"
+import MoveToLibrary from "@/components/game/Library/MoveToLibrary"
+import EditFromWishlist from "@/components/game/Wishlist/EditFromWishlist"
 import { Button } from "@/components/ui/button"
 import {
   Popover,

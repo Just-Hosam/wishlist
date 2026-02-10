@@ -1,8 +1,8 @@
-import { SignOutButton } from "@/components/layout/SignoutButton"
+import { SignOutButton } from "@/components/auth/SignoutButton"
 import { Link } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2, Info, Palette } from "lucide-react"
-import { ThemePicker } from "@/components/layout/ThemePicker"
+import { ThemePicker } from "@/components/theme/ThemePicker"
 
 export default function MorePage() {
   return (

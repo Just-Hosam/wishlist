@@ -1,4 +1,4 @@
-import ListEmptyState from "@/components/layout/ListEmptyState"
+import ListEmptyState from "@/components/game/ListEmptyState"
 import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
 import { getCachedLibraryGames } from "@/server/actions/lists"
 import { Platform } from "@/types"

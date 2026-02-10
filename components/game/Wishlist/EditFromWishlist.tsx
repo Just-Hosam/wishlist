@@ -28,9 +28,9 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "../../ui/drawer"
-import NintendoPriceClient from "../NintendoPriceClient"
-import PlaystationPriceClient from "../PlaystationPriceClient"
-import SteamPriceClient from "../SteamPriceClient"
+import NintendoPriceClient from "../../pricing/NintendoPriceClient"
+import PlaystationPriceClient from "../../pricing/PlaystationPriceClient"
+import SteamPriceClient from "../../pricing/SteamPriceClient"
 
 interface Props {
   game: GameOutput
