@@ -66,10 +66,10 @@ export function ThemePicker({ children }: Props) {
     element.animate(
       [
         { transform: "scale(1)" },
-        { transform: "scale(0.70)" },
+        { transform: "scale(0.80)" },
         { transform: "scale(1)" }
       ],
-      { duration: 250, easing: "ease-in-out" }
+      { duration: 200, easing: "ease-in-out" }
     )
   }
 
@@ -105,7 +105,7 @@ export function ThemePicker({ children }: Props) {
                   {accent === Accent.PURPLE && (
                     <CircleCheckBig
                       size={20}
-                      className="text-accent-foreground"
+                      className="custom-fade-in text-accent-foreground"
                     />
                   )}
                 </div>
@@ -118,7 +118,7 @@ export function ThemePicker({ children }: Props) {
                   {accent === Accent.ORANGE && (
                     <CircleCheckBig
                       size={20}
-                      className="text-accent-foreground"
+                      className="custom-fade-in text-accent-foreground"
                     />
                   )}
                 </div>
@@ -131,7 +131,7 @@ export function ThemePicker({ children }: Props) {
                   {accent === Accent.PINK && (
                     <CircleCheckBig
                       size={20}
-                      className="text-accent-foreground"
+                      className="custom-fade-in text-accent-foreground"
                     />
                   )}
                 </div>
@@ -144,7 +144,7 @@ export function ThemePicker({ children }: Props) {
                   {accent === Accent.BLUE && (
                     <CircleCheckBig
                       size={20}
-                      className="text-accent-foreground"
+                      className="custom-fade-in text-accent-foreground"
                     />
                   )}
                 </div>
