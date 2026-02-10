@@ -1,7 +1,7 @@
 "use server"
 
 import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
-import { TimeToBeat } from "@/types/timeToBeat"
+import { RawIGDBTimeToBeat, TimeToBeat } from "@/types/time-to-beat"
 import { unstable_cache } from "next/cache"
 
 function escapeIGDBString(input: string): string {
@@ -535,7 +535,7 @@ export async function fetchTimeToBeat(
       return null
     }
 
-    const timeData = data[0]
+    const timeData = data[0] as RawIGDBTimeToBeat
 
     return {
       story: timeData.hastily ? Math.round(timeData.hastily / 3600) : 0,

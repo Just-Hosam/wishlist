@@ -128,14 +128,6 @@ export function Game({
         </div>
       </div>
 
-      {/* TIME TO BEAT */}
-      <div className="mt-8 space-y-2">
-        <label className="font-medium">Time to Beat</label>
-        <Suspense fallback={<TimeToBeat loading />}>
-          <IGDBTimeToBeat igdbGameId={igdbId} />
-        </Suspense>
-      </div>
-
       {/* SUMMARY */}
       {summary && (
         <div className="mt-8">
@@ -217,6 +209,14 @@ export function Game({
         </div>
       )}
 
+      {/* TIME TO BEAT */}
+      <div className="mt-8 space-y-2">
+        <label className="font-medium">Time to Beat</label>
+        <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
+          <IGDBTimeToBeat igdbGameId={igdbId} />
+        </Suspense>
+      </div>
+
       {/* MISC */}
       {name && (
         <div className="mt-8 flex flex-col">
@@ -249,7 +249,7 @@ export function Game({
             href={hltbSearchUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 flex-1"
+            className="mt-2 flex-1"
           >
             <Button
               size="lg"
@@ -275,11 +275,7 @@ export function Game({
   )
 }
 
-export default async function IGDBTimeToBeat({
-  igdbGameId
-}: {
-  igdbGameId: string
-}) {
+async function IGDBTimeToBeat({ igdbGameId }: { igdbGameId: string }) {
   try {
     const timeToBeat = await getCachedTimeToBeat(igdbGameId)
 
@@ -288,10 +284,11 @@ export default async function IGDBTimeToBeat({
         story={timeToBeat?.story || 0}
         extra={timeToBeat?.extra || 0}
         complete={timeToBeat?.complete || 0}
+        title="IGDB API"
       />
     )
   } catch (error) {
     console.error("Error fetching IGDB time to beat info:", error)
-    return <TimeToBeat />
+    return <TimeToBeat title="IGDB API" />
   }
 }
