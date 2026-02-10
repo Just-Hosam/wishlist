@@ -8,10 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import {
-  fetchTimeToBeat,
-  getCachedSearchIGDBGamesDirect
-} from "@/server/actions/igdb"
+import { getCachedSearchIGDBGamesDirect } from "@/server/actions/igdb"
 import { CheckCircle2, Heart, LibraryBig, Plus } from "lucide-react"
 import { notFound } from "next/navigation"
 
@@ -27,7 +24,6 @@ export default async function SearchGamePage({ params, searchParams }: Props) {
 
   const games = await getCachedSearchIGDBGamesDirect(query)
   const igdbGame = games.find((game) => String(game.igdbId) === igdbId)
-  const timeToBeat = await fetchTimeToBeat(igdbId)
 
   if (!igdbGame) notFound()
 
@@ -73,8 +69,8 @@ export default async function SearchGamePage({ params, searchParams }: Props) {
       <Game
         imageId={igdbGame.coverImageId || ""}
         name={igdbGame.name || ""}
-        length={timeToBeat || undefined}
         summary={igdbGame.summary || undefined}
+        igdbId={igdbGame.igdbId!.toString()}
         igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || undefined}
         igdbNintendoUrlSegment={igdbGame.nintendoUrlSegment || undefined}
         igdbSteamUrlSegment={igdbGame.steamUrlSegment || undefined}

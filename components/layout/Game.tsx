@@ -9,13 +9,13 @@ import NintendoPrice from "./NintendoPrice"
 import PlaystationPrice from "./PlaystationPrice"
 import SteamPrice from "./SteamPrice"
 import { YoutubeVideo } from "./YoutubeVideo"
+import IGDBTimeToBeat from "./IGDBTimeToBeat"
 
 interface Props {
   imageId: string
   name: string
-  length?: number
   summary?: string
-  igdbId?: string | null
+  igdbId: string
   igdbPlaystationUrlSegment?: string
   igdbNintendoUrlSegment?: string
   igdbSteamUrlSegment?: string
@@ -27,7 +27,6 @@ interface Props {
 export function Game({
   imageId,
   name,
-  length,
   summary,
   igdbId,
   igdbPlaystationUrlSegment,
@@ -63,7 +62,7 @@ export function Game({
       {/* PRICES */}
       <div className="mt-8">
         <label className="font-medium">Prices</label>
-        <div className="mt-3 space-y-3 pl-1">
+        <div className="mt-3 space-y-3 pl-2">
           <div className="flex items-center">
             <Image
               src="/logos/steam.svg"
@@ -126,6 +125,14 @@ export function Game({
             </Suspense>
           </div>
         </div>
+      </div>
+
+      {/* TIME TO BEAT */}
+      <div className="mt-8 space-y-2">
+        <label className="font-medium">Time to Beat</label>
+        <Suspense fallback={<div>LOADING</div>}>
+          <IGDBTimeToBeat igdbGameId={igdbId} />
+        </Suspense>
       </div>
 
       {/* SUMMARY */}

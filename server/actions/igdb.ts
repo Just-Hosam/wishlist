@@ -1,6 +1,7 @@
 "use server"
 
 import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
+import { TimeToBeat } from "@/types/timeToBeat"
 import { unstable_cache } from "next/cache"
 
 function escapeIGDBString(input: string): string {
@@ -499,8 +500,8 @@ export async function getIGDBGameById(
 }
 
 export async function fetchTimeToBeat(
-  igdbGameId: string | null
-): Promise<number | null> {
+  igdbGameId: string
+): Promise<TimeToBeat | null> {
   if (!igdbGameId) return null
 
   const CLIENT_ID = process.env.IGDB_CLIENT_ID
@@ -536,15 +537,26 @@ export async function fetchTimeToBeat(
 
     const timeData = data[0]
 
-    const normallyHours = timeData.normally
-      ? Math.round(timeData.normally / 3600)
-      : 0
-
-    return normallyHours
+    return {
+      story: timeData.hastily ? Math.round(timeData.hastily / 3600) : 0,
+      extra: timeData.normally ? Math.round(timeData.normally / 3600) : 0,
+      complete: timeData.completely ? Math.round(timeData.completely / 3600) : 0
+    }
   } catch (error) {
     console.error("Error fetching game time to beat:", error)
     throw error
   }
+}
+
+export const getCachedTimeToBeat = async (igdbGameId: string) => {
+  return unstable_cache(
+    async () => await fetchTimeToBeat(igdbGameId),
+    [igdbGameId.toString()],
+    {
+      tags: [`IGDB-time-to-beat-${igdbGameId}`],
+      revalidate: 604_800 // 7 days
+    }
+  )()
 }
 
 export const getCachedSearchIGDBGamesDirect = async (query: string) => {
