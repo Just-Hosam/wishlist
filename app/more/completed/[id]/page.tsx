@@ -9,8 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { getCachedGameDetail } from "@/server/actions/lists"
-import { GameCategory } from "@/types"
+import { getCachedGameDetail } from "@/server/actions/game"
 import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"

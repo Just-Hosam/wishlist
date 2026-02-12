@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory, GameInput, GameOutput } from "@/types"
 import { getServerSession } from "next-auth"
-import { revalidateTag } from "next/cache"
+import { revalidateTag, unstable_cache } from "next/cache"
 
 function revalidateGameCategory(category: GameCategory, userId: string) {
   revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
@@ -183,4 +183,22 @@ export async function toggleNowPlaying(gameId: string) {
   revalidateGameDetail(gameId)
 
   return updatedGame.nowPlaying
+}
+
+export const getCachedGameDetail = async (
+  gameId: string,
+  userId: string
+): Promise<GameOutput | null> => {
+  return unstable_cache(
+    async () => {
+      return prisma.game.findFirst({
+        where: { id: gameId, userId }
+      })
+    },
+    [gameId, userId],
+    {
+      tags: [`game-detail-${gameId}`],
+      revalidate: 10_800 // 3 hours
+    }
+  )()
 }

@@ -1,9 +1,9 @@
 "use server"
 
-import prisma from "@/lib/prisma"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
+import prisma from "@/lib/prisma"
+import { GameCategory } from "@/types"
 import { unstable_cache } from "next/cache"
-import { GameCategory, GameOutput } from "@/types"
 
 export const getCachedWishlistGames = async (userId: string) => {
   return unstable_cache(
@@ -108,24 +108,6 @@ export const getCachedCompletedGames = async (userId: string) => {
     [userId],
     {
       tags: [`user-completed-games-${userId}`],
-      revalidate: 10_800 // 3 hours
-    }
-  )()
-}
-
-export const getCachedGameDetail = async (
-  gameId: string,
-  userId: string
-): Promise<GameOutput | null> => {
-  return unstable_cache(
-    async () => {
-      return prisma.game.findFirst({
-        where: { id: gameId, userId }
-      })
-    },
-    [gameId, userId],
-    {
-      tags: [`game-detail-${gameId}`],
       revalidate: 10_800 // 3 hours
     }
   )()
