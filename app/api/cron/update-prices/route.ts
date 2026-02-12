@@ -34,6 +34,7 @@ export async function GET(request: Request) {
     }
   }
 
+  revalidateTag("prices")
   revalidateTag("wishlist")
 
   const status = errors.length ? 500 : 200
