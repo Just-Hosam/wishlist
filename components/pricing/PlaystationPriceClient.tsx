@@ -1,7 +1,7 @@
 "use client"
 
 import { buildPlayStationStoreUrl } from "@/lib/igdb-store-links"
-import { fetchPlayStationGameInfo } from "@/server/actions/playstation"
+import { getCachedPlaystationPrice } from "@/server/actions/playstation"
 import { PriceInput } from "@/types"
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -37,7 +37,7 @@ export default function PlaystationPrice({
   useEffect(() => {
     let cancelled = false
 
-    fetchPlayStationGameInfo(url)
+    getCachedPlaystationPrice(url)
       .then((info) => {
         if (cancelled) return
         setPrice(info)

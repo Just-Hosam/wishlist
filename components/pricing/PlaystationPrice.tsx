@@ -1,5 +1,5 @@
 import { buildPlayStationStoreUrl } from "@/lib/igdb-store-links"
-import { fetchPlayStationGameInfo } from "@/server/actions/playstation"
+import { getCachedPlaystationPrice } from "@/server/actions/playstation"
 import PriceLayout from "./PriceLayout"
 
 interface Props {
@@ -25,7 +25,7 @@ export default async function PlaystationPrice({
   }
 
   try {
-    const info = await fetchPlayStationGameInfo(url)
+    const info = await getCachedPlaystationPrice(url)
 
     return (
       <PriceLayout

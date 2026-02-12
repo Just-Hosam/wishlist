@@ -1,5 +1,5 @@
 import { buildSteamStoreUrl } from "@/lib/igdb-store-links"
-import { fetchSteamGameInfo } from "@/server/actions/steam"
+import { getCachedSteamPrice } from "@/server/actions/steam"
 import PriceLayout from "./PriceLayout"
 
 interface Props {
@@ -22,7 +22,7 @@ export default async function SteamPrice({ igdbSteamUrlSegment }: Props) {
   }
 
   try {
-    const info = await fetchSteamGameInfo(url)
+    const info = await getCachedSteamPrice(url)
 
     return (
       <PriceLayout

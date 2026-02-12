@@ -1,5 +1,5 @@
 import { buildNintendoStoreUrl } from "@/lib/igdb-store-links"
-import { fetchNintendoGameInfo } from "@/server/actions/nintendo"
+import { getCachedNintendoPrice } from "@/server/actions/nintendo"
 import PriceLayout from "./PriceLayout"
 
 export default async function NintendoPrice({
@@ -22,7 +22,7 @@ export default async function NintendoPrice({
   }
 
   try {
-    const info = await fetchNintendoGameInfo(url)
+    const info = await getCachedNintendoPrice(url)
 
     return (
       <PriceLayout

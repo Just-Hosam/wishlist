@@ -1,11 +1,11 @@
 "use server"
 
-import { isPriceStale } from "@/lib/utils"
 import { getPlayStationGamePrice } from "@/server/platforms/playstation"
 import { PriceInput } from "@/types"
-import { getPrice, savePrice } from "./price"
+import { unstable_cache } from "next/cache"
+import { savePrice } from "./price"
 
-export async function fetchPlayStationGameInfo(
+export async function fetchPlayStationPrice(
   url: string | null
 ): Promise<PriceInput> {
   try {
@@ -20,11 +20,6 @@ export async function fetchPlayStationGameInfo(
     ) {
       throw new Error("Please provide a valid PlayStation store URL")
     }
-
-    const cachedPrice = await getPrice(url)
-    const isStale = isPriceStale(cachedPrice)
-
-    if (cachedPrice && !isStale) return cachedPrice
 
     const gameInfo = await getPlayStationGamePrice(url)
 
@@ -47,4 +42,19 @@ export async function fetchPlayStationGameInfo(
         : "Failed to fetch game information"
     )
   }
+}
+
+export const getCachedPlaystationPrice = async (
+  url: string
+): Promise<PriceInput> => {
+  return unstable_cache(
+    async () => {
+      return await fetchPlayStationPrice(url)
+    },
+    [url],
+    {
+      tags: [`playstation-price-${url}`, "playstation-prices", "prices"],
+      revalidate: 24 * 60 * 60 // 24 hours
+    }
+  )()
 }

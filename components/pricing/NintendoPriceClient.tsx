@@ -1,7 +1,7 @@
 "use client"
 
 import { buildNintendoStoreUrl } from "@/lib/igdb-store-links"
-import { fetchNintendoGameInfo } from "@/server/actions/nintendo"
+import { getCachedNintendoPrice } from "@/server/actions/nintendo"
 import { PriceInput } from "@/types"
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -36,7 +36,7 @@ export default function NintendoPrice({
   useEffect(() => {
     let cancelled = false
 
-    fetchNintendoGameInfo(url)
+    getCachedNintendoPrice(url)
       .then((info) => {
         if (cancelled) return
         setPrice(info)

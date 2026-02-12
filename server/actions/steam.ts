@@ -1,13 +1,11 @@
 "use server"
 
-import { isPriceStale } from "@/lib/utils"
 import { getSteamGameInfo } from "@/server/platforms/steam"
 import { PriceInput } from "@/types"
-import { getPrice, savePrice } from "./price"
+import { unstable_cache } from "next/cache"
+import { savePrice } from "./price"
 
-export async function fetchSteamGameInfo(
-  url: string | null
-): Promise<PriceInput> {
+export async function fetchSteamPrice(url: string | null): Promise<PriceInput> {
   try {
     if (!url) {
       throw new Error("URL is required")
@@ -17,11 +15,6 @@ export async function fetchSteamGameInfo(
     if (!url.includes("store.steampowered.com")) {
       throw new Error("Please provide a valid Steam store URL")
     }
-
-    const cachedPrice = await getPrice(url)
-    const isStale = isPriceStale(cachedPrice)
-
-    if (cachedPrice && !isStale) return cachedPrice
 
     const gameInfo = await getSteamGameInfo(url)
 
@@ -44,4 +37,17 @@ export async function fetchSteamGameInfo(
         : "Failed to fetch game information"
     )
   }
+}
+
+export const getCachedSteamPrice = async (url: string): Promise<PriceInput> => {
+  return unstable_cache(
+    async () => {
+      return await fetchSteamPrice(url)
+    },
+    [url],
+    {
+      tags: [`steam-price-${url}`, "steam-prices", "prices"],
+      revalidate: 24 * 60 * 60 // 24 hours
+    }
+  )()
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { buildSteamStoreUrl } from "@/lib/igdb-store-links"
-import { fetchSteamGameInfo } from "@/server/actions/steam"
+import { getCachedSteamPrice } from "@/server/actions/steam"
 import { PriceInput } from "@/types"
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -36,7 +36,7 @@ export default function SteamPrice({
   useEffect(() => {
     let cancelled = false
 
-    fetchSteamGameInfo(url)
+    getCachedSteamPrice(url)
       .then((info) => {
         if (cancelled) return
         setPrice(info)

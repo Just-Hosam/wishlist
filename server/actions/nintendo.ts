@@ -1,11 +1,11 @@
 "use server"
 
-import { isPriceStale } from "@/lib/utils"
 import { getNintendoGameInfo } from "@/server/platforms/nintendo"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
+import { unstable_cache } from "next/cache"
 
-export async function fetchNintendoGameInfo(
+export async function fetchNintendoPrice(
   url: string | null
 ): Promise<PriceInput> {
   try {
@@ -19,10 +19,6 @@ export async function fetchNintendoGameInfo(
     }
 
     const cachedPrice = await getPrice(url)
-    const isStale = isPriceStale(cachedPrice)
-
-    if (cachedPrice && !isStale) return cachedPrice
-
     const gameInfo = await getNintendoGameInfo(url, cachedPrice?.externalId)
 
     if (!gameInfo) {
@@ -44,4 +40,19 @@ export async function fetchNintendoGameInfo(
         : "Failed to fetch game information"
     )
   }
+}
+
+export const getCachedNintendoPrice = async (
+  url: string
+): Promise<PriceInput> => {
+  return unstable_cache(
+    async () => {
+      return await fetchNintendoPrice(url)
+    },
+    [url],
+    {
+      tags: [`nintendo-price-${url}`, "nintendo-prices", "prices"],
+      revalidate: 24 * 60 * 60 // 24 hours
+    }
+  )()
 }
