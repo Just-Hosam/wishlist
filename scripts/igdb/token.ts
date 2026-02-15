@@ -1,3 +1,5 @@
+import { buildRequestHeaders } from "@/lib/request"
+
 const clientId = process.env.IGDB_CLIENT_ID
 const clientSecret = process.env.IGDB_CLIENT_SECRET
 
@@ -11,9 +13,13 @@ if (!clientId || !clientSecret) {
 const fetchTwitchToken = async () => {
   const response = await fetch("https://id.twitch.tv/oauth2/token", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
+    headers: buildRequestHeaders({
+      kind: "api",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        accept: "application/json"
+      }
+    }),
     body: new URLSearchParams({
       client_id: clientId,
       client_secret: clientSecret,

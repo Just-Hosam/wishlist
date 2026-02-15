@@ -1,4 +1,5 @@
 import { Platform, PriceDescription, PriceInput } from "@/types"
+import { buildRequestHeaders } from "@/lib/request"
 
 interface ExtractedPrice {
   name: string
@@ -15,20 +16,14 @@ interface ExtractedPrice {
 }
 
 export async function getPlayStationGamePrice(
-  url: string,
-  headers?: Record<string, string>
+  url: string
 ): Promise<PriceInput | null> {
   try {
     const response = await fetch(url, {
-      headers: {
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        Connection: "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-        ...headers
-      }
+      headers: buildRequestHeaders({
+        kind: "scrape",
+        referer: "https://store.playstation.com/"
+      })
     })
 
     if (!response.ok) {

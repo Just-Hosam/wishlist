@@ -1,3 +1,4 @@
+import { buildRequestHeaders } from "@/lib/request"
 import { RawIGDBAPIGame } from "@/types"
 
 const IGDB_API_URL = "https://api.igdb.com/v4/games"
@@ -19,11 +20,15 @@ export const fetchGamesBatch = async (
   const safeLimit = Math.min(limit, 500)
   const response = await fetch(IGDB_API_URL, {
     method: "POST",
-    headers: {
-      "Client-ID": CLIENT_ID,
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      "Content-Type": "text/plain"
-    },
+    headers: buildRequestHeaders({
+      kind: "api",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "text/plain",
+        accept: "application/json"
+      }
+    }),
     body: `
       fields 
         name, slug, alternative_names.name,

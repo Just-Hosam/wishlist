@@ -1,18 +1,15 @@
 // Nintendo price scraping utilities
 
 import { Platform, PriceDescription, PriceInput } from "@/types"
+import { buildRequestHeaders } from "@/lib/request"
 
 const getNSUID = async (url: string): Promise<string | null> => {
   try {
     const response = await fetch(url, {
-      headers: {
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        Connection: "keep-alive",
-        "Upgrade-Insecure-Requests": "1"
-      }
+      headers: buildRequestHeaders({
+        kind: "scrape",
+        referer: "https://www.nintendo.com/"
+      })
     })
     if (!response.ok) {
       console.error(`Failed to fetch Nintendo URL: ${response.status}`)
@@ -88,15 +85,13 @@ async function getCurrentPrice(
   try {
     const url = `https://api.ec.nintendo.com/v1/price?country=${country}&ids=${nsuid}&lang=${lang}`
     const res = await fetch(url, {
-      headers: {
-        Accept:
-          "application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        Connection: "keep-alive",
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-      }
+      headers: buildRequestHeaders({
+        kind: "api",
+        headers: {
+          accept: "application/json"
+        },
+        referer: "https://www.nintendo.com/"
+      })
     })
     if (!res.ok) {
       console.error(`Nintendo API HTTP ${res.status}`)

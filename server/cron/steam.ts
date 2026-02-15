@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import { buildRequestHeaders } from "@/lib/request"
 import { GameCategory, Platform } from "@/types"
 
 const BATCH_SIZE = 10
@@ -66,9 +67,13 @@ export async function runSteamPriceUpdate() {
 
     try {
       const response = await fetch(apiUrl, {
-        headers: {
-          Accept: "application/json"
-        }
+        headers: buildRequestHeaders({
+          kind: "api",
+          headers: {
+            accept: "application/json"
+          },
+          referer: "https://store.steampowered.com/"
+        })
       })
 
       if (!response.ok) {

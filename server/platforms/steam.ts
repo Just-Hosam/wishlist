@@ -1,4 +1,5 @@
 import { Platform, PriceDescription, PriceInput } from "@/types"
+import { buildRequestHeaders } from "@/lib/request"
 
 interface SteamPrice {
   currency: string
@@ -12,12 +13,18 @@ interface SteamPrice {
 export const getSteamGameInfo = async (
   url: string
 ): Promise<PriceInput | null> => {
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    headers: buildRequestHeaders({
+      kind: "api",
+      headers: {
+        accept: "application/json"
+      },
+      referer: "https://store.steampowered.com/"
+    })
+  })
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch PlayStation Store page: ${response.status}`
-    )
+    throw new Error(`Failed to fetch Steam API response: ${response.status}`)
   }
 
   const json = await response.json()

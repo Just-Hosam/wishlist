@@ -1,5 +1,6 @@
 "use server"
 
+import { buildRequestHeaders } from "@/lib/request"
 import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
 import { RawIGDBTimeToBeat, TimeToBeat } from "@/types/time-to-beat"
 import { unstable_cache } from "next/cache"
@@ -347,11 +348,15 @@ export async function searchIGDBGamesDirect(
   try {
     const response = await fetch("https://api.igdb.com/v4/games", {
       method: "POST",
-      headers: {
-        "Client-ID": CLIENT_ID,
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        "Content-Type": "text/plain"
-      },
+      headers: buildRequestHeaders({
+        kind: "api",
+        headers: {
+          "Client-ID": CLIENT_ID,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "text/plain",
+          accept: "application/json"
+        }
+      }),
       body: `
         search "${sanitizedQuery}";
         
@@ -441,11 +446,15 @@ export async function getIGDBGameById(
   try {
     const response = await fetch("https://api.igdb.com/v4/games", {
       method: "POST",
-      headers: {
-        "Client-ID": CLIENT_ID,
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        "Content-Type": "text/plain"
-      },
+      headers: buildRequestHeaders({
+        kind: "api",
+        headers: {
+          "Client-ID": CLIENT_ID,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "text/plain",
+          accept: "application/json"
+        }
+      }),
       body: `
         fields 
           name, slug,
@@ -516,11 +525,15 @@ export async function fetchTimeToBeat(
   try {
     const response = await fetch("https://api.igdb.com/v4/game_time_to_beats", {
       method: "POST",
-      headers: {
-        "Client-ID": CLIENT_ID,
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        "Content-Type": "text/plain"
-      },
+      headers: buildRequestHeaders({
+        kind: "api",
+        headers: {
+          "Client-ID": CLIENT_ID,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "text/plain",
+          accept: "application/json"
+        }
+      }),
       body: `fields *; where game_id = ${safeGameId};`
     })
 
