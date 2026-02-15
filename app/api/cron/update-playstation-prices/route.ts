@@ -7,10 +7,10 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
+  revalidateTag("playstation-prices")
+
   try {
     const result = await runPlayStationPriceUpdate()
-
-    revalidateTag("playstation-prices")
 
     return NextResponse.json(result)
   } catch (error) {

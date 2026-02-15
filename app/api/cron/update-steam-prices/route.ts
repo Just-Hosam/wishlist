@@ -7,10 +7,10 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
+  revalidateTag("steam-prices")
+
   try {
     const result = await runSteamPriceUpdate()
-
-    revalidateTag("steam-prices")
 
     return NextResponse.json(result)
   } catch (error) {

@@ -25,10 +25,14 @@ export async function fetchNintendoPrice(
       throw new Error("Failed to fetch game information from Nintendo store")
     }
 
-    // Save the price in the background without waiting
-    savePrice(gameInfo).catch((error) => {
-      console.error("Background save failed for Nintendo price:", error)
-    })
+    try {
+      await savePrice(gameInfo)
+    } catch (error) {
+      console.error("Error saving Nintendo game info:", error)
+      throw new Error(
+        `Failed to save game information: ${error instanceof Error ? error.message : String(error)}`
+      )
+    }
 
     return gameInfo
   } catch (error) {

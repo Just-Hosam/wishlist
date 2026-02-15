@@ -27,10 +27,14 @@ export async function fetchPlayStationPrice(
       throw new Error("Failed to fetch game information from PlayStation store")
     }
 
-    // Save the price in the background without waiting
-    savePrice(gameInfo).catch((error) => {
-      console.error("Background save failed for PlayStation price:", error)
-    })
+    try {
+      await savePrice(gameInfo)
+    } catch (error) {
+      console.error("Error saving PlayStation game info:", error)
+      throw new Error(
+        `Failed to save game information: ${error instanceof Error ? error.message : String(error)}`
+      )
+    }
 
     return gameInfo
   } catch (error) {

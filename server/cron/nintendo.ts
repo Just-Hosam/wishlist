@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma"
-import { getNintendoGameInfo } from "@/server/platforms/nintendo"
 import { GameCategory, Platform } from "@/types"
+import { getCachedNintendoPrice } from "../actions/nintendo"
 
 const NINTENDO_BATCH_SIZE = 5
 
@@ -48,23 +48,9 @@ export async function runNintendoPriceUpdate() {
 
     for (const gamePrice of batch) {
       try {
-        const nintendoData = await getNintendoGameInfo(gamePrice.storeUrl)
+        await getCachedNintendoPrice(gamePrice.storeUrl)
 
-        if (nintendoData) {
-          await prisma.price.update({
-            where: { id: gamePrice.id },
-            data: {
-              regularPrice: nintendoData.regularPrice,
-              currentPrice: nintendoData.currentPrice,
-              fetchedAt: new Date(),
-              updatedAt: new Date()
-            }
-          })
-
-          updated++
-        } else {
-          errors++
-        }
+        updated++
 
         const randomDelay = Math.floor(Math.random() * 3000) + 2000
         await new Promise((resolve) => setTimeout(resolve, randomDelay))

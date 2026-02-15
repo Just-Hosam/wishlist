@@ -7,10 +7,10 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
+  revalidateTag("nintendo-prices")
+
   try {
     const result = await runNintendoPriceUpdate()
-
-    revalidateTag("nintendo-prices")
 
     return NextResponse.json(result)
   } catch (error) {
