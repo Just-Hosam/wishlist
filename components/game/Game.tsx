@@ -39,6 +39,8 @@ export function Game({
 }: Props) {
   const youtubeReviewSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(name + " review")}`
   const hltbSearchUrl = `https://howlongtobeat.com/?q=${encodeURIComponent(name)}`
+  const steamId = igdbSteamUrlSegment?.split("/")?.[1]
+  const steamDBUrl = `https://steamdb.info/app/${steamId}/`
 
   return (
     <div className="custom-slide-fade-in">
@@ -210,8 +212,8 @@ export function Game({
       )}
 
       {/* TIME TO BEAT */}
-      <div className="mt-8 space-y-2">
-        <label className="font-medium">Time to Beat</label>
+      <div className="mt-8">
+        <label className="mb-3 block font-medium">Time to Beat</label>
         <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
           <IGDBTimeToBeat igdbGameId={igdbId} />
         </Suspense>
@@ -259,9 +261,9 @@ export function Game({
               <div className="flex items-center gap-2">
                 <Image
                   src="/logos/hltb.png"
-                  alt="YouTube logo"
-                  width={20}
-                  height={20}
+                  alt="HLTB logo"
+                  width={19}
+                  height={19}
                   className="rounded-sm drop-shadow-2xl"
                 />
                 <span className="font-semibold">HLTB Time to Beat</span>
@@ -269,6 +271,32 @@ export function Game({
               <ExternalLink size={16} className="text-muted-foreground" />
             </Button>
           </a>
+          {steamId && (
+            <a
+              href={steamDBUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 flex-1"
+            >
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-auto w-full justify-between gap-3 px-6 py-4"
+              >
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/logos/steam-db.svg"
+                    alt="SteamDB logo"
+                    width={17}
+                    height={17}
+                    className="rounded-sm drop-shadow-2xl"
+                  />
+                  <span className="font-semibold">SteamDB Price History</span>
+                </div>
+                <ExternalLink size={16} className="text-muted-foreground" />
+              </Button>
+            </a>
+          )}
         </div>
       )}
     </div>
