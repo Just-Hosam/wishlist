@@ -1,6 +1,5 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate } from "@/lib/utils"
-import { getCachedTimeToBeat } from "@/server/actions/igdb"
 import { ExternalLink, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
@@ -11,12 +10,17 @@ import { Button } from "../ui/button"
 import { ExpandableText } from "../ui/expandable-text"
 import TimeToBeat from "./TimeToBeat"
 import { YoutubeVideo } from "./YoutubeVideo"
+import {
+  getCachedBackloggdTimeToBeat,
+  getCachedIGDBTimeToBeat
+} from "@/server/actions/time-to-beat"
 
 interface Props {
   imageId: string
   name: string
   summary?: string
   igdbId: string
+  igdbSlug: string
   igdbPlaystationUrlSegment?: string
   igdbNintendoUrlSegment?: string
   igdbSteamUrlSegment?: string
@@ -30,6 +34,7 @@ export function Game({
   name,
   summary,
   igdbId,
+  igdbSlug,
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
@@ -214,9 +219,16 @@ export function Game({
       {/* TIME TO BEAT */}
       <div className="mt-8">
         <label className="mb-3 block font-medium">Time to Beat</label>
-        <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
-          <IGDBTimeToBeat igdbGameId={igdbId} />
-        </Suspense>
+        <div className="space-y-2">
+          {igdbSlug && (
+            <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
+              <BackloggdTimeToBeat slug={igdbSlug} />
+            </Suspense>
+          )}
+          <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
+            <IGDBTimeToBeat igdbGameId={igdbId} />
+          </Suspense>
+        </div>
       </div>
 
       {/* MISC */}
@@ -305,7 +317,7 @@ export function Game({
 
 async function IGDBTimeToBeat({ igdbGameId }: { igdbGameId: string }) {
   try {
-    const timeToBeat = await getCachedTimeToBeat(igdbGameId)
+    const timeToBeat = await getCachedIGDBTimeToBeat(igdbGameId)
 
     return (
       <TimeToBeat
@@ -318,5 +330,23 @@ async function IGDBTimeToBeat({ igdbGameId }: { igdbGameId: string }) {
   } catch (error) {
     console.error("Error fetching IGDB time to beat info:", error)
     return <TimeToBeat title="IGDB API" />
+  }
+}
+
+async function BackloggdTimeToBeat({ slug }: { slug: string }) {
+  try {
+    const timeToBeat = await getCachedBackloggdTimeToBeat(slug)
+
+    return (
+      <TimeToBeat
+        story={timeToBeat?.story || 0}
+        extra={timeToBeat?.extra || 0}
+        complete={timeToBeat?.complete || 0}
+        title="Backloggd"
+      />
+    )
+  } catch (error) {
+    console.error("Error fetching Backloggd time to beat info:", error)
+    return <TimeToBeat title="Backloggd" />
   }
 }

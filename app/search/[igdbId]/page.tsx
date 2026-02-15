@@ -71,6 +71,7 @@ export default async function SearchGamePage({ params, searchParams }: Props) {
         name={igdbGame.name || ""}
         summary={igdbGame.summary || undefined}
         igdbId={igdbGame.igdbId!.toString()}
+        igdbSlug={igdbGame.slug || ""}
         igdbPlaystationUrlSegment={igdbGame.playstationUrlSegment || undefined}
         igdbNintendoUrlSegment={igdbGame.nintendoUrlSegment || undefined}
         igdbSteamUrlSegment={igdbGame.steamUrlSegment || undefined}

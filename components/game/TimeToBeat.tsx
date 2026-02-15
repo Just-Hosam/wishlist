@@ -1,4 +1,3 @@
-import { fetchTimeToBeat, getCachedTimeToBeat } from "@/server/actions/igdb"
 import { Skeleton } from "../ui/skeleton"
 
 interface Props {

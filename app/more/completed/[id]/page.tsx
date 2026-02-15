@@ -75,6 +75,7 @@ export default async function CompletedGamePage({ params }: Props) {
         name={game.igdbName || ""}
         summary={game.igdbSummary || undefined}
         igdbId={game.igdbId!.toString()}
+        igdbSlug={game.igdbSlug || ""}
         igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment || undefined}
         igdbNintendoUrlSegment={game.igdbNintendoUrlSegment || undefined}
         igdbSteamUrlSegment={game.igdbSteamUrlSegment || undefined}
