@@ -23,10 +23,13 @@ export default function Footer() {
         : activePathname.startsWith("/search")
           ? "SEARCH"
           : ""
+
   const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
   const libraryTriggerRef = useRef<HTMLButtonElement>(null)
   const moreTriggerRef = useRef<HTMLButtonElement>(null)
   const searchButtonRef = useRef<HTMLButtonElement>(null)
+
+  if (pathname === "/") return null
 
   const runScaleAnimation = (element: HTMLElement | null) => {
     if (!element?.animate) return
@@ -40,8 +43,6 @@ export default function Footer() {
       { duration: 250, easing: "ease-in-out" }
     )
   }
-
-  if (pathname === "/") return null
 
   const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
     runScaleAnimation(searchButtonRef.current)

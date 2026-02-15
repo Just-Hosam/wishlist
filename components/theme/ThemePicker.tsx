@@ -23,7 +23,7 @@ export function ThemePicker({ children }: Props) {
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
-  const [accent, setAccent] = useState<Accent>("PURPLE")
+  const [accent, setAccent] = useState<Accent>(Accent.PURPLE)
 
   useEffect(() => {
     try {
