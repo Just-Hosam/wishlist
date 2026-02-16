@@ -15,6 +15,7 @@ export default function Footer() {
   const { pendingPathname } = useNavigation()
   const activePathname = pendingPathname ?? pathname
   const activeTab: Tab = activePathname.startsWith("/wishlist")
+    || activePathname.startsWith("/launch")
     ? "WISHLIST"
     : activePathname.startsWith("/library")
       ? "LIBRARY"

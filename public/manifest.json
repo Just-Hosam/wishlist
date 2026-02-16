@@ -2,7 +2,7 @@
   "name": "Playward",
   "short_name": "Playward",
   "description": "Manage your game wishlists with ease. Track games you want to play, own, and have completed.",
-  "start_url": "/",
+  "start_url": "/launch",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

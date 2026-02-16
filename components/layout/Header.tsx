@@ -9,6 +9,7 @@ import { Nav } from "./Nav"
 
 const ROUTE_CONFIG: Record<string, ReactNode> = {
   "/": <SigninHeader />,
+  "/launch": <WishlistHeader />,
   "/wishlist": <WishlistHeader />,
   "/library": <LibraryHeader />,
   "/more": <MoreHeader />,
