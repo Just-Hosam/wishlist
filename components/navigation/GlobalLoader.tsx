@@ -8,7 +8,7 @@ export function GlobalLoader({ children }: { children: React.ReactNode }) {
 
   if (isNavigating) {
     return (
-      <div className="custom-fade-in flex min-h-[400px] items-center justify-center bg-blue-600">
+      <div className="custom-fade-in flex min-h-[400px] items-center justify-center">
         <Spinner />
       </div>
     )
