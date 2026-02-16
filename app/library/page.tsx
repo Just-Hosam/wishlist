@@ -1,5 +1,4 @@
 import ListEmptyState from "@/components/game/ListEmptyState"
-import { ScrollToTopListener } from "@/components/layout/ScrollToTopListener"
 import { getCachedLibraryGames } from "@/server/actions/lists"
 import { Platform } from "@/types"
 import { Clock, Layers, PlayCircle } from "lucide-react"
@@ -23,7 +22,6 @@ export default async function LibraryPage() {
 
   return (
     <>
-      <ScrollToTopListener />
       {hasNowPlaying && (
         <div className="custom-slide-fade-in">
           <div className="flex items-center gap-2 pb-4 font-semibold">

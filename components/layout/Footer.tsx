@@ -31,6 +31,15 @@ export default function Footer() {
 
   if (pathname === "/") return null
 
+  const scrollToTop = () => {
+    const scrollEl =
+      document.querySelector<HTMLElement>("[data-scroll-container]") ??
+      (document.scrollingElement as HTMLElement | null) ??
+      document.documentElement
+
+    scrollEl.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
   const runScaleAnimation = (element: HTMLElement | null) => {
     if (!element?.animate) return
 
@@ -58,7 +67,7 @@ export default function Footer() {
 
     if (pathname === "/wishlist") {
       e.preventDefault()
-      window.dispatchEvent(new CustomEvent("scroll-to-top"))
+      scrollToTop()
     }
   }
 
@@ -67,7 +76,7 @@ export default function Footer() {
 
     if (pathname === "/library") {
       e.preventDefault()
-      window.dispatchEvent(new CustomEvent("scroll-to-top"))
+      scrollToTop()
     }
   }
 
