@@ -16,6 +16,9 @@ export function Link({ children, onClick, href, ...props }: NavLinkProps) {
   const pathname = usePathname()
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(e)
+    if (e.defaultPrevented) return
+
     // Only trigger loading for client-side navigation
     // Skip if it's a new tab, external link, has modifiers, or navigating to current route
     const targetPath = typeof href === "string" ? href : href.pathname || ""
@@ -30,8 +33,6 @@ export function Link({ children, onClick, href, ...props }: NavLinkProps) {
     ) {
       startNavigation(targetPath)
     }
-
-    onClick?.(e)
   }
 
   return (

@@ -8,17 +8,18 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import { decodePathSegment } from "@/lib/path"
 import { getCachedSearchIGDBGamesDirect } from "@/server/actions/igdb"
 import { CheckCircle2, Heart, LibraryBig, Plus } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
-  params: Promise<{ igdbId: string }>
-  searchParams: Promise<{ q: string }>
+  params: Promise<{ q: string; igdbId: string }>
 }
 
-export default async function SearchGamePage({ params, searchParams }: Props) {
-  const [{ igdbId }, { q: query }] = await Promise.all([params, searchParams])
+export default async function SearchGamePage({ params }: Props) {
+  const { q, igdbId } = await params
+  const query = decodePathSegment(q)
 
   if (!igdbId || !query) notFound()
 

@@ -1,110 +1,61 @@
-"use client"
-
+import AddToCompleted from "@/components/game/Completed/AddToCompleted"
+import AddToLibrary from "@/components/game/Library/AddToLibrary"
+import AddToWishlist from "@/components/game/Wishlist/AddToWishlist"
 import { Link } from "@/components/navigation"
-import { Input } from "@/components/ui/input"
-import Spinner from "@/components/ui/spinner"
+import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { decodePathSegment, encodePathSegment } from "@/lib/path"
+import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
+import { tryCatch } from "@/lib/try-catch"
 import { formatReleaseDate } from "@/lib/utils"
 import { getCachedSearchIGDBGamesDirect } from "@/server/actions/igdb"
-import { IGDBGame, Platform } from "@/types"
-import { CheckCircle2, Heart, LibraryBig, Plus, Search, X } from "lucide-react"
+import { Platform } from "@/types"
+import { CheckCircle2, Heart, LibraryBig, Plus, Search } from "lucide-react"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
-import { Nav } from "../layout/Nav"
-import { Button } from "../ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import AddToCompleted from "./Completed/AddToCompleted"
-import AddToLibrary from "./Library/AddToLibrary"
-import AddToWishlist from "./Wishlist/AddToWishlist"
 
-export function SearchPage() {
-  const [query, setQuery] = useState("")
-  const [results, setResults] = useState<IGDBGame[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [hasSearched, setHasSearched] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+interface Props {
+  params: Promise<{ q: string }>
+}
 
-  useEffect(() => {
-    const handleFocusSearch = () => {
-      inputRef.current?.focus()
-    }
+export default async function SearchResultsPage({ params }: Props) {
+  const { q } = await params
+  const query = decodePathSegment(q)
 
-    window.addEventListener("focus-search-input", handleFocusSearch)
-
-    return () => {
-      window.removeEventListener("focus-search-input", handleFocusSearch)
-    }
-  }, [])
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (query.trim().length < 2) {
-      setResults([])
-      setHasSearched(false)
-      return
-    }
-
-    inputRef.current?.blur()
-
-    setIsLoading(true)
-    setHasSearched(true)
-    try {
-      const searchResults = await getCachedSearchIGDBGamesDirect(query)
-      setResults(searchResults)
-    } catch (error) {
-      console.error("Search error:", error)
-      setResults([])
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleClearSearch = () => {
-    setQuery("")
-    setResults([])
-    setHasSearched(false)
-    inputRef.current?.focus()
-  }
-
-  const getImageUrl = (imageId: string) => {
-    return `https://images.igdb.com/igdb/image/upload/t_720p/${imageId}.jpg`
-  }
-
-  // Empty state - before any search
-  const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center pt-20 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
-      <Search className="mb-4 h-16 w-16 text-gray-300" />
-      <h2 className="mb-2 text-xl font-semibold text-gray-700">
-        Search for games
-      </h2>
-      <p className="text-sm text-gray-500">
-        Start typing to find games to track
-      </p>
-    </div>
+  const { data: results, error } = await tryCatch(
+    getCachedSearchIGDBGamesDirect(query)
   )
 
-  // Loading state
-  const renderLoadingState = () => (
-    <div className="duration-1000 animate-in fade-in">
-      <Spinner />
-    </div>
-  )
+  if (error) {
+    return (
+      <div className="custom-slide-fade-in flex flex-col items-center justify-center pt-20 text-center">
+        <Search className="mb-4 h-16 w-16 text-gray-300" />
+        <h2 className="mb-2 text-xl font-semibold text-destructive">
+          Something went wrong
+        </h2>
+        <p className="text-sm text-gray-500">Try searching again</p>
+      </div>
+    )
+  }
 
-  // No results state
-  const renderNoResultsState = () => (
-    <div className="flex flex-col items-center justify-center pt-20 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
-      <Search className="mb-4 h-16 w-16 text-gray-300" />
-      <h2 className="mb-2 text-xl font-semibold text-gray-700">
-        No games found
-      </h2>
-      <p className="text-sm text-gray-500">
-        Try a different search term for "{query}"
-      </p>
-    </div>
-  )
+  if (results.length === 0) {
+    return (
+      <div className="custom-slide-fade-in flex flex-col items-center justify-center pt-20 text-center">
+        <Search className="mb-4 h-16 w-16 text-gray-300" />
+        <h2 className="mb-2 text-xl font-semibold text-gray-700">
+          No games found
+        </h2>
+        <p className="text-sm text-gray-500">
+          Try a different search term for "{query}"
+        </p>
+      </div>
+    )
+  }
 
-  // Results list
-  const renderResults = () => (
+  return (
     <div className="custom-slide-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
         <div className="relative" key={game.id}>
@@ -143,14 +94,14 @@ export function SearchPage() {
           </Popover>
 
           <Link
-            href={`/search/${game.igdbId}?q=${encodeURIComponent(query)}`}
+            href={`/search/${encodePathSegment(query)}/${game.igdbId}`}
             passHref
           >
             <div className="flex cursor-pointer flex-col">
               <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
                 {game.coverImageId ? (
                   <Image
-                    src={getImageUrl(game.coverImageId)}
+                    src={buildIGDBImageUrl(game.coverImageId)}
                     alt={game.name}
                     fill
                     className="object-cover"
@@ -230,54 +181,6 @@ export function SearchPage() {
           </Link>
         </div>
       ))}
-    </div>
-  )
-
-  return (
-    <div>
-      <Nav>
-        <form onSubmit={handleSubmit} className="relative w-full">
-          <Search
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-            aria-hidden
-            size={18}
-          />
-
-          <Input
-            ref={inputRef}
-            type="text"
-            inputMode="search"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for games..."
-            className="pl-11 pr-12 transition-all duration-200"
-          />
-
-          {query && (
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-muted-foreground hover:text-muted-foreground/80"
-              aria-label="Clear search"
-            >
-              <X size={18} />
-            </button>
-          )}
-        </form>
-      </Nav>
-
-      {/* Search Results Area */}
-      {!hasSearched && !isLoading && renderEmptyState()}
-      {isLoading && renderLoadingState()}
-      {hasSearched &&
-        !isLoading &&
-        results.length === 0 &&
-        renderNoResultsState()}
-      {hasSearched && !isLoading && results.length > 0 && renderResults()}
     </div>
   )
 }

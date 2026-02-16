@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useNavigation } from "@/components/navigation/NavigationProvider"
+import { splitPathSegments } from "@/lib/path"
 import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { Link } from "@/components/navigation"
 import { usePathname } from "next/navigation"
@@ -14,16 +15,17 @@ export default function Footer() {
   const pathname = usePathname()
   const { pendingPathname } = useNavigation()
   const activePathname = pendingPathname ?? pathname
-  const activeTab: Tab = activePathname.startsWith("/wishlist")
-    || activePathname.startsWith("/launch")
-    ? "WISHLIST"
-    : activePathname.startsWith("/library")
-      ? "LIBRARY"
-      : activePathname.startsWith("/more")
-        ? "MORE"
-        : activePathname.startsWith("/search")
-          ? "SEARCH"
-          : ""
+  const activeTab: Tab =
+    activePathname.startsWith("/wishlist") ||
+    activePathname.startsWith("/launch")
+      ? "WISHLIST"
+      : activePathname.startsWith("/library")
+        ? "LIBRARY"
+        : activePathname.startsWith("/more")
+          ? "MORE"
+          : activePathname.startsWith("/search")
+            ? "SEARCH"
+            : ""
 
   const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
   const libraryTriggerRef = useRef<HTMLButtonElement>(null)
@@ -57,7 +59,11 @@ export default function Footer() {
   const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
     runScaleAnimation(searchButtonRef.current)
 
-    if (pathname === "/search") {
+    const pathSegments = splitPathSegments(pathname)
+    const isSearchInputRoute =
+      pathSegments[0] === "search" && pathSegments.length <= 2
+
+    if (isSearchInputRoute) {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent("focus-search-input"))
     }

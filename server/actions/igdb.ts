@@ -513,7 +513,7 @@ export const getCachedSearchIGDBGamesDirect = async (query: string) => {
     [query],
     {
       tags: [`search-${query}`],
-      revalidate: 10_800 // 3 hours
+      revalidate: 24 * 60 * 60 // 1 day
     }
   )()
 }
