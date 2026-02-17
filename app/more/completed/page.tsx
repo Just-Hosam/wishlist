@@ -17,7 +17,7 @@ export default async function CompletedList() {
   }
 
   return (
-    <div className="custom-slide-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
+    <div className="custom-slide-down-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
       {games.map((game, index) => (
         <CompletedGameCard game={game} index={index} key={game.id} />
       ))}

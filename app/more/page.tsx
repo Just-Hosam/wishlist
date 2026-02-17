@@ -6,7 +6,7 @@ import { ThemePicker } from "@/components/theme/ThemePicker"
 
 export default function MorePage() {
   return (
-    <div className="custom-slide-fade-in mt-2">
+    <div className="custom-slide-down-fade-in mt-2">
       <h3 className="mb-2 text-sm font-semibold text-muted-foreground">
         Pages
       </h3>

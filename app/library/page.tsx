@@ -23,7 +23,7 @@ export default async function LibraryPage() {
   return (
     <>
       {hasNowPlaying && (
-        <div className="custom-slide-fade-in">
+        <div className="custom-slide-down-fade-in">
           <div className="flex items-center gap-2 pb-4 font-semibold">
             <PlayCircle size={17} strokeWidth={2.5} /> Now Playing
           </div>
@@ -35,7 +35,7 @@ export default async function LibraryPage() {
         </div>
       )}
       {hasBacklog && (
-        <div className="custom-slide-fade-in">
+        <div className="custom-slide-down-fade-in">
           {hasNowPlaying && (
             <div className="mt-8 flex items-center gap-2 bg-background pb-4 font-semibold">
               <Layers size={17} strokeWidth={2.5} />

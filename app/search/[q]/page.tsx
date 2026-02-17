@@ -31,7 +31,7 @@ export default async function SearchResultsPage({ params }: Props) {
 
   if (error) {
     return (
-      <div className="custom-slide-fade-in flex flex-col items-center justify-center pt-20 text-center">
+      <div className="custom-slide-down-fade-in flex flex-col items-center justify-center pt-20 text-center">
         <Search className="mb-4 h-16 w-16 text-gray-300" />
         <h2 className="mb-2 text-xl font-semibold text-destructive">
           Something went wrong
@@ -43,7 +43,7 @@ export default async function SearchResultsPage({ params }: Props) {
 
   if (results.length === 0) {
     return (
-      <div className="custom-slide-fade-in flex flex-col items-center justify-center pt-20 text-center">
+      <div className="custom-slide-down-fade-in flex flex-col items-center justify-center pt-20 text-center">
         <Search className="mb-4 h-16 w-16 text-gray-300" />
         <h2 className="mb-2 text-xl font-semibold text-gray-700">
           No games found
@@ -56,7 +56,7 @@ export default async function SearchResultsPage({ params }: Props) {
   }
 
   return (
-    <div className="custom-slide-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
+    <div className="custom-slide-down-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
         <div className="relative" key={game.id}>
           <Popover>

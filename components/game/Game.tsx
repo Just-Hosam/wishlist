@@ -48,7 +48,7 @@ export function Game({
   const steamDBUrl = `https://steamdb.info/app/${steamId}/`
 
   return (
-    <div className="custom-slide-fade-in">
+    <div className="custom-slide-down-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
         <div className="mb-5 h-[246px] w-[185px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image

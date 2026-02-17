@@ -102,7 +102,7 @@ body {
   }
 }
 
-@keyframes slideFadeIn {
+@keyframes slideDownFadeIn {
   from {
     opacity: 0;
     transform: translateY(-12px);
@@ -113,8 +113,8 @@ body {
   }
 }
 
-.custom-slide-fade-in {
-  animation: slideFadeIn 300ms ease-in-out;
+.custom-slide-down-fade-in {
+  animation: slideDownFadeIn 300ms ease-in-out;
 }
 
 @keyframes fadeIn {

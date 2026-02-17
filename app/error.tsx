@@ -5,7 +5,7 @@ import { Link } from "@/components/navigation"
 
 export default function ErrorPage() {
   return (
-    <div className="custom-slide-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
+    <div className="custom-slide-down-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
       <h1 className="text-7xl font-bold text-destructive">ERROR</h1>
       <h2 className="mt-4 text-3xl font-semibold text-destructive">
         Something went wrong
