@@ -19,7 +19,7 @@ export default async function WishlistPage() {
   }
 
   return (
-    <div className="custom-slide-down-fade-in grid gap-4">
+    <div className="custom-slide-up-fade-in grid gap-4">
       {wishlistGames.map((game, index) => {
         const nintendoPrice = game?.prices?.find(
           ({ platform }) => Platform.NINTENDO === platform

@@ -1,13 +1,17 @@
 "use client"
 
-import { decodePathSegment, normalizePathname, splitPathSegments } from "@/lib/path"
+import {
+  decodePathSegment,
+  normalizePathname,
+  splitPathSegments
+} from "@/lib/path"
 import { Gamepad2 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
+import { SearchBar } from "../game/SearchBar"
 import { useNavigation } from "../navigation/NavigationProvider"
 import { BackButton } from "./BackButton"
 import { Nav } from "./Nav"
-import { SearchBar } from "../game/SearchBar"
 
 export function Header() {
   const pathname = usePathname()

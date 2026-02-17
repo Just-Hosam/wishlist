@@ -10,7 +10,7 @@ import { Link } from "@/components/navigation"
 
 export default function AboutPage() {
   return (
-    <div className="custom-slide-down-fade-in">
+    <div className="custom-slide-up-fade-in">
       <Gamepad2 size={130} strokeWidth={1.45} className="mx-auto -mb-2" />
       <h1 className="mb-2 text-center text-4xl font-semibold">Playward</h1>
       <div className="mb-7 text-center text-xs text-muted-foreground">

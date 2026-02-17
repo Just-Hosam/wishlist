@@ -3,7 +3,7 @@ import { Link } from "@/components/navigation"
 
 export default function NotFoundPage() {
   return (
-    <div className="custom-slide-down-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
+    <div className="custom-slide-up-fade-in flex min-h-[70vh] flex-col items-center justify-center text-center">
       <h1 className="text-8xl font-bold text-destructive">404</h1>
       <h2 className="mt-4 text-3xl font-semibold text-destructive">
         Page not found
