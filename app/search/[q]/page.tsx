@@ -31,7 +31,7 @@ export default async function SearchResultsPage({ params }: Props) {
 
   if (error) {
     return (
-      <div className="custom-slide-down-fade-in flex flex-col items-center justify-center pt-20 text-center">
+      <div className="custom-slide-up-fade-in flex flex-col items-center justify-center pt-20 text-center">
         <Search className="mb-4 h-16 w-16 text-gray-300" />
         <h2 className="mb-2 text-xl font-semibold text-destructive">
           Something went wrong
@@ -43,7 +43,7 @@ export default async function SearchResultsPage({ params }: Props) {
 
   if (results.length === 0) {
     return (
-      <div className="custom-slide-down-fade-in flex flex-col items-center justify-center pt-20 text-center">
+      <div className="custom-slide-up-fade-in flex flex-col items-center justify-center pt-20 text-center">
         <Search className="mb-4 h-16 w-16 text-gray-300" />
         <h2 className="mb-2 text-xl font-semibold text-gray-700">
           No games found
