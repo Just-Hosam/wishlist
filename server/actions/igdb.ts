@@ -380,7 +380,7 @@ export async function searchIGDBGamesDirect(
           & themes != (42) 
           & keywords != (343, 847, 2509, 3586, 26306);
         
-          limit 100;
+          limit 50;
       `.trim()
     })
 
