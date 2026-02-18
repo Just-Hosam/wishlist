@@ -8,7 +8,7 @@ export function Nav({ children }: NavProps) {
   return (
     <nav
       className={cn(
-        "absolute left-0 right-0 top-0 z-30 m-auto flex min-h-[84px] max-w-[1200px] items-center gap-4 bg-gradient-to-b from-[#fafafa] via-[#fafafa]/65 via-55% to-transparent px-5 pb-6 pt-3"
+        "absolute left-0 right-0 top-0 z-30 m-auto flex min-h-[92px] max-w-[1200px] items-center gap-4 bg-gradient-to-b from-[#fafafa] via-[#fafafa]/65 via-55% to-transparent px-5 pb-7 pt-4"
       )}
     >
       {!!children && children}

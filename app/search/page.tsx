@@ -1,10 +1,13 @@
 import GameCarousel from "@/components/game/GameCarousel"
+import { Button } from "@/components/ui/button"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { tryCatch } from "@/lib/try-catch"
 import {
   getCachedIGDBTrendingGames,
   getCachedIGDBUpcomingGames
 } from "@/server/actions/igdb"
+import { ExternalLink } from "lucide-react"
+import Image from "next/image"
 
 export const dynamic = "force-static"
 
@@ -37,7 +40,7 @@ export default async function SearchPage() {
   return (
     <div className="custom-slide-up-fade-in">
       <div className="mb-8">
-        <h2 className="mt-1 text-lg font-bold">Upcoming</h2>
+        <h2 className="text-lg font-bold">Upcoming</h2>
         <p className="mb-4 text-xs text-muted-foreground">
           Don't miss these upcoming releases.
         </p>
@@ -49,7 +52,7 @@ export default async function SearchPage() {
         />
       </div>
 
-      <div>
+      <div className="mb-8">
         <h2 className="text-lg font-bold">Trending</h2>
         <p className="mb-4 text-xs text-muted-foreground">
           Explore these popular titles.

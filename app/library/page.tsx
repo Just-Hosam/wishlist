@@ -22,7 +22,7 @@ export default async function LibraryPage() {
     <>
       {hasNowPlaying && (
         <div className="custom-slide-up-fade-in mb-8">
-          <h2 className="mt-1 text-lg font-bold">Now Playing</h2>
+          <h2 className="text-lg font-bold">Now Playing</h2>
           <p className="mb-4 text-xs text-muted-foreground">
             Games you're playing right now.
           </p>
