@@ -39,9 +39,9 @@ export default async function SearchPage() {
 
   return (
     <div className="custom-slide-up-fade-in">
-      <div className="mb-8">
+      <div className="mb-9">
         <h2 className="text-lg font-bold">Upcoming</h2>
-        <p className="mb-4 text-xs text-muted-foreground">
+        <p className="mb-3 text-xs text-muted-foreground">
           Don't miss these upcoming releases.
         </p>
         <GameCarousel
@@ -52,9 +52,9 @@ export default async function SearchPage() {
         />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-9">
         <h2 className="text-lg font-bold">Trending</h2>
-        <p className="mb-4 text-xs text-muted-foreground">
+        <p className="mb-3 text-xs text-muted-foreground">
           Explore these popular titles.
         </p>
         <GameCarousel
@@ -67,7 +67,7 @@ export default async function SearchPage() {
 
       <div>
         <h2 className="text-lg font-bold">External</h2>
-        <p className="mb-4 text-xs text-muted-foreground">
+        <p className="mb-3 text-xs text-muted-foreground">
           Check out these resources.
         </p>
         <a

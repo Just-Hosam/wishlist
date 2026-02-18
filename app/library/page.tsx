@@ -21,9 +21,9 @@ export default async function LibraryPage() {
   return (
     <>
       {hasNowPlaying && (
-        <div className="custom-slide-up-fade-in mb-8">
+        <div className="custom-slide-up-fade-in mb-9">
           <h2 className="text-lg font-bold">Now Playing</h2>
-          <p className="mb-4 text-xs text-muted-foreground">
+          <p className="mb-3 text-xs text-muted-foreground">
             Games you're playing right now.
           </p>
           <GameCarousel
@@ -39,7 +39,7 @@ export default async function LibraryPage() {
           {hasNowPlaying && (
             <>
               <h2 className="text-lg font-bold">Backlog</h2>
-              <p className="mb-4 text-xs text-muted-foreground">
+              <p className="mb-3 text-xs text-muted-foreground">
                 Games you own.
               </p>
             </>
