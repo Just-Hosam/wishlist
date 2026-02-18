@@ -74,21 +74,21 @@ function SigninHeader() {
   return (
     <div className="flex items-center gap-3">
       <Gamepad2 size={48} />
-      <h1 className="text-4xl font-semibold">Playward</h1>
+      <h1 className="text-5xl font-semibold">Playward</h1>
     </div>
   )
 }
 
 function WishlistHeader() {
-  return <h1 className="text-4xl font-semibold">Wishlist</h1>
+  return <h1 className="text-5xl font-semibold">Wishlist</h1>
 }
 
 function LibraryHeader() {
-  return <h1 className="text-4xl font-semibold">Library</h1>
+  return <h1 className="text-5xl font-semibold">Library</h1>
 }
 
 function MoreHeader() {
-  return <h1 className="text-4xl font-semibold">More</h1>
+  return <h1 className="text-5xl font-semibold">More</h1>
 }
 
 function SearchHeader({ initialQuery = "" }: { initialQuery?: string }) {
