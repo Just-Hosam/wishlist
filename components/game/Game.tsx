@@ -14,6 +14,7 @@ import {
   getCachedBackloggdTimeToBeat,
   getCachedIGDBTimeToBeat
 } from "@/server/actions/time-to-beat"
+import { tryCatch } from "@/lib/try-catch"
 
 interface Props {
   imageId: string
@@ -316,37 +317,41 @@ export function Game({
 }
 
 async function IGDBTimeToBeat({ igdbGameId }: { igdbGameId: string }) {
-  try {
-    const timeToBeat = await getCachedIGDBTimeToBeat(igdbGameId)
+  const { data: timeToBeat, error } = await tryCatch(
+    getCachedIGDBTimeToBeat(igdbGameId)
+  )
 
-    return (
-      <TimeToBeat
-        story={timeToBeat?.story || 0}
-        extra={timeToBeat?.extra || 0}
-        complete={timeToBeat?.complete || 0}
-        title="IGDB API"
-      />
-    )
-  } catch (error) {
+  if (error) {
     console.error("Error fetching IGDB time to beat info:", error)
     return <TimeToBeat title="IGDB API" />
   }
+
+  return (
+    <TimeToBeat
+      story={timeToBeat?.story || 0}
+      extra={timeToBeat?.extra || 0}
+      complete={timeToBeat?.complete || 0}
+      title="IGDB API"
+    />
+  )
 }
 
 async function BackloggdTimeToBeat({ slug }: { slug: string }) {
-  try {
-    const timeToBeat = await getCachedBackloggdTimeToBeat(slug)
+  const { data: timeToBeat, error } = await tryCatch(
+    getCachedBackloggdTimeToBeat(slug)
+  )
 
-    return (
-      <TimeToBeat
-        story={timeToBeat?.story || 0}
-        extra={timeToBeat?.extra || 0}
-        complete={timeToBeat?.complete || 0}
-        title="Backloggd"
-      />
-    )
-  } catch (error) {
+  if (error) {
     console.error("Error fetching Backloggd time to beat info:", error)
     return <TimeToBeat title="Backloggd" />
   }
+
+  return (
+    <TimeToBeat
+      story={timeToBeat?.story || 0}
+      extra={timeToBeat?.extra || 0}
+      complete={timeToBeat?.complete || 0}
+      title="Backloggd"
+    />
+  )
 }
