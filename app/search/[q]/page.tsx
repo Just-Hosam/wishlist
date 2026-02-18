@@ -98,7 +98,7 @@ export default async function SearchResultsPage({ params }: Props) {
             passHref
           >
             <div className="flex cursor-pointer flex-col">
-              <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
+              <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
                 {game.coverImageId ? (
                   <Image
                     src={buildIGDBImageUrl(game.coverImageId)}

@@ -45,7 +45,7 @@ const CompletedGameCard = ({ game, index }: CompletedGameCardProps) => (
       }}
     >
       {/* Cover Image - Takes ~half of vertical space */}
-      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200">
+      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
         {game.coverImageUrl && (
           <Image
             src={game.coverImageUrl}
