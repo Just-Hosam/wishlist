@@ -14,6 +14,7 @@ import {
 } from "../ui/drawer"
 import { CircleCheckBig } from "lucide-react"
 import { Accent, ACCENT_STORAGE_KEY } from "@/types/theme"
+import { cn } from "@/lib/utils"
 
 interface Props {
   children: React.ReactNode
@@ -158,6 +159,12 @@ export function ThemePicker({ children }: Props) {
               disabled={isSaving}
               variant="accent"
               onClick={handleSave}
+              className={cn(
+                accent === Accent.PURPLE && "bg-[hsl(var(--accent-purple))]",
+                accent === Accent.ORANGE && "bg-[hsl(var(--accent-orange))]",
+                accent === Accent.PINK && "bg-[hsl(var(--accent-pink))]",
+                accent === Accent.BLUE && "bg-[hsl(var(--accent-blue))]"
+              )}
             >
               {isSaving ? "Saving..." : "Save"}
             </Button>
