@@ -4,6 +4,49 @@ import { buildRequestHeaders } from "@/lib/request"
 import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
+const IGDB_GAMES_ENDPOINT = "https://api.igdb.com/v4/games"
+const IGDB_POPSCORE_ENDPOINT = "https://api.igdb.com/v4/popularity_primitives"
+
+const IGDB_GAME_FIELDS = `
+  name, slug,
+  summary,
+  first_release_date,
+  websites.type, websites.url,
+  platforms.id,
+  cover.image_id, screenshots.image_id, videos.video_id, videos.name,
+  hypes, rating, rating_count, aggregated_rating, aggregated_rating_count
+`
+
+const IGDB_DISCOVER_WHERE_FILTER = `
+  game_type = (0, 2, 3, 8, 9)
+  & platforms = (48, 167, 130, 508, 6, 169)
+  & first_release_date != null
+  & first_release_date >= 1262329201
+  & summary != null
+  & cover != null
+  & videos != null
+  & genres != null
+  & themes != (42)
+  & keywords != (343, 847, 2509, 3586, 26306)
+`
+
+enum IGDBPopularityType {
+  WANT_TO_PLAY = 2,
+  PLAYING = 3,
+  PLAYED = 4
+}
+
+interface IGDBPopscorePrimitive {
+  game_id: number
+  popularity_type: number
+  value: number
+}
+
+interface RankedIGDBGame {
+  igdbId: number
+  score: number
+}
+
 function escapeIGDBString(input: string): string {
   return input
     .trim()
@@ -26,6 +69,42 @@ function parsePositiveIGDBId(value: string, field: string): number {
   }
 
   return parsed
+}
+
+function getIGDBCredentials() {
+  const CLIENT_ID = process.env.IGDB_CLIENT_ID
+  const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
+
+  if (!CLIENT_ID || !ACCESS_TOKEN) {
+    throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
+  }
+
+  return { CLIENT_ID, ACCESS_TOKEN }
+}
+
+async function queryIGDB<T>(endpoint: string, body: string): Promise<T[]> {
+  const { CLIENT_ID, ACCESS_TOKEN } = getIGDBCredentials()
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: buildRequestHeaders({
+      kind: "api",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "text/plain",
+        accept: "application/json"
+      }
+    }),
+    body
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`IGDB API error (${response.status}): ${errorText}`)
+  }
+
+  return (await response.json()) as T[]
 }
 
 /**
@@ -327,96 +406,124 @@ function segmentSteamURL(url: string): string | null {
   return simpleMatch ? simpleMatch[1] : null
 }
 
+function transformRawIGDBGame(game: RawIGDBAPIGame): IGDBGame {
+  const storeSegments = extractStoreSegments(game.websites || [])
+
+  return {
+    id: game.id.toString(),
+    igdbId: game.id,
+    name: game.name,
+    slug: game.slug,
+    summary: game.summary || "",
+    coverImageId: game.cover?.image_id || "",
+    screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
+    videoId: chooseVideoId(game.videos),
+    videoIds: sortVideos(game.videos),
+    platforms: transformIGDBPlatforms(game.platforms?.map((p) => p.id) || []),
+    firstReleaseDate: game.first_release_date || 0,
+    rating: game.rating || null,
+    ratingCount: game.rating_count || null,
+    aggregatedRating: game.aggregated_rating || null,
+    aggregatedRatingCount: game.aggregated_rating_count || null,
+    hypes: game.hypes || null,
+    ...storeSegments
+  }
+}
+
+async function fetchIGDBGamesByIds(igdbIds: number[]): Promise<IGDBGame[]> {
+  if (igdbIds.length === 0) return []
+
+  const uniqueIds = [...new Set(igdbIds)]
+    .filter((id) => Number.isSafeInteger(id) && id > 0)
+    .slice(0, 500)
+
+  if (uniqueIds.length === 0) return []
+
+  const rawGames = await queryIGDB<RawIGDBAPIGame>(
+    IGDB_GAMES_ENDPOINT,
+    `
+      fields ${IGDB_GAME_FIELDS};
+
+      where id = (${uniqueIds.join(",")})
+        & ${IGDB_DISCOVER_WHERE_FILTER};
+
+      limit ${uniqueIds.length};
+    `.trim()
+  )
+
+  const transformedById = new Map(
+    rawGames.map((game) => [game.id, transformRawIGDBGame(game)])
+  )
+
+  return uniqueIds
+    .map((id) => transformedById.get(id))
+    .filter((game): game is IGDBGame => Boolean(game))
+}
+
+async function fetchPopscoreByType(
+  popularityType: IGDBPopularityType,
+  limit = 200
+): Promise<IGDBPopscorePrimitive[]> {
+  const safeLimit = Math.min(Math.max(limit, 1), 500)
+
+  return queryIGDB<IGDBPopscorePrimitive>(
+    IGDB_POPSCORE_ENDPOINT,
+    `
+      fields game_id, popularity_type, value;
+
+      where popularity_type = ${popularityType};
+
+      sort value desc;
+      limit ${safeLimit};
+    `.trim()
+  )
+}
+
+function rankGamesFromPopscore(
+  primitives: IGDBPopscorePrimitive[],
+  weights: Partial<Record<IGDBPopularityType, number>>
+): RankedIGDBGame[] {
+  const scoreByGameId = new Map<number, number>()
+
+  for (const primitive of primitives) {
+    const popularityType = primitive.popularity_type as IGDBPopularityType
+    const weight = weights[popularityType]
+    if (!weight) continue
+
+    const current = scoreByGameId.get(primitive.game_id) ?? 0
+    scoreByGameId.set(primitive.game_id, current + primitive.value * weight)
+  }
+
+  return [...scoreByGameId.entries()]
+    .map(([igdbId, score]) => ({ igdbId, score }))
+    .sort((a, b) => b.score - a.score)
+}
+
 /**
  * Search IGDB API directly and return ranked results
  */
 export async function searchIGDBGamesDirect(
   query: string
 ): Promise<IGDBGame[]> {
-  const CLIENT_ID = process.env.IGDB_CLIENT_ID
-  const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
-
-  if (!CLIENT_ID || !ACCESS_TOKEN) {
-    throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
-  }
-
   // Sanitize and limit query length to prevent abuse
   const sanitizedQuery = escapeIGDBString(query).slice(0, 100)
   if (!sanitizedQuery) return []
 
   try {
-    const response = await fetch("https://api.igdb.com/v4/games", {
-      method: "POST",
-      headers: buildRequestHeaders({
-        kind: "api",
-        headers: {
-          "Client-ID": CLIENT_ID,
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          "Content-Type": "text/plain",
-          accept: "application/json"
-        }
-      }),
-      body: `
+    const rawGames = await queryIGDB<RawIGDBAPIGame>(
+      IGDB_GAMES_ENDPOINT,
+      `
         search "${sanitizedQuery}";
-        
-        fields 
-          name, slug,
-          summary,
-          first_release_date,
-          websites.type, websites.url,
-          platforms.id,
-          cover.image_id, screenshots.image_id, videos.video_id, videos.name,
-          hypes, rating, rating_count, aggregated_rating, aggregated_rating_count;
 
-        where 
-          game_type = (0, 2, 3, 8, 9)
-          & platforms = (48, 167, 130, 508, 6, 169)
-          & first_release_date != null 
-          & first_release_date >= 1262329201
-          & summary != null
-          & cover != null
-          & videos != null
-          & genres != null
-          & themes != (42) 
-          & keywords != (343, 847, 2509, 3586, 26306);
-        
-          limit 50;
+        fields ${IGDB_GAME_FIELDS};
+
+        where ${IGDB_DISCOVER_WHERE_FILTER};
+
+        limit 50;
       `.trim()
-    })
+    )
 
-    if (!response.ok) {
-      const errorText = await response.text()
-      throw new Error(`IGDB API error (${response.status}): ${errorText}`)
-    }
-
-    const rawGames: RawIGDBAPIGame[] = await response.json()
-
-    // Transform to IGDBGame format
-    const games: IGDBGame[] = rawGames.map((game) => {
-      const storeSegments = extractStoreSegments(game.websites || [])
-
-      return {
-        id: game.id.toString(),
-        igdbId: game.id,
-        name: game.name,
-        slug: game.slug,
-        summary: game.summary || "",
-        coverImageId: game.cover?.image_id || "",
-        screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
-        videoId: chooseVideoId(game.videos),
-        videoIds: sortVideos(game.videos),
-        platforms: transformIGDBPlatforms(
-          game.platforms?.map((p) => p.id) || []
-        ),
-        firstReleaseDate: game.first_release_date || 0,
-        rating: game.rating || null,
-        ratingCount: game.rating_count || null,
-        aggregatedRating: game.aggregated_rating || null,
-        aggregatedRatingCount: game.aggregated_rating_count || null,
-        hypes: game.hypes || null,
-        ...storeSegments
-      }
-    })
+    const games = rawGames.map(transformRawIGDBGame)
 
     const rankedGames = rankGamesByQuality(games)
 
@@ -433,77 +540,114 @@ export async function searchIGDBGamesDirect(
 export async function getIGDBGameById(
   igdbId: string
 ): Promise<IGDBGame | null> {
-  const CLIENT_ID = process.env.IGDB_CLIENT_ID
-  const ACCESS_TOKEN = process.env.IGDB_ACCESS_TOKEN
-
-  if (!CLIENT_ID || !ACCESS_TOKEN) {
-    throw new Error("IGDB_CLIENT_ID and IGDB_ACCESS_TOKEN must be provided")
-  }
-
   const safeIgdbId = parsePositiveIGDBId(igdbId, "igdbId")
 
   try {
-    const response = await fetch("https://api.igdb.com/v4/games", {
-      method: "POST",
-      headers: buildRequestHeaders({
-        kind: "api",
-        headers: {
-          "Client-ID": CLIENT_ID,
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          "Content-Type": "text/plain",
-          accept: "application/json"
-        }
-      }),
-      body: `
-        fields 
-          name, slug,
-          summary,
-          first_release_date,
-          websites.type, websites.url,
-          platforms.id,
-          cover.image_id, screenshots.image_id, videos.video_id, videos.name,
-          hypes, rating, rating_count, aggregated_rating, aggregated_rating_count;
+    const rawGames = await queryIGDB<RawIGDBAPIGame>(
+      IGDB_GAMES_ENDPOINT,
+      `
+      fields ${IGDB_GAME_FIELDS};
 
-        where id = ${safeIgdbId};
+      where id = ${safeIgdbId};
       `.trim()
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      throw new Error(`IGDB API error (${response.status}): ${errorText}`)
-    }
-
-    const rawGames: RawIGDBAPIGame[] = await response.json()
+    )
 
     if (rawGames.length === 0) {
       return null
     }
 
-    const game = rawGames[0]
-    const storeSegments = extractStoreSegments(game.websites || [])
-
-    return {
-      id: game.id.toString(),
-      igdbId: game.id,
-      name: game.name,
-      slug: game.slug,
-      summary: game.summary || "",
-      coverImageId: game.cover?.image_id || "",
-      screenshotImageIds: game.screenshots?.map((s) => s.image_id) || [],
-      videoId: chooseVideoId(game.videos),
-      videoIds: sortVideos(game.videos),
-      platforms: transformIGDBPlatforms(game.platforms?.map((p) => p.id) || []),
-      firstReleaseDate: game.first_release_date || 0,
-      rating: game.rating || null,
-      ratingCount: game.rating_count || null,
-      aggregatedRating: game.aggregated_rating || null,
-      aggregatedRatingCount: game.aggregated_rating_count || null,
-      hypes: game.hypes || null,
-      ...storeSegments
-    }
+    return transformRawIGDBGame(rawGames[0])
   } catch (error) {
     console.error("Error fetching IGDB game by ID:", error)
     throw new Error("Failed to fetch IGDB game")
+  }
+}
+
+export async function getIGDBTrendingGames(): Promise<IGDBGame[]> {
+  try {
+    const [wantToPlay, playing, played] = await Promise.all([
+      fetchPopscoreByType(IGDBPopularityType.WANT_TO_PLAY, 180),
+      fetchPopscoreByType(IGDBPopularityType.PLAYING, 180),
+      fetchPopscoreByType(IGDBPopularityType.PLAYED, 120)
+    ])
+
+    const rankedGameIds = rankGamesFromPopscore(
+      [...wantToPlay, ...playing, ...played],
+      {
+        [IGDBPopularityType.WANT_TO_PLAY]: 0.5,
+        [IGDBPopularityType.PLAYING]: 0.35,
+        [IGDBPopularityType.PLAYED]: 0.15
+      }
+    )
+
+    const topIds = rankedGameIds.slice(0, 100).map(({ igdbId }) => igdbId)
+    const games = await fetchIGDBGamesByIds(topIds)
+    const scoreByGameId = new Map(
+      rankedGameIds.map((entry) => [entry.igdbId, entry.score])
+    )
+
+    return games
+      .sort(
+        (a, b) =>
+          (scoreByGameId.get(b.igdbId) ?? 0) -
+          (scoreByGameId.get(a.igdbId) ?? 0)
+      )
+      .slice(0, 24)
+  } catch (error) {
+    console.error("Error fetching IGDB trending games:", error)
+    throw new Error("Failed to fetch IGDB trending games")
+  }
+}
+
+export async function getIGDBUpcomingGames(): Promise<IGDBGame[]> {
+  try {
+    const [wantToPlay, playing] = await Promise.all([
+      fetchPopscoreByType(IGDBPopularityType.WANT_TO_PLAY, 220),
+      fetchPopscoreByType(IGDBPopularityType.PLAYING, 120)
+    ])
+
+    const rankedGameIds = rankGamesFromPopscore([...wantToPlay, ...playing], {
+      [IGDBPopularityType.WANT_TO_PLAY]: 0.75,
+      [IGDBPopularityType.PLAYING]: 0.25
+    })
+
+    const topIds = rankedGameIds.slice(0, 140).map(({ igdbId }) => igdbId)
+    const games = await fetchIGDBGamesByIds(topIds)
+    const scoreByGameId = new Map(
+      rankedGameIds.map((entry) => [entry.igdbId, entry.score])
+    )
+
+    const now = Math.floor(Date.now() / 1000)
+    const oneYearFromNow = now + 60 * 60 * 24 * 365
+
+    const sortUpcoming = (a: IGDBGame, b: IGDBGame) => {
+      if (a.firstReleaseDate !== b.firstReleaseDate) {
+        return a.firstReleaseDate - b.firstReleaseDate
+      }
+
+      return (
+        (scoreByGameId.get(b.igdbId) ?? 0) - (scoreByGameId.get(a.igdbId) ?? 0)
+      )
+    }
+
+    const upcomingWithinYear = games
+      .filter(
+        (game) =>
+          game.firstReleaseDate > now && game.firstReleaseDate <= oneYearFromNow
+      )
+      .sort(sortUpcoming)
+
+    if (upcomingWithinYear.length >= 12) {
+      return upcomingWithinYear.slice(0, 24)
+    }
+
+    return games
+      .filter((game) => game.firstReleaseDate > now)
+      .sort(sortUpcoming)
+      .slice(0, 24)
+  } catch (error) {
+    console.error("Error fetching IGDB upcoming games:", error)
+    throw new Error("Failed to fetch IGDB upcoming games")
   }
 }
 
@@ -514,6 +658,35 @@ export const getCachedSearchIGDBGamesDirect = async (query: string) => {
     {
       tags: [`search-${query}`],
       revalidate: 24 * 60 * 60 // 1 day
+    }
+  )()
+}
+
+export const getCachedIGDBGameById = async (igdbId: string) => {
+  return unstable_cache(async () => await getIGDBGameById(igdbId), [igdbId], {
+    tags: [`igdb-game-${igdbId}`],
+    revalidate: 24 * 60 * 60 // 1 day
+  })()
+}
+
+export const getCachedIGDBTrendingGames = async () => {
+  return unstable_cache(
+    async () => await getIGDBTrendingGames(),
+    ["igdb-trending-games"],
+    {
+      tags: ["search-trending-games"],
+      revalidate: false
+    }
+  )()
+}
+
+export const getCachedIGDBUpcomingGames = async () => {
+  return unstable_cache(
+    async () => await getIGDBUpcomingGames(),
+    ["igdb-upcoming-games"],
+    {
+      tags: ["search-upcoming-games"],
+      revalidate: false
     }
   )()
 }

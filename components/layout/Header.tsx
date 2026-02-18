@@ -60,7 +60,14 @@ function resolveSearchHeader(pathname: string): ReactNode | null {
   }
 
   if (segments.length === 2) {
-    return <SearchHeader initialQuery={decodePathSegment(segments[1])} />
+    return (
+      <div className="flex w-full items-center gap-2">
+        <BackButton />
+        <div className="flex-1">
+          <SearchHeader initialQuery={decodePathSegment(segments[1])} />
+        </div>
+      </div>
+    )
   }
 
   if (segments.length >= 3) {
@@ -74,21 +81,21 @@ function SigninHeader() {
   return (
     <div className="flex items-center gap-3">
       <Gamepad2 size={48} />
-      <h1 className="text-5xl font-semibold">Playward</h1>
+      <h1 className="text-4xl font-bold">Playward</h1>
     </div>
   )
 }
 
 function WishlistHeader() {
-  return <h1 className="text-5xl font-semibold">Wishlist</h1>
+  return <h1 className="text-4xl font-bold">Wishlist</h1>
 }
 
 function LibraryHeader() {
-  return <h1 className="text-5xl font-semibold">Library</h1>
+  return <h1 className="text-4xl font-bold">Library</h1>
 }
 
 function MoreHeader() {
-  return <h1 className="text-5xl font-semibold">More</h1>
+  return <h1 className="text-4xl font-bold">More</h1>
 }
 
 function SearchHeader({ initialQuery = "" }: { initialQuery?: string }) {

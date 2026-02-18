@@ -62,11 +62,10 @@ export const getCachedLibraryGames = async (userId: string) => {
       return games.map((game) => ({
         id: game.id,
         name: game.igdbName || "Untitled Game",
-        length: game.length,
-        category: game.category,
         coverImageUrl: game.igdbCoverImageId
           ? buildIGDBImageUrl(game.igdbCoverImageId)
           : null,
+        length: game.length,
         platforms: game.platforms,
         nowPlaying: game.nowPlaying,
         createdAt: game.createdAt.toISOString(),
@@ -95,11 +94,11 @@ export const getCachedCompletedGames = async (userId: string) => {
       return games.map((game) => ({
         id: game.id,
         name: game.igdbName || "Untitled Game",
-        length: game.length,
-        category: game.category,
         coverImageUrl: game.igdbCoverImageId
           ? buildIGDBImageUrl(game.igdbCoverImageId)
           : null,
+        releaseDate: game.igdbFirstReleaseDate,
+        length: game.length,
         platforms: game.platforms,
         createdAt: game.createdAt.toISOString(),
         updatedAt: game.updatedAt.toISOString()
