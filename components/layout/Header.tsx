@@ -99,7 +99,7 @@ function AboutHeader() {
   return (
     <>
       <BackButton />
-      <h1 className="text-2xl font-semibold">About</h1>
+      <h1 className="text-xl font-bold">About</h1>
     </>
   )
 }
@@ -108,7 +108,7 @@ function CompletedHeader() {
   return (
     <>
       <BackButton />
-      <h1 className="text-2xl font-semibold">Completed</h1>
+      <h1 className="text-xl font-bold">Completed</h1>
     </>
   )
 }
