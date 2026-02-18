@@ -31,6 +31,7 @@ A full-stack video game backlog manager and price tracker. Search for games, org
 </p>
 
 <p align="center">
+	<img src="public/screenshots/Searching.PNG" alt="Search" width="32%" />
 	<img src="public/screenshots/Add_to_wishlist.PNG" alt="Add to wishlist" width="32%" />
 	<img src="public/screenshots/Add_to_library.PNG" alt="Add to library" width="32%" />
 </p>
