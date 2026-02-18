@@ -61,6 +61,60 @@ export default async function SearchPage() {
           showPlatforms
         />
       </div>
+
+      <div>
+        <h2 className="text-lg font-bold">External</h2>
+        <p className="mb-4 text-xs text-muted-foreground">
+          Check out these resources.
+        </p>
+        <a
+          href="https://www.playstation.com/en-ca/ps-plus/games/?category=MONTHLY_GAMES&sort=last#plus-container"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-2 block"
+        >
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-auto w-full justify-between gap-3 px-6 py-4"
+          >
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logos/ps-plus.svg"
+                alt="PlayStation Plus logo"
+                width={17}
+                height={17}
+                className="rounded-sm drop-shadow-2xl"
+              />
+              <span className="font-semibold">Monthly Games</span>
+            </div>
+            <ExternalLink size={16} className="text-muted-foreground" />
+          </Button>
+        </a>
+        <a
+          href="https://www.playstation.com/en-ca/ps-plus/games/?category=GAME_CATALOG&sort=last#plus-container"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-auto w-full justify-between gap-3 px-6 py-4"
+          >
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logos/ps-plus.svg"
+                alt="PlayStation Plus logo"
+                width={17}
+                height={17}
+                className="rounded-sm drop-shadow-2xl"
+              />
+              <span className="font-semibold">Game Catalog</span>
+            </div>
+            <ExternalLink size={16} className="text-muted-foreground" />
+          </Button>
+        </a>
+      </div>
     </div>
   )
 }
