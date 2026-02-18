@@ -40,6 +40,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
   }
 
   const handleClearSearch = () => {
+    router.push("/search")
     setQuery("")
     inputRef.current?.focus()
   }

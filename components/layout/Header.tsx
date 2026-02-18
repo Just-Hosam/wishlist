@@ -60,14 +60,7 @@ function resolveSearchHeader(pathname: string): ReactNode | null {
   }
 
   if (segments.length === 2) {
-    return (
-      <div className="flex w-full items-center gap-2">
-        <BackButton />
-        <div className="flex-1">
-          <SearchHeader initialQuery={decodePathSegment(segments[1])} />
-        </div>
-      </div>
-    )
+    return <SearchHeader initialQuery={decodePathSegment(segments[1])} />
   }
 
   if (segments.length >= 3) {
