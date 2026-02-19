@@ -1,7 +1,7 @@
 "use server"
 
 import { buildRequestHeaders } from "@/lib/request"
-import { IGDBGame, Platform, RawIGDBAPIGame } from "@/types"
+import { IGDBGame, Platform, RawIGDBGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
 const IGDB_GAMES_ENDPOINT = "https://api.igdb.com/v4/games"
@@ -406,7 +406,7 @@ function segmentSteamURL(url: string): string | null {
   return simpleMatch ? simpleMatch[1] : null
 }
 
-function transformRawIGDBGame(game: RawIGDBAPIGame): IGDBGame {
+function transformRawIGDBGame(game: RawIGDBGame): IGDBGame {
   const storeSegments = extractStoreSegments(game.websites || [])
 
   return {
@@ -439,7 +439,7 @@ async function fetchIGDBGamesByIds(igdbIds: number[]): Promise<IGDBGame[]> {
 
   if (uniqueIds.length === 0) return []
 
-  const rawGames = await queryIGDB<RawIGDBAPIGame>(
+  const rawGames = await queryIGDB<RawIGDBGame>(
     IGDB_GAMES_ENDPOINT,
     `
       fields ${IGDB_GAME_FIELDS};
@@ -510,7 +510,7 @@ export async function searchIGDBGamesDirect(
   if (!sanitizedQuery) return []
 
   try {
-    const rawGames = await queryIGDB<RawIGDBAPIGame>(
+    const rawGames = await queryIGDB<RawIGDBGame>(
       IGDB_GAMES_ENDPOINT,
       `
         search "${sanitizedQuery}";
@@ -543,7 +543,7 @@ export async function getIGDBGameById(
   const safeIgdbId = parsePositiveIGDBId(igdbId, "igdbId")
 
   try {
-    const rawGames = await queryIGDB<RawIGDBAPIGame>(
+    const rawGames = await queryIGDB<RawIGDBGame>(
       IGDB_GAMES_ENDPOINT,
       `
       fields ${IGDB_GAME_FIELDS};

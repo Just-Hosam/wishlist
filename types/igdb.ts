@@ -22,7 +22,7 @@ export interface IGDBGame {
   steamUrlSegment?: string | null
 }
 
-export interface RawIGDBAPIGame {
+export interface RawIGDBGame {
   id: number
   name: string
   slug: string

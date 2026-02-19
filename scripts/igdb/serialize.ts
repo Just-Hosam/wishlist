@@ -1,4 +1,4 @@
-import { RawIGDBAPIGame } from "@/types"
+import { RawIGDBGame } from "@/types"
 import { Platform } from "@prisma/client"
 
 const platformMap: Record<number, Platform> = {
@@ -20,9 +20,7 @@ const VIDEO_NAME_RANKING = [
   "Game Intro"
 ]
 
-const chooseVideoId = (
-  videos: RawIGDBAPIGame["videos"] = []
-): string | null => {
+const chooseVideoId = (videos: RawIGDBGame["videos"] = []): string | null => {
   if (videos.length === 0) {
     return null
   }
@@ -65,7 +63,7 @@ const segmentSteamURL = (url: string): string | null => {
   return match ? match[1] : null
 }
 
-const mapPlatforms = (platforms: RawIGDBAPIGame["platforms"]): Platform[] => {
+const mapPlatforms = (platforms: RawIGDBGame["platforms"]): Platform[] => {
   if (!platforms) {
     return []
   }
@@ -76,7 +74,7 @@ const mapPlatforms = (platforms: RawIGDBAPIGame["platforms"]): Platform[] => {
 }
 
 const findWebsiteByType = (
-  websites: RawIGDBAPIGame["websites"],
+  websites: RawIGDBGame["websites"],
   type: number
 ): string | null => {
   if (!websites) {
@@ -86,7 +84,7 @@ const findWebsiteByType = (
   return websites.find((website) => website.type === type)?.url ?? null
 }
 
-export const serializeGame = (game: RawIGDBAPIGame) => {
+export const serializeGame = (game: RawIGDBGame) => {
   return {
     igdbId: game.id,
     name: game.name,
@@ -114,5 +112,4 @@ export const serializeGame = (game: RawIGDBAPIGame) => {
   }
 }
 
-export const serializeGames = (games: RawIGDBAPIGame[]) =>
-  games.map(serializeGame)
+export const serializeGames = (games: RawIGDBGame[]) => games.map(serializeGame)
