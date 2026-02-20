@@ -60,7 +60,7 @@ export function Game({
             sizes="185px"
           />
         </div>
-        <h1 className="mb-1 text-2xl font-bold">{name}</h1>
+        <h1 className="mb-1 max-w-[80%] text-2xl font-bold">{name}</h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
@@ -70,7 +70,7 @@ export function Game({
 
       {/* PRICES */}
       <div className="mt-8">
-        <label className="font-medium">Prices</label>
+        <label className="font-semibold">Prices</label>
         <div className="mt-3 space-y-3 pl-2">
           <div className="flex items-center">
             <Image
@@ -139,7 +139,7 @@ export function Game({
       {/* SUMMARY */}
       {summary && (
         <div className="mt-8">
-          <label className="font-medium">Summary</label>
+          <label className="font-semibold">Summary</label>
           <ExpandableText
             text={summary}
             className="mt-2 text-sm text-muted-foreground"
@@ -150,7 +150,7 @@ export function Game({
       {/* SCREENSHOTS */}
       {igdbScreenshotIds && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-medium">Screenshots</label>
+          <label className="mb-4 font-semibold">Screenshots</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
             tabIndex={0}
@@ -186,7 +186,7 @@ export function Game({
       {/* VIDEOS */}
       {igdbVideoIds && igdbVideoIds.length > 0 && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-medium">Videos</label>
+          <label className="mb-4 font-semibold">Videos</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
             tabIndex={0}
@@ -219,7 +219,7 @@ export function Game({
 
       {/* TIME TO BEAT */}
       <div className="mt-8">
-        <label className="mb-3 block font-medium">Time to Beat</label>
+        <label className="mb-3 block font-semibold">Time to Beat</label>
         <div className="space-y-2">
           {igdbSlug && (
             <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
@@ -235,36 +235,12 @@ export function Game({
       {/* MISC */}
       {name && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-medium">Miscellaneous</label>
-          <a
-            href={youtubeReviewSearchUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1"
-          >
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-auto w-full justify-between gap-3 px-6 py-4"
-            >
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/logos/youtube.svg"
-                  alt="YouTube logo"
-                  width={22}
-                  height={22}
-                  className="drop-shadow-2xl"
-                />
-                <span className="font-semibold">Reviews on Youtube</span>
-              </div>
-              <ExternalLink size={16} className="text-muted-foreground" />
-            </Button>
-          </a>
+          <label className="mb-4 font-semibold">External</label>
           <a
             href={hltbSearchUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex-1"
+            className="flex-1"
           >
             <Button
               size="lg"
@@ -280,6 +256,30 @@ export function Game({
                   className="rounded-sm drop-shadow-2xl"
                 />
                 <span className="font-semibold">HLTB Time to Beat</span>
+              </div>
+              <ExternalLink size={16} className="text-muted-foreground" />
+            </Button>
+          </a>
+          <a
+            href={youtubeReviewSearchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 flex-1"
+          >
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-auto w-full justify-between gap-3 px-6 py-4"
+            >
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/logos/youtube.svg"
+                  alt="YouTube logo"
+                  width={22}
+                  height={22}
+                  className="drop-shadow-2xl"
+                />
+                <span className="font-semibold">Reviews on Youtube</span>
               </div>
               <ExternalLink size={16} className="text-muted-foreground" />
             </Button>
@@ -304,7 +304,7 @@ export function Game({
                     height={17}
                     className="rounded-sm drop-shadow-2xl"
                   />
-                  <span className="font-semibold">SteamDB Price History</span>
+                  <span className="font-semibold">Steam Price History</span>
                 </div>
                 <ExternalLink size={16} className="text-muted-foreground" />
               </Button>

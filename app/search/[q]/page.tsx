@@ -63,7 +63,7 @@ export default async function SearchResultsPage({ params }: Props) {
             <PopoverTrigger asChild>
               <Button
                 size="icon"
-                className="absolute right-2 top-2 z-10 size-9"
+                className="absolute right-2 top-2 z-10 size-8"
               >
                 <Plus />
               </Button>
@@ -105,7 +105,7 @@ export default async function SearchResultsPage({ params }: Props) {
                     alt={game.name}
                     fill
                     className="object-cover"
-                    priority={index < 8}
+                    priority={index < 6}
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
                 ) : (

@@ -51,7 +51,9 @@ export default async function WishlistPage() {
 
               <div className="flex min-w-0 flex-1 flex-col px-4 py-3">
                 <header className="items-start justify-between">
-                  <h3 className="mb-1 line-clamp-2 font-medium">{game.name}</h3>
+                  <h3 className="mb-1 line-clamp-2 font-semibold">
+                    {game.name}
+                  </h3>
                   <p className="flex items-center gap-1 text-xs font-normal text-muted-foreground">
                     <Clock
                       size={12}

@@ -40,7 +40,7 @@ export default async function LibraryPage() {
             <>
               <h2 className="text-lg font-bold">Backlog</h2>
               <p className="mb-3 text-xs text-muted-foreground">
-                Games you own.
+                Your to-play collection.
               </p>
             </>
           )}
