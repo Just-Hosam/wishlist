@@ -1,6 +1,7 @@
 "use server"
 
 import { buildRequestHeaders } from "@/lib/request"
+import { tryCatch } from "@/lib/try-catch"
 import { IGDBGame, Platform, RawIGDBGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
@@ -82,7 +83,7 @@ function getIGDBCredentials() {
   return { CLIENT_ID, ACCESS_TOKEN }
 }
 
-async function queryIGDB<T>(endpoint: string, body: string): Promise<T[]> {
+async function queryIGDB<T>(endpoint: string, body: string): Promise<T> {
   const { CLIENT_ID, ACCESS_TOKEN } = getIGDBCredentials()
 
   const response = await fetch(endpoint, {
@@ -104,7 +105,7 @@ async function queryIGDB<T>(endpoint: string, body: string): Promise<T[]> {
     throw new Error(`IGDB API error (${response.status}): ${errorText}`)
   }
 
-  return (await response.json()) as T[]
+  return (await response.json()) as T
 }
 
 /**
@@ -439,7 +440,7 @@ async function fetchIGDBGamesByIds(igdbIds: number[]): Promise<IGDBGame[]> {
 
   if (uniqueIds.length === 0) return []
 
-  const rawGames = await queryIGDB<RawIGDBGame>(
+  const rawGames = await queryIGDB<RawIGDBGame[]>(
     IGDB_GAMES_ENDPOINT,
     `
       fields ${IGDB_GAME_FIELDS};
@@ -460,45 +461,6 @@ async function fetchIGDBGamesByIds(igdbIds: number[]): Promise<IGDBGame[]> {
     .filter((game): game is IGDBGame => Boolean(game))
 }
 
-async function fetchPopscoreByType(
-  popularityType: IGDBPopularityType,
-  limit = 200
-): Promise<IGDBPopscorePrimitive[]> {
-  const safeLimit = Math.min(Math.max(limit, 1), 500)
-
-  return queryIGDB<IGDBPopscorePrimitive>(
-    IGDB_POPSCORE_ENDPOINT,
-    `
-      fields game_id, popularity_type, value;
-
-      where popularity_type = ${popularityType};
-
-      sort value desc;
-      limit ${safeLimit};
-    `.trim()
-  )
-}
-
-function rankGamesFromPopscore(
-  primitives: IGDBPopscorePrimitive[],
-  weights: Partial<Record<IGDBPopularityType, number>>
-): RankedIGDBGame[] {
-  const scoreByGameId = new Map<number, number>()
-
-  for (const primitive of primitives) {
-    const popularityType = primitive.popularity_type as IGDBPopularityType
-    const weight = weights[popularityType]
-    if (!weight) continue
-
-    const current = scoreByGameId.get(primitive.game_id) ?? 0
-    scoreByGameId.set(primitive.game_id, current + primitive.value * weight)
-  }
-
-  return [...scoreByGameId.entries()]
-    .map(([igdbId, score]) => ({ igdbId, score }))
-    .sort((a, b) => b.score - a.score)
-}
-
 /**
  * Search IGDB API directly and return ranked results
  */
@@ -510,7 +472,7 @@ export async function searchIGDBGamesDirect(
   if (!sanitizedQuery) return []
 
   try {
-    const rawGames = await queryIGDB<RawIGDBGame>(
+    const rawGames = await queryIGDB<RawIGDBGame[]>(
       IGDB_GAMES_ENDPOINT,
       `
         search "${sanitizedQuery}";
@@ -543,7 +505,7 @@ export async function getIGDBGameById(
   const safeIgdbId = parsePositiveIGDBId(igdbId, "igdbId")
 
   try {
-    const rawGames = await queryIGDB<RawIGDBGame>(
+    const game = await queryIGDB<RawIGDBGame>(
       IGDB_GAMES_ENDPOINT,
       `
       fields ${IGDB_GAME_FIELDS};
@@ -552,103 +514,127 @@ export async function getIGDBGameById(
       `.trim()
     )
 
-    if (rawGames.length === 0) {
-      return null
-    }
+    if (!game) return null
 
-    return transformRawIGDBGame(rawGames[0])
+    return transformRawIGDBGame(game)
   } catch (error) {
     console.error("Error fetching IGDB game by ID:", error)
     throw new Error("Failed to fetch IGDB game")
   }
 }
 
-export async function getIGDBTrendingGames(): Promise<IGDBGame[]> {
-  try {
-    const [wantToPlay, playing, played] = await Promise.all([
-      fetchPopscoreByType(IGDBPopularityType.WANT_TO_PLAY, 180),
-      fetchPopscoreByType(IGDBPopularityType.PLAYING, 180),
-      fetchPopscoreByType(IGDBPopularityType.PLAYED, 120)
-    ])
+export async function getIGDBMostVisitedGameIds(): Promise<number[]> {
+  const rankedGamesPromise = queryIGDB<IGDBPopscorePrimitive[]>(
+    "https://api.igdb.com/v4/popularity_primitives",
+    `
+      fields game_id;
 
-    const rankedGameIds = rankGamesFromPopscore(
-      [...wantToPlay, ...playing, ...played],
-      {
-        [IGDBPopularityType.WANT_TO_PLAY]: 0.5,
-        [IGDBPopularityType.PLAYING]: 0.35,
-        [IGDBPopularityType.PLAYED]: 0.15
-      }
-    )
+      where popularity_type = 1;
 
-    const topIds = rankedGameIds.slice(0, 100).map(({ igdbId }) => igdbId)
-    const games = await fetchIGDBGamesByIds(topIds)
-    const scoreByGameId = new Map(
-      rankedGameIds.map((entry) => [entry.igdbId, entry.score])
-    )
+      sort value desc;
+      limit 500;
+    `.trim()
+  )
+  const { data: rankedGames, error } = await tryCatch(rankedGamesPromise)
 
-    return games
-      .sort(
-        (a, b) =>
-          (scoreByGameId.get(b.igdbId) ?? 0) -
-          (scoreByGameId.get(a.igdbId) ?? 0)
-      )
-      .slice(0, 24)
-  } catch (error) {
-    console.error("Error fetching IGDB trending games:", error)
-    throw new Error("Failed to fetch IGDB trending games")
-  }
+  if (error) return []
+
+  return rankedGames.map((game) => game.game_id)
 }
 
-export async function getIGDBUpcomingGames(): Promise<IGDBGame[]> {
-  try {
-    const [wantToPlay, playing] = await Promise.all([
-      fetchPopscoreByType(IGDBPopularityType.WANT_TO_PLAY, 220),
-      fetchPopscoreByType(IGDBPopularityType.PLAYING, 120)
-    ])
+export async function getTrendingGames(ids: number[]): Promise<IGDBGame[]> {
+  const formatedIds = `(${ids.join(", ")})`
+  const nowSec = Math.floor(Date.now() / 1000) // today in seconds
+  const oneYearAgo = nowSec - 60 * 60 * 24 * 365 // 1 year ago in seconds
 
-    const rankedGameIds = rankGamesFromPopscore([...wantToPlay, ...playing], {
-      [IGDBPopularityType.WANT_TO_PLAY]: 0.75,
-      [IGDBPopularityType.PLAYING]: 0.25
-    })
+  const trending = await queryIGDB<RawIGDBGame[]>(
+    IGDB_GAMES_ENDPOINT,
+    `
+      fields ${IGDB_GAME_FIELDS};
 
-    const topIds = rankedGameIds.slice(0, 140).map(({ igdbId }) => igdbId)
-    const games = await fetchIGDBGamesByIds(topIds)
-    const scoreByGameId = new Map(
-      rankedGameIds.map((entry) => [entry.igdbId, entry.score])
-    )
+      where id = ${formatedIds}
+        & game_type = (0, 2, 3, 8, 9)
+        & platforms = (48, 167, 130, 508, 6, 169)
+        & first_release_date != null
+        & first_release_date <= ${nowSec}
+        & first_release_date >= ${oneYearAgo}
+        & summary != null
+        & cover != null
+        & videos != null
+        & genres != null
+        & themes != (42)
+        & keywords != (343, 847, 2509, 3586, 26306);
 
-    const now = Math.floor(Date.now() / 1000)
-    const oneYearFromNow = now + 60 * 60 * 24 * 365
+      limit 500;
+    `.trim()
+  )
 
-    const sortUpcoming = (a: IGDBGame, b: IGDBGame) => {
-      if (a.firstReleaseDate !== b.firstReleaseDate) {
-        return a.firstReleaseDate - b.firstReleaseDate
-      }
+  const trendingById = new Map(trending.map((game) => [game.id, game]))
+  const sortedTrending = ids
+    .map((id) => trendingById.get(id))
+    .filter((game): game is RawIGDBGame => Boolean(game))
+    .map(transformRawIGDBGame)
 
-      return (
-        (scoreByGameId.get(b.igdbId) ?? 0) - (scoreByGameId.get(a.igdbId) ?? 0)
-      )
-    }
+  return sortedTrending
+}
 
-    const upcomingWithinYear = games
-      .filter(
-        (game) =>
-          game.firstReleaseDate > now && game.firstReleaseDate <= oneYearFromNow
-      )
-      .sort(sortUpcoming)
+export async function getUpcomingGames(ids: number[]): Promise<IGDBGame[]> {
+  const formatedIds = `(${ids.join(", ")})`
+  const nowSec = Math.floor(Date.now() / 1000) // today in seconds
 
-    if (upcomingWithinYear.length >= 12) {
-      return upcomingWithinYear.slice(0, 24)
-    }
+  const upcoming = await queryIGDB<RawIGDBGame[]>(
+    IGDB_GAMES_ENDPOINT,
+    `
+      fields ${IGDB_GAME_FIELDS};
 
-    return games
-      .filter((game) => game.firstReleaseDate > now)
-      .sort(sortUpcoming)
-      .slice(0, 24)
-  } catch (error) {
-    console.error("Error fetching IGDB upcoming games:", error)
-    throw new Error("Failed to fetch IGDB upcoming games")
-  }
+      where id = ${formatedIds}
+        & game_type = (0, 2, 3, 8, 9)
+        & platforms = (48, 167, 130, 508, 6, 169)
+        & first_release_date != null
+        & first_release_date >= ${nowSec}
+        & summary != null
+        & cover != null
+        & videos != null
+        & genres != null
+        & themes != (42)
+        & keywords != (343, 847, 2509, 3586, 26306);
+
+      sort first_release_date asc;
+
+      limit 500;
+    `.trim()
+  )
+
+  return upcoming.map(transformRawIGDBGame)
+}
+
+export async function getRecommendedGames(): Promise<{
+  upcoming: IGDBGame[]
+  trending: IGDBGame[]
+}> {
+  const { data: ids, error } = await tryCatch(getIGDBMostVisitedGameIds())
+
+  if (!ids) return { upcoming: [], trending: [] }
+
+  // wait 1 second to avoid rate limit
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const { data: trending, error: trendingError } = await tryCatch(
+    getTrendingGames(ids)
+  )
+  if (trendingError)
+    console.error("Error fetching trending games:", trendingError)
+
+  // wait 1 second to avoid rate limit
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const { data: upcoming, error: upcomingError } = await tryCatch(
+    getUpcomingGames(ids)
+  )
+  if (upcomingError)
+    console.error("Error fetching upcoming games:", upcomingError)
+
+  return { trending: trending || [], upcoming: upcoming || [] }
 }
 
 export const getCachedSearchIGDBGamesDirect = async (query: string) => {
@@ -669,23 +655,12 @@ export const getCachedIGDBGameById = async (igdbId: string) => {
   })()
 }
 
-export const getCachedIGDBTrendingGames = async () => {
+export const getCachedRecommendedGames = async () => {
   return unstable_cache(
-    async () => await getIGDBTrendingGames(),
-    ["igdb-trending-games"],
+    async () => await getRecommendedGames(),
+    ["igdb-recommended-games"],
     {
-      tags: ["search-trending-games"],
-      revalidate: false
-    }
-  )()
-}
-
-export const getCachedIGDBUpcomingGames = async () => {
-  return unstable_cache(
-    async () => await getIGDBUpcomingGames(),
-    ["igdb-upcoming-games"],
-    {
-      tags: ["search-upcoming-games"],
+      tags: ["igdb-recommended-games"],
       revalidate: false
     }
   )()

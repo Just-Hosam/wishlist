@@ -2,22 +2,18 @@ import GameCarousel from "@/components/game/GameCarousel"
 import { Button } from "@/components/ui/button"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { tryCatch } from "@/lib/try-catch"
-import {
-  getCachedIGDBTrendingGames,
-  getCachedIGDBUpcomingGames
-} from "@/server/actions/igdb"
+import { getCachedRecommendedGames } from "@/server/actions/igdb"
 import { ExternalLink } from "lucide-react"
 import Image from "next/image"
 
 export const dynamic = "force-static"
 
 export default async function SearchPage() {
-  const [trendingResult, upcomingResult] = await Promise.all([
-    tryCatch(getCachedIGDBTrendingGames()),
-    tryCatch(getCachedIGDBUpcomingGames())
-  ])
+  const { data, error } = await tryCatch(getCachedRecommendedGames())
 
-  const upcomingGames = upcomingResult.data ?? []
+  if (error) return null
+
+  const upcomingGames = data?.upcoming ?? []
   const upcomingCarouselGames = upcomingGames.map((game) => ({
     id: game.id,
     name: game.name,
@@ -27,7 +23,7 @@ export default async function SearchPage() {
     platforms: game.platforms
   }))
 
-  const trendingGames = trendingResult.data ?? []
+  const trendingGames = data?.trending ?? []
   const trendingCarouselGames = trendingGames.map((game) => ({
     id: game.id,
     name: game.name,
