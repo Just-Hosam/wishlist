@@ -505,7 +505,7 @@ export async function getIGDBGameById(
   const safeIgdbId = parsePositiveIGDBId(igdbId, "igdbId")
 
   try {
-    const game = await queryIGDB<RawIGDBGame>(
+    const games = await queryIGDB<RawIGDBGame[]>(
       IGDB_GAMES_ENDPOINT,
       `
       fields ${IGDB_GAME_FIELDS};
@@ -514,9 +514,9 @@ export async function getIGDBGameById(
       `.trim()
     )
 
-    if (!game) return null
+    if (games.length === 0) return null
 
-    return transformRawIGDBGame(game)
+    return transformRawIGDBGame(games[0])
   } catch (error) {
     console.error("Error fetching IGDB game by ID:", error)
     throw new Error("Failed to fetch IGDB game")
@@ -543,6 +543,8 @@ export async function getIGDBMostVisitedGameIds(): Promise<number[]> {
 }
 
 export async function getTrendingGames(ids: number[]): Promise<IGDBGame[]> {
+  if (ids.length === 0) return []
+
   const formatedIds = `(${ids.join(", ")})`
   const nowSec = Math.floor(Date.now() / 1000) // today in seconds
   const oneYearAgo = nowSec - 60 * 60 * 24 * 365 // 1 year ago in seconds
@@ -579,6 +581,8 @@ export async function getTrendingGames(ids: number[]): Promise<IGDBGame[]> {
 }
 
 export async function getUpcomingGames(ids: number[]): Promise<IGDBGame[]> {
+  if (ids.length === 0) return []
+
   const formatedIds = `(${ids.join(", ")})`
   const nowSec = Math.floor(Date.now() / 1000) // today in seconds
 
@@ -614,7 +618,7 @@ export async function getRecommendedGames(): Promise<{
 }> {
   const { data: ids, error } = await tryCatch(getIGDBMostVisitedGameIds())
 
-  if (!ids) return { upcoming: [], trending: [] }
+  if (error || !ids || ids.length === 0) return { upcoming: [], trending: [] }
 
   // wait 1 second to avoid rate limit
   await new Promise((resolve) => setTimeout(resolve, 1000))
