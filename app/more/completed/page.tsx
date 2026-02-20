@@ -16,7 +16,7 @@ export default async function CompletedList() {
 
   return (
     <div className="custom-slide-up-fade-in">
-      <GameList games={games} baseHref="/more/completed" showPlatforms />
+      <GameList games={games} baseHref="/more/completed" />
     </div>
   )
 }
