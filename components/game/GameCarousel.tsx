@@ -30,7 +30,7 @@ export default function GameCarousel({
 }: Props) {
   return (
     <div
-      className="hide-scrollbar -mx-4 flex snap-x snap-mandatory overflow-x-auto scroll-smooth px-4"
+      className="hide-scrollbar -mx-4 flex snap-x snap-mandatory overflow-x-auto scroll-smooth pr-4"
       tabIndex={0}
       role="region"
       aria-label="Game Carousel"
