@@ -9,10 +9,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { tryCatch } from "@/lib/try-catch"
-import {
-  getCachedIGDBTrendingGames,
-  getCachedIGDBUpcomingGames
-} from "@/server/actions/igdb"
+import { getCachedRecommendedGames } from "@/server/actions/igdb"
 import { CheckCircle2, Heart, LibraryBig, Plus } from "lucide-react"
 import { notFound } from "next/navigation"
 
@@ -20,14 +17,16 @@ interface Props {
   params: Promise<{ igdbid: string }>
 }
 
-export default async function TrendingGamePage({ params }: Props) {
+export default async function UpcomingGamePage({ params }: Props) {
   const { igdbid: igdbId } = await params
   if (!igdbId) notFound()
 
-  const { data, error } = await tryCatch(getCachedIGDBUpcomingGames())
+  const { data, error } = await tryCatch(getCachedRecommendedGames())
   if (error) notFound()
 
-  const igdbGame = data.find((game) => game.igdbId === parseInt(igdbId))
+  const igdbGame = data.upcoming.find(
+    (game) => game.igdbId === parseInt(igdbId)
+  )
   if (!igdbGame) notFound()
 
   return (
