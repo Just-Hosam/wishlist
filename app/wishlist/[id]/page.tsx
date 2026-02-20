@@ -33,7 +33,7 @@ export default async function WishlistGamePage({ params }: Props) {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button size="icon" className="absolute right-5 top-3 z-40">
+          <Button size="icon" className="absolute right-5 top-4 z-40">
             <Ellipsis />
           </Button>
         </PopoverTrigger>

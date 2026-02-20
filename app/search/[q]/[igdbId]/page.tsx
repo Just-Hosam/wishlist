@@ -35,7 +35,7 @@ export default async function SearchGamePage({ params }: Props) {
           <Button
             size="lg"
             variant="accent"
-            className="absolute right-5 top-3 z-40"
+            className="absolute right-5 top-4 z-40"
           >
             <Plus />
             Add to
