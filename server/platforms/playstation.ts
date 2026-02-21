@@ -66,14 +66,20 @@ export function extractPrice(html: string): ExtractedPrice | null {
       const cache = json?.cache
       if (!cache) continue
 
-      // Find price data
-      const priceEntry = Object.entries(cache).find(
+      // Find price data and avoid picking the PS Plus Premium upsell if there
+      // is any alternative CTA price result.
+      const priceEntries = Object.entries(cache).filter(
         ([key, item]: [string, any]) => key.includes("GameCTA") && item?.price
       )
 
-      if (!priceEntry) continue
+      if (priceEntries.length === 0) continue
 
-      const price = (priceEntry[1] as any).price
+      const selectedPriceEntry =
+        priceEntries.find(
+          ([, item]) => !isPsPlusPremiumPrice((item as any)?.price)
+        ) || priceEntries[0]
+
+      const price = (selectedPriceEntry[1] as any).price
 
       // Find product name
       const productEntry = Object.entries(cache).find(
@@ -144,6 +150,11 @@ export function extractPrice(html: string): ExtractedPrice | null {
   }
 
   return null
+}
+
+function isPsPlusPremiumPrice(price: any): boolean {
+  if (!price?.isTiedToSubscription) return false
+  return price.upsellText?.toLowerCase().includes("premium") ?? false
 }
 
 export function buildPlayStationStoreUrl(
