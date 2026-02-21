@@ -3,7 +3,7 @@
 import { buildNintendoStoreUrl } from "@/lib/igdb-store-links"
 import { getCachedNintendoPrice } from "@/server/actions/nintendo"
 import { PriceInput } from "@/types"
-import { Loader2 } from "lucide-react"
+import { LoaderCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import PriceLayout from "./PriceLayout"
 
@@ -58,8 +58,8 @@ export default function NintendoPrice({
   return (
     <>
       {!price && !error && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" />
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <LoaderCircle className="h-4 w-4 animate-spin" />
           <span>Fetching price...</span>
         </div>
       )}

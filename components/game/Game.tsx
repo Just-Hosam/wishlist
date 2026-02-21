@@ -1,6 +1,11 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
+import { tryCatch } from "@/lib/try-catch"
 import { formatReleaseDate } from "@/lib/utils"
-import { ExternalLink, Loader2 } from "lucide-react"
+import {
+  getCachedBackloggdTimeToBeat,
+  getCachedIGDBTimeToBeat
+} from "@/server/actions/time-to-beat"
+import { ExternalLink, LoaderCircle } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
 import NintendoPrice from "../pricing/NintendoPrice"
@@ -10,11 +15,6 @@ import { Button } from "../ui/button"
 import { ExpandableText } from "../ui/expandable-text"
 import TimeToBeat from "./TimeToBeat"
 import { YoutubeVideo } from "./YoutubeVideo"
-import {
-  getCachedBackloggdTimeToBeat,
-  getCachedIGDBTimeToBeat
-} from "@/server/actions/time-to-beat"
-import { tryCatch } from "@/lib/try-catch"
 
 interface Props {
   imageId: string
@@ -71,7 +71,7 @@ export function Game({
       {/* PRICES */}
       <div className="mt-8">
         <label className="font-semibold">Prices</label>
-        <div className="mt-3 space-y-3 pl-2">
+        <div className="mt-4 space-y-3 pl-2">
           <div className="flex items-center">
             <Image
               src="/logos/steam.svg"
@@ -82,8 +82,8 @@ export function Game({
             />
             <Suspense
               fallback={
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
                   <span>Fetching price...</span>
                 </div>
               }
@@ -101,8 +101,8 @@ export function Game({
             />
             <Suspense
               fallback={
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
                   <span>Fetching price...</span>
                 </div>
               }
@@ -122,8 +122,8 @@ export function Game({
             />
             <Suspense
               fallback={
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
                   <span>Fetching price...</span>
                 </div>
               }
@@ -219,7 +219,7 @@ export function Game({
 
       {/* TIME TO BEAT */}
       <div className="mt-8">
-        <label className="mb-3 block font-semibold">Time to Beat</label>
+        <label className="mb-4 block font-semibold">Time to Beat</label>
         <div className="space-y-2">
           {igdbSlug && (
             <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
