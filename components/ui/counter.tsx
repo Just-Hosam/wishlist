@@ -43,7 +43,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
       <Button
         type="button"
         variant="secondary"
-        className="min-w-12 flex-1"
+        className="min-w-12 flex-1 text-xl font-normal"
         size="icon"
         onClick={() => handleIncrement(-1)}
       >
@@ -56,12 +56,12 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         max="9999"
         value={value ?? ""}
         onChange={handleInputChange}
-        className="flex-[2] text-center"
+        className="flex-[2] pl-7 text-center"
       />
       <Button
         type="button"
         variant="secondary"
-        className="min-w-12 flex-1"
+        className="min-w-12 flex-1 text-xl font-normal"
         size="icon"
         onClick={() => handleIncrement(1)}
       >
