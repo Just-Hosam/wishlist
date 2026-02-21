@@ -39,7 +39,7 @@ export default async function TrendingGamePage({ params }: Props) {
             className="absolute right-5 top-4 z-40"
           >
             <Plus />
-            Add to
+            Add
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-fit">

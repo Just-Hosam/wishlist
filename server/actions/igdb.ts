@@ -2,7 +2,7 @@
 
 import { buildRequestHeaders } from "@/lib/request"
 import { tryCatch } from "@/lib/try-catch"
-import { IGDBGame, Platform, RawIGDBGame } from "@/types"
+import { IGDBGame, IGDBPopscore, Platform, RawIGDBGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
 const IGDB_GAMES_ENDPOINT = "https://api.igdb.com/v4/games"
@@ -22,7 +22,7 @@ const IGDB_DISCOVER_WHERE_FILTER = `
   game_type = (0, 2, 3, 8, 9)
   & platforms = (48, 167, 130, 508, 6, 169)
   & first_release_date != null
-  & first_release_date >= 1262329201
+  & first_release_date >= 946688461
   & summary != null
   & cover != null
   & videos != null
@@ -30,23 +30,6 @@ const IGDB_DISCOVER_WHERE_FILTER = `
   & themes != (42)
   & keywords != (343, 847, 2509, 3586, 26306)
 `
-
-enum IGDBPopularityType {
-  WANT_TO_PLAY = 2,
-  PLAYING = 3,
-  PLAYED = 4
-}
-
-interface IGDBPopscorePrimitive {
-  game_id: number
-  popularity_type: number
-  value: number
-}
-
-interface RankedIGDBGame {
-  igdbId: number
-  score: number
-}
 
 function escapeIGDBString(input: string): string {
   return input
@@ -524,8 +507,8 @@ export async function getIGDBGameById(
 }
 
 export async function getIGDBMostVisitedGameIds(): Promise<number[]> {
-  const rankedGamesPromise = queryIGDB<IGDBPopscorePrimitive[]>(
-    "https://api.igdb.com/v4/popularity_primitives",
+  const rankedGamesPromise = queryIGDB<IGDBPopscore[]>(
+    IGDB_POPSCORE_ENDPOINT,
     `
       fields game_id;
 

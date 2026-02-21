@@ -39,3 +39,9 @@ export interface RawIGDBGame {
   hypes?: number
   websites?: { id: string; type: number; url: string }[]
 }
+
+export interface IGDBPopscore {
+  game_id: number
+  popularity_type: number
+  value: number
+}
