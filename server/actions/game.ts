@@ -4,14 +4,14 @@ import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory, GameInput, GameOutput } from "@/types"
 import { getServerSession } from "next-auth"
-import { revalidateTag, unstable_cache } from "next/cache"
+import { unstable_cache, updateTag } from "next/cache"
 
 function revalidateGameCategory(category: GameCategory, userId: string) {
-  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`, "max")
+  updateTag(`user-${category.toLowerCase()}-games-${userId}`)
 }
 
 function revalidateGameDetail(gameId: string) {
-  revalidateTag(`game-detail-${gameId}`, "max")
+  updateTag(`game-detail-${gameId}`)
 }
 
 export async function deleteGame(id: string) {
