@@ -24,6 +24,8 @@ export default function PriceLayout({
     currencyMap[currency as keyof typeof currencyMap] || "$"
 
   const formatPrice = (price: number) => {
+    if (price === 0) return "Free"
+
     return `${currencySymbol}${price.toFixed(2)}`
   }
 
