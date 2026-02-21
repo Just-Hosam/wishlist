@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
-  revalidateTag("prices")
+  revalidateTag("prices", "max")
 
   console.log("[CRON] Starting combined price update job...")
 
@@ -36,7 +36,7 @@ export async function GET(request: Request) {
     }
   }
 
-  revalidateTag("wishlist")
+  revalidateTag("wishlist", "max")
 
   const status = errors.length ? 500 : 200
 

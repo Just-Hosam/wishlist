@@ -7,11 +7,11 @@ import { getServerSession } from "next-auth"
 import { revalidateTag, unstable_cache } from "next/cache"
 
 function revalidateGameCategory(category: GameCategory, userId: string) {
-  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
+  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`, "max")
 }
 
 function revalidateGameDetail(gameId: string) {
-  revalidateTag(`game-detail-${gameId}`)
+  revalidateTag(`game-detail-${gameId}`, "max")
 }
 
 export async function deleteGame(id: string) {

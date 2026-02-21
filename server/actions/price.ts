@@ -77,7 +77,7 @@ export async function linkPriceToGame(
     })
   }
 
-  revalidateTag(`game-detail-${gameId}`)
+  revalidateTag(`game-detail-${gameId}`, "max")
 }
 
 export async function unlinkPriceFromGame(
@@ -111,7 +111,7 @@ export async function unlinkPriceFromGame(
     })
   }
 
-  revalidateTag(`game-detail-${gameId}`)
+  revalidateTag(`game-detail-${gameId}`, "max")
 }
 
 export async function getTrackedPlatformsForGame(

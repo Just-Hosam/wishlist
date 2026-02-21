@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
-  revalidateTag("nintendo-prices")
+  revalidateTag("nintendo-prices", "max")
 
   try {
     const result = await runNintendoPriceUpdate()
