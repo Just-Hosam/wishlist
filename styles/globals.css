@@ -154,3 +154,16 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes footerSlideUp {
+  from {
+    transform: translateY(120px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.custom-footer-slide-up {
+  animation: footerSlideUp 500ms ease-in-out;
+}
