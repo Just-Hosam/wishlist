@@ -74,7 +74,7 @@ export default async function SearchPage() {
       <div className="mb-9">
         <h2 className="text-lg font-bold">Released</h2>
         <p className="mb-3 text-xs text-muted-foreground">
-          Recently released games.
+          New and notable games.
         </p>
         <GameCarousel
           games={releasedCarouselGames}

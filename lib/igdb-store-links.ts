@@ -77,9 +77,33 @@ export function buildSteamStoreUrl(
 ): string | null {
   if (!urlSegment) return null
 
-  const appId = urlSegment.split("/")[1]
+  const appId = extractSteamAppId(urlSegment)
+  if (!appId) return null
 
   return `https://store.steampowered.com/api/appdetails?appids=${appId}&cc=${country.toLowerCase()}&l=en`
+}
+
+/**
+ * Build Steam store page URL for direct user navigation
+ * @param urlSegment - The Steam URL segment from IGDB
+ * @param country - Country code (default: 'CA' for Canada)
+ * @returns Full Steam store page URL
+ */
+export function buildSteamStorePageUrl(
+  urlSegment: string,
+  country: Country = "CA"
+): string | null {
+  if (!urlSegment) return null
+
+  const appId = extractSteamAppId(urlSegment)
+  if (!appId) return null
+
+  return `https://store.steampowered.com/app/${appId}/?cc=${country.toLowerCase()}&l=en`
+}
+
+function extractSteamAppId(urlSegment: string): string | null {
+  const match = urlSegment.match(/\d+/)
+  return match ? match[0] : null
 }
 
 /**

@@ -28,12 +28,19 @@ export default async function PlaystationPrice({
     const info = await getCachedPlaystationPrice(url)
 
     return (
-      <PriceLayout
-        onSale={(info.currentPrice || 0) < (info.regularPrice || 0)}
-        currentPrice={info.currentPrice || 0}
-        regularPrice={info.regularPrice || 0}
-        currency="CAD"
-      />
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:opacity-90"
+      >
+        <PriceLayout
+          onSale={(info.currentPrice || 0) < (info.regularPrice || 0)}
+          currentPrice={info.currentPrice || 0}
+          regularPrice={info.regularPrice || 0}
+          currency="CAD"
+        />
+      </a>
     )
   } catch (error) {
     console.error("Error fetching PlayStation game info:", error)
