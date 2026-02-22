@@ -603,7 +603,14 @@ export async function getUpcomingGames(ids: number[]): Promise<IGDBGame[]> {
 export async function getRecommendedGames(): Promise<{
   upcoming: IGDBGame[]
   trending: IGDBGame[]
+  released: IGDBGame[]
 }> {
+  const results = {
+    upcoming: [] as IGDBGame[],
+    trending: [] as IGDBGame[],
+    released: [] as IGDBGame[]
+  }
+
   const { data: ids1, error: error1 } = await tryCatch(
     getIGDBMostVisitedGameIds()
   )
@@ -624,12 +631,32 @@ export async function getRecommendedGames(): Promise<{
   // wait 1 second to avoid rate limit
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  const { data: trending, error: trendingError } = await tryCatch(
+  const { data: trending1, error: trendingError1 } = await tryCatch(
     getTrendingGames(ids1 || [])
   )
-  if (trendingError) {
-    console.error("Error fetching trending games:", trendingError)
+  if (trendingError1) {
+    console.error("Error fetching trending games:", trendingError1)
   }
+
+  if (trending1 && trending1.length > 0)
+    results.trending.push(...trending1.slice(0, 30))
+
+  // wait 1 second to avoid rate limit
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const { data: trending2, error: trendingError2 } = await tryCatch(
+    getTrendingGames(ids2 || [])
+  )
+  if (trendingError2) {
+    console.error("Error fetching trending games (offset):", trendingError2)
+  }
+
+  const released = []
+  if (trending1 && trending1.length > 0) released.push(...trending1)
+  if (trending2 && trending2.length > 0) released.push(...trending2)
+
+  released.sort((a, b) => (b.firstReleaseDate || 0) - (a.firstReleaseDate || 0))
+  results.released = released.slice(0, 30)
 
   // wait 1 second to avoid rate limit
   await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -640,6 +667,9 @@ export async function getRecommendedGames(): Promise<{
   if (upcomingError1) {
     console.error("Error fetching upcoming games 1:", upcomingError1)
   }
+
+  // wait 1 second to avoid rate limit
+  await new Promise((resolve) => setTimeout(resolve, 1000))
 
   const { data: upcoming2, error: upcomingError2 } = await tryCatch(
     getUpcomingGames(ids2 || [])
@@ -653,8 +683,9 @@ export async function getRecommendedGames(): Promise<{
   if (upcoming2 && upcoming2.length > 0) upcoming.push(...upcoming2)
 
   upcoming.sort((a, b) => (a.firstReleaseDate || 0) - (b.firstReleaseDate || 0))
+  results.upcoming = upcoming.slice(0, 30)
 
-  return { trending: trending || [], upcoming: upcoming || [] }
+  return results
 }
 
 export const getCachedSearchIGDBGamesDirect = async (query: string) => {

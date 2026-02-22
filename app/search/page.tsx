@@ -13,16 +13,6 @@ export default async function SearchPage() {
 
   if (error) return null
 
-  const upcomingGames = data?.upcoming ?? []
-  const upcomingCarouselGames = upcomingGames.map((game) => ({
-    id: game.id,
-    name: game.name,
-    coverImageUrl: buildIGDBImageUrl(game.coverImageId),
-    releaseDate: game.firstReleaseDate,
-    length: undefined,
-    platforms: game.platforms
-  }))
-
   const trendingGames = data?.trending ?? []
   const trendingCarouselGames = trendingGames.map((game) => ({
     id: game.id,
@@ -33,8 +23,41 @@ export default async function SearchPage() {
     platforms: game.platforms
   }))
 
+  const upcomingGames = data?.upcoming ?? []
+  const upcomingCarouselGames = upcomingGames.map((game) => ({
+    id: game.id,
+    name: game.name,
+    coverImageUrl: buildIGDBImageUrl(game.coverImageId),
+    releaseDate: game.firstReleaseDate,
+    length: undefined,
+    platforms: game.platforms
+  }))
+
+  const releasedGames = data?.released ?? []
+  const releasedCarouselGames = releasedGames.map((game) => ({
+    id: game.id,
+    name: game.name,
+    coverImageUrl: buildIGDBImageUrl(game.coverImageId),
+    releaseDate: game.firstReleaseDate,
+    length: undefined,
+    platforms: game.platforms
+  }))
+
   return (
     <div className="custom-slide-up-fade-in">
+      <div className="mb-9">
+        <h2 className="text-lg font-bold">Trending</h2>
+        <p className="mb-3 text-xs text-muted-foreground">
+          Explore these popular titles.
+        </p>
+        <GameCarousel
+          games={trendingCarouselGames}
+          baseHref="/search/trending"
+          showDate
+          showPlatforms
+        />
+      </div>
+
       <div className="mb-9">
         <h2 className="text-lg font-bold">Coming Up</h2>
         <p className="mb-3 text-xs text-muted-foreground">
@@ -49,13 +72,13 @@ export default async function SearchPage() {
       </div>
 
       <div className="mb-9">
-        <h2 className="text-lg font-bold">Trending</h2>
+        <h2 className="text-lg font-bold">Released</h2>
         <p className="mb-3 text-xs text-muted-foreground">
-          Explore these popular titles.
+          Recently released games.
         </p>
         <GameCarousel
-          games={trendingCarouselGames}
-          baseHref="/search/trending"
+          games={releasedCarouselGames}
+          baseHref="/search/released"
           showDate
           showPlatforms
         />
