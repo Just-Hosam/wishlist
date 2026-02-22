@@ -56,7 +56,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         max="9999"
         value={value ?? ""}
         onChange={handleInputChange}
-        className="flex-[2] pl-7 text-center"
+        className="flex-[2] text-center"
       />
       <Button
         type="button"
