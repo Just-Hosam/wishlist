@@ -506,7 +506,9 @@ export async function getIGDBGameById(
   }
 }
 
-export async function getIGDBMostVisitedGameIds(): Promise<number[]> {
+export async function getIGDBMostVisitedGameIds(
+  offset?: number
+): Promise<number[]> {
   const rankedGamesPromise = queryIGDB<IGDBPopscore[]>(
     IGDB_POPSCORE_ENDPOINT,
     `
@@ -515,6 +517,9 @@ export async function getIGDBMostVisitedGameIds(): Promise<number[]> {
       where popularity_type = 1;
 
       sort value desc;
+
+      ${offset ? `offset ${offset};` : ""}
+
       limit 500;
     `.trim()
   )
@@ -599,27 +604,55 @@ export async function getRecommendedGames(): Promise<{
   upcoming: IGDBGame[]
   trending: IGDBGame[]
 }> {
-  const { data: ids, error } = await tryCatch(getIGDBMostVisitedGameIds())
+  const { data: ids1, error: error1 } = await tryCatch(
+    getIGDBMostVisitedGameIds()
+  )
+  if (error1) {
+    console.error("Error fetching most visited game IDs:", error1)
+  }
 
-  if (error || !ids || ids.length === 0) return { upcoming: [], trending: [] }
+  // wait 1 second to avoid rate limit
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const { data: ids2, error: error2 } = await tryCatch(
+    getIGDBMostVisitedGameIds(500)
+  )
+  if (error2) {
+    console.error("Error fetching most visited game IDs (offset):", error2)
+  }
 
   // wait 1 second to avoid rate limit
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
   const { data: trending, error: trendingError } = await tryCatch(
-    getTrendingGames(ids)
+    getTrendingGames(ids1 || [])
   )
-  if (trendingError)
+  if (trendingError) {
     console.error("Error fetching trending games:", trendingError)
+  }
 
   // wait 1 second to avoid rate limit
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  const { data: upcoming, error: upcomingError } = await tryCatch(
-    getUpcomingGames(ids)
+  const { data: upcoming1, error: upcomingError1 } = await tryCatch(
+    getUpcomingGames(ids1 || [])
   )
-  if (upcomingError)
-    console.error("Error fetching upcoming games:", upcomingError)
+  if (upcomingError1) {
+    console.error("Error fetching upcoming games 1:", upcomingError1)
+  }
+
+  const { data: upcoming2, error: upcomingError2 } = await tryCatch(
+    getUpcomingGames(ids2 || [])
+  )
+  if (upcomingError2) {
+    console.error("Error fetching upcoming games 2:", upcomingError2)
+  }
+
+  const upcoming = []
+  if (upcoming1 && upcoming1.length > 0) upcoming.push(...upcoming1)
+  if (upcoming2 && upcoming2.length > 0) upcoming.push(...upcoming2)
+
+  upcoming.sort((a, b) => (a.firstReleaseDate || 0) - (b.firstReleaseDate || 0))
 
   return { trending: trending || [], upcoming: upcoming || [] }
 }
