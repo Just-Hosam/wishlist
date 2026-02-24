@@ -1,5 +1,6 @@
+import { sleep } from "@/lib/utils"
 import { requireCronAuth } from "@/server/cron/auth"
-import { runCronStep, sleep } from "@/server/cron/utils"
+import { runCronStep } from "@/server/cron/utils"
 import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
@@ -22,7 +23,7 @@ export async function GET(request: Request) {
     )
   }
 
-  await sleep(1500)
+  await sleep(500)
 
   const refresh = await runCronStep(request, {
     path: "/api/cron/update-recommended/refresh",

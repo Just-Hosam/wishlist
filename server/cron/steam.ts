@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma"
 import { buildRequestHeaders } from "@/lib/request"
+import { sleep } from "@/lib/utils"
 import { GameCategory, Platform } from "@/types"
 
 const BATCH_SIZE = 10
@@ -16,8 +17,6 @@ const chunk = <T>(items: T[], size: number) => {
 
   return batches
 }
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export async function runSteamPriceUpdate() {
   console.log("[CRON] Starting Steam price update job...")
@@ -139,7 +138,7 @@ export async function runSteamPriceUpdate() {
     }
 
     if (batchIndex < batches.length - 1) {
-      const delay = Math.floor(Math.random() * 2000) + 2000
+      const delay = Math.floor(Math.random() * 200) + 400 // Around 500ms
       console.log(`[CRON] Waiting ${delay}ms before next batch...`)
       await sleep(delay)
     }

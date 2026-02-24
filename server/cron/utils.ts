@@ -58,7 +58,3 @@ export async function runCronStep(
     body: await parseResponseBody(response)
   }
 }
-
-export async function sleep(ms: number): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, ms))
-}

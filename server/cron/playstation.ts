@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma"
 import { GameCategory, Platform } from "@/types"
 import { getCachedPlaystationPrice } from "../actions/playstation"
+import { sleep } from "@/lib/utils"
 
 export async function runPlayStationPriceUpdate() {
   console.log("[CRON] Starting PlayStation price update job...")
@@ -30,8 +31,8 @@ export async function runPlayStationPriceUpdate() {
 
       updated++
 
-      const randomDelay = Math.floor(Math.random() * 3000) + 2000
-      await new Promise((resolve) => setTimeout(resolve, randomDelay))
+      const randomDelay = Math.floor(Math.random() * 400) + 600 // around 800ms
+      await sleep(randomDelay)
     } catch (error) {
       console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
       errors++
