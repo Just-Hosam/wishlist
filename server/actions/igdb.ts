@@ -2,6 +2,7 @@
 
 import { buildRequestHeaders } from "@/lib/request"
 import { tryCatch } from "@/lib/try-catch"
+import { sleep } from "@/lib/utils"
 import { IGDBGame, IGDBPopscore, Platform, RawIGDBGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
@@ -618,8 +619,7 @@ export async function getRecommendedGames(): Promise<{
     console.error("Error fetching most visited game IDs:", error1)
   }
 
-  // wait 1 second to avoid rate limit
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await sleep(350)
 
   const { data: ids2, error: error2 } = await tryCatch(
     getIGDBMostVisitedGameIds(500)
@@ -628,8 +628,7 @@ export async function getRecommendedGames(): Promise<{
     console.error("Error fetching most visited game IDs (offset):", error2)
   }
 
-  // wait 1 second to avoid rate limit
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await sleep(350)
 
   const { data: trending1, error: trendingError1 } = await tryCatch(
     getTrendingGames(ids1 || [])
@@ -641,8 +640,7 @@ export async function getRecommendedGames(): Promise<{
   if (trending1 && trending1.length > 0)
     results.trending.push(...trending1.slice(0, 30))
 
-  // wait 1 second to avoid rate limit
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await sleep(350)
 
   const { data: trending2, error: trendingError2 } = await tryCatch(
     getTrendingGames(ids2 || [])
@@ -658,8 +656,7 @@ export async function getRecommendedGames(): Promise<{
   released.sort((a, b) => (b.firstReleaseDate || 0) - (a.firstReleaseDate || 0))
   results.released = released.slice(0, 30)
 
-  // wait 1 second to avoid rate limit
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await sleep(350)
 
   const { data: upcoming1, error: upcomingError1 } = await tryCatch(
     getUpcomingGames(ids1 || [])
@@ -668,8 +665,7 @@ export async function getRecommendedGames(): Promise<{
     console.error("Error fetching upcoming games 1:", upcomingError1)
   }
 
-  // wait 1 second to avoid rate limit
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await sleep(350)
 
   const { data: upcoming2, error: upcomingError2 } = await tryCatch(
     getUpcomingGames(ids2 || [])

@@ -1,19 +1,7 @@
 import prisma from "@/lib/prisma"
 import { GameCategory, Platform } from "@/types"
 import { getCachedPlaystationPrice } from "../actions/playstation"
-
-const PLAYSTATION_BATCH_SIZE = 5
-
-const batchArr = <T>(arr: T[], batchSize: number) => {
-  const result: T[][] = []
-
-  for (let i = 0; i < arr.length; i += batchSize) {
-    const batch = arr.slice(i, i + batchSize)
-    result.push(batch)
-  }
-
-  return result
-}
+import { sleep } from "@/lib/utils"
 
 export async function runPlayStationPriceUpdate() {
   console.log("[CRON] Starting PlayStation price update job...")
@@ -32,37 +20,22 @@ export async function runPlayStationPriceUpdate() {
     }
   })
 
-  const batches = batchArr(playstationPrices, PLAYSTATION_BATCH_SIZE)
-
-  console.log(
-    `[CRON] Processing ${playstationPrices.length} wishlist games in ${batches.length} batches`
-  )
+  console.log(`[CRON] Processing ${playstationPrices.length} wishlist games`)
 
   let updated = 0
   let errors = 0
 
-  for (const [batchIndex, batch] of batches.entries()) {
-    console.log(
-      `[CRON] Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} games)`
-    )
+  for (const gamePrice of playstationPrices) {
+    try {
+      await getCachedPlaystationPrice(gamePrice.storeUrl)
 
-    for (const gamePrice of batch) {
-      try {
-        await getCachedPlaystationPrice(gamePrice.storeUrl)
+      updated++
 
-        updated++
-
-        const randomDelay = Math.floor(Math.random() * 3000) + 2000
-        await new Promise((resolve) => setTimeout(resolve, randomDelay))
-      } catch (error) {
-        console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
-        errors++
-      }
-    }
-
-    if (batchIndex < batches.length - 1) {
-      console.log(`[CRON] Waiting before next batch...`)
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      const randomDelay = Math.floor(Math.random() * 400) + 600 // around 800ms
+      await sleep(randomDelay)
+    } catch (error) {
+      console.error(`[CRON] Error updating game ID ${gamePrice.id}:`, error)
+      errors++
     }
   }
 

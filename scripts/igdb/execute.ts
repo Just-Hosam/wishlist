@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import { fetchGamesBatch } from "./fetch"
 import { serializeGames } from "./serialize"
+import { sleep } from "@/lib/utils"
 
 const START_OFFSET = 0
 const MAX_BATCHES = Number.POSITIVE_INFINITY
@@ -9,8 +10,6 @@ const IGDB_RATE_LIMIT_DELAY_MS = 2000
 
 const prisma = new PrismaClient()
 const failedOffsets: number[] = []
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const processBatch = async (offset: number): Promise<boolean> => {
   console.log(`🔄 [offset ${offset}] Fetching games...`)
