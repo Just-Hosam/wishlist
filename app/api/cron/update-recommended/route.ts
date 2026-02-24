@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   if (!invalidate.ok) {
     return NextResponse.json(
       {
-        error: "Search discovery cache invalidation failed",
+        error: "Recommended games cache invalidation failed",
         invalidate,
         timestamp: new Date().toISOString()
       },
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
   if (!refresh.ok) {
     return NextResponse.json(
       {
-        error: "Search discovery update failed",
+        error: "Recommended games update failed",
         invalidate,
         refresh,
         timestamp: new Date().toISOString()

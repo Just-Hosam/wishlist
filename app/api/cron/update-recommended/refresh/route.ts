@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: "Search discovery refresh failed",
+        error: "Recommended games refresh failed",
         details: error instanceof Error ? error.message : "Unknown error"
       },
       { status: 500 }
