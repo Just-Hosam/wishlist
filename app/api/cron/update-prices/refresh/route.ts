@@ -1,4 +1,3 @@
-import { tryCatch } from "@/lib/try-catch"
 import { requireCronAuth } from "@/server/cron/auth"
 import { runNintendoPriceUpdate } from "@/server/cron/nintendo"
 import { runPlayStationPriceUpdate } from "@/server/cron/playstation"
@@ -18,23 +17,26 @@ export async function GET(request: Request) {
 
   console.log("[CRON] Starting combined price refresh job...")
 
+  const settled = await Promise.allSettled(jobs.map((job) => job.run()))
+
   const results: Array<Record<string, unknown>> = []
   const errors: Array<{ platform: string; message: string }> = []
 
-  for (const job of jobs) {
-    const { data, error } = await tryCatch(job.run())
+  for (let i = 0; i < settled.length; i++) {
+    const result = settled[i]
+    const job = jobs[i]
 
-    if (error) {
-      const message = error instanceof Error ? error.message : "Unknown error"
+    if (result.status === "fulfilled") {
+      results.push(result.value)
+    } else {
+      const message =
+        result.reason instanceof Error ? result.reason.message : "Unknown error"
       console.error(
-        `[CRON] ${job.platform} price update failed in tryCatch wrapper:`,
-        error
+        `[CRON] ${job.platform} price update failed:`,
+        result.reason
       )
       errors.push({ platform: job.platform, message })
-      continue
     }
-
-    results.push(data)
   }
 
   revalidateTag("wishlist")
