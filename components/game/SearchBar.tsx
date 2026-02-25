@@ -128,7 +128,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
             key={keyword}
           >
             <History className="size-[15px] text-muted-foreground" />
-            <span className="line-clamp-1 flex-1">{query}</span>
+            <span className="line-clamp-1 flex-1">{keyword}</span>
             <Button
               size="sm"
               variant="ghost"
