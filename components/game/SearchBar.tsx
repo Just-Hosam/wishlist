@@ -118,6 +118,10 @@ export function SearchBar({ initialQuery = "" }: Props) {
       </PopoverAnchor>
       <PopoverContent
         className="z-40 mt-2 px-0 py-[2px]"
+        style={{
+          width: "var(--radix-popover-trigger-width)",
+          maxWidth: "500px"
+        }}
         onMouseDown={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
