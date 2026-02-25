@@ -53,6 +53,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   games         Game[]
+  searchHistory SearchHistory[]
 }
 
 model VerificationToken {
@@ -149,4 +150,15 @@ model Price {
   trackedBy     Game[]   @relation("TrackedPrices")
 
   @@index([platform, externalId])
+}
+
+model SearchHistory {
+  id         String   @id @default(cuid())
+  query      String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  searchedAt DateTime @default(now())
+
+  @@unique([userId, query])
+  @@index([userId, searchedAt(sort: Desc)])
 }
