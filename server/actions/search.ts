@@ -3,6 +3,7 @@
 import { authOptions } from "@/lib/auth-options"
 import { getServerSession } from "next-auth"
 import prisma from "@/lib/prisma"
+import { tryCatch } from "@/lib/utils"
 
 export async function getSearchQueries(): Promise<string[]> {
   const session = await getServerSession(authOptions)
@@ -27,11 +28,15 @@ export async function saveSearchQuery(query: string) {
   const userId = session?.user?.id
   if (!userId) return
 
-  await prisma.searchHistory.upsert({
-    where: { userId_query: { userId, query: trimmed } },
-    create: { userId, query: trimmed },
-    update: { searchedAt: new Date() }
-  })
+  const { error } = await tryCatch(
+    prisma.searchHistory.upsert({
+      where: { userId_query: { userId, query: trimmed } },
+      create: { userId, query: trimmed },
+      update: { searchedAt: new Date() }
+    })
+  )
+
+  if (error) console.error("Error saving search query:", error)
 }
 
 export async function deleteSearchQuery(query: string) {
@@ -42,11 +47,14 @@ export async function deleteSearchQuery(query: string) {
   const userId = session?.user?.id
   if (!userId) return
 
-  await prisma.searchHistory.deleteMany({
-    where: {
-      // userId_query: { userId, query: trimmed }
-      query: trimmed,
-      userId
-    }
-  })
+  const { error } = await tryCatch(
+    prisma.searchHistory.deleteMany({
+      where: {
+        query: trimmed,
+        userId
+      }
+    })
+  )
+
+  if (error) console.error("Error deleting search query:", error)
 }
