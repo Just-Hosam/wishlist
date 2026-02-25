@@ -149,7 +149,11 @@ export default function EditFromWishlist({ game, children }: Props) {
         }
       }
 
-      await Promise.all([playstationPromise, nintendoPromise, steamPromise])
+      await Promise.allSettled([
+        playstationPromise,
+        nintendoPromise,
+        steamPromise
+      ])
 
       toast.success("Game saved!")
       setOpen(false)

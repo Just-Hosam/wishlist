@@ -76,7 +76,7 @@ export default function MoveToLibrary({ game, children }: Props) {
         .filter(Boolean)
         .map((url) => unlinkPriceFromGame(game.id, url!))
 
-      await Promise.all(pricePromises)
+      await Promise.allSettled(pricePromises)
 
       toast.success("Game moved to library!")
       setOpen(false)

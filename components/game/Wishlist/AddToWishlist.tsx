@@ -112,7 +112,11 @@ export default function AddToWishlist({
         }
       }
 
-      await Promise.all([playstationPromise, nintendoPromise, steamPromise])
+      await Promise.allSettled([
+        playstationPromise,
+        nintendoPromise,
+        steamPromise
+      ])
 
       toast.success("Game added to wishlist!")
       setOpen(false)
