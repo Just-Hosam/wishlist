@@ -1,6 +1,5 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
-import { tryCatch } from "@/lib/try-catch"
-import { formatReleaseDate } from "@/lib/utils"
+import { formatReleaseDate, tryCatch } from "@/lib/utils"
 import {
   getCachedBackloggdTimeToBeat,
   getCachedIGDBTimeToBeat

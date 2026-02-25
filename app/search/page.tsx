@@ -1,7 +1,7 @@
 import GameCarousel from "@/components/game/GameCarousel"
 import { Button } from "@/components/ui/button"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
-import { tryCatch } from "@/lib/try-catch"
+import { tryCatch } from "@/lib/utils"
 import { getCachedRecommendedGames } from "@/server/actions/igdb"
 import { ExternalLink } from "lucide-react"
 import Image from "next/image"

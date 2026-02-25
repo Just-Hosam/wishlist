@@ -1,4 +1,4 @@
-import { tryCatch } from "@/lib/try-catch"
+import { tryCatch } from "@/lib/utils"
 import { getCachedRecommendedGames } from "@/server/actions/igdb"
 import { requireCronAuth } from "@/server/cron/auth"
 import { NextResponse } from "next/server"
