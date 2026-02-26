@@ -1,11 +1,7 @@
 "use client"
 
 import { encodePathSegment } from "@/lib/path"
-import {
-  deleteSearchQuery,
-  getSearchQueries,
-  saveSearchQuery
-} from "@/server/actions/search"
+import { deleteSearchQuery, saveSearchQuery } from "@/server/actions/search"
 import { History, Search, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "../navigation"
@@ -25,7 +21,10 @@ export function SearchBar({ initialQuery = "" }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    getSearchQueries().then((queries) => setHistory(queries))
+    fetch("/api/search-history")
+      .then((res) => res.json())
+      .then((queries) => setHistory(queries))
+      .catch(() => {})
   }, [])
 
   useEffect(() => {

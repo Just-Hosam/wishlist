@@ -5,21 +5,6 @@ import { getServerSession } from "next-auth"
 import prisma from "@/lib/prisma"
 import { tryCatch } from "@/lib/utils"
 
-export async function getSearchQueries(): Promise<string[]> {
-  const session = await getServerSession(authOptions)
-  const userId = session?.user?.id
-  if (!userId) return []
-
-  const results = await prisma.searchHistory.findMany({
-    where: { userId },
-    orderBy: { searchedAt: "desc" },
-    take: 5,
-    select: { query: true }
-  })
-
-  return results.map((r) => r.query)
-}
-
 export async function saveSearchQuery(query: string) {
   const trimmed = query.trim()
   if (!trimmed) return
