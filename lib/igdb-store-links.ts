@@ -120,7 +120,7 @@ export function buildIGDBImageUrl(
     | "screenshot_med"
     | "screenshot_big"
     | "720p"
-    | "1080p" = "720p"
+    | "1080p" = "cover_big"
 ): string {
   return `https://images.igdb.com/igdb/image/upload/t_${size}/${coverImageId}.jpg`
 }
