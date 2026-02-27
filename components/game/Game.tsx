@@ -65,6 +65,7 @@ export function Game({
             width={185}
             height={246}
             sizes="185px"
+            priority
           />
         </div>
         <h1 className="mb-1 max-w-[80%] text-2xl font-bold">{name}</h1>

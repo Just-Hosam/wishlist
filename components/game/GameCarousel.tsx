@@ -47,6 +47,7 @@ export default function GameCarousel({
                   priority={index < 4}
                   width={150}
                   height={200}
+                  sizes="150px"
                 />
               )}
             </div>
