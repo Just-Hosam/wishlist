@@ -86,6 +86,7 @@ export function Game({
               width={20}
               height={20}
               className="mr-3"
+              unoptimized
             />
             <Suspense
               fallback={
@@ -105,6 +106,7 @@ export function Game({
               width={20}
               height={20}
               className="mr-3"
+              unoptimized
             />
             <Suspense
               fallback={
@@ -126,6 +128,7 @@ export function Game({
               width={20}
               height={20}
               className="mr-3"
+              unoptimized
             />
             <Suspense
               fallback={
@@ -278,6 +281,7 @@ export function Game({
                   width={19}
                   height={19}
                   className="rounded-sm drop-shadow-2xl"
+                  unoptimized
                 />
                 <span className="font-semibold">HLTB Time to Beat</span>
               </div>
@@ -302,6 +306,7 @@ export function Game({
                   width={22}
                   height={22}
                   className="drop-shadow-2xl"
+                  unoptimized
                 />
                 <span className="font-semibold">Reviews on Youtube</span>
               </div>
@@ -327,6 +332,7 @@ export function Game({
                     width={17}
                     height={17}
                     className="rounded-sm drop-shadow-2xl"
+                    unoptimized
                   />
                   <span className="font-semibold">Steam Price History</span>
                 </div>

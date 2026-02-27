@@ -57,6 +57,7 @@ export function YoutubeVideo({
           width={80}
           height={80}
           className="absolute drop-shadow-2xl"
+          unoptimized
         />
       </div>
     </a>

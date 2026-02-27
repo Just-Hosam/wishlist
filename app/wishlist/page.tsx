@@ -73,6 +73,7 @@ export default async function WishlistPage() {
                         width={16}
                         height={16}
                         className="mr-2"
+                        unoptimized
                       />
                       <PriceLayout
                         onSale={
@@ -93,6 +94,7 @@ export default async function WishlistPage() {
                         width={16}
                         height={16}
                         className="mr-2"
+                        unoptimized
                       />
                       <PriceLayout
                         onSale={
@@ -118,6 +120,7 @@ export default async function WishlistPage() {
                         width={16}
                         height={16}
                         className="mr-2"
+                        unoptimized
                       />
                       <PriceLayout
                         onSale={

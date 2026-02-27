@@ -17,6 +17,7 @@ export function GoogleSigninButton() {
           alt="Google Logo"
           width={20}
           height={20}
+          unoptimized
         ></Image>
         <p className="text-base">Login with Google</p>
       </Button>

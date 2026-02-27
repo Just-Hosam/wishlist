@@ -78,6 +78,7 @@ export default function GameCarousel({
                       alt="Steam Logo"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                   {game.platforms.includes(Platform.PLAYSTATION) && (
@@ -86,6 +87,7 @@ export default function GameCarousel({
                       alt="PlayStation Logo"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                   {game.platforms.includes(Platform.NINTENDO) && (
@@ -94,6 +96,7 @@ export default function GameCarousel({
                       alt="Nintendo Switch Logo"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                   {game.platforms.includes(Platform.XBOX) && (
@@ -102,6 +105,7 @@ export default function GameCarousel({
                       alt="Xbox"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                 </div>

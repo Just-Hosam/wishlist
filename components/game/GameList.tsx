@@ -73,6 +73,7 @@ export default async function GameList({
                       alt="Steam Logo"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                   {game.platforms.includes(Platform.PLAYSTATION) && (
@@ -81,6 +82,7 @@ export default async function GameList({
                       alt="PlayStation Logo"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                   {game.platforms.includes(Platform.NINTENDO) && (
@@ -89,6 +91,7 @@ export default async function GameList({
                       alt="Nintendo Switch Logo"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                   {game.platforms.includes(Platform.XBOX) && (
@@ -97,6 +100,7 @@ export default async function GameList({
                       alt="Xbox"
                       width={13}
                       height={13}
+                      unoptimized
                     />
                   )}
                 </div>

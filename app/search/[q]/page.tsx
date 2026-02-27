@@ -144,6 +144,7 @@ export default async function SearchResultsPage({ params }: Props) {
                         alt="Steam Logo"
                         width={13}
                         height={13}
+                        unoptimized
                       />
                     )}
                     {game.playstationUrlSegment && (
@@ -152,6 +153,7 @@ export default async function SearchResultsPage({ params }: Props) {
                         alt="PlayStation Logo"
                         width={13}
                         height={13}
+                        unoptimized
                       />
                     )}
                     {game.nintendoUrlSegment && (
@@ -160,6 +162,7 @@ export default async function SearchResultsPage({ params }: Props) {
                         alt="Nintendo Switch Logo"
                         width={13}
                         height={13}
+                        unoptimized
                       />
                     )}
                     {game.platforms?.includes(Platform.PC) && (
@@ -168,6 +171,7 @@ export default async function SearchResultsPage({ params }: Props) {
                         alt="Windows Logo"
                         width={13}
                         height={13}
+                        unoptimized
                       />
                     )}
                     {game.platforms?.includes(Platform.XBOX) && (
@@ -176,6 +180,7 @@ export default async function SearchResultsPage({ params }: Props) {
                         alt="Xbox Logo"
                         width={13}
                         height={13}
+                        unoptimized
                       />
                     )}
                   </div>

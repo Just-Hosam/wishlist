@@ -107,6 +107,7 @@ export default async function SearchPage() {
                 width={17}
                 height={17}
                 className="rounded-sm drop-shadow-2xl"
+                unoptimized
               />
               <span className="font-semibold">Monthly Games</span>
             </div>
@@ -130,6 +131,7 @@ export default async function SearchPage() {
                 width={17}
                 height={17}
                 className="rounded-sm drop-shadow-2xl"
+                unoptimized
               />
               <span className="font-semibold">Game Catalog</span>
             </div>
