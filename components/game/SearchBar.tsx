@@ -1,7 +1,7 @@
 "use client"
 
 import { encodePathSegment } from "@/lib/path"
-import { deleteSearchQuery, saveSearchQuery } from "@/server/actions/search"
+import { deleteSearchQuery } from "@/server/actions/search"
 import { History, Search, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "../navigation"
@@ -50,11 +50,6 @@ export function SearchBar({ initialQuery = "" }: Props) {
     if (!trimmedQuery) return
 
     router.push(`/search/${encodePathSegment(trimmedQuery)}`)
-
-    setHistory((prev) =>
-      [trimmedQuery, ...prev.filter((q) => q !== trimmedQuery)].slice(0, 5)
-    )
-    saveSearchQuery(trimmedQuery)
   }
 
   const handleClearSearch = () => {
@@ -66,10 +61,6 @@ export function SearchBar({ initialQuery = "" }: Props) {
   const handleQueryClick = (keyword: string) => {
     inputRef.current?.blur()
     router.push(`/search/${encodePathSegment(keyword.trim())}`)
-    setHistory((prev) =>
-      [keyword, ...prev.filter((q) => q !== keyword)].slice(0, 5)
-    )
-    saveSearchQuery(keyword)
   }
 
   const handleSearchQueryDelete = (keyword: string) => {
@@ -116,7 +107,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
         </form>
       </PopoverAnchor>
       <PopoverContent
-        className="z-40 mt-2 px-0 py-[2px]"
+        className="z-40 mt-2 overflow-hidden p-0"
         style={{
           width: "var(--radix-popover-trigger-width)",
           maxWidth: "500px"
@@ -124,26 +115,28 @@ export function SearchBar({ initialQuery = "" }: Props) {
         onMouseDown={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        {history.map((keyword) => (
-          <div
-            className="flex cursor-pointer items-center gap-2 border-b py-2 pl-5 pr-2 text-sm last:border-none"
-            onClick={() => handleQueryClick(keyword)}
-            key={keyword}
-          >
-            <History className="size-[15px] text-muted-foreground" />
-            <span className="line-clamp-1 flex-1">{keyword}</span>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={(e) => {
-                e.stopPropagation()
-                handleSearchQueryDelete(keyword)
-              }}
+        <div className="max-h-[291px] overflow-auto py-[2px]">
+          {history.map((keyword) => (
+            <div
+              className="flex cursor-pointer items-center gap-2 border-b py-2 pl-5 pr-2 text-sm last:border-none"
+              onClick={() => handleQueryClick(keyword)}
+              key={keyword}
             >
-              <X className="size-4 text-muted-foreground" />
-            </Button>
-          </div>
-        ))}
+              <History className="size-[15px] text-muted-foreground" />
+              <span className="line-clamp-1 flex-1">{keyword}</span>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSearchQueryDelete(keyword)
+                }}
+              >
+                <X className="size-4 text-muted-foreground" />
+              </Button>
+            </div>
+          ))}
+        </div>
       </PopoverContent>
     </Popover>
   )

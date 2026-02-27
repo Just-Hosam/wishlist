@@ -12,6 +12,7 @@ import { decodePathSegment, encodePathSegment } from "@/lib/path"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSearchIGDBGamesDirect } from "@/server/actions/igdb"
+import { saveSearchQuery } from "@/server/actions/search"
 import { Platform } from "@/types"
 import { CheckCircle2, Heart, LibraryBig, Plus, Search } from "lucide-react"
 import Image from "next/image"
@@ -53,6 +54,10 @@ export default async function SearchResultsPage({ params }: Props) {
       </div>
     )
   }
+
+  void saveSearchQuery(query).catch((error) => {
+    console.error("Error saving search query:", error)
+  })
 
   return (
     <div className="custom-slide-up-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">

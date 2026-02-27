@@ -11,7 +11,7 @@ export async function GET() {
   const results = await prisma.searchHistory.findMany({
     where: { userId },
     orderBy: { searchedAt: "desc" },
-    take: 5,
+    take: 10,
     select: { query: true }
   })
 
