@@ -36,7 +36,7 @@ async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
   const total = data?.query_summary?.total_reviews
   const description = data?.query_summary?.review_score_desc
 
-  if (total == null && !description) throw new Error("No Reviews")
+  if (total == null || !description) throw new Error("No Reviews")
 
   return {
     total,
