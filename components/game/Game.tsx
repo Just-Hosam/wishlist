@@ -1,10 +1,18 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate, tryCatch } from "@/lib/utils"
+import { getCachedSteamReviews } from "@/server/actions/reviews"
 import {
   getCachedBackloggdTimeToBeat,
   getCachedIGDBTimeToBeat
 } from "@/server/actions/time-to-beat"
-import { ExternalLink, LoaderCircle } from "lucide-react"
+import {
+  ExternalLink,
+  Frown,
+  Laugh,
+  LoaderCircle,
+  Meh,
+  Smile
+} from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
 import NintendoPrice from "../pricing/NintendoPrice"
@@ -216,6 +224,23 @@ export function Game({
         </div>
       )}
 
+      {/* Reviews */}
+      {steamId && (
+        <div className="mt-8">
+          <label className="mb-4 block font-semibold">Reviews</label>
+          <Suspense
+            fallback={
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+                <span>Fetching reviews...</span>
+              </div>
+            }
+          >
+            <SteamReviews steamId={steamId} />
+          </Suspense>
+        </div>
+      )}
+
       {/* TIME TO BEAT */}
       <div className="mt-8">
         <label className="mb-4 block font-semibold">Time to Beat</label>
@@ -352,5 +377,42 @@ async function BackloggdTimeToBeat({ slug }: { slug: string }) {
       complete={timeToBeat?.complete || 0}
       title="Backloggd"
     />
+  )
+}
+
+async function SteamReviews({ steamId }: { steamId: string }) {
+  const { data, error } = await tryCatch(getCachedSteamReviews(steamId))
+
+  if (error) return <div>Error: {error.message}</div>
+
+  let icon
+
+  switch (data.description) {
+    case "Overwhelmingly Positive":
+    case "Very Positive":
+      icon = <Laugh className="h-4 w-4 text-blue-500" />
+      break
+    case "Positive":
+    case "Mostly Positive":
+      icon = <Smile className="h-4 w-4 text-blue-500" />
+      break
+    case "Mixed":
+      icon = <Meh className="h-4 w-4 text-yellow-500" />
+      break
+    case "Mostly Negative":
+    case "Negative":
+    case "Overwhelmingly Negative":
+      icon = <Frown className="h-4 w-4 text-red-500" />
+      break
+    default:
+      icon = null
+  }
+
+  return (
+    <div className="flex items-center pl-1 text-sm">
+      {icon}
+      <span className="ml-2">{data.description}</span>
+      <span className="ml-2 text-muted-foreground">({data.total} reviews)</span>
+    </div>
   )
 }
