@@ -64,6 +64,11 @@ export function SearchBar({ initialQuery = "" }: Props) {
     if (!trimmedQuery) return
 
     router.push(`/search/${encodePathSegment(trimmedQuery)}`)
+
+    setHistory((prev) => [
+      trimmedQuery,
+      ...prev.filter((q) => q !== trimmedQuery)
+    ])
   }
 
   const handleClearSearch = () => {
@@ -75,11 +80,15 @@ export function SearchBar({ initialQuery = "" }: Props) {
   const handleQueryClick = (keyword: string) => {
     inputRef.current?.blur()
     router.push(`/search/${encodePathSegment(keyword.trim())}`)
+
+    setHistory((prev) => [keyword, ...prev.filter((q) => q !== keyword)])
   }
 
   const handleSearchQueryDelete = (keyword: string) => {
     setHistory((prev) => prev.filter((q) => q !== keyword))
     deleteSearchQuery(keyword)
+
+    setHistory((prev) => [keyword, ...prev.filter((q) => q !== keyword)])
   }
 
   return (
