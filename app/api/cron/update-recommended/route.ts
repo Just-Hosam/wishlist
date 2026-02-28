@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     )
   }
 
-  await sleep(500)
+  await sleep(1000)
 
   const refresh = await runCronStep(request, {
     path: "/api/cron/update-recommended/refresh",

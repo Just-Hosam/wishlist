@@ -1,5 +1,5 @@
 import { requireCronAuth } from "@/server/cron/auth"
-import { revalidateTag } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
@@ -7,10 +7,13 @@ export async function GET(request: Request) {
   if (!authResponse.ok) return authResponse
 
   revalidateTag("prices")
+  revalidateTag("wishlist")
+  revalidatePath("/wishlist")
 
   return NextResponse.json({
     ok: true,
-    invalidatedTags: ["prices"],
+    invalidatedTags: ["prices", "wishlist"],
+    invalidatedPaths: ["/wishlist"],
     timestamp: new Date().toISOString()
   })
 }

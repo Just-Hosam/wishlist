@@ -2,7 +2,6 @@ import { requireCronAuth } from "@/server/cron/auth"
 import { runNintendoPriceUpdate } from "@/server/cron/nintendo"
 import { runPlayStationPriceUpdate } from "@/server/cron/playstation"
 import { runSteamPriceUpdate } from "@/server/cron/steam"
-import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 const jobs = [
@@ -38,8 +37,6 @@ export async function GET(request: Request) {
       errors.push({ platform: job.platform, message })
     }
   }
-
-  revalidateTag("wishlist")
 
   const status = errors.length > 0 ? 500 : 200
 
