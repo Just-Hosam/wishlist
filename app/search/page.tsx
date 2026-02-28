@@ -1,5 +1,4 @@
 import GameCarousel from "@/components/game/GameCarousel"
-import { RefreshButton } from "@/components/RefreshButton"
 import { Button } from "@/components/ui/button"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { tryCatch } from "@/lib/utils"
