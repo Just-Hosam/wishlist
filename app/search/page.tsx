@@ -1,4 +1,5 @@
 import GameCarousel from "@/components/game/GameCarousel"
+import { RefreshButton } from "@/components/RefreshButton"
 import { Button } from "@/components/ui/button"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { tryCatch } from "@/lib/utils"
@@ -54,6 +55,7 @@ export default async function SearchPage() {
 
   return (
     <div className="custom-slide-up-fade-in">
+      <RefreshButton></RefreshButton>
       <div className="mb-9">
         <h2 className="text-lg font-bold">Trending</h2>
         <p className="mb-3 text-xs text-muted-foreground">
