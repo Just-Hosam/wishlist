@@ -130,7 +130,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
         </form>
       </PopoverAnchor>
       <PopoverContent
-        className="z-40 mt-2 overflow-hidden p-0"
+        className="z-40 mt-2 px-0 py-[2px]"
         style={{
           width: "var(--radix-popover-trigger-width)",
           maxWidth: "500px"
@@ -138,14 +138,16 @@ export function SearchBar({ initialQuery = "" }: Props) {
         onMouseDown={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <div className="max-h-[291px] overflow-auto py-[2px]">
-          {isLoadingHistory ? (
-            <div className="flex items-center gap-2 py-3 pl-5 pr-4 text-sm text-muted-foreground">
-              <Loader2 className="size-[15px] animate-spin" />
-              <span>Loading recent searches...</span>
-            </div>
-          ) : (
-            history.map((keyword) => (
+        {isLoadingHistory ? (
+          <div className="flex items-center gap-2 py-3 pl-5 pr-4 text-sm text-muted-foreground">
+            <Loader2 className="size-[15px] animate-spin" />
+            <span>Loading recent searches...</span>
+          </div>
+        ) : (
+          history.map((keyword, index) => {
+            if (index >= 4) return null
+
+            return (
               <div
                 className="flex cursor-pointer items-center gap-2 border-b py-2 pl-5 pr-2 text-sm last:border-none"
                 onClick={() => handleQueryClick(keyword)}
@@ -164,9 +166,9 @@ export function SearchBar({ initialQuery = "" }: Props) {
                   <X className="size-4 text-muted-foreground" />
                 </Button>
               </div>
-            ))
-          )}
-        </div>
+            )
+          })
+        )}
       </PopoverContent>
     </Popover>
   )
