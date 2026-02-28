@@ -4,14 +4,10 @@ import { authOptions } from "@/lib/auth-options"
 import prisma from "@/lib/prisma"
 import { GameCategory, GameInput, GameOutput } from "@/types"
 import { getServerSession } from "next-auth"
-import { revalidateTag, unstable_cache } from "next/cache"
+import { revalidateTag } from "next/cache"
 
 function revalidateGameCategory(category: GameCategory, userId: string) {
   revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
-}
-
-function revalidateGameDetail(gameId: string) {
-  revalidateTag(`game-detail-${gameId}`)
 }
 
 export async function deleteGame(id: string) {
@@ -42,7 +38,6 @@ export async function deleteGame(id: string) {
   await prisma.game.delete({ where: { id: game.id } })
 
   revalidateGameCategory(game.category, userId)
-  revalidateGameDetail(game.id)
 }
 
 export async function saveGame(
@@ -132,8 +127,6 @@ export async function saveGame(
     revalidateGameCategory(game.category, userId)
   }
 
-  revalidateGameDetail(game.id)
-
   return game
 }
 
@@ -180,25 +173,6 @@ export async function toggleNowPlaying(gameId: string) {
   })
 
   revalidateGameCategory(GameCategory.LIBRARY, userId)
-  revalidateGameDetail(gameId)
 
   return updatedGame.nowPlaying
-}
-
-export const getCachedGameDetail = async (
-  gameId: string,
-  userId: string
-): Promise<GameOutput | null> => {
-  return unstable_cache(
-    async () => {
-      return prisma.game.findFirst({
-        where: { id: gameId, userId }
-      })
-    },
-    [gameId, userId],
-    {
-      tags: [`game-detail-${gameId}`],
-      revalidate: 10_800 // 3 hours
-    }
-  )()
 }

@@ -17,17 +17,13 @@ export const getCachedWishlistGames = async (userId: string) => {
         include: { trackedPrices: { orderBy: { fetchedAt: "desc" } } }
       })
 
-      return games.map((game) => ({
-        id: game.id,
+      return games.map(({ trackedPrices, ...game }) => ({
+        ...game,
         name: game.igdbName || "Untitled Game",
-        length: game.length,
-        category: game.category,
         coverImageUrl: game.igdbCoverImageId
           ? buildIGDBImageUrl(game.igdbCoverImageId)
           : null,
-        createdAt: game.createdAt.toISOString(),
-        updatedAt: game.updatedAt.toISOString(),
-        prices: game.trackedPrices.map((price) => ({
+        prices: trackedPrices.map((price) => ({
           id: price.id,
           platform: price.platform,
           externalId: price.externalId,
@@ -60,16 +56,11 @@ export const getCachedLibraryGames = async (userId: string) => {
       })
 
       return games.map((game) => ({
-        id: game.id,
+        ...game,
         name: game.igdbName || "Untitled Game",
         coverImageUrl: game.igdbCoverImageId
           ? buildIGDBImageUrl(game.igdbCoverImageId)
-          : null,
-        length: game.length,
-        platforms: game.platforms,
-        nowPlaying: game.nowPlaying,
-        createdAt: game.createdAt.toISOString(),
-        updatedAt: game.updatedAt.toISOString()
+          : null
       }))
     },
     [userId],
@@ -92,16 +83,12 @@ export const getCachedCompletedGames = async (userId: string) => {
       })
 
       return games.map((game) => ({
-        id: game.id,
+        ...game,
         name: game.igdbName || "Untitled Game",
         coverImageUrl: game.igdbCoverImageId
           ? buildIGDBImageUrl(game.igdbCoverImageId)
           : null,
-        releaseDate: game.igdbFirstReleaseDate,
-        length: game.length,
-        platforms: game.platforms,
-        createdAt: game.createdAt.toISOString(),
-        updatedAt: game.updatedAt.toISOString()
+        releaseDate: game.igdbFirstReleaseDate
       }))
     },
     [userId],

@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { getCachedGameDetail } from "@/server/actions/game"
+import { getCachedCompletedGames } from "@/server/actions/lists"
 import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
@@ -26,7 +26,8 @@ export default async function CompletedGamePage({ params }: Props) {
   if (!id) notFound()
   if (!userId) redirect("/")
 
-  const game = await getCachedGameDetail(id, userId)
+  const games = await getCachedCompletedGames(userId)
+  const game = games.find((g) => g.id === id)
   if (!game) notFound()
 
   return (
