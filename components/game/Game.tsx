@@ -60,7 +60,7 @@ export function Game({
       <header className="mx-auto flex flex-col items-center text-center">
         <div className="mb-5 h-[246px] w-[185px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image
-            src={buildIGDBImageUrl(imageId || "", "720p")}
+            src={buildIGDBImageUrl(imageId || "")}
             alt={name || "Game cover"}
             width={185}
             height={246}
@@ -179,7 +179,7 @@ export function Game({
                     className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
                   >
                     <Image
-                      src={buildIGDBImageUrl(id || "", "screenshot_med")}
+                      src={buildIGDBImageUrl(id || "")}
                       alt={name || "Game cover"}
                       width={308}
                       height={173}
