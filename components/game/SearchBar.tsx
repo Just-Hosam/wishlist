@@ -91,8 +91,6 @@ export function SearchBar({ initialQuery = "" }: Props) {
   const handleSearchQueryDelete = (keyword: string) => {
     setHistory((prev) => prev.filter((q) => q !== keyword))
     deleteSearchQuery(keyword)
-
-    setHistory((prev) => [keyword, ...prev.filter((q) => q !== keyword)])
   }
 
   return (
