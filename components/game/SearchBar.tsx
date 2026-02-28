@@ -59,10 +59,12 @@ export function SearchBar({ initialQuery = "" }: Props) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    setOpen(false)
     inputRef.current?.blur()
+
     const trimmedQuery = query.trim()
     if (!trimmedQuery) return
-
     router.push(`/search/${encodePathSegment(trimmedQuery)}`)
 
     setHistory((prev) => [
@@ -72,13 +74,15 @@ export function SearchBar({ initialQuery = "" }: Props) {
   }
 
   const handleClearSearch = () => {
-    router.push("/search")
     setQuery("")
     inputRef.current?.focus()
+    router.push("/search")
   }
 
   const handleQueryClick = (keyword: string) => {
+    setOpen(false)
     inputRef.current?.blur()
+
     router.push(`/search/${encodePathSegment(keyword.trim())}`)
 
     setHistory((prev) => [keyword, ...prev.filter((q) => q !== keyword)])
