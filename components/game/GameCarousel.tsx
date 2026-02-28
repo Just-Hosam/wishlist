@@ -8,6 +8,7 @@ interface Props {
   showLength?: boolean
   showDate?: boolean
   showPlatforms?: boolean
+  platformMode?: "owned" | "supported"
 
   baseHref: string
 
@@ -18,6 +19,9 @@ interface Props {
     releaseDate?: number | null
     length?: number | null
     platforms?: Platform[] | null
+    steamUrlSegment?: string | null
+    playstationUrlSegment?: string | null
+    nintendoUrlSegment?: string | null
   }[]
 }
 
@@ -26,7 +30,8 @@ export default function GameCarousel({
   baseHref,
   showLength = false,
   showDate = false,
-  showPlatforms = false
+  showPlatforms = false,
+  platformMode = "owned"
 }: Props) {
   return (
     <div
@@ -71,46 +76,104 @@ export default function GameCarousel({
               )}
 
               {/* Platforms - Show unique platform icons */}
-              {showPlatforms && game.platforms && game.platforms.length > 0 && (
-                <div className="mt-3 flex items-center gap-2">
-                  {game.platforms.includes(Platform.PC) && (
-                    <Image
-                      src="/logos/steam.svg"
-                      alt="Steam Logo"
-                      width={13}
-                      height={13}
-                      unoptimized
-                    />
-                  )}
-                  {game.platforms.includes(Platform.PLAYSTATION) && (
-                    <Image
-                      src="/logos/playstation.svg"
-                      alt="PlayStation Logo"
-                      width={13}
-                      height={13}
-                      unoptimized
-                    />
-                  )}
-                  {game.platforms.includes(Platform.NINTENDO) && (
-                    <Image
-                      src="/logos/nintendo-switch.svg"
-                      alt="Nintendo Switch Logo"
-                      width={13}
-                      height={13}
-                      unoptimized
-                    />
-                  )}
-                  {game.platforms.includes(Platform.XBOX) && (
-                    <Image
-                      src="/logos/xbox.svg"
-                      alt="Xbox"
-                      width={13}
-                      height={13}
-                      unoptimized
-                    />
-                  )}
-                </div>
-              )}
+              {showPlatforms &&
+                platformMode === "owned" &&
+                game.platforms &&
+                game.platforms.length > 0 && (
+                  <div className="mt-3 flex items-center gap-2">
+                    {game.platforms.includes(Platform.PC) && (
+                      <Image
+                        src="/logos/steam.svg"
+                        alt="Steam Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.platforms.includes(Platform.PLAYSTATION) && (
+                      <Image
+                        src="/logos/playstation.svg"
+                        alt="PlayStation Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.platforms.includes(Platform.NINTENDO) && (
+                      <Image
+                        src="/logos/nintendo-switch.svg"
+                        alt="Nintendo Switch Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.platforms.includes(Platform.XBOX) && (
+                      <Image
+                        src="/logos/xbox.svg"
+                        alt="Xbox"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                )}
+              {showPlatforms &&
+                platformMode === "supported" &&
+                (game.steamUrlSegment ||
+                  game.playstationUrlSegment ||
+                  game.nintendoUrlSegment ||
+                  game.platforms?.includes(Platform.PC) ||
+                  game.platforms?.includes(Platform.XBOX)) && (
+                  <div className="mt-3 flex items-center gap-2">
+                    {game.steamUrlSegment && (
+                      <Image
+                        src="/logos/steam.svg"
+                        alt="Steam Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.playstationUrlSegment && (
+                      <Image
+                        src="/logos/playstation.svg"
+                        alt="PlayStation Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.nintendoUrlSegment && (
+                      <Image
+                        src="/logos/nintendo-switch.svg"
+                        alt="Nintendo Switch Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.platforms?.includes(Platform.PC) && (
+                      <Image
+                        src="/logos/windows-10.svg"
+                        alt="Windows Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                    {game.platforms?.includes(Platform.XBOX) && (
+                      <Image
+                        src="/logos/xbox.svg"
+                        alt="Xbox Logo"
+                        width={13}
+                        height={13}
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                )}
             </div>
           </Link>
         </div>

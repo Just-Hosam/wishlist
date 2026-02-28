@@ -20,7 +20,10 @@ export default async function SearchPage() {
     coverImageUrl: buildIGDBImageUrl(game.coverImageId),
     releaseDate: game.firstReleaseDate,
     length: undefined,
-    platforms: game.platforms
+    platforms: game.platforms,
+    steamUrlSegment: game.steamUrlSegment,
+    playstationUrlSegment: game.playstationUrlSegment,
+    nintendoUrlSegment: game.nintendoUrlSegment
   }))
 
   const upcomingGames = data?.upcoming ?? []
@@ -30,7 +33,10 @@ export default async function SearchPage() {
     coverImageUrl: buildIGDBImageUrl(game.coverImageId),
     releaseDate: game.firstReleaseDate,
     length: undefined,
-    platforms: game.platforms
+    platforms: game.platforms,
+    steamUrlSegment: game.steamUrlSegment,
+    playstationUrlSegment: game.playstationUrlSegment,
+    nintendoUrlSegment: game.nintendoUrlSegment
   }))
 
   const releasedGames = data?.released ?? []
@@ -40,7 +46,10 @@ export default async function SearchPage() {
     coverImageUrl: buildIGDBImageUrl(game.coverImageId),
     releaseDate: game.firstReleaseDate,
     length: undefined,
-    platforms: game.platforms
+    platforms: game.platforms,
+    steamUrlSegment: game.steamUrlSegment,
+    playstationUrlSegment: game.playstationUrlSegment,
+    nintendoUrlSegment: game.nintendoUrlSegment
   }))
 
   return (
@@ -55,6 +64,7 @@ export default async function SearchPage() {
           baseHref="/search/trending"
           showDate
           showPlatforms
+          platformMode="supported"
         />
       </div>
 
@@ -68,6 +78,7 @@ export default async function SearchPage() {
           baseHref="/search/upcoming"
           showDate
           showPlatforms
+          platformMode="supported"
         />
       </div>
 
@@ -81,6 +92,7 @@ export default async function SearchPage() {
           baseHref="/search/released"
           showDate
           showPlatforms
+          platformMode="supported"
         />
       </div>
 
