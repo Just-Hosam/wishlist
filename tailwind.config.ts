@@ -53,8 +53,8 @@ export default {
         }
       },
       fontFamily: {
-        mont: ["Montserrat", "sans-serif"],
-        open: ["Open Sans", "sans-serif"]
+        mont: ["var(--font-montserrat)", "sans-serif"],
+        open: ["var(--font-open-sans)", "sans-serif"]
       },
       borderRadius: {
         lg: "var(--radius)",

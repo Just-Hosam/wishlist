@@ -7,7 +7,21 @@ import { AccentHydrator } from "@/components/theme/AccentHydrator"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
+import { Montserrat, Open_Sans } from "next/font/google"
 import "../styles/globals.css"
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-montserrat"
+})
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-open-sans",
+  preload: false
+})
 
 export const metadata: Metadata = {
   title: "Playward",
@@ -22,7 +36,10 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html className="font-mont text-base" lang="en">
+    <html
+      className={`${montserrat.variable} ${openSans.variable} font-mont text-base`}
+      lang="en"
+    >
       <head>
         <link
           rel="icon"
@@ -35,12 +52,6 @@ export default async function RootLayout({
 
         <PWAConfig />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-          rel="stylesheet"
-        />
         {/* <script
               crossOrigin="anonymous"
               src="//unpkg.com/react-scan/dist/auto.global.js"
