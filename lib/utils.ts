@@ -48,6 +48,14 @@ export const formatReleaseDate = (timestamp: number) => {
   })
 }
 
-export async function sleep(ms: number): Promise<void> {
+export const sleep = async (ms: number): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const getScrollContainer = (): HTMLElement => {
+  return (
+    document.querySelector<HTMLElement>("[data-scroll-container]") ??
+    (document.scrollingElement as HTMLElement | null) ??
+    document.documentElement
+  )
 }

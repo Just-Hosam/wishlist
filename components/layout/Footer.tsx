@@ -8,6 +8,7 @@ import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { Link } from "@/components/navigation"
 import { usePathname } from "next/navigation"
 import { useRef } from "react"
+import { getScrollContainer } from "@/lib/utils"
 
 type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 
@@ -35,10 +36,7 @@ export default function Footer() {
   if (pathname === "/") return null
 
   const scrollToTop = () => {
-    const scrollEl =
-      document.querySelector<HTMLElement>("[data-scroll-container]") ??
-      (document.scrollingElement as HTMLElement | null) ??
-      document.documentElement
+    const scrollEl = getScrollContainer()
 
     scrollEl.scrollTo({ top: 0, behavior: "smooth" })
   }
