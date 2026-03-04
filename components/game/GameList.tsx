@@ -8,6 +8,7 @@ interface Props {
   showLength?: boolean
   showDate?: boolean
   showPlatforms?: boolean
+  priorityCount?: number
 
   baseHref: string
 
@@ -26,7 +27,8 @@ export default async function GameList({
   baseHref,
   showLength = false,
   showDate = false,
-  showPlatforms = false
+  showPlatforms = false,
+  priorityCount = 0
 }: Props) {
   return (
     <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
@@ -41,7 +43,8 @@ export default async function GameList({
                   alt={`${game.name} cover`}
                   fill
                   className="object-cover"
-                  priority={index < 6}
+                  priority={index < priorityCount}
+                  fetchPriority={index === 0 && priorityCount > 0 ? "high" : undefined}
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               )}

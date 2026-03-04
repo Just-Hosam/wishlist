@@ -65,6 +65,7 @@ export default async function SearchPage() {
           showDate
           showPlatforms
           platformMode="supported"
+          priorityCount={1}
         />
       </div>
 
@@ -79,6 +80,7 @@ export default async function SearchPage() {
           showDate
           showPlatforms
           platformMode="supported"
+          priorityCount={0}
         />
       </div>
 
@@ -93,6 +95,7 @@ export default async function SearchPage() {
           showDate
           showPlatforms
           platformMode="supported"
+          priorityCount={0}
         />
       </div>
 

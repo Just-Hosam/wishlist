@@ -9,6 +9,7 @@ interface Props {
   showDate?: boolean
   showPlatforms?: boolean
   platformMode?: "owned" | "supported"
+  priorityCount?: number
 
   baseHref: string
 
@@ -31,7 +32,8 @@ export default function GameCarousel({
   showLength = false,
   showDate = false,
   showPlatforms = false,
-  platformMode = "owned"
+  platformMode = "owned",
+  priorityCount = 0
 }: Props) {
   return (
     <div
@@ -49,7 +51,8 @@ export default function GameCarousel({
                   src={game.coverImageUrl}
                   alt={`${game.name} cover`}
                   className="object-cover"
-                  priority={index < 4}
+                  priority={index < priorityCount}
+                  fetchPriority={index === 0 && priorityCount > 0 ? "high" : undefined}
                   width={150}
                   height={200}
                   sizes="150px"

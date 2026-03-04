@@ -31,6 +31,7 @@ export default async function LibraryPage() {
             baseHref="/library"
             showLength
             showPlatforms
+            priorityCount={1}
           />
         </div>
       )}
@@ -49,6 +50,7 @@ export default async function LibraryPage() {
             baseHref="/library"
             showLength
             showPlatforms
+            priorityCount={hasNowPlaying ? 0 : 1}
           />
         </div>
       )}
