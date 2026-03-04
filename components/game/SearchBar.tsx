@@ -1,7 +1,7 @@
 "use client"
 
 import { encodePathSegment } from "@/lib/path"
-import { deleteSearchQuery } from "@/server/actions/search"
+import { deleteSearchQuery, saveSearchQuery } from "@/server/actions/search"
 import { History, Loader2, Search, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "../navigation"
@@ -86,6 +86,9 @@ export function SearchBar({ initialQuery = "" }: Props) {
     router.push(`/search/${encodePathSegment(keyword.trim())}`)
 
     setHistory((prev) => [keyword, ...prev.filter((q) => q !== keyword)])
+    void saveSearchQuery(keyword).catch((error) => {
+      console.error("Error saving search query:", error)
+    })
   }
 
   const handleSearchQueryDelete = (keyword: string) => {
