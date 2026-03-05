@@ -553,45 +553,7 @@ export async function getIGDBMostVisitedGameIds(): Promise<{
   }
 }
 
-export async function getTrendingGames(ids: number[]): Promise<IGDBGame[]> {
-  if (ids.length === 0) return []
-
-  const formatedIds = `(${ids.join(", ")})`
-  const nowSec = Math.floor(Date.now() / 1000) // today in seconds
-  const oneYearAgo = nowSec - 60 * 60 * 24 * 365 // 1 year ago in seconds
-
-  const trending = await queryIGDB<RawIGDBGame[]>(
-    IGDB_GAMES_ENDPOINT,
-    `
-      fields ${IGDB_GAME_FIELDS};
-
-      where id = ${formatedIds}
-        & game_type = (0, 2, 3, 8, 9)
-        & platforms = (48, 167, 130, 508, 6, 169)
-        & first_release_date != null
-        & first_release_date <= ${nowSec}
-        & first_release_date >= ${oneYearAgo}
-        & summary != null
-        & cover != null
-        & videos != null
-        & genres != null
-        & themes != (42)
-        & keywords != (343, 847, 2509, 3586, 26306);
-
-      limit 500;
-    `.trim()
-  )
-
-  const trendingById = new Map(trending.map((game) => [game.id, game]))
-  const sortedTrending = ids
-    .map((id) => trendingById.get(id))
-    .filter((game): game is RawIGDBGame => Boolean(game))
-    .map(transformRawIGDBGame)
-
-  return sortedTrending
-}
-
-async function getTrendingGamesMulti(idSets: {
+async function getTrendingGames(idSets: {
   "set-1": number[]
   "set-2": number[]
   "set-3": number[]
@@ -638,14 +600,8 @@ async function getTrendingGamesMulti(idSets: {
 
   if (error) return []
 
-  const allIds = [
-    ...idSets["set-1"],
-    ...idSets["set-2"],
-    ...idSets["set-3"]
-  ]
-  const byId = new Map(
-    gameSet.flatMap((s) => s.result).map((g) => [g.id, g])
-  )
+  const allIds = [...idSets["set-1"], ...idSets["set-2"], ...idSets["set-3"]]
+  const byId = new Map(gameSet.flatMap((s) => s.result).map((g) => [g.id, g]))
 
   return allIds
     .map((id) => byId.get(id))
@@ -653,39 +609,7 @@ async function getTrendingGamesMulti(idSets: {
     .map(transformRawIGDBGame)
 }
 
-export async function getUpcomingGames(ids: number[]): Promise<IGDBGame[]> {
-  if (ids.length === 0) return []
-
-  const formatedIds = `(${ids.join(", ")})`
-  const nowSec = Math.floor(Date.now() / 1000) // today in seconds
-
-  const upcoming = await queryIGDB<RawIGDBGame[]>(
-    IGDB_GAMES_ENDPOINT,
-    `
-      fields ${IGDB_GAME_FIELDS};
-
-      where id = ${formatedIds}
-        & game_type = (0, 2, 3, 8, 9)
-        & platforms = (48, 167, 130, 508, 6, 169)
-        & first_release_date != null
-        & first_release_date >= ${nowSec}
-        & summary != null
-        & cover != null
-        & videos != null
-        & genres != null
-        & themes != (42)
-        & keywords != (343, 847, 2509, 3586, 26306);
-
-      sort first_release_date asc;
-
-      limit 500;
-    `.trim()
-  )
-
-  return upcoming.map(transformRawIGDBGame)
-}
-
-async function getUpcomingGamesMulti(idSets: {
+async function getUpcomingGames(idSets: {
   "set-1": number[]
   "set-2": number[]
   "set-3": number[]
@@ -755,7 +679,7 @@ export async function getRecommendedGames(): Promise<{
   await sleep(350)
 
   const { data: trending, error: trendingError } = await tryCatch(
-    getTrendingGamesMulti(idSets ?? { "set-1": [], "set-2": [], "set-3": [] })
+    getTrendingGames(idSets ?? { "set-1": [], "set-2": [], "set-3": [] })
   )
   if (trendingError) {
     console.error("Error fetching trending games:", trendingError)
@@ -770,7 +694,7 @@ export async function getRecommendedGames(): Promise<{
   await sleep(350)
 
   const { data: upcoming, error: upcomingError } = await tryCatch(
-    getUpcomingGamesMulti(idSets ?? { "set-1": [], "set-2": [], "set-3": [] })
+    getUpcomingGames(idSets ?? { "set-1": [], "set-2": [], "set-3": [] })
   )
   if (upcomingError) {
     console.error("Error fetching upcoming games:", upcomingError)
