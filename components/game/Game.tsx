@@ -66,6 +66,7 @@ export function Game({
             height={246}
             sizes="185px"
             priority
+            fetchPriority="high"
           />
         </div>
         <h1 className="mb-1 max-w-[80%] text-2xl font-bold">{name}</h1>
