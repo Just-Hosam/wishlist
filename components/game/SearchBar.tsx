@@ -163,6 +163,8 @@ export function SearchBar({ initialQuery = "" }: Props) {
                 <Button
                   size="sm"
                   variant="ghost"
+                  aria-label={`Remove ${keyword} from recent searches`}
+                  title={`Remove ${keyword} from recent searches`}
                   onClick={(e) => {
                     e.stopPropagation()
                     handleSearchQueryDelete(keyword)

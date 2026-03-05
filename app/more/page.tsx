@@ -7,9 +7,9 @@ import { ThemePicker } from "@/components/theme/ThemePicker"
 export default function MorePage() {
   return (
     <div className="custom-slide-up-fade-in">
-      <h3 className="mb-2 text-sm font-semibold text-muted-foreground">
+      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
         Pages
-      </h3>
+      </h2>
       <Button
         asChild
         className="w-full justify-start"
@@ -35,9 +35,9 @@ export default function MorePage() {
         </Link>
       </Button>
       <div className="-mx-4 my-6 border-[3px]"></div>
-      <h3 className="mb-2 text-sm font-semibold text-muted-foreground">
+      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
         Settings
-      </h3>
+      </h2>
       <ThemePicker>
         <Button className="w-full justify-start" size="lg" variant="ghost">
           <Palette />

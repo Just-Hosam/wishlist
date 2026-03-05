@@ -1,11 +1,11 @@
 import ListEmptyState from "@/components/game/ListEmptyState"
+import { Link } from "@/components/navigation"
 import PriceLayout from "@/components/pricing/PriceLayout"
 import { getCachedWishlistGames } from "@/server/actions/lists"
 import { Platform } from "@/types"
 import { Clock } from "lucide-react"
 import { headers } from "next/headers"
 import Image from "next/image"
-import { Link } from "@/components/navigation"
 import { redirect } from "next/navigation"
 
 export default async function WishlistPage() {
@@ -53,9 +53,9 @@ export default async function WishlistPage() {
 
               <div className="flex min-w-0 flex-1 flex-col px-4 py-3">
                 <header className="items-start justify-between">
-                  <h3 className="mb-1 line-clamp-2 font-semibold">
+                  <h2 className="mb-1 line-clamp-2 font-semibold">
                     {game.name}
-                  </h3>
+                  </h2>
                   <p className="flex items-center gap-1 text-xs font-normal text-muted-foreground">
                     <Clock
                       size={12}

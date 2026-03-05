@@ -17,7 +17,7 @@ export default function TimeToBeat({
 }: Props) {
   return (
     <div className="rounded-3xl border px-5 py-4">
-      {title && <h4 className="mb-1 text-xs font-bold">{title}</h4>}
+      {title && <p className="mb-1 text-xs font-bold">{title}</p>}
       <div className="flex items-center gap-4">
         <div className="flex-1">
           <label className="text-xs text-muted-foreground">Story</label>

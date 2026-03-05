@@ -2,8 +2,8 @@ import Footer from "@/components/layout/Footer"
 import { Header } from "@/components/layout/Header"
 import { GlobalLoader } from "@/components/navigation/GlobalLoader"
 import { NavigationProvider } from "@/components/navigation/NavigationProvider"
-import { Toaster } from "@/components/ui/sonner"
 import { AccentHydrator } from "@/components/theme/AccentHydrator"
+import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
@@ -58,16 +58,15 @@ export default async function RootLayout({
             ></script> */}
       </head>
       <body>
-        {/* Hydrate accent from localStorage on first client paint (V1: client-only persistence). */}
         <AccentHydrator />
         <NavigationProvider>
           <Header />
-          <div
+          <main
             className="m-auto h-full max-w-[700px] overflow-y-auto px-4 pb-40 pt-[92px]"
             data-scroll-container
           >
             <GlobalLoader>{children}</GlobalLoader>
-          </div>
+          </main>
           <Footer />
           <Toaster position="top-center" duration={2000} />
           <SpeedInsights />

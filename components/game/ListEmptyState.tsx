@@ -10,7 +10,7 @@ export default function ListEmptyState() {
         className="mb-6 text-muted-foreground"
         strokeWidth={1}
       />
-      <h3 className="mb-2 text-xl font-semibold">No games yet</h3>
+      <h2 className="mb-2 text-xl font-semibold">No games yet</h2>
       <p className="text-muted-foreground">
         Start by searching for your first game
       </p>

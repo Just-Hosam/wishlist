@@ -68,6 +68,8 @@ export default async function SearchResultsPage({ params }: Props) {
               <Button
                 size="icon"
                 className="absolute right-2 top-2 z-10 size-8"
+                aria-label={`Open add actions for ${game.name}`}
+                title={`Open add actions for ${game.name}`}
               >
                 <Plus />
               </Button>
@@ -123,9 +125,9 @@ export default async function SearchResultsPage({ params }: Props) {
               {/* Game Info Section */}
               <div className="flex flex-1 flex-col px-1">
                 {/* Game Name */}
-                <h3 className="line-clamp-2 text-sm font-medium leading-tight">
+                <p className="line-clamp-2 text-sm font-medium leading-tight">
                   {game.name}
-                </h3>
+                </p>
 
                 {/* Release Date */}
                 {game.firstReleaseDate && (

@@ -61,9 +61,9 @@ export default function GameCarousel({
             </div>
 
             <div className="px-1">
-              <h3 className="line-clamp-2 text-sm font-medium leading-tight">
+              <p className="line-clamp-2 text-sm font-medium leading-tight">
                 {game.name}
-              </h3>
+              </p>
 
               {showDate && game.releaseDate && (
                 <p className="mt-1 text-xs text-muted-foreground md:text-sm">

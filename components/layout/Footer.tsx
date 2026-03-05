@@ -1,14 +1,12 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useNavigation } from "@/components/navigation/NavigationProvider"
-import { splitPathSegments } from "@/lib/path"
-import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { Link } from "@/components/navigation"
+import { useNavigation } from "@/components/navigation/NavigationProvider"
+import { buttonVariants } from "@/components/ui/button"
+import { splitPathSegments } from "@/lib/path"
+import { cn, getScrollContainer } from "@/lib/utils"
+import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { useRef } from "react"
-import { getScrollContainer } from "@/lib/utils"
 
 type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 
@@ -27,11 +25,6 @@ export default function Footer() {
           : activePathname.startsWith("/search")
             ? "SEARCH"
             : ""
-
-  const wishlistTriggerRef = useRef<HTMLButtonElement>(null)
-  const libraryTriggerRef = useRef<HTMLButtonElement>(null)
-  const moreTriggerRef = useRef<HTMLButtonElement>(null)
-  const searchButtonRef = useRef<HTMLButtonElement>(null)
 
   if (pathname === "/") return null
 
@@ -54,8 +47,10 @@ export default function Footer() {
     )
   }
 
-  const handleSearchClickOnSearchPage = (e: React.MouseEvent) => {
-    runScaleAnimation(searchButtonRef.current)
+  const handleSearchClickOnSearchPage = (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    runScaleAnimation(e.currentTarget)
 
     const pathSegments = splitPathSegments(pathname)
     const isSearchInputRoute =
@@ -67,8 +62,10 @@ export default function Footer() {
     }
   }
 
-  const handleWishlistClickOnWishlistPage = (e: React.MouseEvent) => {
-    runScaleAnimation(wishlistTriggerRef.current)
+  const handleWishlistClickOnWishlistPage = (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    runScaleAnimation(e.currentTarget)
 
     if (pathname === "/wishlist") {
       e.preventDefault()
@@ -76,8 +73,10 @@ export default function Footer() {
     }
   }
 
-  const handleLibraryClickOnLibraryPage = (e: React.MouseEvent) => {
-    runScaleAnimation(libraryTriggerRef.current)
+  const handleLibraryClickOnLibraryPage = (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    runScaleAnimation(e.currentTarget)
 
     if (pathname === "/library") {
       e.preventDefault()
@@ -85,79 +84,80 @@ export default function Footer() {
     }
   }
 
-  const handleCompletedClickOnCompletedPage = () => {
-    runScaleAnimation(moreTriggerRef.current)
+  const handleCompletedClickOnCompletedPage = (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    runScaleAnimation(e.currentTarget)
   }
 
   return (
     <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[85%] via-60% to-transparent px-5 pb-6 pt-3">
       <div className="m-auto flex max-w-[450px] items-center gap-4">
-        <Tabs value={activeTab} className="flex-1">
-          <TabsList className="min-h-[68px] w-full justify-around rounded-full bg-white px-[6px] py-0 shadow-lg">
+        <nav aria-label="Primary" className="flex-1">
+          <div className="flex min-h-[68px] w-full items-center justify-around gap-[2px] rounded-full bg-white px-[6px] py-0 text-muted-foreground shadow-lg">
             <Link
               href="/wishlist"
-              className="flex-1"
+              className={cn(
+                "inline-flex h-[56px] flex-1 items-center justify-center rounded-full border border-transparent px-[10px] py-[6px] text-sm font-medium text-foreground transition-[color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+                activeTab === "WISHLIST" && "bg-accent/20 text-accent"
+              )}
               onClick={handleWishlistClickOnWishlistPage}
+              aria-label="Go to wishlist"
             >
-              <TabsTrigger
-                value="WISHLIST"
-                ref={wishlistTriggerRef}
-                className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
-              >
-                {activeTab === "WISHLIST" ? (
-                  <Heart className="size-[18px] fill-accent text-accent" />
-                ) : (
-                  <Heart className="size-[18px]" />
-                )}
-              </TabsTrigger>
+              {activeTab === "WISHLIST" ? (
+                <Heart className="size-[18px] fill-accent text-accent" />
+              ) : (
+                <Heart className="size-[18px]" />
+              )}
             </Link>
             <Link
               href="/library"
-              className="flex-1"
+              className={cn(
+                "inline-flex h-[56px] flex-1 items-center justify-center rounded-full border border-transparent px-[10px] py-[6px] text-sm font-medium text-foreground transition-[color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+                activeTab === "LIBRARY" && "bg-accent/20 text-accent"
+              )}
               onClick={handleLibraryClickOnLibraryPage}
+              aria-label="Go to library"
             >
-              <TabsTrigger
-                value="LIBRARY"
-                ref={libraryTriggerRef}
-                className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
-              >
-                {activeTab === "LIBRARY" ? (
-                  <LibraryBig
-                    strokeWidth={1.6}
-                    className="size-[18px] text-accent"
-                  />
-                ) : (
-                  <LibraryBig strokeWidth={1.6} className="size-[18px]" />
-                )}
-              </TabsTrigger>
+              {activeTab === "LIBRARY" ? (
+                <LibraryBig
+                  strokeWidth={1.6}
+                  className="size-[18px] text-accent"
+                />
+              ) : (
+                <LibraryBig strokeWidth={1.6} className="size-[18px]" />
+              )}
             </Link>
             <Link
               href="/more"
-              className="flex-1"
+              className={cn(
+                "inline-flex h-[56px] flex-1 items-center justify-center rounded-full border border-transparent px-[10px] py-[6px] text-sm font-medium text-foreground transition-[color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+                activeTab === "MORE" && "bg-accent/20 text-accent"
+              )}
               onClick={handleCompletedClickOnCompletedPage}
+              aria-label="Go to more"
             >
-              <TabsTrigger
-                value="MORE"
-                ref={moreTriggerRef}
-                className="h-[56px] w-full rounded-full data-[state=active]:bg-accent/20"
-              >
-                {activeTab === "MORE" ? (
-                  <AlignJustify className="size-[18px] text-accent" />
-                ) : (
-                  <AlignJustify className="size-[18px]" />
-                )}
-              </TabsTrigger>
+              {activeTab === "MORE" ? (
+                <AlignJustify className="size-[18px] text-accent" />
+              ) : (
+                <AlignJustify className="size-[18px]" />
+              )}
             </Link>
-          </TabsList>
-        </Tabs>
-        <Link href="/search" onClick={handleSearchClickOnSearchPage}>
-          <Button
-            variant="accent"
-            ref={searchButtonRef}
-            className="h-[68px] w-[68px] rounded-full shadow-lg transition-transform [&_svg]:size-[18px]"
-          >
+          </div>
+        </nav>
+        <Link
+          href="/search"
+          onClick={handleSearchClickOnSearchPage}
+          aria-label="Go to search"
+          className={cn(
+            buttonVariants({ variant: "accent", size: "icon" }),
+            "h-[68px] w-[68px] rounded-full shadow-lg transition-transform focus-visible:ring-accent [&_svg]:size-[18px]"
+          )}
+        >
+          <span className="sr-only">Search</span>
+          <span aria-hidden="true">
             <Search />
-          </Button>
+          </span>
         </Link>
       </div>
     </footer>

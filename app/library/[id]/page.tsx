@@ -35,7 +35,12 @@ export default async function LibraryGamePage({ params }: Props) {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button size="icon" className="absolute right-5 top-4 z-40">
+          <Button
+            size="icon"
+            className="absolute right-5 top-4 z-40"
+            aria-label="Open game actions"
+            title="Open game actions"
+          >
             <Ellipsis />
           </Button>
         </PopoverTrigger>
