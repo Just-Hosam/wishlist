@@ -6,7 +6,7 @@ import { IGDBGame, IGDBPopscore, Platform, RawIGDBGame } from "@/types"
 import { unstable_cache } from "next/cache"
 
 const IGDB_GAMES_ENDPOINT = "https://api.igdb.com/v4/games"
-const IGDB_POPSCORE_ENDPOINT = "https://api.igdb.com/v4/popularity_primitives"
+const IGDB_MULTIQUERY_ENDPOINT = "https://api.igdb.com/v4/multiquery"
 
 const IGDB_GAME_FIELDS = `
   name, slug,
@@ -506,28 +506,51 @@ export async function getIGDBGameById(
   }
 }
 
-export async function getIGDBMostVisitedGameIds(
-  offset?: number
-): Promise<number[]> {
-  const rankedGamesPromise = queryIGDB<IGDBPopscore[]>(
-    IGDB_POPSCORE_ENDPOINT,
-    `
-      fields game_id;
+export async function getIGDBMostVisitedGameIds(): Promise<{
+  "set-1": number[]
+  "set-2": number[]
+  "set-3": number[]
+}> {
+  const { data: gameSet, error } = await tryCatch(
+    queryIGDB<{ name: string; result: IGDBPopscore[] }[]>(
+      IGDB_MULTIQUERY_ENDPOINT,
+      `
+        query popularity_primitives "set-1" {
+          fields game_id;
+          where popularity_type = 1;
+          sort value desc;
+          limit 500;
+        };
 
-      where popularity_type = 1;
+        query popularity_primitives "set-2" {
+          fields game_id;
+          where popularity_type = 1;
+          sort value desc;
+          offset 500;
+          limit 500;
+        };
 
-      sort value desc;
-
-      ${offset ? `offset ${offset};` : ""}
-
-      limit 500;
-    `.trim()
+        query popularity_primitives "set-3" {
+          fields game_id;
+          where popularity_type = 1;
+          sort value desc;
+          offset 1000;
+          limit 500;
+        };
+      `.trim()
+    )
   )
-  const { data: rankedGames, error } = await tryCatch(rankedGamesPromise)
 
-  if (error) return []
+  if (error) return { "set-1": [], "set-2": [], "set-3": [] }
 
-  return rankedGames.map((game) => game.game_id)
+  const extract = (name: string) =>
+    gameSet.find((s) => s.name === name)?.result.map((g) => g.game_id) ?? []
+
+  return {
+    "set-1": extract("set-1"),
+    "set-2": extract("set-2"),
+    "set-3": extract("set-3")
+  }
 }
 
 export async function getTrendingGames(ids: number[]): Promise<IGDBGame[]> {
@@ -611,72 +634,86 @@ export async function getRecommendedGames(): Promise<{
     released: [] as IGDBGame[]
   }
 
-  const { data: ids1, error: error1 } = await tryCatch(
+  const { data: idSets, error: idSetsError } = await tryCatch(
     getIGDBMostVisitedGameIds()
   )
-  if (error1) {
-    console.error("Error fetching most visited game IDs:", error1)
+  if (idSetsError) {
+    console.error("Error fetching most visited game IDs:", idSetsError)
   }
 
-  await sleep(350)
-
-  const { data: ids2, error: error2 } = await tryCatch(
-    getIGDBMostVisitedGameIds(500)
-  )
-  if (error2) {
-    console.error("Error fetching most visited game IDs (offset):", error2)
-  }
+  const ids1 = idSets?.["set-1"] ?? []
+  const ids2 = idSets?.["set-2"] ?? []
+  const ids3 = idSets?.["set-3"] ?? []
 
   await sleep(350)
 
   const { data: trending1, error: trendingError1 } = await tryCatch(
-    getTrendingGames(ids1 || [])
+    getTrendingGames(ids1)
   )
   if (trendingError1) {
     console.error("Error fetching trending games:", trendingError1)
   }
 
-  if (trending1 && trending1.length > 0)
-    results.trending.push(...trending1.slice(0, 30))
+  if (trending1?.length) results.trending.push(...trending1.slice(0, 30))
 
   await sleep(350)
 
   const { data: trending2, error: trendingError2 } = await tryCatch(
-    getTrendingGames(ids2 || [])
+    getTrendingGames(ids2)
   )
   if (trendingError2) {
-    console.error("Error fetching trending games (offset):", trendingError2)
+    console.error("Error fetching trending games (set-2):", trendingError2)
   }
 
-  const released = []
-  if (trending1 && trending1.length > 0) released.push(...trending1)
-  if (trending2 && trending2.length > 0) released.push(...trending2)
+  await sleep(350)
 
+  const { data: trending3, error: trendingError3 } = await tryCatch(
+    getTrendingGames(ids3)
+  )
+  if (trendingError3) {
+    console.error("Error fetching trending games (set-3):", trendingError3)
+  }
+
+  const released = [
+    ...(trending1 ?? []),
+    ...(trending2 ?? []),
+    ...(trending3 ?? [])
+  ]
   released.sort((a, b) => (b.firstReleaseDate || 0) - (a.firstReleaseDate || 0))
   results.released = released.slice(0, 30)
 
   await sleep(350)
 
   const { data: upcoming1, error: upcomingError1 } = await tryCatch(
-    getUpcomingGames(ids1 || [])
+    getUpcomingGames(ids1)
   )
   if (upcomingError1) {
-    console.error("Error fetching upcoming games 1:", upcomingError1)
+    console.error("Error fetching upcoming games (set-1):", upcomingError1)
   }
 
   await sleep(350)
 
   const { data: upcoming2, error: upcomingError2 } = await tryCatch(
-    getUpcomingGames(ids2 || [])
+    getUpcomingGames(ids2)
   )
   if (upcomingError2) {
-    console.error("Error fetching upcoming games 2:", upcomingError2)
+    console.error("Error fetching upcoming games (set-2):", upcomingError2)
   }
 
-  const upcoming = []
-  if (upcoming1 && upcoming1.length > 0) upcoming.push(...upcoming1)
-  if (upcoming2 && upcoming2.length > 0) upcoming.push(...upcoming2)
+  await sleep(350)
 
+  const { data: upcoming3, error: upcomingError3 } = await tryCatch(
+    getUpcomingGames(ids3)
+  )
+  if (upcomingError3) {
+    console.error("Error fetching upcoming games (set-3):", upcomingError3)
+  }
+
+  const upcoming = [
+    ...(upcoming1 ?? []),
+    ...(upcoming2 ?? []),
+    ...(upcoming3 ?? [])
+  ]
   upcoming.sort((a, b) => (a.firstReleaseDate || 0) - (b.firstReleaseDate || 0))
   results.upcoming = upcoming.slice(0, 30)
 
