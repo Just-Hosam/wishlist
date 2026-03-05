@@ -109,8 +109,8 @@ export default async function SearchResultsPage({ params }: Props) {
                     alt={game.name}
                     fill
                     className="object-cover"
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : undefined}
+                    priority={index < 2}
+                    fetchPriority={index < 2 ? "high" : undefined}
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
                 ) : (

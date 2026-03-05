@@ -44,8 +44,8 @@ export default async function WishlistPage() {
                     width={150}
                     height={200}
                     className="h-full w-full object-cover"
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : undefined}
+                    priority={index < 2}
+                    fetchPriority={index < 2 ? "high" : undefined}
                     sizes="150px"
                   />
                 </div>

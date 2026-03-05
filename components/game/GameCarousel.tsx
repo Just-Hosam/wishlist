@@ -52,7 +52,7 @@ export default function GameCarousel({
                   alt={`${game.name} cover`}
                   className="object-cover"
                   priority={index < priorityCount}
-                  fetchPriority={index === 0 && priorityCount > 0 ? "high" : undefined}
+                  fetchPriority={index < priorityCount ? "high" : undefined}
                   width={150}
                   height={200}
                   sizes="150px"

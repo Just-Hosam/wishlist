@@ -44,7 +44,7 @@ export default async function GameList({
                   fill
                   className="object-cover"
                   priority={index < priorityCount}
-                  fetchPriority={index === 0 && priorityCount > 0 ? "high" : undefined}
+                  fetchPriority={index < priorityCount ? "high" : undefined}
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               )}
