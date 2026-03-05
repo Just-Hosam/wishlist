@@ -685,6 +685,55 @@ export async function getUpcomingGames(ids: number[]): Promise<IGDBGame[]> {
   return upcoming.map(transformRawIGDBGame)
 }
 
+async function getUpcomingGamesMulti(idSets: {
+  "set-1": number[]
+  "set-2": number[]
+  "set-3": number[]
+}): Promise<IGDBGame[]> {
+  const nowSec = Math.floor(Date.now() / 1000)
+
+  const activeSets = (
+    Object.entries(idSets) as [keyof typeof idSets, number[]][]
+  ).filter(([, ids]) => ids.length > 0)
+
+  if (activeSets.length === 0) return []
+
+  const queryBody = activeSets
+    .map(
+      ([name, ids]) => `
+        query games "${name}" {
+          fields ${IGDB_GAME_FIELDS};
+          where id = (${ids.join(", ")})
+            & game_type = (0, 2, 3, 8, 9)
+            & platforms = (48, 167, 130, 508, 6, 169)
+            & first_release_date != null
+            & first_release_date >= ${nowSec}
+            & summary != null
+            & cover != null
+            & videos != null
+            & genres != null
+            & themes != (42)
+            & keywords != (343, 847, 2509, 3586, 26306);
+          sort first_release_date asc;
+          limit 500;
+        };
+      `
+    )
+    .join("")
+    .trim()
+
+  const { data: gameSet, error } = await tryCatch(
+    queryIGDB<{ name: string; result: RawIGDBGame[] }[]>(
+      IGDB_MULTIQUERY_ENDPOINT,
+      queryBody
+    )
+  )
+
+  if (error) return []
+
+  return gameSet.flatMap((s) => s.result).map(transformRawIGDBGame)
+}
+
 export async function getRecommendedGames(): Promise<{
   upcoming: IGDBGame[]
   trending: IGDBGame[]
@@ -703,10 +752,6 @@ export async function getRecommendedGames(): Promise<{
     console.error("Error fetching most visited game IDs:", idSetsError)
   }
 
-  const ids1 = idSets?.["set-1"] ?? []
-  const ids2 = idSets?.["set-2"] ?? []
-  const ids3 = idSets?.["set-3"] ?? []
-
   await sleep(350)
 
   const { data: trending, error: trendingError } = await tryCatch(
@@ -724,38 +769,18 @@ export async function getRecommendedGames(): Promise<{
 
   await sleep(350)
 
-  const { data: upcoming1, error: upcomingError1 } = await tryCatch(
-    getUpcomingGames(ids1)
+  const { data: upcoming, error: upcomingError } = await tryCatch(
+    getUpcomingGamesMulti(idSets ?? { "set-1": [], "set-2": [], "set-3": [] })
   )
-  if (upcomingError1) {
-    console.error("Error fetching upcoming games (set-1):", upcomingError1)
+  if (upcomingError) {
+    console.error("Error fetching upcoming games:", upcomingError)
   }
 
-  await sleep(350)
-
-  const { data: upcoming2, error: upcomingError2 } = await tryCatch(
-    getUpcomingGames(ids2)
+  const upcomingSorted = [...(upcoming ?? [])]
+  upcomingSorted.sort(
+    (a, b) => (a.firstReleaseDate || 0) - (b.firstReleaseDate || 0)
   )
-  if (upcomingError2) {
-    console.error("Error fetching upcoming games (set-2):", upcomingError2)
-  }
-
-  await sleep(350)
-
-  const { data: upcoming3, error: upcomingError3 } = await tryCatch(
-    getUpcomingGames(ids3)
-  )
-  if (upcomingError3) {
-    console.error("Error fetching upcoming games (set-3):", upcomingError3)
-  }
-
-  const upcoming = [
-    ...(upcoming1 ?? []),
-    ...(upcoming2 ?? []),
-    ...(upcoming3 ?? [])
-  ]
-  upcoming.sort((a, b) => (a.firstReleaseDate || 0) - (b.firstReleaseDate || 0))
-  results.upcoming = upcoming.slice(0, 30)
+  results.upcoming = upcomingSorted.slice(0, 30)
 
   return results
 }
