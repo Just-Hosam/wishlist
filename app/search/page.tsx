@@ -130,7 +130,7 @@ export default async function SearchPage() {
           </Button>
         </a>
         <a
-          href="https://www.playstation.com/en-ca/ps-plus/games/?category=GAME_CATALOG&sort=last#plus-container"
+          href="https://www.subsort.gg/en?xb=0&psp=1&av=av&s=dd"
           target="_blank"
           rel="noopener noreferrer"
         >
