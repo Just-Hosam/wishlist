@@ -10,6 +10,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
 import { Montserrat, Open_Sans } from "next/font/google"
+import { Suspense } from "react"
 import "../styles/globals.css"
 
 const montserrat = Montserrat({
@@ -63,7 +64,9 @@ export default async function RootLayout({
         <ServiceWorkerRegistration />
         <AccentHydrator />
         <NavigationProvider>
-          <ScrollRestoration />
+          <Suspense fallback={null}>
+            <ScrollRestoration />
+          </Suspense>
           <Header />
           <main
             className="m-auto h-full max-w-[700px] overflow-y-auto px-4 pb-40 pt-[92px]"
