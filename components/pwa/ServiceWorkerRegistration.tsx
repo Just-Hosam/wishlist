@@ -7,10 +7,9 @@ const SERVICE_WORKER_PATH = "/sw.js"
 export function ServiceWorkerRegistration() {
   useEffect(() => {
     const notProductionEnv = process.env.NODE_ENV !== "production"
-    const onServer = typeof window === "undefined"
     const noSWSupport = !("serviceWorker" in navigator)
 
-    if (notProductionEnv || onServer || noSWSupport) return
+    if (notProductionEnv || noSWSupport) return
 
     // If the document is already loaded, we can skip waiting for the load event
     const documentAlreadyLoaded = document.readyState === "complete"
