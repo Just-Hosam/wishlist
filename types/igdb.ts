@@ -1,5 +1,28 @@
 import { Platform } from "./enums"
 
+export const IGDB_GAME_FIELDS = `
+  name, slug,
+  summary,
+  first_release_date,
+  websites.type, websites.url,
+  platforms.id,
+  cover.image_id, screenshots.image_id, videos.video_id, videos.name,
+  hypes, rating, rating_count, aggregated_rating, aggregated_rating_count
+`
+
+export const IGDB_DISCOVER_WHERE_FILTER = `
+  game_type = (0, 2, 3, 8, 9)
+  & platforms = (48, 167, 130, 508, 6, 169)
+  & first_release_date != null
+  & first_release_date >= 946688461
+  & summary != null
+  & cover != null
+  & videos != null
+  & genres != null
+  & themes != (42)
+  & keywords != (343, 847, 2509, 3586, 26306)
+`
+
 export interface IGDBGame {
   id: string
   igdbId: number

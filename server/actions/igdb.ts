@@ -2,34 +2,18 @@
 
 import { buildRequestHeaders } from "@/lib/request"
 import { sleep, tryCatch } from "@/lib/utils"
-import { IGDBGame, IGDBPopscore, Platform, RawIGDBGame } from "@/types"
+import {
+  IGDB_DISCOVER_WHERE_FILTER,
+  IGDB_GAME_FIELDS,
+  IGDBGame,
+  IGDBPopscore,
+  Platform,
+  RawIGDBGame
+} from "@/types"
 import { unstable_cache } from "next/cache"
 
 const IGDB_GAMES_ENDPOINT = "https://api.igdb.com/v4/games"
 const IGDB_MULTIQUERY_ENDPOINT = "https://api.igdb.com/v4/multiquery"
-
-const IGDB_GAME_FIELDS = `
-  name, slug,
-  summary,
-  first_release_date,
-  websites.type, websites.url,
-  platforms.id,
-  cover.image_id, screenshots.image_id, videos.video_id, videos.name,
-  hypes, rating, rating_count, aggregated_rating, aggregated_rating_count
-`
-
-const IGDB_DISCOVER_WHERE_FILTER = `
-  game_type = (0, 2, 3, 8, 9)
-  & platforms = (48, 167, 130, 508, 6, 169)
-  & first_release_date != null
-  & first_release_date >= 946688461
-  & summary != null
-  & cover != null
-  & videos != null
-  & genres != null
-  & themes != (42)
-  & keywords != (343, 847, 2509, 3586, 26306)
-`
 
 function escapeIGDBString(input: string): string {
   return input
