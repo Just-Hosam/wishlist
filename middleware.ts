@@ -33,6 +33,6 @@ export default async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Exclude API, static assets, PWA files, and JSON files (including manifest.json).
-    "/((?!api|_next/static|_next/image|sw.js|favicon.ico|manifest.json|.*\\.json$|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
+    "/((?!api|_next/static|_next/image|sw\\.js|favicon.ico|manifest.json|.*\\.json$|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
   ]
 }
