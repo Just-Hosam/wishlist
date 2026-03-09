@@ -35,9 +35,12 @@ export default function GameCarousel({
   platformMode = "owned",
   priorityCount = 0
 }: Props) {
+  const restoreId = `game-carousel:${baseHref}`
+
   return (
     <div
       className="hide-scrollbar -mx-4 flex snap-x snap-mandatory overflow-x-auto scroll-smooth pr-4"
+      data-scroll-restore-id={restoreId}
       tabIndex={0}
       role="region"
       aria-label="Game Carousel"

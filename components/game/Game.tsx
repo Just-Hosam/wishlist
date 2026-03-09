@@ -165,6 +165,7 @@ export function Game({
           <label className="mb-4 font-semibold">Screenshots</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            data-scroll-restore-id="screenshots"
             tabIndex={0}
             role="region"
             aria-label="Screenshots"
@@ -201,6 +202,7 @@ export function Game({
           <label className="mb-4 font-semibold">Videos</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            data-scroll-restore-id="videos"
             tabIndex={0}
             role="region"
             aria-label="Videos"

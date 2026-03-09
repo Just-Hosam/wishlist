@@ -9,11 +9,18 @@ import {
   useEffect
 } from "react"
 import { usePathname } from "next/navigation"
+import { dispatchNavigationSaveEvent } from "./navigation-events"
 
 interface NavigationContextType {
   isNavigating: boolean
   pendingPathname: string | null
-  startNavigation: (targetPathname: string) => void
+  // Centralized navigation entry point used by custom Link/useRouter wrappers.
+  // It emits a pre-navigation save event so scroll state is captured
+  // synchronously before loader rendering can alter layout/scroll positions.
+  startNavigation: (
+    targetPathname: string,
+    options?: { restoreScroll?: boolean }
+  ) => void
   endNavigation: () => void
 }
 
@@ -26,13 +33,15 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   const [pendingPathname, setPendingPathname] = useState<string | null>(null)
   const pathname = usePathname()
 
-  // Auto-end navigation when pathname changes
+  // When Next reports a new pathname, we consider navigation complete.
+  // This keeps the global loader lifetime tied to actual route transitions.
   useEffect(() => {
     setIsNavigating(false)
     setPendingPathname(null)
   }, [pathname])
 
-  // Timeout to prevent spinner from showing indefinitely
+  // Failsafe: if something goes wrong during navigation, do not leave
+  // the loading spinner stuck forever.
   useEffect(() => {
     if (isNavigating) {
       const timeoutId = setTimeout(() => {
@@ -44,10 +53,18 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     }
   }, [isNavigating])
 
-  const startNavigation = useCallback((targetPathname: string) => {
-    setPendingPathname(targetPathname)
-    setIsNavigating(true)
-  }, [])
+  const startNavigation = useCallback(
+    (targetPathname: string, options?: { restoreScroll?: boolean }) => {
+      // Emit before any state updates so listeners can read current scroll
+      // while old content is still mounted and measurable.
+      dispatchNavigationSaveEvent({
+        restoreScroll: options?.restoreScroll ?? false
+      })
+      setPendingPathname(targetPathname)
+      setIsNavigating(true)
+    },
+    []
+  )
 
   const endNavigation = useCallback(() => {
     setIsNavigating(false)
