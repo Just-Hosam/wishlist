@@ -2,6 +2,7 @@ import Footer from "@/components/layout/Footer"
 import { Header } from "@/components/layout/Header"
 import { GlobalLoader } from "@/components/navigation/GlobalLoader"
 import { NavigationProvider } from "@/components/navigation/NavigationProvider"
+import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration"
 import { AccentHydrator } from "@/components/theme/AccentHydrator"
 import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next"
@@ -58,6 +59,7 @@ export default async function RootLayout({
             ></script> */}
       </head>
       <body>
+        <ServiceWorkerRegistration />
         <AccentHydrator />
         <NavigationProvider>
           <Header />

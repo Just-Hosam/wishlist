@@ -1,6 +1,8 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
+const PUBLIC_ROUTES = ["/", "/launch"]
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const token = await getToken({
@@ -8,7 +10,9 @@ export default async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET
   })
 
-  if (!token && pathname !== "/") {
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
+
+  if (!token && !isPublicRoute) {
     const url = request.nextUrl.clone()
     url.pathname = "/"
     return NextResponse.redirect(url)
@@ -28,7 +32,7 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Exclude API, next static routes, images, favicon, and JSON files (including manifest.json)
-    "/((?!api|_next/static|_next/image|favicon.ico|manifest.json|.*\\.json$|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
+    // Exclude API, static assets, PWA files, and JSON files (including manifest.json).
+    "/((?!api|_next/static|_next/image|sw\\.js|favicon.ico|manifest.json|.*\\.json$|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
   ]
 }
