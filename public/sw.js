@@ -63,10 +63,9 @@ self.addEventListener("activate", (event) => {
         })
       )
     )
+    // Keep activate alive until claim is complete for deterministic takeover.
+    .then(() => self.clients.claim())
   )
-
-  // Start controlling already-open pages without requiring another navigation.
-  self.clients.claim()
 })
 
 self.addEventListener("fetch", (event) => {
