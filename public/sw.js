@@ -22,7 +22,6 @@ const STATIC_ASSETS_CACHE = `static-assets-${SW_VERSION}`
 // `/launch` is a light page in this app that immediately routes onward.
 const APP_SHELL_URLS = [
   "/launch",
-  "/manifest.json",
   "/favicon/favicon-96x96.png",
   "/favicon/web-app-manifest-192x192.png",
   "/favicon/web-app-manifest-512x512.png",
