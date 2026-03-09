@@ -85,7 +85,15 @@ self.addEventListener("fetch", (event) => {
   const isAppShellRoute =
     request.mode === "navigate" && requestUrl.pathname === "/launch"
   if (isAppShellRoute) {
-    event.respondWith(cacheFirstAppShell(request))
+    const task = cacheFirstAppShell(request)
+
+    event.respondWith(task.then(({ response }) => response))
+    event.waitUntil(
+      task
+        .then(({ revalidate }) => revalidate)
+        .catch(() => undefined)
+    )
+
     return
   }
 
@@ -93,7 +101,14 @@ self.addEventListener("fetch", (event) => {
   // - immediate cache response if present
   // - background refresh keeps cache up to date for next visit
   if (isStaticAsset(requestUrl.pathname)) {
-    event.respondWith(staleWhileRevalidate(request))
+    const task = staleWhileRevalidate(request)
+
+    event.respondWith(task.then(({ response }) => response))
+    event.waitUntil(
+      task
+        .then(({ revalidate }) => revalidate)
+        .catch(() => undefined)
+    )
   }
 })
 
@@ -105,14 +120,19 @@ async function cacheFirstAppShell(request) {
   const cachedResponse = await cache.match("/launch")
 
   if (cachedResponse) {
-    // Fire-and-forget refresh in background to keep cache warm/fresh.
-    // `void` signals we intentionally do not await this Promise.
-    void fetchAndCache(request, cache, "/launch")
-    return cachedResponse
+    // When cache hits, return cached response immediately but also revalidate.
+    // The fetch event listener attaches this promise to event.waitUntil().
+    return {
+      response: cachedResponse,
+      revalidate: fetchAndCache(request, cache, "/launch")
+    }
   }
 
   // Cold start: no cache available yet, fetch from network and store it.
-  return fetchAndCache(request, cache, "/launch")
+  return {
+    response: fetchAndCache(request, cache, "/launch"),
+    revalidate: null
+  }
 }
 
 async function staleWhileRevalidate(request) {
@@ -123,10 +143,18 @@ async function staleWhileRevalidate(request) {
   // cached bytes first, but network response updates cache for future requests.
   const networkPromise = fetchAndCache(request, cache)
 
-  if (cachedResponse) return cachedResponse
+  if (cachedResponse) {
+    return {
+      response: cachedResponse,
+      revalidate: networkPromise
+    }
+  }
 
   // Cache miss falls back to network Promise.
-  return networkPromise
+  return {
+    response: networkPromise,
+    revalidate: null
+  }
 }
 
 async function fetchAndCache(request, cache, cacheKey) {
