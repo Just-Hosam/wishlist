@@ -11,16 +11,24 @@ interface NavLinkProps
   children: ReactNode
 }
 
-export function Link({ children, onClick, href, ...props }: NavLinkProps) {
+export function Link({
+  children,
+  onClick,
+  href,
+  scroll,
+  ...props
+}: NavLinkProps) {
   const { startNavigation } = useNavigation()
   const pathname = usePathname()
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    // Preserve caller behavior first (some handlers intentionally prevent nav).
     onClick?.(e)
     if (e.defaultPrevented) return
 
-    // Only trigger loading for client-side navigation
-    // Skip if it's a new tab, external link, has modifiers, or navigating to current route
+    // Detect same-route vs route-change so we avoid unnecessary loader state.
+    // Note: this simple check is intentional for our usage because `href` is
+    // mostly string routes in this app.
     const targetPath = typeof href === "string" ? href : href.pathname || ""
     const isSameRoute = targetPath === pathname
 
@@ -31,12 +39,15 @@ export function Link({ children, onClick, href, ...props }: NavLinkProps) {
       e.button === 0 && // left click
       !isSameRoute
     ) {
-      startNavigation(targetPath)
+      // Regular link navigation should *not* restore scroll on destination.
+      startNavigation(targetPath, { restoreScroll: false })
     }
   }
 
   return (
-    <NextLink href={href} onClick={handleClick} {...props}>
+    // Default to scroll={false}; central restoration logic decides whether
+    // destination should restore or reset based on navigation intent.
+    <NextLink href={href} onClick={handleClick} scroll={scroll ?? false} {...props}>
       {children}
     </NextLink>
   )

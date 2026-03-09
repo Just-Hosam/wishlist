@@ -2,6 +2,7 @@ import Footer from "@/components/layout/Footer"
 import { Header } from "@/components/layout/Header"
 import { GlobalLoader } from "@/components/navigation/GlobalLoader"
 import { NavigationProvider } from "@/components/navigation/NavigationProvider"
+import { ScrollRestoration } from "@/components/navigation/ScrollRestoration"
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration"
 import { AccentHydrator } from "@/components/theme/AccentHydrator"
 import { Toaster } from "@/components/ui/sonner"
@@ -62,6 +63,7 @@ export default async function RootLayout({
         <ServiceWorkerRegistration />
         <AccentHydrator />
         <NavigationProvider>
+          <ScrollRestoration />
           <Header />
           <main
             className="m-auto h-full max-w-[700px] overflow-y-auto px-4 pb-40 pt-[92px]"
