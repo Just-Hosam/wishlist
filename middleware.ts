@@ -1,18 +1,17 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
-const PUBLIC_ROUTES = ["/", "/launch"]
-
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  if (pathname === "/launch") return NextResponse.next()
+
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET
   })
 
-  const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
-
-  if (!token && !isPublicRoute) {
+  if (!token && pathname !== "/") {
     const url = request.nextUrl.clone()
     url.pathname = "/"
     return NextResponse.redirect(url)
