@@ -11,17 +11,7 @@ export function ServiceWorkerRegistration() {
 
     if (notProductionEnv || noSWSupport) return
 
-    // If the document is already loaded, we can skip waiting for the load event
-    const documentAlreadyLoaded = document.readyState === "complete"
-    if (documentAlreadyLoaded) {
-      void registerServiceWorker()
-      return
-    }
-
-    const onLoad = () => void registerServiceWorker()
-    window.addEventListener("load", onLoad)
-
-    return () => window.removeEventListener("load", onLoad)
+    void registerServiceWorker()
   }, [])
 
   return null
