@@ -267,8 +267,8 @@ export function SearchBar({ initialQuery = "" }: Props) {
           ? Array.from({ length: MAX_SEARCH_KEYWORD_SUGGESTIONS }).map(
               (_, index) => (
                 <SearchPopoverRow
-                  action={<Skeleton className="size-4 rounded-full" />}
-                  icon={<Skeleton className="size-[15px] rounded-full" />}
+                  action={<Skeleton className="size-5 rounded-full" />}
+                  icon={<Skeleton className="size-5 rounded-full" />}
                   isActive={false}
                   key={`skeleton-${index}`}
                   label={<Skeleton className="h-4 w-36" />}
@@ -332,22 +332,22 @@ function SearchPopoverRow({
 }) {
   return (
     <div
-      className={`flex min-h-11 cursor-pointer items-center gap-2 border-b py-2 pl-5 pr-2 text-sm last:border-none ${
+      className={`flex min-h-11 cursor-pointer items-center border-b py-2 pl-3 pr-2 text-sm last:border-none ${
         isActive ? "bg-muted/60" : ""
       }`}
       onClick={onClick}
     >
-      <div className="flex size-8 shrink-0 items-center justify-center">
+      <div className="mr-1 flex size-8 shrink-0 items-center justify-center">
         {icon}
       </div>
-      <div className="flex-1 overflow-hidden">
+      <div className="min-w-0 flex-1">
         {typeof label === "string" ? (
-          <span className="line-clamp-1 block">{label}</span>
+          <span className="block truncate">{label}</span>
         ) : (
           label
         )}
       </div>
-      <div className="flex size-8 shrink-0 items-center justify-center">
+      <div className="ml-3 flex size-8 shrink-0 items-center justify-center">
         {action}
       </div>
     </div>
