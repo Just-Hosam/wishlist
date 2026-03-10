@@ -113,7 +113,7 @@ export default async function SearchResultsPage({ params }: Props) {
                     className="object-cover"
                     priority={index < 2}
                     fetchPriority={index < 2 ? "high" : undefined}
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    unoptimized
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-gray-400">

@@ -9,7 +9,6 @@ type Props = {
   videoId: string // IGDB video_id (YouTube ID)
   width?: number
   height?: number
-  sizes?: string
   className?: string
 }
 
@@ -17,7 +16,6 @@ export function YoutubeVideo({
   videoId,
   width = 308,
   height = 173,
-  sizes = "(max-width: 640px) 90vw, 308px",
   className
 }: Props) {
   const encodedId = encodeURIComponent(videoId)
@@ -44,9 +42,9 @@ export function YoutubeVideo({
           alt="YouTube thumbnail"
           width={width}
           height={height}
-          sizes={sizes}
           className="absolute h-full w-full object-cover"
           priority={false}
+          unoptimized
           onError={() => {
             if (thumbnailUrl !== hq) setThumbnailUrl(hq)
           }}

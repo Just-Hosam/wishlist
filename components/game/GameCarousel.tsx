@@ -58,7 +58,7 @@ export default function GameCarousel({
                   fetchPriority={index < priorityCount ? "high" : undefined}
                   width={150}
                   height={200}
-                  sizes="150px"
+                  unoptimized
                 />
               )}
             </div>

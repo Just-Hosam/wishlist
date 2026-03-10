@@ -46,7 +46,7 @@ export default async function WishlistPage() {
                     className="h-full w-full object-cover"
                     priority={index < 2}
                     fetchPriority={index < 2 ? "high" : undefined}
-                    sizes="150px"
+                    unoptimized
                   />
                 </div>
               )}
