@@ -58,13 +58,13 @@ export function Game({
   return (
     <div className="custom-slide-up-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
-        <div className="mb-5 h-[246px] w-[185px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
+        <div className="mb-5 h-[266px] w-[200px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image
             src={buildIGDBImageUrl(imageId || "")}
             alt={name || "Game cover"}
-            width={185}
-            height={246}
-            sizes="185px"
+            width={200}
+            height={266}
+            sizes="200px"
             priority
             fetchPriority="high"
           />
@@ -185,8 +185,8 @@ export function Game({
                       alt={name || "Game cover"}
                       width={308}
                       height={173}
-                      sizes="(max-width: 640px) 90vw, 308px"
                       className="overflow-hidden rounded-2xl"
+                      unoptimized
                     />
                   </div>
                 )
@@ -217,12 +217,7 @@ export function Game({
                     // 330px = 308px (image) + 6px (horizontal padding) + 10px (first or last element, 16px - 6px)
                     className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
                   >
-                    <YoutubeVideo
-                      videoId={videoId}
-                      width={308}
-                      height={173}
-                      sizes="(max-width: 640px) 90vw, 308px"
-                    />
+                    <YoutubeVideo videoId={videoId} width={308} height={173} />
                   </div>
                 )
               })}
