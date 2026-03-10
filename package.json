@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "igdb-execute": "tsx --env-file=.env scripts/igdb/execute.ts",
+    "search-keywords": "tsx --env-file=.env scripts/search/execute.ts",
     "igdb-token": "tsx --env-file=.env scripts/igdb/token.ts",
     "deploy": "./scripts/deploy.sh"
   },
