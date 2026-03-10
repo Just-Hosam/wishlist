@@ -5,6 +5,7 @@ import {
   getConnectionEffectiveType,
   getDisplayMode,
   LaunchDiagnostic,
+  LaunchMarker,
   readLaunchHistory
 } from "@/lib/pwa-diagnostics"
 import { Button } from "../ui/button"
@@ -215,33 +216,154 @@ export function PWADiagnostics() {
         ) : (
           <div className="space-y-3">
             {snapshot.history.map((entry) => (
-              <article
+              <details
                 key={entry.id}
                 className="rounded-2xl bg-secondary/40 p-3 text-sm"
               >
-                <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <span className="font-medium">
-                    {formatDuration(entry.durationMs)}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {formatRecordedAt(entry.recordedAt)}
-                  </span>
+                <summary className="cursor-pointer list-none">
+                  <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <span className="font-medium">
+                      {formatDuration(entry.durationMs)}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {formatRecordedAt(entry.recordedAt)}
+                    </span>
+                  </div>
+                  <div className="grid gap-1 text-muted-foreground">
+                    <span>
+                      cache {entry.launchCacheResult} | controlled{" "}
+                      {entry.swControlled ? "yes" : "no"} | mode{" "}
+                      {entry.displayMode}
+                    </span>
+                    <span>
+                      sw {entry.swVersion ?? "-"} | app {entry.appVersion ?? "-"}
+                    </span>
+                    <span>
+                      online {entry.online ? "yes" : "no"} | connection{" "}
+                      {entry.effectiveType ?? "-"}
+                    </span>
+                    <span>{formatPhaseSummary(entry)}</span>
+                  </div>
+                </summary>
+
+                <div className="mt-4 space-y-4 border-t pt-4">
+                  <section className="space-y-2">
+                    <h3 className="font-medium">Timeline</h3>
+                    {entry.markers.length === 0 ? (
+                      <p className="text-muted-foreground">No markers captured.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {entry.markers.map((marker, index) => (
+                          <div
+                            key={`${entry.id}-${marker.label}-${index}`}
+                            className="grid gap-1 rounded-xl bg-background/60 p-2"
+                          >
+                            <div className="flex items-baseline justify-between gap-3">
+                              <span className="font-mono text-xs text-muted-foreground">
+                                {formatOffset(marker.atMs)}
+                              </span>
+                              <span className="flex-1">{marker.label}</span>
+                            </div>
+                            {marker.detail && (
+                              <div className="text-xs text-muted-foreground">
+                                {marker.detail}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="space-y-2">
+                    <h3 className="font-medium">Navigation Timing</h3>
+                    {entry.navigationTiming ? (
+                      <div className="grid gap-2 rounded-xl bg-background/60 p-3 text-xs text-muted-foreground">
+                        <span>
+                          type {entry.navigationTiming.type} | redirects{" "}
+                          {entry.navigationTiming.redirectCount}
+                        </span>
+                        <span>
+                          fetch {formatOffset(entry.navigationTiming.fetchStart)} |
+                          request {formatOffset(entry.navigationTiming.requestStart)} |
+                          response start{" "}
+                          {formatOffset(entry.navigationTiming.responseStart)} |
+                          response end{" "}
+                          {formatOffset(entry.navigationTiming.responseEnd)}
+                        </span>
+                        <span>
+                          dom interactive{" "}
+                          {formatOffset(entry.navigationTiming.domInteractive)} |
+                          dcl{" "}
+                          {formatOffset(
+                            entry.navigationTiming.domContentLoadedEventEnd
+                          )}{" "}
+                          | load {formatOffset(entry.navigationTiming.loadEventEnd)}
+                        </span>
+                        <span>
+                          transfer {formatBytes(entry.navigationTiming.transferSize)} |
+                          encoded{" "}
+                          {formatBytes(entry.navigationTiming.encodedBodySize)} |
+                          decoded{" "}
+                          {formatBytes(entry.navigationTiming.decodedBodySize)}
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground">
+                        No navigation timing captured.
+                      </p>
+                    )}
+                  </section>
+
+                  <section className="space-y-2">
+                    <h3 className="font-medium">Paint Timing</h3>
+                    {entry.paintTimings.length === 0 ? (
+                      <p className="text-muted-foreground">No paint entries captured.</p>
+                    ) : (
+                      <div className="grid gap-2 rounded-xl bg-background/60 p-3 text-xs text-muted-foreground">
+                        {entry.paintTimings.map((paint) => (
+                          <span key={`${entry.id}-${paint.name}`}>
+                            {paint.name} {formatOffset(paint.startTime)}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="space-y-2">
+                    <h3 className="font-medium">Relevant Requests</h3>
+                    {entry.resourceTimings.length === 0 ? (
+                      <p className="text-muted-foreground">
+                        No matching resource timings captured.
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {entry.resourceTimings.map((resource) => (
+                          <div
+                            key={`${entry.id}-${resource.name}-${resource.startTime}`}
+                            className="grid gap-1 rounded-xl bg-background/60 p-2 text-xs text-muted-foreground"
+                          >
+                            <span className="break-all font-mono text-[11px]">
+                              {resource.name}
+                            </span>
+                            <span>
+                              {resource.initiatorType} | start{" "}
+                              {formatOffset(resource.startTime)} | end{" "}
+                              {formatOffset(resource.responseEnd)} | duration{" "}
+                              {formatOffset(resource.duration)}
+                            </span>
+                            <span>
+                              transfer {formatBytes(resource.transferSize)} |
+                              encoded {formatBytes(resource.encodedBodySize)} |
+                              decoded {formatBytes(resource.decodedBodySize)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </section>
                 </div>
-                <div className="grid gap-1 text-muted-foreground">
-                  <span>
-                    cache {entry.launchCacheResult} | controlled{" "}
-                    {entry.swControlled ? "yes" : "no"} | mode{" "}
-                    {entry.displayMode}
-                  </span>
-                  <span>
-                    sw {entry.swVersion ?? "-"} | app {entry.appVersion ?? "-"}
-                  </span>
-                  <span>
-                    online {entry.online ? "yes" : "no"} | connection{" "}
-                    {entry.effectiveType ?? "-"}
-                  </span>
-                </div>
-              </article>
+              </details>
             ))}
           </div>
         )}
@@ -270,6 +392,11 @@ function formatDuration(durationMs: number | null) {
   return `${durationMs} ms`
 }
 
+function formatOffset(value: number | null) {
+  if (value === null) return "- ms"
+  return `${Math.round(value)} ms`
+}
+
 function formatRecordedAt(recordedAt: string | null) {
   if (!recordedAt) return "Unknown launch time"
 
@@ -277,4 +404,34 @@ function formatRecordedAt(recordedAt: string | null) {
   if (Number.isNaN(date.getTime())) return "Unknown launch time"
 
   return date.toLocaleString()
+}
+
+function formatPhaseSummary(entry: LaunchDiagnostic) {
+  const swMessage = findMarker(entry.markers, "sw-message-received")
+  const replaceCalled = findMarker(entry.markers, "wishlist-replace-called")
+  const wishlistMount = findMarker(entry.markers, "wishlist-marker-mounted")
+
+  return [
+    `sw ${formatMaybeMarker(swMessage)}`,
+    `replace ${formatMaybeMarker(replaceCalled)}`,
+    `mount ${formatMaybeMarker(wishlistMount)}`
+  ].join(" | ")
+}
+
+function findMarker(markers: LaunchMarker[], label: string) {
+  return markers.find((marker) => marker.label === label) ?? null
+}
+
+function formatMaybeMarker(marker: LaunchMarker | null) {
+  if (!marker) return "-"
+  return formatOffset(marker.atMs)
+}
+
+function formatBytes(value: number | null) {
+  if (value === null || value === 0) return "-"
+
+  if (value < 1024) return `${value} B`
+  if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`
+
+  return `${(value / (1024 * 1024)).toFixed(2)} MB`
 }
