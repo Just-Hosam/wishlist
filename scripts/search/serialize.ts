@@ -1,5 +1,5 @@
+import { joinNormalizedKeywordParts, normalizeKeywordText } from "@/lib/search"
 import { RawSearchGame, SearchKeywordInput } from "@/types/search"
-import { joinNormalizedKeywordParts, normalizeKeywordText } from "./normalize"
 
 const getAlternativeNames = (game: RawSearchGame): string[] => {
   const seen = new Set<string>()
