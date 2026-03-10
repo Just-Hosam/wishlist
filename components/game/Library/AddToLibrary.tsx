@@ -145,6 +145,7 @@ export default function AddToLibrary({
                     alt="Steam Logo"
                     width={18}
                     height={18}
+                    unoptimized
                   />
                   <span className="hidden text-sm font-normal sm:inline-block">
                     Steam
@@ -162,6 +163,7 @@ export default function AddToLibrary({
                     alt="PlayStation Logo"
                     width={18}
                     height={18}
+                    unoptimized
                   />
                   <span className="hidden text-sm font-normal sm:inline-block">
                     Playstation
@@ -179,6 +181,7 @@ export default function AddToLibrary({
                     alt="Nintendo Logo"
                     width={18}
                     height={18}
+                    unoptimized
                   />
                   <span className="hidden text-sm font-normal sm:inline-block">
                     Nintendo

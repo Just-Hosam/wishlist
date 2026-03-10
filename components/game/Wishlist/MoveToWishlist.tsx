@@ -141,6 +141,7 @@ export default function MoveToWishlist({
                   width={20}
                   height={20}
                   className="mr-3"
+                  unoptimized
                 />
 
                 <SteamPriceClient
@@ -162,6 +163,7 @@ export default function MoveToWishlist({
                   width={20}
                   height={20}
                   className="mr-3"
+                  unoptimized
                 />
                 <PlaystationPriceClient
                   igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
@@ -182,6 +184,7 @@ export default function MoveToWishlist({
                   width={20}
                   height={20}
                   className="mr-3"
+                  unoptimized
                 />
 
                 <NintendoPriceClient

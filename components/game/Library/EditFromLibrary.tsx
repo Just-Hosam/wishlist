@@ -134,6 +134,7 @@ export default function EditFromLibrary({ game, children }: Props) {
                     alt="Steam Logo"
                     width={18}
                     height={18}
+                    unoptimized
                   />
                   <span className="hidden text-sm font-normal sm:inline-block">
                     Steam
@@ -151,6 +152,7 @@ export default function EditFromLibrary({ game, children }: Props) {
                     alt="PlayStation Logo"
                     width={18}
                     height={18}
+                    unoptimized
                   />
                   <span className="hidden text-sm font-normal sm:inline-block">
                     Playstation
@@ -168,6 +170,7 @@ export default function EditFromLibrary({ game, children }: Props) {
                     alt="Nintendo Logo"
                     width={18}
                     height={18}
+                    unoptimized
                   />
                   <span className="hidden text-sm font-normal sm:inline-block">
                     Nintendo

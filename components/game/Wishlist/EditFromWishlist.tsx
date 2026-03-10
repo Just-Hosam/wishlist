@@ -206,6 +206,7 @@ export default function EditFromWishlist({ game, children }: Props) {
                     width={20}
                     height={20}
                     className="mr-3"
+                    unoptimized
                   />
 
                   <SteamPriceClient
@@ -227,6 +228,7 @@ export default function EditFromWishlist({ game, children }: Props) {
                     width={20}
                     height={20}
                     className="mr-3"
+                    unoptimized
                   />
                   <PlaystationPriceClient
                     igdbPlaystationUrlSegment={game.igdbPlaystationUrlSegment}
@@ -247,6 +249,7 @@ export default function EditFromWishlist({ game, children }: Props) {
                     width={20}
                     height={20}
                     className="mr-3"
+                    unoptimized
                   />
 
                   <NintendoPriceClient
