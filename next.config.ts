@@ -2,7 +2,8 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   env: {
-    APP_VERSION: process.env.npm_package_version
+    APP_VERSION: process.env.npm_package_version,
+    NEXT_PUBLIC_APP_VERSION: process.env.npm_package_version
   },
   images: {
     minimumCacheTTL: 10_368_000, // 4 months

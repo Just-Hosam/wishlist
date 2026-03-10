@@ -22,6 +22,7 @@ const BOOT_CACHE = `boot-cache-${SW_VERSION}`
 // `/launch` is a light page in this app that immediately routes onward.
 const APP_SHELL_URL = "/launch"
 const PRECACHE_URLS = [APP_SHELL_URL]
+const launchRequestResults = new Map()
 
 self.addEventListener("install", (event) => {
   // waitUntil tells the browser "installation is not done until this resolves".
@@ -76,7 +77,7 @@ self.addEventListener("fetch", (event) => {
   const isAppShellRoute =
     request.mode === "navigate" && requestUrl.pathname === APP_SHELL_URL
   if (isAppShellRoute) {
-    event.respondWith(cacheFirst(request, APP_SHELL_URL))
+    event.respondWith(handleLaunchRequest(event))
     return
   }
 
@@ -87,6 +88,50 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(cacheFirst(request))
   }
 })
+
+self.addEventListener("message", (event) => {
+  if (event.data?.type !== "get-launch-cache-result") return
+
+  const source = event.source
+  const clientId = source?.id
+  const payload = clientId
+    ? launchRequestResults.get(clientId)
+    : {
+        type: "launch-cache-result",
+        result: "unknown",
+        swVersion: SW_VERSION
+      }
+
+  source?.postMessage(
+    payload ?? {
+      type: "launch-cache-result",
+      result: "unknown",
+      swVersion: SW_VERSION
+    }
+  )
+
+  if (clientId) {
+    launchRequestResults.delete(clientId)
+  }
+})
+
+async function handleLaunchRequest(event) {
+  const cache = await caches.open(BOOT_CACHE)
+  const cachedResponse = await cache.match(APP_SHELL_URL)
+  const clientId = event.resultingClientId || event.clientId
+
+  if (clientId) {
+    launchRequestResults.set(clientId, {
+      type: "launch-cache-result",
+      result: cachedResponse ? "hit" : "miss",
+      swVersion: SW_VERSION
+    })
+  }
+
+  if (cachedResponse) return cachedResponse
+
+  return fetchAndCache(event.request, cache, APP_SHELL_URL)
+}
 
 async function cacheFirst(request, cacheKey = request) {
   const cache = await caches.open(BOOT_CACHE)

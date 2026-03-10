@@ -7,6 +7,7 @@ import { Clock } from "lucide-react"
 import { headers } from "next/headers"
 import Image from "next/image"
 import { redirect } from "next/navigation"
+import { LaunchCompleteMarker } from "./LaunchCompleteMarker"
 
 export default async function WishlistPage() {
   const userId = (await headers()).get("x-user-id")
@@ -20,6 +21,7 @@ export default async function WishlistPage() {
 
   return (
     <div className="custom-slide-up-fade-in grid gap-4">
+      <LaunchCompleteMarker />
       {wishlistGames.map((game, index) => {
         const nintendoPrice = game?.prices?.find(
           ({ platform }) => Platform.NINTENDO === platform
