@@ -1,4 +1,14 @@
 import { GoogleSigninButton } from "@/components/auth/GoogleSigninButton"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Sign In",
+  description:
+    "Sign in to Playward to manage your game wishlist, library, and completed games.",
+  alternates: {
+    canonical: "/"
+  }
+}
 
 export default function Home() {
   return (

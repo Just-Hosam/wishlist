@@ -27,10 +27,42 @@ const openSans = Open_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Playward",
+  metadataBase: new URL(getSiteUrl()),
+  applicationName: "Playward",
+  title: {
+    default: "Playward App",
+    template: "%s | Playward"
+  },
   description:
-    "Manage your game wishlists with ease. Track games you want to play, own, and have completed.",
-  manifest: "/manifest.json"
+    "Playward is a game wishlist and backlog app for tracking games you want to play, own, and complete.",
+  keywords: [
+    "Playward",
+    "Playward app",
+    "game wishlist app",
+    "video game tracker",
+    "gaming backlog app"
+  ],
+  manifest: "/manifest.json",
+  openGraph: {
+    type: "website",
+    siteName: "Playward",
+    title: "Playward App",
+    description:
+      "Playward is a game wishlist and backlog app for tracking games you want to play, own, and complete.",
+    images: [
+      {
+        url: "/screenshots/Wishlist.PNG",
+        alt: "Playward wishlist app preview"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Playward App",
+    description:
+      "Playward is a game wishlist and backlog app for tracking games you want to play, own, and complete.",
+    images: ["/screenshots/Wishlist.PNG"]
+  }
 }
 
 export default async function RootLayout({
@@ -82,6 +114,19 @@ export default async function RootLayout({
       </body>
     </html>
   )
+}
+
+function getSiteUrl() {
+  const value =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.NEXTAUTH_URL ??
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL
+
+  if (!value) return "http://localhost:3000"
+  if (value.startsWith("http://") || value.startsWith("https://")) return value
+
+  return value.startsWith("localhost") ? `http://${value}` : `https://${value}`
 }
 
 function PWAConfig() {
