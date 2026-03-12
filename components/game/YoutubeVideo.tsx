@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
+const YOUTUBE_VIDEO_PLAY_EVENT = "youtube-video-play"
+
 type Props = {
   videoId: string // IGDB video_id (YouTube ID)
   width?: number
@@ -26,15 +28,31 @@ export function YoutubeVideo({
   const [playing, setPlaying] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
+  const pauseVideo = () => {
+    iframeRef.current?.contentWindow?.postMessage(
+      '{"event":"command","func":"pauseVideo","args":""}',
+      "https://www.youtube-nocookie.com"
+    )
+  }
+
+  useEffect(() => {
+    const handleVideoPlay = (event: Event) => {
+      const { detail } = event as CustomEvent<string>
+      if (detail !== videoId) pauseVideo()
+    }
+
+    window.addEventListener(YOUTUBE_VIDEO_PLAY_EVENT, handleVideoPlay)
+    return () => {
+      window.removeEventListener(YOUTUBE_VIDEO_PLAY_EVENT, handleVideoPlay)
+    }
+  }, [videoId])
+
   useEffect(() => {
     if (!playing) return
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
-          iframeRef.current?.contentWindow?.postMessage(
-            '{"event":"command","func":"pauseVideo","args":""}',
-            "https://www.youtube-nocookie.com"
-          )
+          pauseVideo()
         }
       },
       { threshold: 0.1 }
@@ -67,7 +85,14 @@ export function YoutubeVideo({
     <button
       type="button"
       aria-label="Play video"
-      onClick={() => setPlaying(true)}
+      onClick={() => {
+        window.dispatchEvent(
+          new CustomEvent<string>(YOUTUBE_VIDEO_PLAY_EVENT, {
+            detail: videoId
+          })
+        )
+        setPlaying(true)
+      }}
       className={cn(
         "relative block w-full overflow-hidden rounded-2xl text-left",
         className
