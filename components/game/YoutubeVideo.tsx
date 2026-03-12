@@ -45,6 +45,11 @@ export function YoutubeVideo({
           className="absolute h-full w-full object-cover"
           priority={false}
           unoptimized
+          onLoad={(e) => {
+            // YouTube returns a 120×90 grey placeholder (not a 404) for missing
+            // maxres thumbnails, so onError never fires. Fall back to hq here.
+            if (e.currentTarget.naturalWidth <= 120) setThumbnailUrl(hq)
+          }}
           onError={() => {
             if (thumbnailUrl !== hq) setThumbnailUrl(hq)
           }}
