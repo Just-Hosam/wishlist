@@ -78,7 +78,7 @@ export function YoutubeVideo({
       <div className="relative aspect-video w-full">
         <iframe
           ref={iframeRef}
-          src={`https://www.youtube-nocookie.com/embed/${encodedId}?autoplay=0&enablejsapi=1&rel=0&iv_load_policy=3&color=white`}
+          src={`https://www.youtube-nocookie.com/embed/${encodedId}?autoplay=0&enablejsapi=1&rel=0&iv_load_policy=3&color=white&playsinline=0`}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           allowFullScreen
