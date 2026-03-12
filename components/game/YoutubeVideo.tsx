@@ -14,8 +14,8 @@ type Props = {
 
 export function YoutubeVideo({
   videoId,
-  width = 308,
-  height = 173,
+  width = 332,
+  height = 187,
   className
 }: Props) {
   const encodedId = encodeURIComponent(videoId)
@@ -61,9 +61,9 @@ export function YoutubeVideo({
         <Image
           src="/logos/youtube.svg"
           alt="Play on YouTube"
-          width={80}
-          height={80}
-          className="absolute drop-shadow-2xl"
+          width={70}
+          height={70}
+          className="absolute shadow-2xl"
           unoptimized
         />
       </div>

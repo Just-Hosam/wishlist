@@ -52,6 +52,9 @@ export function Game({
   const steamId = igdbSteamUrlSegment?.split("/")?.[1]
   const steamDBUrl = `https://steamdb.info/app/${steamId}/`
 
+  const hasVideos = igdbVideoIds && igdbVideoIds.length > 0
+  const hasScreenshots = igdbScreenshotIds && igdbScreenshotIds.length > 0
+
   return (
     <div className="custom-slide-up-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
@@ -162,67 +165,56 @@ export function Game({
       )}
 
       {/* SCREENSHOTS */}
-      {igdbScreenshotIds && (
+      {(hasVideos || hasScreenshots) && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-3 text-lg font-bold">Screenshots</label>
+          <label className="mb-3 text-lg font-bold">Media</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
-            data-scroll-restore-id="screenshots"
+            data-scroll-restore-id="media"
             tabIndex={0}
             role="region"
-            aria-label="Screenshots"
+            aria-label="media"
           >
             <div className="flex">
-              {igdbScreenshotIds.map((id, index) => {
-                if (index >= 8) return null
-                return (
-                  <div
-                    key={id}
-                    // 320px = 308px (image) + 12px (2x 6px horizontal padding)
-                    // 330px = 308px (image) + 6px (horizontal padding) + 10px (first or last element, 16px - 6px)
-                    className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
-                  >
-                    <Image
-                      src={buildIGDBImageUrl(id || "")}
-                      alt={name || "Game cover"}
-                      width={308}
-                      height={173}
-                      className="overflow-hidden rounded-2xl"
-                      unoptimized
-                    />
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* VIDEOS */}
-      {igdbVideoIds && igdbVideoIds.length > 0 && (
-        <div className="mt-8 flex flex-col">
-          <label className="mb-3 text-lg font-bold">Videos</label>
-          <div
-            className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
-            data-scroll-restore-id="videos"
-            tabIndex={0}
-            role="region"
-            aria-label="Videos"
-          >
-            <div className="flex">
-              {igdbVideoIds.map((videoId, index) => {
-                if (index >= 6) return null
-                return (
-                  <div
-                    key={videoId}
-                    // 320px = 308px (image) + 12px (2x 6px horizontal padding)
-                    // 330px = 308px (image) + 6px (horizontal padding) + 10px (first or last element, 16px - 6px)
-                    className="w-[90%] max-w-[320px] shrink-0 snap-center px-[6px] first:max-w-[330px] first:pl-4 last:max-w-[330px] last:pr-4"
-                  >
-                    <YoutubeVideo videoId={videoId} width={308} height={173} />
-                  </div>
-                )
-              })}
+              {hasVideos &&
+                igdbVideoIds.map((videoId, index) => {
+                  if (index >= 3) return null
+                  return (
+                    <div
+                      key={videoId}
+                      // 340px = 332px (image) + 8px (2x 4px horizontal padding)
+                      // 352px = 332px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
+                      className="w-[95%] max-w-[340px] shrink-0 snap-center px-1 first:max-w-[352px] first:pl-4 last:max-w-[352px] last:pr-4"
+                    >
+                      <YoutubeVideo
+                        videoId={videoId}
+                        width={332}
+                        height={187}
+                      />
+                    </div>
+                  )
+                })}
+              {hasScreenshots &&
+                igdbScreenshotIds.map((screenshotId, index) => {
+                  if (index >= 6) return null
+                  return (
+                    <div
+                      key={screenshotId}
+                      // 340px = 332px (image) + 8px (2x 4px horizontal padding)
+                      // 352px = 332px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
+                      className="w-[95%] max-w-[340px] shrink-0 snap-center px-1 first:max-w-[352px] first:pl-4 last:max-w-[352px] last:pr-4"
+                    >
+                      <Image
+                        src={buildIGDBImageUrl(screenshotId || "")}
+                        alt={name || "Game cover"}
+                        width={332}
+                        height={187}
+                        className="overflow-hidden rounded-2xl"
+                        unoptimized
+                      />
+                    </div>
+                  )
+                })}
             </div>
           </div>
         </div>
