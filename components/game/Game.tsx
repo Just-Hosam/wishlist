@@ -55,6 +55,10 @@ export function Game({
   const hasVideos = igdbVideoIds && igdbVideoIds.length > 0
   const hasScreenshots = igdbScreenshotIds && igdbScreenshotIds.length > 0
 
+  const isUpcoming = igdbFirstReleaseDate
+    ? new Date(igdbFirstReleaseDate * 1000) > new Date()
+    : false
+
   return (
     <div className="custom-slide-up-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
@@ -76,7 +80,7 @@ export function Game({
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
           )}
-          {steamId && (
+          {!isUpcoming && steamId && (
             <div className="ml-[10px] empty:hidden">
               <Suspense fallback={<Skeleton className="h-5 w-14" />}>
                 <SteamReviews steamId={steamId} />
@@ -221,22 +225,24 @@ export function Game({
       )}
 
       {/* TIME TO BEAT */}
-      <div className="mt-8">
-        <label className="mb-3 block text-lg font-bold">Time to Beat</label>
-        <div className="space-y-2">
-          {igdbSlug && (
-            <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
-              <BackloggdTimeToBeat slug={igdbSlug} />
+      {!isUpcoming && (
+        <div className="mt-8">
+          <label className="mb-3 block text-lg font-bold">Time to Beat</label>
+          <div className="space-y-2">
+            {igdbSlug && (
+              <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
+                <BackloggdTimeToBeat slug={igdbSlug} />
+              </Suspense>
+            )}
+            <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
+              <IGDBTimeToBeat igdbGameId={igdbId} />
             </Suspense>
-          )}
-          <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
-            <IGDBTimeToBeat igdbGameId={igdbId} />
-          </Suspense>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* MISC */}
-      {name && (
+      {!isUpcoming && name && (
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">External</label>
           <a
