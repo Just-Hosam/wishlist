@@ -7,7 +7,7 @@ import { ThemePicker } from "@/components/theme/ThemePicker"
 export default function MorePage() {
   return (
     <div className="custom-slide-up-fade-in">
-      <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
+      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
         Pages
       </h2>
       <Button
@@ -35,7 +35,7 @@ export default function MorePage() {
         </Link>
       </Button>
       <div className="-mx-4 my-6 border-[3px]"></div>
-      <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
+      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
         Settings
       </h2>
       <ThemePicker>
