@@ -31,10 +31,6 @@ export function YoutubeVideo({
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Play on YouTube"
-      onClick={(e) => {
-        e.preventDefault()
-        window.open(href, "_blank", "noopener,noreferrer")
-      }}
       className={cn(
         "relative block overflow-hidden rounded-2xl text-left",
         className
