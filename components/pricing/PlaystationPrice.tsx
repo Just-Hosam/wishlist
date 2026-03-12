@@ -45,9 +45,14 @@ export default async function PlaystationPrice({
   } catch (error) {
     console.error("Error fetching PlayStation game info:", error)
     return (
-      <span className="text-sm text-red-600">
-        Failed to fetch game information
-      </span>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-red-600 hover:opacity-90"
+      >
+        <span>Failed to fetch game information</span>
+      </a>
     )
   }
 }

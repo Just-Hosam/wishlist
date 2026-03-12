@@ -46,9 +46,14 @@ export default async function SteamPrice({ igdbSteamUrlSegment }: Props) {
   } catch (error) {
     console.error("Error fetching Steam game info:", error)
     return (
-      <span className="text-sm text-red-600">
-        Failed to fetch game information
-      </span>
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-red-600 hover:opacity-90"
+      >
+        <span>Failed to fetch game information</span>
+      </a>
     )
   }
 }
