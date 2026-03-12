@@ -45,6 +45,25 @@ export default async function SteamPrice({ igdbSteamUrlSegment }: Props) {
     )
   } catch (error) {
     console.error("Error fetching Steam game info:", error)
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch game information"
+
+    if (message === "Price not available") {
+      return (
+        <a
+          href={storeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-muted-foreground hover:opacity-90"
+        >
+          <span>Price not available</span>
+        </a>
+      )
+    }
+
     return (
       <a
         href={storeUrl}

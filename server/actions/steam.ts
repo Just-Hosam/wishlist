@@ -18,9 +18,7 @@ export async function fetchSteamPrice(url: string | null): Promise<PriceInput> {
 
     const gameInfo = await getSteamGameInfo(url)
 
-    if (!gameInfo) {
-      throw new Error("Failed to fetch game information from Steam store")
-    }
+    if (!gameInfo) throw new Error("Price not available")
 
     // Save the price in the background without waiting
     savePrice(gameInfo).catch((error) => {
