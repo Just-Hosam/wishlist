@@ -27,7 +27,11 @@ export function ExpandableText({
   const clampClass = CLAMP_CLASSES[lineClamp] || "line-clamp-4"
   return (
     <p
-      className={cn(!isExpanded && clampClass, className)}
+      className={cn(
+        "whitespace-pre-line",
+        !isExpanded && clampClass,
+        className
+      )}
       onClick={() => setIsExpanded(!isExpanded)}
     >
       {text}
