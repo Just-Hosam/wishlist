@@ -123,7 +123,14 @@ function getSiteUrl() {
     process.env.VERCEL_PROJECT_PRODUCTION_URL ??
     process.env.VERCEL_URL
 
-  if (!value) return "http://localhost:3000"
+  if (!value) {
+    if (process.env.NODE_ENV !== "production") return "http://localhost:3000"
+
+    throw new Error(
+      "Missing site URL. Set NEXT_PUBLIC_APP_URL, NEXTAUTH_URL, VERCEL_PROJECT_PRODUCTION_URL, or VERCEL_URL."
+    )
+  }
+
   if (value.startsWith("http://") || value.startsWith("https://")) return value
 
   return value.startsWith("localhost") ? `http://${value}` : `https://${value}`
