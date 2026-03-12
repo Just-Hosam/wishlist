@@ -70,10 +70,16 @@ export function YoutubeVideo({
         <div className="relative aspect-video w-full">
           <iframe
             ref={iframeRef}
-            src={`https://www.youtube-nocookie.com/embed/${encodedId}?autoplay=1&enablejsapi=1&rel=0&iv_load_policy=3&playsinline=1&color=white`}
+            src={`https://www.youtube-nocookie.com/embed/${encodedId}?autoplay=1&enablejsapi=1&rel=0&iv_load_policy=3&color=white`}
             title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
             allowFullScreen
+            onLoad={() => {
+              iframeRef.current?.contentWindow?.postMessage(
+                '{"event":"command","func":"playVideo","args":""}',
+                "https://www.youtube-nocookie.com"
+              )
+            }}
             className="absolute h-full w-full"
           />
         </div>
