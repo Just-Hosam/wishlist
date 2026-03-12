@@ -63,8 +63,10 @@ export function Game({
             fetchPriority="high"
           />
         </div>
-        <h1 className="mb-1 max-w-[80%] text-2xl font-bold">{name}</h1>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <h1 className="mb-1 line-clamp-2 max-w-[85%] text-2xl font-bold">
+          {name}
+        </h1>
+        <div className="flex items-center text-sm text-muted-foreground">
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
           )}
@@ -79,83 +81,79 @@ export function Game({
       </header>
 
       {/* PRICES */}
-      <div className="mt-8">
-        <label className="font-semibold">Prices</label>
-        <div className="mt-4 space-y-3 pl-2">
-          <div className="flex items-center">
-            <Image
-              src="/logos/steam.svg"
-              alt="Steam Logo"
-              width={20}
-              height={20}
-              className="mr-3"
-              unoptimized
+      <div className="mt-10 space-y-3 pl-2">
+        <div className="flex items-center">
+          <Image
+            src="/logos/steam.svg"
+            alt="Steam Logo"
+            width={20}
+            height={20}
+            className="mr-3"
+            unoptimized
+          />
+          <Suspense
+            fallback={
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+                <span>Fetching price...</span>
+              </div>
+            }
+          >
+            <SteamPrice igdbSteamUrlSegment={igdbSteamUrlSegment || null} />
+          </Suspense>
+        </div>
+        <div className="flex items-center">
+          <Image
+            src="/logos/playstation.svg"
+            alt="PlayStation Logo"
+            width={20}
+            height={20}
+            className="mr-3"
+            unoptimized
+          />
+          <Suspense
+            fallback={
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+                <span>Fetching price...</span>
+              </div>
+            }
+          >
+            <PlaystationPrice
+              igdbPlaystationUrlSegment={igdbPlaystationUrlSegment || null}
             />
-            <Suspense
-              fallback={
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <LoaderCircle className="h-4 w-4 animate-spin" />
-                  <span>Fetching price...</span>
-                </div>
-              }
-            >
-              <SteamPrice igdbSteamUrlSegment={igdbSteamUrlSegment || null} />
-            </Suspense>
-          </div>
-          <div className="flex items-center">
-            <Image
-              src="/logos/playstation.svg"
-              alt="PlayStation Logo"
-              width={20}
-              height={20}
-              className="mr-3"
-              unoptimized
+          </Suspense>
+        </div>
+        <div className="flex items-center">
+          <Image
+            src="/logos/nintendo-switch.svg"
+            alt="Nintendo Switch Logo"
+            width={20}
+            height={20}
+            className="mr-3"
+            unoptimized
+          />
+          <Suspense
+            fallback={
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+                <span>Fetching price...</span>
+              </div>
+            }
+          >
+            <NintendoPrice
+              igdbNintendoUrlSegment={igdbNintendoUrlSegment || null}
             />
-            <Suspense
-              fallback={
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <LoaderCircle className="h-4 w-4 animate-spin" />
-                  <span>Fetching price...</span>
-                </div>
-              }
-            >
-              <PlaystationPrice
-                igdbPlaystationUrlSegment={igdbPlaystationUrlSegment || null}
-              />
-            </Suspense>
-          </div>
-          <div className="flex items-center">
-            <Image
-              src="/logos/nintendo-switch.svg"
-              alt="Nintendo Switch Logo"
-              width={20}
-              height={20}
-              className="mr-3"
-              unoptimized
-            />
-            <Suspense
-              fallback={
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <LoaderCircle className="h-4 w-4 animate-spin" />
-                  <span>Fetching price...</span>
-                </div>
-              }
-            >
-              <NintendoPrice
-                igdbNintendoUrlSegment={igdbNintendoUrlSegment || null}
-              />
-            </Suspense>
-          </div>
+          </Suspense>
         </div>
       </div>
 
       {/* SUMMARY */}
       {summary && (
-        <div className="mt-8">
-          <label className="font-semibold">Summary</label>
+        <div className="mt-7 rounded-3xl border px-5 py-4">
           <ExpandableText
             text={summary}
-            className="mt-2 text-sm text-muted-foreground"
+            className="text-sm text-muted-foreground"
           />
         </div>
       )}
