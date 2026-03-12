@@ -13,7 +13,7 @@
 // Bump this string whenever you change SW caching behavior and want to force
 // old caches to be cleaned up on activate. This is also enough to force a
 // fresh `/launch` shell after you change that route in a meaningful way.
-const SW_VERSION = "0.3.57"
+const SW_VERSION = "0.3.58"
 
 // Keep one small cache dedicated to startup-critical responses.
 const BOOT_CACHE = `boot-cache-${SW_VERSION}`
