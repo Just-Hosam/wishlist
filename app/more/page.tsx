@@ -1,13 +1,7 @@
 import { SignOutButton } from "@/components/auth/SignoutButton"
 import { Link } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
-import {
-  ArrowRight,
-  Bug,
-  CheckCircle2,
-  Info,
-  Palette
-} from "lucide-react"
+import { ArrowRight, CheckCircle2, Info, Palette } from "lucide-react"
 import { ThemePicker } from "@/components/theme/ThemePicker"
 
 export default function MorePage() {
@@ -51,19 +45,6 @@ export default function MorePage() {
           <ArrowRight className="ml-auto text-muted-foreground" />
         </Button>
       </ThemePicker>
-
-      <Button
-        asChild
-        className="w-full justify-start"
-        size="lg"
-        variant="ghost"
-      >
-        <Link href="/more/pwa">
-          <Bug />
-          PWA Diagnostics
-          <ArrowRight className="ml-auto text-muted-foreground" />
-        </Link>
-      </Button>
 
       <div className="-mx-4 my-6 border-[3px]"></div>
       <div className="px-2">
