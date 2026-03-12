@@ -168,7 +168,7 @@ export function Game({
         </div>
       )}
 
-      {/* SCREENSHOTS */}
+      {/* MEDIA */}
       {(hasVideos || hasScreenshots) && (
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">Media</label>
@@ -186,14 +186,14 @@ export function Game({
                   return (
                     <div
                       key={videoId}
-                      // 340px = 332px (image) + 8px (2x 4px horizontal padding)
-                      // 352px = 332px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
-                      className="w-[95%] max-w-[340px] shrink-0 snap-center px-1 first:max-w-[352px] first:pl-4 last:max-w-[352px] last:pr-4"
+                      // 348px = 340px (image) + 8px (2x 4px horizontal padding)
+                      // 360px = 340px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
+                      className="w-[95%] max-w-[348px] shrink-0 snap-center px-1 first:max-w-[360px] first:pl-4 last:max-w-[360px] last:pr-4"
                     >
                       <YoutubeVideo
                         videoId={videoId}
-                        width={332}
-                        height={187}
+                        width={340}
+                        height={191}
                       />
                     </div>
                   )
@@ -204,15 +204,15 @@ export function Game({
                   return (
                     <div
                       key={screenshotId}
-                      // 340px = 332px (image) + 8px (2x 4px horizontal padding)
-                      // 352px = 332px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
-                      className="w-[95%] max-w-[340px] shrink-0 snap-center px-1 first:max-w-[352px] first:pl-4 last:max-w-[352px] last:pr-4"
+                      // 348px = 340px (image) + 8px (2x 4px horizontal padding)
+                      // 360px = 340px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
+                      className="w-[95%] max-w-[348px] shrink-0 snap-center px-1 first:max-w-[360px] first:pl-4 last:max-w-[360px] last:pr-4"
                     >
                       <Image
                         src={buildIGDBImageUrl(screenshotId || "")}
                         alt={name || "Game cover"}
-                        width={332}
-                        height={187}
+                        width={340}
+                        height={191}
                         className="overflow-hidden rounded-2xl"
                         unoptimized
                       />
