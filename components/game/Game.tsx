@@ -5,14 +5,7 @@ import {
   getCachedBackloggdTimeToBeat,
   getCachedIGDBTimeToBeat
 } from "@/server/actions/time-to-beat"
-import {
-  ExternalLink,
-  Frown,
-  Laugh,
-  LoaderCircle,
-  Meh,
-  Smile
-} from "lucide-react"
+import { ExternalLink, LoaderCircle, Star } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
 import NintendoPrice from "../pricing/NintendoPrice"
@@ -20,6 +13,7 @@ import PlaystationPrice from "../pricing/PlaystationPrice"
 import SteamPrice from "../pricing/SteamPrice"
 import { Button } from "../ui/button"
 import { ExpandableText } from "../ui/expandable-text"
+import { Skeleton } from "../ui/skeleton"
 import TimeToBeat from "./TimeToBeat"
 import { YoutubeVideo } from "./YoutubeVideo"
 
@@ -73,6 +67,13 @@ export function Game({
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {igdbFirstReleaseDate && (
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
+          )}
+          {steamId && (
+            <div className="ml-3 empty:hidden">
+              <Suspense fallback={<Skeleton className="h-5 w-14" />}>
+                <SteamReviews steamId={steamId} />
+              </Suspense>
+            </div>
           )}
         </div>
       </header>
@@ -226,23 +227,6 @@ export function Game({
         </div>
       )}
 
-      {/* Reviews */}
-      {steamId && (
-        <div className="mt-8">
-          <label className="mb-4 block font-semibold">Reviews</label>
-          <Suspense
-            fallback={
-              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                <LoaderCircle className="h-4 w-4 animate-spin" />
-                <span>Fetching reviews...</span>
-              </div>
-            }
-          >
-            <SteamReviews steamId={steamId} />
-          </Suspense>
-        </div>
-      )}
-
       {/* TIME TO BEAT */}
       <div className="mt-8">
         <label className="mb-4 block font-semibold">Time to Beat</label>
@@ -388,36 +372,24 @@ async function BackloggdTimeToBeat({ slug }: { slug: string }) {
 async function SteamReviews({ steamId }: { steamId: string }) {
   const { data, error } = await tryCatch(getCachedSteamReviews(steamId))
 
-  if (error) return <div>Error: {error.message}</div>
+  if (error) {
+    console.error("Error fetching Steam reviews:", error)
+    return null
+  }
 
-  let icon
+  const starRatio =
+    Math.round((Math.abs(data.positive / data.total) * 100) / 2) / 10
 
-  switch (data.description) {
-    case "Overwhelmingly Positive":
-    case "Very Positive":
-      icon = <Laugh className="h-4 w-4 text-blue-500" />
-      break
-    case "Positive":
-    case "Mostly Positive":
-      icon = <Smile className="h-4 w-4 text-blue-500" />
-      break
-    case "Mixed":
-      icon = <Meh className="h-4 w-4 text-yellow-500" />
-      break
-    case "Mostly Negative":
-    case "Negative":
-    case "Overwhelmingly Negative":
-      icon = <Frown className="h-4 w-4 text-red-500" />
-      break
-    default:
-      icon = null
+  if (Number.isNaN(starRatio)) {
+    console.error("Error calculating Steam star ratio:", data)
+    return null
   }
 
   return (
-    <div className="flex items-center pl-1 text-sm">
-      {icon}
-      <span className="ml-2">{data.description}</span>
-      <span className="ml-2 text-muted-foreground">({data.total} reviews)</span>
+    <div className="flex items-center text-sm">
+      <span className="mr-2 font-bold">•</span>
+      <Star className="mr-1 h-4 w-4 fill-[#fbc113] text-[#fbc113]" />
+      <span>{starRatio}</span>
     </div>
   )
 }

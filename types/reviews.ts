@@ -14,6 +14,7 @@ type ReviewDescription =
 
 export interface SteamReviews {
   total: number
+  positive: number
   description: ReviewDescription
 }
 

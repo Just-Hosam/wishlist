@@ -34,12 +34,14 @@ async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
   const data = (await response.json()) as RawSteamReviews
 
   const total = data?.query_summary?.total_reviews
+  const positive = data?.query_summary?.total_positive
   const description = data?.query_summary?.review_score_desc
 
   if (total == null || !description) throw new Error("No Reviews")
 
   return {
     total,
+    positive,
     description
   }
 }
@@ -51,7 +53,7 @@ export const getCachedSteamReviews = async (
     async (steamId: string) => fetchSteamReviews(steamId),
     [steamId],
     {
-      tags: [`steam-reviews-${steamId}`],
+      tags: [`steam-reviews-${steamId}`, "steam-reviews"],
       revalidate: 259_200 // 3 days
     }
   )(steamId)
