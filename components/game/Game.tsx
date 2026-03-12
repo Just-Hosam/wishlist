@@ -186,14 +186,14 @@ export function Game({
                   return (
                     <div
                       key={videoId}
-                      // 348px = 340px (image) + 8px (2x 4px horizontal padding)
-                      // 360px = 340px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
-                      className="w-[95%] max-w-[348px] shrink-0 snap-center px-1 first:max-w-[360px] first:pl-4 last:max-w-[360px] last:pr-4"
+                      // 356px = 348px (image) + 8px (2x 4px horizontal padding)
+                      // 368px = 348px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
+                      className="w-[95%] max-w-[356px] shrink-0 snap-center px-1 first:max-w-[368px] first:pl-4 last:max-w-[368px] last:pr-4"
                     >
                       <YoutubeVideo
                         videoId={videoId}
-                        width={340}
-                        height={191}
+                        width={348}
+                        height={196}
                       />
                     </div>
                   )
@@ -204,15 +204,15 @@ export function Game({
                   return (
                     <div
                       key={screenshotId}
-                      // 348px = 340px (image) + 8px (2x 4px horizontal padding)
-                      // 360px = 340px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
-                      className="w-[95%] max-w-[348px] shrink-0 snap-center px-1 first:max-w-[360px] first:pl-4 last:max-w-[360px] last:pr-4"
+                      // 356px = 348px (image) + 8px (2x 4px horizontal padding)
+                      // 368px = 348px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
+                      className="w-[95%] max-w-[356px] shrink-0 snap-center px-1 first:max-w-[368px] first:pl-4 last:max-w-[368px] last:pr-4"
                     >
                       <Image
                         src={buildIGDBImageUrl(screenshotId || "")}
                         alt={name || "Game cover"}
-                        width={340}
-                        height={191}
+                        width={348}
+                        height={196}
                         className="overflow-hidden rounded-2xl"
                         unoptimized
                       />
