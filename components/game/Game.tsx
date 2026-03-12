@@ -1,4 +1,7 @@
-import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
+import {
+  buildIGDBImageUrl,
+  buildSteamStorePageUrl
+} from "@/lib/igdb-store-links"
 import { formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
 import {
@@ -71,7 +74,7 @@ export function Game({
             <p>{formatReleaseDate(igdbFirstReleaseDate)}</p>
           )}
           {steamId && (
-            <div className="ml-3 empty:hidden">
+            <div className="ml-[10px] empty:hidden">
               <Suspense fallback={<Skeleton className="h-5 w-14" />}>
                 <SteamReviews steamId={steamId} />
               </Suspense>
@@ -161,7 +164,7 @@ export function Game({
       {/* SCREENSHOTS */}
       {igdbScreenshotIds && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-semibold">Screenshots</label>
+          <label className="mb-3 text-lg font-bold">Screenshots</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
             data-scroll-restore-id="screenshots"
@@ -198,7 +201,7 @@ export function Game({
       {/* VIDEOS */}
       {igdbVideoIds && igdbVideoIds.length > 0 && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-semibold">Videos</label>
+          <label className="mb-3 text-lg font-bold">Videos</label>
           <div
             className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
             data-scroll-restore-id="videos"
@@ -227,7 +230,7 @@ export function Game({
 
       {/* TIME TO BEAT */}
       <div className="mt-8">
-        <label className="mb-4 block font-semibold">Time to Beat</label>
+        <label className="mb-3 block text-lg font-bold">Time to Beat</label>
         <div className="space-y-2">
           {igdbSlug && (
             <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
@@ -243,7 +246,7 @@ export function Game({
       {/* MISC */}
       {name && (
         <div className="mt-8 flex flex-col">
-          <label className="mb-4 font-semibold">External</label>
+          <label className="mb-3 text-lg font-bold">External</label>
           <a
             href={hltbSearchUrl}
             target="_blank"
@@ -383,11 +386,20 @@ async function SteamReviews({ steamId }: { steamId: string }) {
     return null
   }
 
+  const storeUrl = buildSteamStorePageUrl(steamId) || ""
+
   return (
     <div className="flex items-center text-sm">
       <span className="mr-2 font-bold">•</span>
-      <Star className="mr-1 h-4 w-4 fill-[#fbc113] text-[#fbc113]" />
-      <span>{starRatio}</span>
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center text-sm hover:opacity-90"
+      >
+        <Star className="mr-1 h-4 w-4 fill-[#fbc113] text-[#fbc113]" />
+        <span>{starRatio}</span>
+      </a>
     </div>
   )
 }
