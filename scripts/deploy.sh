@@ -45,9 +45,14 @@ fi
 echo "📦 Starting deployment process..."
 echo ""
 
-# Run version increment script
-echo "🔢 Incrementing version..."
-./scripts/version-increment.sh
+# Ask whether to bump version
+read -r -p "🔢 Do you want to bump the version? (y/n): " VERSION_BUMP
+if [[ "$VERSION_BUMP" =~ ^[Yy]$ ]]; then
+    echo "🔢 Incrementing version..."
+    ./scripts/version-increment.sh
+else
+    echo "⏭️  Skipping version bump."
+fi
 
 echo ""
 echo "🚀 Triggering Vercel deployment..."
