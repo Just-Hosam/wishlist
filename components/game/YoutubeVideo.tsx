@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -19,20 +19,57 @@ export function YoutubeVideo({
   className
 }: Props) {
   const encodedId = encodeURIComponent(videoId)
-  const href = `https://youtu.be/${encodedId}`
   const maxres = `https://i.ytimg.com/vi/${encodedId}/maxresdefault.jpg`
   const hq = `https://i.ytimg.com/vi/${encodedId}/hqdefault.jpg`
 
   const [thumbnailUrl, setThumbnailUrl] = useState(maxres)
+  const [playing, setPlaying] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  useEffect(() => {
+    if (!playing) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          iframeRef.current?.contentWindow?.postMessage(
+            '{"event":"command","func":"pauseVideo","args":""}',
+            "https://www.youtube-nocookie.com"
+          )
+        }
+      },
+      { threshold: 0.1 }
+    )
+    const el = iframeRef.current
+    if (el) observer.observe(el)
+    return () => {
+      if (el) observer.unobserve(el)
+    }
+  }, [playing])
+
+  if (playing) {
+    return (
+      <div className={cn("relative overflow-hidden rounded-2xl", className)}>
+        <div className="relative aspect-video w-full">
+          <iframe
+            ref={iframeRef}
+            src={`https://www.youtube-nocookie.com/embed/${encodedId}?autoplay=1&enablejsapi=1`}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute h-full w-full"
+          />
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Play on YouTube"
+    <button
+      type="button"
+      aria-label="Play video"
+      onClick={() => setPlaying(true)}
       className={cn(
-        "relative block overflow-hidden rounded-2xl text-left",
+        "relative block w-full overflow-hidden rounded-2xl text-left",
         className
       )}
     >
@@ -63,6 +100,6 @@ export function YoutubeVideo({
           unoptimized
         />
       </div>
-    </a>
+    </button>
   )
 }
