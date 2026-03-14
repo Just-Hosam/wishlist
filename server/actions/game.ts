@@ -18,17 +18,8 @@ export async function deleteGame(id: string) {
     throw new Error("Unauthorized.")
   }
 
-  const user = await prisma.user.findUnique({ where: { id: userId } })
-
-  if (!user) {
-    throw new Error("User not found.")
-  }
-
   const game = await prisma.game.findFirst({
-    where: {
-      id,
-      userId: user.id
-    }
+    where: { id, userId }
   })
 
   if (!game) {
@@ -77,12 +68,6 @@ export async function saveGame(
     throw new Error("Invalid game category.")
   }
 
-  const user = await prisma.user.findUnique({ where: { id: userId } })
-
-  if (!user || !user.id) {
-    throw new Error("User not found.")
-  }
-
   const gameData = {
     length: length || null,
     category: category,
@@ -106,15 +91,10 @@ export async function saveGame(
   let game: GameOutput
 
   if (!id) {
-    game = await prisma.game.create({
-      data: {
-        ...gameData,
-        userId: user.id
-      }
-    })
+    game = await prisma.game.create({ data: { ...gameData, userId } })
   } else {
     game = await prisma.game.update({
-      where: { id, userId: user.id },
+      where: { id, userId },
       data: gameData
     })
   }
@@ -131,31 +111,14 @@ export async function saveGame(
 }
 
 export async function toggleNowPlaying(gameId: string) {
+  if (!gameId) throw new Error("Game ID is required.")
+
   const session = await getServerSession(authOptions)
   const userId = session?.user?.id
 
-  if (!userId) {
-    throw new Error("Unauthorized.")
-  }
+  if (!userId) throw new Error("Unauthorized.")
 
-  if (!gameId) {
-    throw new Error("Game ID is required.")
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId }
-  })
-
-  if (!user) {
-    throw new Error("User not found.")
-  }
-
-  const game = await prisma.game.findFirst({
-    where: {
-      id: gameId,
-      userId: user.id
-    }
-  })
+  const game = await prisma.game.findFirst({ where: { id: gameId, userId } })
 
   if (!game) {
     throw new Error("Game not found or you don't have permission to update it.")
