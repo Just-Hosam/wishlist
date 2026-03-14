@@ -33,6 +33,9 @@ if [ -z "$VERCEL_DEPLOY_HOOK" ] || [ "$VERCEL_DEPLOY_HOOK" = "https://api.vercel
     exit 1
 fi
 
+# Ask whether to bump the version or not
+read -r -p "🔢 Do you want to bump the version? (y/n): " VERSION_BUMP
+
 # Run build check to catch errors before deploying
 echo "🔨 Running production build check..."
 if npm run build; then
@@ -45,8 +48,6 @@ fi
 echo "📦 Starting deployment process..."
 echo ""
 
-# Ask whether to bump version
-read -r -p "🔢 Do you want to bump the version? (y/n): " VERSION_BUMP
 if [[ "$VERSION_BUMP" =~ ^[Yy]$ ]]; then
     echo "🔢 Incrementing version..."
     ./scripts/version-increment.sh
