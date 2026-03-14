@@ -39,14 +39,17 @@ export default function GameCarousel({
 
   return (
     <div
-      className="hide-scrollbar -mx-4 flex snap-x snap-mandatory overflow-x-auto scroll-smooth pr-4"
+      className="hide-scrollbar -mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto scroll-smooth"
       data-scroll-restore-id={restoreId}
       tabIndex={0}
       role="region"
       aria-label="Game Carousel"
     >
       {games.map((game, index) => (
-        <div className="w-[166px] shrink-0 snap-start pl-4" key={game.id}>
+        <div
+          className="w-[172px] shrink-0 snap-start first:ml-4 last:mr-4"
+          key={game.id}
+        >
           <Link href={`${baseHref}/${game.id}`}>
             <div className="relative mb-2 w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
               {game.coverImageUrl && (
@@ -56,8 +59,8 @@ export default function GameCarousel({
                   className="object-cover"
                   priority={index < priorityCount}
                   fetchPriority={index < priorityCount ? "high" : undefined}
-                  width={150}
-                  height={200}
+                  width={172}
+                  height={229}
                   unoptimized
                 />
               )}
