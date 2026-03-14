@@ -47,20 +47,20 @@ export default function GameCarousel({
     >
       {games.map((game, index) => (
         <div
-          className="w-[172px] shrink-0 snap-start first:ml-4 last:mr-4"
+          className="w-[166px] shrink-0 snap-start first:ml-4 last:mr-4"
           key={game.id}
         >
           <Link href={`${baseHref}/${game.id}`}>
-            <div className="relative mb-2 w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
+            <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-200 shadow-md">
               {game.coverImageUrl && (
                 <Image
                   src={game.coverImageUrl}
                   alt={`${game.name} cover`}
+                  fill
+                  sizes="166px"
                   className="object-cover"
                   priority={index < priorityCount}
                   fetchPriority={index < priorityCount ? "high" : undefined}
-                  width={172}
-                  height={229}
                   unoptimized
                 />
               )}
