@@ -33,8 +33,15 @@ if [ -z "$VERCEL_DEPLOY_HOOK" ] || [ "$VERCEL_DEPLOY_HOOK" = "https://api.vercel
     exit 1
 fi
 
-# Ask whether to bump the version or not
+# Ask up front which optional deploy steps to run later in the flow.
 read -r -p "🔢 Do you want to bump the version? (y/n): " VERSION_BUMP
+read -r -p "🔍 Do you want to update search data after deploy? (y/n): " UPDATE_SEARCH_DATA
+
+if [[ "$UPDATE_SEARCH_DATA" =~ ^[Yy]$ ]] && [ -z "$CRON_SECRET" ]; then
+    echo "❌ Error: CRON_SECRET not configured in .env!"
+    echo "Please add CRON_SECRET before using the search update option."
+    exit 1
+fi
 
 # Run build check to catch errors before deploying
 echo "🔨 Running production build check..."
@@ -66,6 +73,18 @@ if echo "$RESPONSE" | grep -q "job"; then
     echo "✅ Deployment triggered successfully!"
     echo ""
     echo "📊 Check deployment status at: https://vercel.com/just-hosams-projects/wishlist/deployments"
+
+    if [[ "$UPDATE_SEARCH_DATA" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "⏳ Waiting 2 minutes before updating recommended search data..."
+        sleep 120
+        echo "🔍 Updating recommended search data..."
+        curl -fsS \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            https://wishlist.samdahrooge.com/api/cron/update-recommended
+        echo ""
+        echo "✅ Recommended search data update triggered."
+    fi
 else
     echo "⚠️  Deployment may have been triggered, but response was unexpected:"
     echo "$RESPONSE"
