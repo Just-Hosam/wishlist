@@ -15,9 +15,17 @@ export default async function middleware(request: NextRequest) {
 
   if (isPublicPath(pathname)) return NextResponse.next()
 
+  const secureCookie =
+    request.nextUrl.protocol === "https:" ||
+    request.headers.get("x-forwarded-proto") === "https"
+
   const token = await getToken({
     req: request,
-    secret: process.env.NEXTAUTH_SECRET
+    secret: process.env.NEXTAUTH_SECRET,
+    secureCookie,
+    cookieName: secureCookie
+      ? "__Secure-authjs.session-token"
+      : "authjs.session-token"
   })
   const userId = typeof token?.sub === "string" && token.sub ? token.sub : null
 
