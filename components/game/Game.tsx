@@ -62,13 +62,13 @@ export function Game({
   return (
     <div className="custom-slide-up-fade-in">
       <header className="mx-auto flex flex-col items-center text-center">
-        <div className="mb-5 h-[266px] w-[200px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
+        <div className="mb-5 h-[253px] w-[190px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image
             src={buildIGDBImageUrl(imageId || "")}
             alt={name || "Game cover"}
-            width={200}
-            height={266}
-            sizes="200px"
+            width={190}
+            height={253}
+            sizes="190px"
             priority
             fetchPriority="high"
           />
@@ -160,7 +160,7 @@ export function Game({
 
       {/* SUMMARY */}
       {summary && (
-        <div className="mt-7 rounded-3xl border px-5 py-4">
+        <div className="mt-7 rounded-2xl border px-4 py-3">
           <ExpandableText
             text={summary}
             className="text-sm text-muted-foreground"
