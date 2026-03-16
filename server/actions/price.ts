@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma"
 import { PriceInput, PriceOutput } from "@/types"
 import { Platform } from "@prisma/client"
 import { getServerSession } from "next-auth"
-import { revalidateTag } from "next/cache"
 
 export async function getPrice(url: string): Promise<PriceOutput | null> {
   if (!url) throw new Error("URL is required")
@@ -76,8 +75,6 @@ export async function linkPriceToGame(
       }
     })
   }
-
-  revalidateTag(`game-detail-${gameId}`)
 }
 
 export async function unlinkPriceFromGame(
@@ -110,8 +107,6 @@ export async function unlinkPriceFromGame(
       }
     })
   }
-
-  revalidateTag(`game-detail-${gameId}`)
 }
 
 export async function getTrackedPlatformsForGame(
