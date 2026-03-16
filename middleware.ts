@@ -1,10 +1,20 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
+function isPublicPath(pathname: string) {
+  return (
+    pathname === "/launch" ||
+    pathname === "/search" ||
+    pathname.startsWith("/search/") ||
+    pathname === "/more" ||
+    pathname === "/more/about"
+  )
+}
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (pathname === "/launch") return NextResponse.next()
+  if (isPublicPath(pathname)) return NextResponse.next()
 
   const token = await getToken({
     req: request,
