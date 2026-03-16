@@ -1,8 +1,5 @@
-import authConfig from "@/auth.config"
-import NextAuth, { type NextAuthRequest } from "next-auth"
-import { NextResponse } from "next/server"
-
-const { auth } = NextAuth(authConfig)
+import { getToken } from "next-auth/jwt"
+import { NextRequest, NextResponse } from "next/server"
 
 function isPublicPath(pathname: string) {
   return (
@@ -14,31 +11,35 @@ function isPublicPath(pathname: string) {
   )
 }
 
-export default auth(function middleware(request: NextAuthRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const session = request.auth
 
   if (isPublicPath(pathname)) return NextResponse.next()
 
-  if (!session && pathname !== "/") {
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET
+  })
+
+  if (!token && pathname !== "/") {
     const url = request.nextUrl.clone()
     url.pathname = "/"
     return NextResponse.redirect(url)
   }
 
-  if (session && pathname === "/") {
+  if (token && pathname === "/") {
     const url = request.nextUrl.clone()
     url.pathname = "/wishlist"
     return NextResponse.redirect(url)
   }
 
   const requestHeaders = new Headers(request.headers)
-  if (session?.user?.id) {
-    requestHeaders.set("x-user-id", session.user.id)
+  if (typeof token?.sub === "string" && token.sub) {
+    requestHeaders.set("x-user-id", token.sub)
   }
 
   return NextResponse.next({ request: { headers: requestHeaders } })
-})
+}
 
 export const config = {
   matcher: [
