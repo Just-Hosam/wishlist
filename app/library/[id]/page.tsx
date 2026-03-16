@@ -20,9 +20,9 @@ interface Props {
 }
 
 export default async function LibraryGamePage({ params }: Props) {
-  const [headersTest, paramsTest] = await Promise.all([headers(), params])
-  const id = paramsTest.id
-  const userId = headersTest.get("x-user-id")
+  const [requestHeaders, resolvedParams] = await Promise.all([headers(), params])
+  const id = resolvedParams.id
+  const userId = requestHeaders.get("x-user-id")
 
   if (!id) notFound()
   if (!userId) redirect("/")

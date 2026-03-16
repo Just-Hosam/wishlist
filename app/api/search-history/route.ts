@@ -1,10 +1,9 @@
-import { authOptions } from "@/lib/auth-options"
+import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
-import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) return NextResponse.json([])
 

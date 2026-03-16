@@ -1,7 +1,6 @@
 "use server"
 
-import { authOptions } from "@/lib/auth-options"
-import { getServerSession } from "next-auth"
+import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
 import { tryCatch } from "@/lib/utils"
 
@@ -9,7 +8,7 @@ export async function saveSearchQuery(query: string) {
   const trimmed = query.trim()
   if (!trimmed) return
 
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) return
 
@@ -28,7 +27,7 @@ export async function deleteSearchQuery(query: string) {
   const trimmed = query.trim()
   if (!trimmed) return
 
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) return
 
