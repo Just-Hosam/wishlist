@@ -19,9 +19,9 @@ interface Props {
 }
 
 export default async function CompletedGamePage({ params }: Props) {
-  const [headersTest, paramsTest] = await Promise.all([headers(), params])
+  const [requestHeaders, paramsTest] = await Promise.all([headers(), params])
   const id = paramsTest.id
-  const userId = headersTest.get("x-user-id")
+  const userId = requestHeaders.get("x-user-id")
 
   if (!id) notFound()
   if (!userId) redirect("/")

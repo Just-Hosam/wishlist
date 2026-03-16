@@ -1,10 +1,9 @@
 "use server"
 
-import { authOptions } from "@/lib/auth-options"
+import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
 import { PriceInput, PriceOutput } from "@/types"
 import { Platform } from "@prisma/client"
-import { getServerSession } from "next-auth"
 
 export async function getPrice(url: string): Promise<PriceOutput | null> {
   if (!url) throw new Error("URL is required")
@@ -49,7 +48,7 @@ export async function linkPriceToGame(
   gameId: string,
   url: string
 ): Promise<void> {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) throw new Error("Unauthorized.")
 
@@ -81,7 +80,7 @@ export async function unlinkPriceFromGame(
   gameId: string,
   url: string
 ): Promise<void> {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) throw new Error("Unauthorized.")
 
@@ -112,7 +111,7 @@ export async function unlinkPriceFromGame(
 export async function getTrackedPlatformsForGame(
   gameId: string
 ): Promise<Platform[]> {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) throw new Error("Unauthorized.")
 

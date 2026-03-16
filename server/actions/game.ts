@@ -1,9 +1,8 @@
 "use server"
 
-import { authOptions } from "@/lib/auth-options"
+import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
 import { GameCategory, GameInput, GameOutput } from "@/types"
-import { getServerSession } from "next-auth"
 import { revalidateTag } from "next/cache"
 
 function revalidateGameCategory(category: GameCategory, userId: string) {
@@ -11,7 +10,7 @@ function revalidateGameCategory(category: GameCategory, userId: string) {
 }
 
 export async function deleteGame(id: string) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
 
   if (!userId) {
@@ -36,7 +35,7 @@ export async function saveGame(
   id?: string,
   categoriesToRevalidate?: GameCategory[]
 ): Promise<GameOutput> {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
   if (!userId) throw new Error("Unauthorized.")
 
@@ -113,7 +112,7 @@ export async function saveGame(
 export async function toggleNowPlaying(gameId: string) {
   if (!gameId) throw new Error("Game ID is required.")
 
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   const userId = session?.user?.id
 
   if (!userId) throw new Error("Unauthorized.")
