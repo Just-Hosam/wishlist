@@ -54,7 +54,7 @@ export const getCachedSteamReviews = async (
     [steamId],
     {
       tags: [`steam-reviews-${steamId}`, "steam-reviews"],
-      revalidate: 259_200 // 3 days
+      revalidate: 86_400 // 1 day
     }
   )(steamId)
 }
