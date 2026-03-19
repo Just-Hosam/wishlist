@@ -92,7 +92,7 @@ export default async function RootLayout({
               src="//unpkg.com/react-scan/dist/auto.global.js"
             ></script> */}
       </head>
-      <body>
+      <body className="bg-red-600">
         <ServiceWorkerRegistration />
         <AccentHydrator />
         <NavigationProvider>
@@ -101,7 +101,7 @@ export default async function RootLayout({
           </Suspense>
           <Header />
           <main
-            className="m-auto h-full max-w-[700px] overflow-y-auto px-4 pb-40 pt-[92px]"
+            className="m-auto h-full max-w-[700px] overflow-y-auto bg-background px-4 pb-40 pt-[92px]"
             data-scroll-container
           >
             <GlobalLoader>{children}</GlobalLoader>
