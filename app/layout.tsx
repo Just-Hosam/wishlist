@@ -151,6 +151,7 @@ function PWAConfig() {
         content="black-translucent"
       />
       <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="theme-color" content="#f5427e" />
       <link
         rel="apple-touch-startup-image"
         href="/pwa/apple-splash-2048-2732.jpg"
