@@ -1,7 +1,4 @@
-import {
-  buildIGDBImageUrl,
-  buildSteamStorePageUrl
-} from "@/lib/igdb-store-links"
+import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
 import {
@@ -11,6 +8,7 @@ import {
 import { ExternalLink, LoaderCircle, Star } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
+import { Link } from "../navigation"
 import NintendoPrice from "../pricing/NintendoPrice"
 import PlaystationPrice from "../pricing/PlaystationPrice"
 import SteamPrice from "../pricing/SteamPrice"
@@ -384,20 +382,16 @@ async function SteamReviews({ steamId }: { steamId: string }) {
     return null
   }
 
-  const storeUrl = buildSteamStorePageUrl(steamId) || ""
-
   return (
     <div className="flex items-center text-sm">
       <span className="mr-2 font-bold">•</span>
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={`/reviews/${steamId}`}
         className="flex items-center text-sm hover:opacity-90"
       >
         <Star className="mr-1 h-4 w-4 fill-[#fbc113] text-[#fbc113]" />
         <span>{starRatio}</span>
-      </a>
+      </Link>
     </div>
   )
 }
