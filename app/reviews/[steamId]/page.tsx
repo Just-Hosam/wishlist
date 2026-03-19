@@ -4,7 +4,7 @@ import { buildSteamStorePageUrl } from "@/lib/igdb-store-links"
 import { cn, formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
 import { SteamReview } from "@/types/reviews"
-import { Check, ExternalLink, Star, X } from "lucide-react"
+import { Check, ExternalLink, Info, Star, X } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -52,6 +52,17 @@ export default async function SteamReviewsPage({ params }: Props) {
         {data.reviews.map((review, index) => (
           <Review key={index} {...review} />
         ))}
+      </div>
+      <div className="mt-6 flex gap-2 rounded-2xl px-2 text-muted-foreground">
+        <Info className="mt-[3px] size-[18px]" />
+        <p className="flex-1 text-sm">
+          Only 20 reviews are being shown. Visit the official steam page to{" "}
+          <a href={steamReviewsUrl!} target="_blank" rel="noopener noreferrer">
+            view all reviews{" "}
+            <ExternalLink className="-mt-[2px] ml-[1px] inline size-[14px]" />
+          </a>
+          .
+        </p>
       </div>
     </div>
   )
