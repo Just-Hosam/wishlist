@@ -29,7 +29,7 @@ export default async function SteamReviewsPage({ params }: Props) {
   const steamReviewsUrl = buildSteamStorePageUrl(
     steamId,
     "CA",
-    "app_review_hash"
+    "app_reviews_hash"
   )
   if (!steamReviewsUrl) notFound()
 
