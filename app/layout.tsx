@@ -92,7 +92,7 @@ export default async function RootLayout({
               src="//unpkg.com/react-scan/dist/auto.global.js"
             ></script> */}
       </head>
-      <body className="bg-background">
+      <body className="bg-[hsl(0 0% 98%)]">
         <ServiceWorkerRegistration />
         <AccentHydrator />
         <NavigationProvider>
