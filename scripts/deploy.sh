@@ -12,6 +12,21 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
     exit 1
 fi
 
+# Make sure local main matches remote main before deploying.
+echo "🔄 Checking local main against origin/main..."
+git fetch origin main --quiet
+
+LOCAL_MAIN=$(git rev-parse main)
+REMOTE_MAIN=$(git rev-parse origin/main)
+
+if [ "$LOCAL_MAIN" != "$REMOTE_MAIN" ]; then
+    echo "❌ Error: local main does not match origin/main."
+    echo "Please sync main with origin/main before deploying."
+    echo "Local main:  $LOCAL_MAIN"
+    echo "origin/main: $REMOTE_MAIN"
+    exit 1
+fi
+
 # Check if .env exists
 if [ ! -f .env ]; then
     echo "❌ Error: .env file not found!"
