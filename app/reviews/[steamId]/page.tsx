@@ -98,7 +98,7 @@ function Review(review: SteamReview) {
       <ExpandableText
         text={review.message}
         className="mt-4 text-sm text-muted-foreground"
-        lineClamp={6}
+        lineClamp={14}
       />
     </div>
   )
