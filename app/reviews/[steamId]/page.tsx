@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button"
 import { ExpandableText } from "@/components/ui/expandable-text"
-import { buildSteamStorePageUrl } from "@/lib/igdb-store-links"
+import { buildSteamStoreReviewsUrl } from "@/lib/igdb-store-links"
 import { cn, formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
 import { SteamReview } from "@/types/reviews"
@@ -26,11 +25,7 @@ export default async function SteamReviewsPage({ params }: Props) {
     return null
   }
 
-  const steamReviewsUrl = buildSteamStorePageUrl(
-    steamId,
-    "CA",
-    "app_reviews_hash"
-  )
+  const steamReviewsUrl = buildSteamStoreReviewsUrl(steamId)
   if (!steamReviewsUrl) notFound()
 
   return (
