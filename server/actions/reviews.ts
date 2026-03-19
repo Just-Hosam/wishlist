@@ -36,7 +36,7 @@ async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
   const total = data?.query_summary?.total_reviews
   const positive = data?.query_summary?.total_positive
   const description = data?.query_summary?.review_score_desc
-  const reviews = data?.reviews.map((review: RawSteamReview) => ({
+  const reviews = (data?.reviews ?? []).map((review: RawSteamReview) => ({
     message: review.review,
     recommended: review.voted_up,
     username: review.author?.personaname,
