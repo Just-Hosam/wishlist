@@ -16,6 +16,14 @@ export interface SteamReviews {
   total: number
   positive: number
   description: ReviewDescription
+  reviews: SteamReview[]
+}
+
+export interface SteamReview {
+  message: string
+  recommended: boolean
+  username?: string
+  date?: number
 }
 
 export interface RawSteamReviews {
