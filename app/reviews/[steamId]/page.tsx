@@ -31,6 +31,7 @@ export default async function SteamReviewsPage({ params }: Props) {
     "CA",
     "app_review_hash"
   )
+  if (!steamReviewsUrl) notFound()
 
   return (
     <div className="custom-slide-up-fade-in">
@@ -39,7 +40,7 @@ export default async function SteamReviewsPage({ params }: Props) {
         <Star className="mr-1 size-9 fill-[#fbc113] text-[#fbc113]" />
       </div>
       <a
-        href={steamReviewsUrl!}
+        href={steamReviewsUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-1 flex w-fit items-center gap-2 px-2 text-lg text-muted-foreground hover:opacity-90"
