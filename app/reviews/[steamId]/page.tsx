@@ -1,8 +1,10 @@
+import { Button } from "@/components/ui/button"
 import { ExpandableText } from "@/components/ui/expandable-text"
+import { buildSteamStorePageUrl } from "@/lib/igdb-store-links"
 import { cn, formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
 import { SteamReview } from "@/types/reviews"
-import { Check, Star, X } from "lucide-react"
+import { Check, ExternalLink, Star, X } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -24,15 +26,27 @@ export default async function SteamReviewsPage({ params }: Props) {
     return null
   }
 
+  const steamReviewsUrl = buildSteamStorePageUrl(
+    steamId,
+    "CA",
+    "app_review_hash"
+  )
+
   return (
     <div className="custom-slide-up-fade-in">
       <div className="flex items-baseline gap-3">
         <h2 className="text-7xl font-bold">{starRatio}</h2>
         <Star className="mr-1 size-9 fill-[#fbc113] text-[#fbc113]" />
       </div>
-      <p className="mt-1 pl-2 text-lg text-muted-foreground">
-        {data.total} reviews
-      </p>
+      <a
+        href={steamReviewsUrl!}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-1 flex w-fit items-center gap-2 px-2 text-lg text-muted-foreground hover:opacity-90"
+      >
+        <p>{data.total} reviews</p>
+        <ExternalLink className="size-4" />
+      </a>
 
       <div className="mt-6 space-y-4">
         {data.reviews.map((review, index) => (

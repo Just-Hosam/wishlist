@@ -91,14 +91,15 @@ export function buildSteamStoreUrl(
  */
 export function buildSteamStorePageUrl(
   urlSegment: string,
-  country: Country = "CA"
+  country: Country = "CA",
+  hash?: string
 ): string | null {
   if (!urlSegment) return null
 
   const appId = extractSteamAppId(urlSegment)
   if (!appId) return null
 
-  return `https://store.steampowered.com/app/${appId}/?cc=${country.toLowerCase()}&l=en`
+  return `https://store.steampowered.com/app/${appId}/?cc=${country.toLowerCase()}&l=en${hash ? `#${hash}` : ""}`
 }
 
 function extractSteamAppId(urlSegment: string): string | null {
