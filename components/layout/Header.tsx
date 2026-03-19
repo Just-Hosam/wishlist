@@ -28,6 +28,9 @@ function resolveHeader(pathname: string): ReactNode {
   const searchHeader = resolveSearchHeader(pathname)
   if (searchHeader) return searchHeader
 
+  const reviewsHeader = resolveReviewsHeader(pathname)
+  if (reviewsHeader) return reviewsHeader
+
   return <DefaultHeader />
 }
 
@@ -66,6 +69,15 @@ function resolveSearchHeader(pathname: string): ReactNode | null {
   if (segments.length >= 3) {
     return <DefaultHeader />
   }
+
+  return null
+}
+
+function resolveReviewsHeader(pathname: string): ReactNode | null {
+  const segments = splitPathSegments(pathname)
+  if (segments[0] !== "reviews") return null
+
+  if (segments.length === 2) return <ReviewsHeader />
 
   return null
 }
@@ -109,6 +121,15 @@ function CompletedHeader() {
     <>
       <BackButton />
       <h1 className="text-xl font-bold">Completed</h1>
+    </>
+  )
+}
+
+function ReviewsHeader() {
+  return (
+    <>
+      <BackButton />
+      <h1 className="text-xl font-bold">Steam Reviews</h1>
     </>
   )
 }
