@@ -699,7 +699,7 @@ export const getCachedSearchIGDBGamesDirect = async (query: string) => {
     [query],
     {
       tags: [`search-${query}`],
-      revalidate: 24 * 60 * 60 // 1 day
+      revalidate: 86_400 // 1 day
     }
   )()
 }
@@ -707,7 +707,7 @@ export const getCachedSearchIGDBGamesDirect = async (query: string) => {
 export const getCachedIGDBGameById = async (igdbId: string) => {
   return unstable_cache(async () => await getIGDBGameById(igdbId), [igdbId], {
     tags: [`igdb-game-${igdbId}`],
-    revalidate: 24 * 60 * 60 // 1 day
+    revalidate: 86_400 // 1 day
   })()
 }
 

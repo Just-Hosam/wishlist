@@ -39,7 +39,7 @@ export const getCachedWishlistGames = async (userId: string) => {
     [userId],
     {
       tags: [`user-wishlist-games-${userId}`, "wishlist"],
-      revalidate: 30 * 60 // 30 minutes
+      revalidate: 1_800 // 30 minutes
     }
   )()
 }
@@ -66,7 +66,7 @@ export const getCachedLibraryGames = async (userId: string) => {
     [userId],
     {
       tags: [`user-library-games-${userId}`],
-      revalidate: 30 * 60 // 30 minutes
+      revalidate: 1_800 // 30 minutes
     }
   )()
 }
@@ -94,7 +94,7 @@ export const getCachedCompletedGames = async (userId: string) => {
     [userId],
     {
       tags: [`user-completed-games-${userId}`],
-      revalidate: 30 * 60 // 30 minutes
+      revalidate: 1_800 // 30 minutes
     }
   )()
 }

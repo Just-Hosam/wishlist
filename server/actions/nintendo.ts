@@ -56,7 +56,7 @@ export const getCachedNintendoPrice = async (
     [url],
     {
       tags: [`nintendo-price-${url}`, "nintendo-prices", "prices"],
-      revalidate: 24 * 60 * 60 // 24 hours
+      revalidate: 86_400 // 1 day
     }
   )()
 }

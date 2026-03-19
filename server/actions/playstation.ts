@@ -58,7 +58,7 @@ export const getCachedPlaystationPrice = async (
     [url],
     {
       tags: [`playstation-price-${url}`, "playstation-prices", "prices"],
-      revalidate: 24 * 60 * 60 // 24 hours
+      revalidate: 86_400 // 1 day
     }
   )()
 }

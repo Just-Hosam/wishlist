@@ -45,7 +45,7 @@ export const getCachedSteamPrice = async (url: string): Promise<PriceInput> => {
     [url],
     {
       tags: [`steam-price-${url}`, "steam-prices", "prices"],
-      revalidate: 24 * 60 * 60 // 24 hours
+      revalidate: 86_400 // 1 day
     }
   )()
 }
