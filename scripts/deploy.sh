@@ -22,8 +22,6 @@ REMOTE_MAIN=$(git rev-parse origin/main)
 if [ "$LOCAL_MAIN" != "$REMOTE_MAIN" ]; then
     echo "❌ Error: local main does not match origin/main."
     echo "Please sync main with origin/main before deploying."
-    echo "Local main:  $LOCAL_MAIN"
-    echo "origin/main: $REMOTE_MAIN"
     exit 1
 fi
 
