@@ -7,11 +7,7 @@
   "crons": [
     {
       "path": "/api/cron/update-prices",
-      "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/update-recommended",
-      "schedule": "0 10 * * *"
+      "schedule": "0 3,11 * * *"
     }
   ]
 }
