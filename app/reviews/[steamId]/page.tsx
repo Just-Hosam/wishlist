@@ -57,7 +57,8 @@ export default async function SteamReviewsPage({ params }: Props) {
       <div className="mt-6 flex gap-2 rounded-2xl px-2 text-muted-foreground">
         <Info className="mt-[3px] size-[18px]" />
         <p className="flex-1 text-sm">
-          Only 20 reviews are being shown. Visit the official steam page to{" "}
+          A limited number of reviews is being shown. Visit the official steam
+          page to{" "}
           <a href={steamReviewsUrl!} target="_blank" rel="noopener noreferrer">
             view all reviews{" "}
             <ExternalLink className="-mt-[2px] ml-[1px] inline size-[14px]" />
