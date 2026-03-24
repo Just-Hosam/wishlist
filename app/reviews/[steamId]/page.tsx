@@ -30,7 +30,7 @@ export default async function SteamReviewsPage({ params }: Props) {
 
   return (
     <div className="custom-slide-up-fade-in">
-      <div className="flex items-baseline gap-3">
+      <div className="ml-2 flex items-baseline gap-3">
         <h2 className="text-7xl font-bold">{starRatio}</h2>
         <Star className="mr-1 size-9 fill-[#fbc113] text-[#fbc113]" />
       </div>
@@ -38,7 +38,7 @@ export default async function SteamReviewsPage({ params }: Props) {
         href={steamReviewsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-1 flex w-fit items-center gap-2 px-2 text-lg text-muted-foreground hover:opacity-90"
+        className="mt-1 flex w-fit items-center gap-2 px-4 text-lg text-muted-foreground hover:opacity-90"
       >
         <p>{data.total} reviews</p>
         <ExternalLink className="size-4" />

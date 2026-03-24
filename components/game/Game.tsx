@@ -158,7 +158,7 @@ export function Game({
 
       {/* SUMMARY */}
       {summary && (
-        <div className="mt-7 rounded-2xl border px-4 py-3">
+        <div className="mt-7 rounded-2xl bg-card px-4 py-3 shadow-sm">
           <ExpandableText
             text={summary}
             className="text-sm text-muted-foreground"

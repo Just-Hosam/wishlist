@@ -20,9 +20,7 @@ async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
     })
   )
 
-  if (error) {
-    throw new Error("Failed to fetch steam reviews from API")
-  }
+  if (error) throw new Error("Failed to fetch steam reviews from API")
 
   if (!response.ok) {
     const errorText = await response.text()
