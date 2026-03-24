@@ -59,6 +59,7 @@ export function Game({
 
   return (
     <div className="custom-slide-up-fade-in">
+      {/* HEADER */}
       <header className="mx-auto flex flex-col items-center text-center">
         <div className="mb-5 h-[253px] w-[190px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image
@@ -88,8 +89,8 @@ export function Game({
         </div>
       </header>
 
-      {/* PRICES */}
-      <div className="mt-10 rounded-3xl bg-card p-6 shadow-sm">
+      {/* PRICES & SUMMARY */}
+      <div className="mt-8 rounded-3xl bg-card p-6 shadow-sm">
         <div className="flex items-center">
           <Image
             src="/logos/steam.svg"
