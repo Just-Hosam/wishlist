@@ -17,14 +17,14 @@ const SW_VERSION = "0.3.69"
 
 // Keep one small cache dedicated to startup-critical responses.
 const BOOT_CACHE = `boot-cache-${SW_VERSION}`
-// Store remote IGDB artwork separately from boot assets so image churn does
-// not evict the tiny shell cache used for fast startup.
-const IGDB_IMAGE_CACHE = "igdb-image-cache-v1"
+// Store remote artwork separately from boot assets so image churn does not
+// evict the tiny shell cache used for fast startup.
+const REMOTE_IMAGE_CACHE = "remote-image-cache-v1"
 // CacheStorage cannot attach custom metadata to entries, so keep TTL metadata
 // in a parallel cache keyed by the same request URL.
-const IGDB_IMAGE_META_CACHE = "igdb-image-meta-v1"
-// IGDB image URLs are content-addressed enough to tolerate long-lived reuse.
-const IGDB_IMAGE_TTL_MS = 2_592_000_000 // 30 days
+const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v1"
+// These remote image URLs are stable enough to tolerate long-lived reuse.
+const REMOTE_IMAGE_TTL_MS = 2_592_000_000 // 30 days
 
 // "App shell" = the smallest set of assets needed for very fast startup.
 // `/launch` is a light page in this app that immediately routes onward.
@@ -48,7 +48,7 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   // On activate, rotate versioned boot caches while preserving long-lived
-  // IGDB image caches across releases.
+  // remote image caches across releases.
   event.waitUntil(
     caches
       .keys()
@@ -77,14 +77,34 @@ self.addEventListener("fetch", (event) => {
 
   if (!isGET) return
 
-  // IGDB images are a separate cross-origin cache path. Keep them out of the
+  // Remote artwork is a separate cross-origin cache path. Keep it out of the
   // boot cache and allow stale entries to cover offline/error cases while
   // refreshing from network whenever the TTL has expired.
   const isIGDBImageRequest = requestUrl.href.startsWith(
     "https://images.igdb.com/igdb/image/upload/"
   )
   if (isIGDBImageRequest) {
-    event.respondWith(serveIGDBImage(request))
+    event.respondWith(
+      serveRemoteImage(request, {
+        cacheName: REMOTE_IMAGE_CACHE,
+        metaCacheName: REMOTE_IMAGE_META_CACHE,
+        ttlMs: REMOTE_IMAGE_TTL_MS
+      })
+    )
+    return
+  }
+
+  const isYouTubeImageRequest = requestUrl.href.startsWith(
+    "https://i.ytimg.com/vi/"
+  )
+  if (isYouTubeImageRequest) {
+    event.respondWith(
+      serveRemoteImage(request, {
+        cacheName: REMOTE_IMAGE_CACHE,
+        metaCacheName: REMOTE_IMAGE_META_CACHE,
+        ttlMs: REMOTE_IMAGE_TTL_MS
+      })
+    )
     return
   }
 
@@ -137,9 +157,9 @@ async function fetchAndCache(request, cache, cacheKey) {
   return response
 }
 
-async function serveIGDBImage(request) {
-  const imageCache = await caches.open(IGDB_IMAGE_CACHE)
-  const metadataCache = await caches.open(IGDB_IMAGE_META_CACHE)
+async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
+  const imageCache = await caches.open(cacheName)
+  const metadataCache = await caches.open(metaCacheName)
   const cacheKey = request
   const metaCacheKey = request.url
 
@@ -148,7 +168,7 @@ async function serveIGDBImage(request) {
     readCachedAt(metadataCache, metaCacheKey)
   ])
 
-  const isExpired = (cachedAt) => Date.now() - cachedAt >= IGDB_IMAGE_TTL_MS
+  const isExpired = (cachedAt) => Date.now() - cachedAt >= ttlMs
   const isCacheValid = cachedAt && !isExpired(cachedAt)
 
   if (cachedResponse && isCacheValid) return cachedResponse
@@ -215,12 +235,12 @@ function shouldDeleteCache(cacheName) {
     return cacheName !== BOOT_CACHE
   }
 
-  if (cacheName.startsWith("igdb-image-cache-")) {
-    return cacheName !== IGDB_IMAGE_CACHE
+  if (cacheName.startsWith("remote-image-cache-")) {
+    return cacheName !== REMOTE_IMAGE_CACHE
   }
 
-  if (cacheName.startsWith("igdb-image-meta-")) {
-    return cacheName !== IGDB_IMAGE_META_CACHE
+  if (cacheName.startsWith("remote-image-meta-")) {
+    return cacheName !== REMOTE_IMAGE_META_CACHE
   }
 
   return false
