@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
+// This is less of a focus on "public routes" as the app is very user centered. It's just to skip an extra user check when not needed.
 function isPublicPath(pathname: string) {
   return (
     pathname === "/launch" ||

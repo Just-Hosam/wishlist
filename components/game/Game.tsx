@@ -89,7 +89,7 @@ export function Game({
       </header>
 
       {/* PRICES */}
-      <div className="mt-10 space-y-3 pl-2">
+      <div className="mt-10 rounded-3xl bg-card p-6 shadow-sm">
         <div className="flex items-center">
           <Image
             src="/logos/steam.svg"
@@ -110,7 +110,7 @@ export function Game({
             <SteamPrice igdbSteamUrlSegment={igdbSteamUrlSegment || null} />
           </Suspense>
         </div>
-        <div className="flex items-center">
+        <div className="mt-3 flex items-center">
           <Image
             src="/logos/playstation.svg"
             alt="PlayStation Logo"
@@ -132,7 +132,7 @@ export function Game({
             />
           </Suspense>
         </div>
-        <div className="flex items-center">
+        <div className="mt-3 flex items-center">
           <Image
             src="/logos/nintendo-switch.svg"
             alt="Nintendo Switch Logo"
@@ -154,17 +154,15 @@ export function Game({
             />
           </Suspense>
         </div>
+        {summary && (
+          <div className="mt-7">
+            <ExpandableText
+              text={summary}
+              className="text-sm text-muted-foreground"
+            />
+          </div>
+        )}
       </div>
-
-      {/* SUMMARY */}
-      {summary && (
-        <div className="mt-7 rounded-2xl bg-card px-4 py-3 shadow-sm">
-          <ExpandableText
-            text={summary}
-            className="text-sm text-muted-foreground"
-          />
-        </div>
-      )}
 
       {/* MEDIA */}
       {(hasVideos || hasScreenshots) && (
@@ -251,8 +249,7 @@ export function Game({
           >
             <Button
               size="lg"
-              variant="outline"
-              className="h-auto w-full justify-between gap-3 px-6 py-4"
+              className="h-auto w-full justify-between gap-3 rounded-2xl px-6 py-4 shadow-sm"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -276,8 +273,7 @@ export function Game({
           >
             <Button
               size="lg"
-              variant="outline"
-              className="h-auto w-full justify-between gap-3 px-6 py-4"
+              className="h-auto w-full justify-between gap-3 rounded-2xl px-6 py-4 shadow-sm"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -302,8 +298,7 @@ export function Game({
             >
               <Button
                 size="lg"
-                variant="outline"
-                className="h-auto w-full justify-between gap-3 px-6 py-4"
+                className="h-auto w-full justify-between gap-3 rounded-2xl px-6 py-4 shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Image
