@@ -17,6 +17,14 @@ const SW_VERSION = "0.3.69"
 
 // Keep one small cache dedicated to startup-critical responses.
 const BOOT_CACHE = `boot-cache-${SW_VERSION}`
+// Store remote IGDB artwork separately from boot assets so image churn does
+// not evict the tiny shell cache used for fast startup.
+const IGDB_IMAGE_CACHE = "igdb-image-cache-v1"
+// CacheStorage cannot attach custom metadata to entries, so keep TTL metadata
+// in a parallel cache keyed by the same request URL.
+const IGDB_IMAGE_META_CACHE = "igdb-image-meta-v1"
+// IGDB image URLs are content-addressed enough to tolerate long-lived reuse.
+const IGDB_IMAGE_TTL_MS = 2_592_000_000 // 30 days
 
 // "App shell" = the smallest set of assets needed for very fast startup.
 // `/launch` is a light page in this app that immediately routes onward.
@@ -39,15 +47,15 @@ self.addEventListener("install", (event) => {
 })
 
 self.addEventListener("activate", (event) => {
-  // On activate, remove caches created by older SW versions.
-  // This prevents unbounded cache growth and stale asset usage.
+  // On activate, rotate versioned boot caches while preserving long-lived
+  // IGDB image caches across releases.
   event.waitUntil(
     caches
       .keys()
       .then((cacheNames) =>
         Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== BOOT_CACHE) {
+            if (shouldDeleteCache(cacheName)) {
               return caches.delete(cacheName)
             }
 
@@ -66,10 +74,24 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(request.url)
 
   const isGET = request.method === "GET"
+
+  if (!isGET) return
+
+  // IGDB images are a separate cross-origin cache path. Keep them out of the
+  // boot cache and allow stale entries to cover offline/error cases while
+  // refreshing from network whenever the TTL has expired.
+  const isIGDBImageRequest = requestUrl.href.startsWith(
+    "https://images.igdb.com/igdb/image/upload/"
+  )
+  if (isIGDBImageRequest) {
+    event.respondWith(serveIGDBImage(request))
+    return
+  }
+
   const isSameOrigin = requestUrl.origin === self.location.origin
   const isAPIRoute = requestUrl.pathname.startsWith("/api/")
 
-  if (!isGET || !isSameOrigin || isAPIRoute) return
+  if (!isSameOrigin || isAPIRoute) return
 
   // Navigation strategy for app shell:
   // cache-first gives the fastest possible bootstrap path for `/launch`.
@@ -115,9 +137,91 @@ async function fetchAndCache(request, cache, cacheKey) {
   return response
 }
 
+async function serveIGDBImage(request) {
+  const imageCache = await caches.open(IGDB_IMAGE_CACHE)
+  const metadataCache = await caches.open(IGDB_IMAGE_META_CACHE)
+  const cacheKey = request
+  const metaCacheKey = request.url
+
+  const [cachedResponse, cachedAt] = await Promise.all([
+    imageCache.match(cacheKey),
+    readCachedAt(metadataCache, metaCacheKey)
+  ])
+
+  const isExpired = (cachedAt) => Date.now() - cachedAt >= IGDB_IMAGE_TTL_MS
+  const isCacheValid = cachedAt && !isExpired(cachedAt)
+
+  if (cachedResponse && isCacheValid) return cachedResponse
+
+  try {
+    const response = await fetch(request)
+
+    const isCachable = response.ok || response.type === "opaque"
+
+    if (isCachable) {
+      await Promise.all([
+        imageCache.put(cacheKey, response.clone()),
+        writeCachedAt(metadataCache, metaCacheKey, Date.now())
+      ])
+    }
+
+    return response
+  } catch (error) {
+    // Return stale cache if new response fails
+    if (cachedResponse) return cachedResponse
+
+    throw error
+  }
+}
+
+async function readCachedAt(cache, cacheKey) {
+  const response = await cache.match(cacheKey)
+
+  if (!response) return null
+
+  try {
+    // Treat malformed metadata as a miss so the image is refreshed normally.
+    const data = await response.json()
+    const cachedAt = Number(data?.cachedAt)
+    return Number.isFinite(cachedAt) ? cachedAt : null
+  } catch {
+    return null
+  }
+}
+
+async function writeCachedAt(cache, cacheKey, cachedAt) {
+  // Store only the timestamp we need for TTL checks; image bytes live in the
+  // separate artwork cache.
+  const response = new Response(JSON.stringify({ cachedAt }), {
+    headers: {
+      "content-type": "application/json"
+    }
+  })
+
+  await cache.put(cacheKey, response)
+}
+
 function isBootStaticAsset(pathname) {
   // Keep this list intentionally narrow. `/_next/static/` contains the
   // hashed JS/CSS chunks needed to hydrate and navigate quickly on repeat
   // launches, without pulling dynamic HTML or user-specific data into SW.
   return pathname.startsWith("/_next/static/")
+}
+
+function shouldDeleteCache(cacheName) {
+  // Rotate versioned caches within each namespace, but leave unrelated caches
+  // untouched in case the browser stores entries from other features/origins.
+  if (cacheName.startsWith("boot-cache-")) {
+    return cacheName !== BOOT_CACHE
+  }
+
+  if (cacheName.startsWith("igdb-image-cache-")) {
+    return cacheName !== IGDB_IMAGE_CACHE
+  }
+
+  if (cacheName.startsWith("igdb-image-meta-")) {
+    return cacheName !== IGDB_IMAGE_META_CACHE
+  }
+
+  return false
 }

@@ -66,9 +66,9 @@ export function Game({
             alt={name || "Game cover"}
             width={190}
             height={253}
-            sizes="190px"
             priority
             fetchPriority="high"
+            unoptimized
           />
         </div>
         <h1 className="mb-1 line-clamp-2 max-w-[85%] text-2xl font-bold">
