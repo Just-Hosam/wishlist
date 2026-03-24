@@ -182,9 +182,14 @@ export function Game({
                 return (
                   <div
                     key={videoId}
-                    className="w-[calc(100%-32px)] shrink-0 snap-center first:ml-4 last:mr-4"
+                    className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
                   >
-                    <YoutubeVideo videoId={videoId} width={358} height={201} />
+                    <YoutubeVideo
+                      videoId={videoId}
+                      width={400}
+                      height={223}
+                      className="w-full"
+                    />
                   </div>
                 )
               })}
@@ -194,16 +199,18 @@ export function Game({
                 return (
                   <div
                     key={screenshotId}
-                    className="w-[calc(100%-32px)] shrink-0 snap-center first:ml-4 last:mr-4"
+                    className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
                   >
-                    <Image
-                      src={buildIGDBImageUrl(screenshotId || "")}
-                      alt={name || "Game cover"}
-                      width={358}
-                      height={201}
-                      className="overflow-hidden rounded-2xl"
-                      unoptimized
-                    />
+                    <div className="relative aspect-video overflow-hidden rounded-2xl">
+                      <Image
+                        src={buildIGDBImageUrl(screenshotId || "")}
+                        alt={name || "Game cover"}
+                        fill
+                        sizes="(max-width: 432px) calc(100vw - 32px), 400px"
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
                   </div>
                 )
               })}
