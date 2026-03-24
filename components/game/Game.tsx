@@ -66,9 +66,9 @@ export function Game({
             alt={name || "Game cover"}
             width={190}
             height={253}
-            sizes="190px"
             priority
             fetchPriority="high"
+            unoptimized
           />
         </div>
         <h1 className="mb-1 line-clamp-2 max-w-[85%] text-2xl font-bold">
@@ -169,53 +169,43 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">Media</label>
           <div
-            className="hide-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            className="hide-scrollbar -mx-4 flex snap-x snap-mandatory gap-[6px] overflow-x-auto scroll-smooth"
             data-scroll-restore-id="media"
             tabIndex={0}
             role="region"
             aria-label="media"
           >
-            <div className="flex">
-              {hasVideos &&
-                igdbVideoIds.map((videoId, index) => {
-                  if (index >= 3) return null
-                  return (
-                    <div
-                      key={videoId}
-                      // 356px = 348px (image) + 8px (2x 4px horizontal padding)
-                      // 368px = 348px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
-                      className="w-[95%] max-w-[356px] shrink-0 snap-center px-1 first:max-w-[368px] first:pl-4 last:max-w-[368px] last:pr-4"
-                    >
-                      <YoutubeVideo
-                        videoId={videoId}
-                        width={348}
-                        height={196}
-                      />
-                    </div>
-                  )
-                })}
-              {hasScreenshots &&
-                igdbScreenshotIds.map((screenshotId, index) => {
-                  if (index >= 6) return null
-                  return (
-                    <div
-                      key={screenshotId}
-                      // 356px = 348px (image) + 8px (2x 4px horizontal padding)
-                      // 368px = 348px (image) + 4px (horizontal padding) + 16px (first or last element, 16px)
-                      className="w-[95%] max-w-[356px] shrink-0 snap-center px-1 first:max-w-[368px] first:pl-4 last:max-w-[368px] last:pr-4"
-                    >
-                      <Image
-                        src={buildIGDBImageUrl(screenshotId || "")}
-                        alt={name || "Game cover"}
-                        width={348}
-                        height={196}
-                        className="overflow-hidden rounded-2xl"
-                        unoptimized
-                      />
-                    </div>
-                  )
-                })}
-            </div>
+            {hasVideos &&
+              igdbVideoIds.map((videoId, index) => {
+                if (index >= 3) return null
+                return (
+                  <div
+                    key={videoId}
+                    className="w-[calc(100%-32px)] shrink-0 snap-center first:ml-4 last:mr-4"
+                  >
+                    <YoutubeVideo videoId={videoId} width={358} height={201} />
+                  </div>
+                )
+              })}
+            {hasScreenshots &&
+              igdbScreenshotIds.map((screenshotId, index) => {
+                if (index >= 6) return null
+                return (
+                  <div
+                    key={screenshotId}
+                    className="w-[calc(100%-32px)] shrink-0 snap-center first:ml-4 last:mr-4"
+                  >
+                    <Image
+                      src={buildIGDBImageUrl(screenshotId || "")}
+                      alt={name || "Game cover"}
+                      width={358}
+                      height={201}
+                      className="overflow-hidden rounded-2xl"
+                      unoptimized
+                    />
+                  </div>
+                )
+              })}
           </div>
         </div>
       )}

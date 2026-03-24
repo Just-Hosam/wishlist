@@ -16,8 +16,8 @@ type Props = {
 
 export function YoutubeVideo({
   videoId,
-  width = 332,
-  height = 187,
+  width = 358,
+  height = 201,
   className
 }: Props) {
   const encodedId = encodeURIComponent(videoId)
