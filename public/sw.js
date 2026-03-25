@@ -10,9 +10,8 @@
     because those are user/session-specific and can easily become stale/wrong.
 */
 
-// Bump this string whenever you change SW caching behavior and want to force
-// old caches to be cleaned up on activate. This is also enough to force a
-// fresh `/launch` shell after you change that route in a meaningful way.
+// This value is updated automatically on deploy to keep boot cache rotation
+// aligned with each release. Do not bump it manually for normal SW edits.
 const SW_VERSION = "0.3.70"
 
 // Keep one small cache dedicated to startup-critical responses.
@@ -98,6 +97,20 @@ self.addEventListener("fetch", (event) => {
     "https://i.ytimg.com/vi/"
   )
   if (isYouTubeImageRequest) {
+    event.respondWith(
+      serveRemoteImage(request, {
+        cacheName: REMOTE_IMAGE_CACHE,
+        metaCacheName: REMOTE_IMAGE_META_CACHE,
+        ttlMs: REMOTE_IMAGE_TTL_MS
+      })
+    )
+    return
+  }
+
+  const isLocalLogoRequest =
+    requestUrl.origin === self.location.origin &&
+    requestUrl.pathname.startsWith("/logos/")
+  if (isLocalLogoRequest) {
     event.respondWith(
       serveRemoteImage(request, {
         cacheName: REMOTE_IMAGE_CACHE,
