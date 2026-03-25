@@ -170,7 +170,7 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">Media</label>
           <div
-            className="hide-scrollbar -mx-4 flex snap-x snap-mandatory gap-[6px] overflow-x-auto scroll-smooth"
+            className="hide-scrollbar -mx-4 flex snap-x snap-mandatory gap-[6px] overflow-x-auto scroll-smooth pb-3"
             data-scroll-restore-id="media"
             tabIndex={0}
             role="region"
@@ -188,7 +188,7 @@ export function Game({
                       videoId={videoId}
                       width={400}
                       height={223}
-                      className="w-full"
+                      className="w-full overflow-hidden rounded-2xl shadow-md"
                     />
                   </div>
                 )
@@ -201,7 +201,7 @@ export function Game({
                     key={screenshotId}
                     className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
                   >
-                    <div className="relative aspect-video overflow-hidden rounded-2xl">
+                    <div className="relative aspect-video overflow-hidden rounded-2xl shadow-md">
                       <Image
                         src={buildIGDBImageUrl(screenshotId || "")}
                         alt={name || "Game cover"}
@@ -220,7 +220,7 @@ export function Game({
 
       {/* TIME TO BEAT */}
       {!isUpcoming && (
-        <div className="mt-8">
+        <div className="mt-5">
           <label className="mb-3 block text-lg font-bold">Time to Beat</label>
           <div className="space-y-2">
             {igdbSlug && (

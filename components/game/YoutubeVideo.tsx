@@ -73,7 +73,7 @@ export function YoutubeVideo({
   }, [playing])
 
   return (
-    <div className={cn("relative overflow-hidden rounded-2xl", className)}>
+    <div className={cn("relative", className)}>
       {/* Iframe is always in the DOM so iOS has it loaded before the tap */}
       <div className="relative aspect-video w-full">
         <iframe
