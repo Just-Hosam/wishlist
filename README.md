@@ -23,67 +23,31 @@ Playward is a full-stack video game wishlist and backlog manager built with Next
 ### Manage your backlog
 
 <p>
-  <span style="display:inline-block; width:220px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/wishlist.PNG" alt="Wishlist page showing saved games and tracked prices" width="220" /><br />
-    <sub>Wishlist page</sub>
-  </span>
-  <span style="display:inline-block; width:220px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/library.PNG" alt="Library page showing now playing and backlog sections" width="220" /><br />
-    <sub>Library page</sub>
-  </span>
+  <img src="./public/screenshots/wishlist.PNG" alt="Wishlist page showing saved games and tracked prices" width="220" />
+  <img src="./public/screenshots/library.PNG" alt="Library page showing now playing and backlog sections" width="220" />
 </p>
-
-<br />
 
 ### Find new games
 
 <p>
-  <span style="display:inline-block; width:180px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/search-recommendations.PNG" alt="Discovery screen showing trending and upcoming game recommendations" width="180" /><br />
-    <sub>Recommendations</sub>
-  </span>
-  <span style="display:inline-block; width:180px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/search-keywords.PNG" alt="Search screen showing keyword suggestions for a game query" width="180" /><br />
-    <sub>Keyword suggestions</sub>
-  </span>
-  <span style="display:inline-block; width:180px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/search-results.PNG" alt="Search results for Hollow Knight titles" width="180" /><br />
-    <sub>Search results</sub>
-  </span>
+  <img src="./public/screenshots/search-recommendations.PNG" alt="Discovery screen showing trending and upcoming game recommendations" width="180" />
+  <img src="./public/screenshots/search-keywords.PNG" alt="Search screen showing keyword suggestions for a game query" width="180" />
+  <img src="./public/screenshots/search-results.PNG" alt="Search results for Hollow Knight titles" width="180" />
 </p>
-
-<br />
 
 ### Check out a game
 
 <p>
-  <span style="display:inline-block; width:180px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/game-1.PNG" alt="Game details screen with pricing and summary for Planet of Lana" width="180" /><br />
-    <sub>Game info and prices</sub>
-  </span>
-  <span style="display:inline-block; width:180px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/game-2.PNG" alt="Game details screen with media and time to beat for Planet of Lana" width="180" /><br />
-    <sub>Media and Time to Beat</sub>
-  </span>
-  <span style="display:inline-block; width:180px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/reviews.PNG" alt="Steam reviews screen with rating and user reviews" width="180" /><br />
-    <sub>Reviews</sub>
-  </span>
+  <img src="./public/screenshots/game-1.PNG" alt="Game details screen with pricing and summary for Planet of Lana" width="180" />
+  <img src="./public/screenshots/game-2.PNG" alt="Game details screen with media and time to beat for Planet of Lana" width="180" />
+  <img src="./public/screenshots/reviews.PNG" alt="Steam reviews screen with rating and user reviews" width="180" />
 </p>
-
-<br />
 
 ### Add it to the right list
 
 <p>
-  <span style="display:inline-block; width:220px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/add-to-wishlist.PNG" alt="Add to Wishlist sheet with time-to-beat and price tracking options" width="220" /><br />
-    <sub>Add to wishlist</sub>
-  </span>
-  <span style="display:inline-block; width:220px; text-align:center; vertical-align:top;">
-    <img src="./public/screenshots/add-to-library.PNG" alt="Add to Library sheet with platform ownership and currently playing options" width="220" /><br />
-    <sub>Add to library</sub>
-  </span>
+  <img src="./public/screenshots/add-to-wishlist.PNG" alt="Add to Wishlist sheet with time-to-beat and price tracking options" width="220" />
+  <img src="./public/screenshots/add-to-library.PNG" alt="Add to Library sheet with platform ownership and currently playing options" width="220" />
 </p>
 
 ## Architecture Highlights
