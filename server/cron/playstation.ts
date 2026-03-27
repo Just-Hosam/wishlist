@@ -1,19 +1,9 @@
 import prisma from "@/lib/prisma"
+import { chunk, sleep } from "@/lib/utils"
 import { GameCategory, Platform } from "@/types"
 import { getCachedPlaystationPrice } from "../actions/playstation"
-import { sleep } from "@/lib/utils"
 
 const BATCH_SIZE = 3
-
-const chunk = <T>(items: T[], size: number) => {
-  const batches: T[][] = []
-
-  for (let i = 0; i < items.length; i += size) {
-    batches.push(items.slice(i, i + size))
-  }
-
-  return batches
-}
 
 export async function runPlayStationPriceUpdate() {
   console.log("[CRON] Starting PlayStation price update job...")

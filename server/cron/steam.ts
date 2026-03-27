@@ -1,22 +1,12 @@
 import prisma from "@/lib/prisma"
 import { buildRequestHeaders } from "@/lib/request"
-import { sleep } from "@/lib/utils"
+import { chunk, sleep } from "@/lib/utils"
 import { GameCategory, Platform } from "@/types"
 
 const BATCH_SIZE = 10
 const COUNTRY_PARAM = "ca"
 const LANGUAGE_PARAM = "en"
 const COUNTRY_CODE = "CA"
-
-const chunk = <T>(items: T[], size: number) => {
-  const batches: T[][] = []
-
-  for (let i = 0; i < items.length; i += size) {
-    batches.push(items.slice(i, i + size))
-  }
-
-  return batches
-}
 
 export async function runSteamPriceUpdate() {
   console.log("[CRON] Starting Steam price update job...")

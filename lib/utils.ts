@@ -52,6 +52,16 @@ export const sleep = async (ms: number): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+export const chunk = <T>(items: T[], size: number): T[][] => {
+  const batches: T[][] = []
+
+  for (let i = 0; i < items.length; i += size) {
+    batches.push(items.slice(i, i + size))
+  }
+
+  return batches
+}
+
 export const getScrollContainer = (): HTMLElement => {
   return (
     document.querySelector<HTMLElement>("[data-scroll-container]") ??
