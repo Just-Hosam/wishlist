@@ -3,7 +3,7 @@
 import { Link } from "@/components/navigation"
 import { useNavigation } from "@/components/navigation/NavigationProvider"
 import { buttonVariants } from "@/components/ui/button"
-import { splitPathSegments } from "@/lib/path"
+import { normalizePathname, splitPathSegments } from "@/lib/path"
 import { cn, getScrollContainer } from "@/lib/utils"
 import { AlignJustify, Heart, LibraryBig, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -13,7 +13,8 @@ type Tab = "WISHLIST" | "LIBRARY" | "MORE" | "SEARCH" | ""
 export default function Footer() {
   const pathname = usePathname()
   const { pendingPathname } = useNavigation()
-  const activePathname = pendingPathname ?? pathname
+  const activePathname = normalizePathname(pendingPathname ?? pathname)
+  const isVisible = shouldShowFooter(activePathname)
   const activeTab: Tab =
     activePathname.startsWith("/wishlist") ||
     activePathname.startsWith("/launch")
@@ -91,7 +92,15 @@ export default function Footer() {
   }
 
   return (
-    <footer className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[85%] via-60% to-transparent px-5 pb-6 pt-3">
+    <footer
+      aria-hidden={!isVisible}
+      className={cn(
+        "absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[85%] via-60% to-transparent px-5 pb-6 pt-3 transition-transform duration-500 ease-in-out",
+        isVisible
+          ? "pointer-events-auto translate-y-0"
+          : "pointer-events-none translate-y-full"
+      )}
+    >
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <nav aria-label="Primary" className="flex-1">
           <div className="flex min-h-[68px] w-full items-center justify-around gap-[2px] rounded-full bg-white px-[6px] py-0 text-muted-foreground shadow-lg">
@@ -162,4 +171,20 @@ export default function Footer() {
       </div>
     </footer>
   )
+}
+
+function shouldShowFooter(pathname: string) {
+  const segments = splitPathSegments(pathname)
+
+  if (
+    pathname === "/launch" ||
+    pathname === "/wishlist" ||
+    pathname === "/library" ||
+    pathname === "/more" ||
+    pathname === "/search"
+  ) {
+    return true
+  }
+
+  return segments[0] === "search" && segments.length === 2
 }
