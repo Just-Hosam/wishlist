@@ -21,6 +21,9 @@ const HORIZONTAL_RESTORE_SELECTOR = "[data-scroll-restore-id]"
 // Horizontal content (images/videos) can mount a few frames after route render.
 // We retry restoration across multiple frames to catch late layout shifts.
 const HORIZONTAL_RESTORE_ATTEMPTS = 12
+// Vertical restoration needs a longer retry window because the page can be too
+// short for the target scroll position until async content/layout settles.
+const PAGE_RESTORE_ATTEMPTS = 120
 
 type ScrollMap = Record<string, number>
 
@@ -47,6 +50,13 @@ const parseScrollMap = (rawValue: string | null): ScrollMap => {
 // Example: "/search::game-carousel:/search/trending" -> 428
 const getHorizontalScrollKey = (routeKey: string, restoreId: string): string =>
   `${routeKey}::${restoreId}`
+
+// During native browser history navigation we sometimes need the destination
+// route immediately, before Next's hooks have caught up to the new URL.
+const getLocationRouteKey = () => {
+  const { pathname, search } = window.location
+  return search ? `${pathname}${search}` : pathname
+}
 
 const setElementScrollLeftInstant = (
   element: HTMLElement,
@@ -82,6 +92,12 @@ export function ScrollRestoration() {
   const loadedRef = useRef(false)
   const currentRouteKeyRef = useRef(routeKey)
   const isNavigatingRef = useRef(isNavigating)
+  // While restoration is actively applying scroll positions, ignore passive
+  // scroll persistence so we do not overwrite the saved value with 0/clamped data.
+  const isRestoringRef = useRef(false)
+  // Native browser back/forward can arrive outside our managed navigation path,
+  // so we keep a dedicated retry loop handle for that restore flow.
+  const popstateRestoreFrameRef = useRef(0)
 
   // Set by navigation event/popstate. Determines if *next* route applies saved
   // scroll (history navigation) or resets to top (push/replace).
@@ -182,17 +198,16 @@ export function ScrollRestoration() {
     [ensureStorageLoaded, persistHorizontalScrollMap]
   )
 
-  const restorePageScroll = useCallback(
-    (targetRouteKey: string) => {
-      ensureStorageLoaded()
+  const restorePageScroll = useCallback((nextScrollTop: number) => {
+    const scrollContainer = getScrollContainer()
 
-      // Missing key defaults to top.
-      const nextScrollTop = pageScrollMapRef.current[targetRouteKey] ?? 0
-      const scrollContainer = getScrollContainer()
-      scrollContainer.scrollTo({ top: nextScrollTop, behavior: "auto" })
-    },
-    [ensureStorageLoaded]
-  )
+    // Returning a boolean lets callers retry across frames until layout is tall
+    // enough for the requested position to actually stick.
+    if (Math.abs(scrollContainer.scrollTop - nextScrollTop) < 1) return true
+
+    scrollContainer.scrollTo({ top: nextScrollTop, behavior: "auto" })
+    return Math.abs(scrollContainer.scrollTop - nextScrollTop) < 1
+  }, [])
 
   const resetPageScroll = useCallback(() => {
     // Used for push/replace navigations where we want fresh-page behavior.
@@ -276,22 +291,70 @@ export function ScrollRestoration() {
 
   useEffect(() => {
     const onPopState = () => {
-      const currentRouteKey = currentRouteKeyRef.current
+      // Managed back/forward already opts into restoration before history
+      // navigation starts. The special path below is only for native browser
+      // history, where popstate can arrive after the route effect has reset
+      // scroll to top.
+      if (shouldRestoreNextRouteRef.current) return
+
+      ensureStorageLoaded()
 
       // Browser back/forward should restore previous scroll.
       shouldRestoreNextRouteRef.current = true
+      const targetRouteKey = getLocationRouteKey()
+      // Use the live browser URL here because this handler exists specifically
+      // for cases where the route effect observed the destination too early.
+      currentRouteKeyRef.current = targetRouteKey
 
-      // Capture the route we're leaving before history entry changes render.
-      savePageScroll(currentRouteKey)
-      saveHorizontalScroll(currentRouteKey)
+      if (popstateRestoreFrameRef.current !== 0) {
+        window.cancelAnimationFrame(popstateRestoreFrameRef.current)
+      }
+
+      const targetPageScrollTop = pageScrollMapRef.current[targetRouteKey] ?? 0
+      let pageRestoreAttempts = 0
+      let horizontalRestoreAttempts = 0
+
+      const runPopstateRestore = () => {
+        // Mirror the normal restore path, but decoupled from route-effect timing.
+        isRestoringRef.current = true
+
+        let shouldContinue = false
+        const pageRestored = restorePageScroll(targetPageScrollTop)
+        pageRestoreAttempts += 1
+
+        if (!pageRestored && pageRestoreAttempts < PAGE_RESTORE_ATTEMPTS) {
+          shouldContinue = true
+        }
+
+        restoreHorizontalScroll(targetRouteKey)
+        horizontalRestoreAttempts += 1
+
+        if (horizontalRestoreAttempts < HORIZONTAL_RESTORE_ATTEMPTS) {
+          shouldContinue = true
+        }
+
+        if (shouldContinue) {
+          popstateRestoreFrameRef.current =
+            window.requestAnimationFrame(runPopstateRestore)
+        } else {
+          isRestoringRef.current = false
+          popstateRestoreFrameRef.current = 0
+        }
+      }
+
+      popstateRestoreFrameRef.current =
+        window.requestAnimationFrame(runPopstateRestore)
     }
 
     window.addEventListener("popstate", onPopState)
 
     return () => {
       window.removeEventListener("popstate", onPopState)
+      if (popstateRestoreFrameRef.current !== 0) {
+        window.cancelAnimationFrame(popstateRestoreFrameRef.current)
+      }
     }
-  }, [saveHorizontalScroll, savePageScroll])
+  }, [ensureStorageLoaded, restoreHorizontalScroll, restorePageScroll])
 
   useEffect(() => {
     // Wait until loading state is done so we restore against real page content.
@@ -300,36 +363,58 @@ export function ScrollRestoration() {
     ensureStorageLoaded()
     currentRouteKeyRef.current = routeKey
     const shouldRestore = shouldRestoreNextRouteRef.current
+    // Capture a stable vertical target once per transition so retries do not
+    // chase values that may still be changing in storage.
+    const targetPageScrollTop = pageScrollMapRef.current[routeKey] ?? 0
+    isRestoringRef.current = shouldRestore
 
-    if (shouldRestore) {
-      restorePageScroll(routeKey)
-    } else {
+    if (!shouldRestore) {
       resetPageScroll()
     }
 
     let restoreFrame = 0
-    let restoreAttempts = 0
+    let pageRestoreAttempts = 0
+    let horizontalRestoreAttempts = 0
 
-    const runHorizontalRestore = () => {
+    const runRestore = () => {
+      let shouldContinue = false
+
       if (shouldRestore) {
+        // Keep trying until the saved vertical position actually sticks. This
+        // covers slower route transitions where content mounts later.
+        const pageRestored = restorePageScroll(targetPageScrollTop)
+        pageRestoreAttempts += 1
+
+        if (!pageRestored && pageRestoreAttempts < PAGE_RESTORE_ATTEMPTS) {
+          shouldContinue = true
+        }
+
         // Re-run across frames to catch late-mounted carousels.
         restoreHorizontalScroll(routeKey)
-      }
-      restoreAttempts += 1
+        horizontalRestoreAttempts += 1
 
-      if (restoreAttempts < HORIZONTAL_RESTORE_ATTEMPTS) {
-        restoreFrame = window.requestAnimationFrame(runHorizontalRestore)
+        if (horizontalRestoreAttempts < HORIZONTAL_RESTORE_ATTEMPTS) {
+          shouldContinue = true
+        }
+      }
+
+      if (shouldContinue) {
+        restoreFrame = window.requestAnimationFrame(runRestore)
+      } else {
+        isRestoringRef.current = false
       }
     }
 
-    restoreFrame = window.requestAnimationFrame(runHorizontalRestore)
+    restoreFrame = window.requestAnimationFrame(runRestore)
 
     // One-shot flag: applies only to this route transition.
     shouldRestoreNextRouteRef.current = false
 
-    return () => window.cancelAnimationFrame(restoreFrame)
+    return () => {
+      isRestoringRef.current = false
+      window.cancelAnimationFrame(restoreFrame)
+    }
   }, [
-    ensureStorageLoaded,
     isNavigating,
     resetPageScroll,
     restoreHorizontalScroll,
@@ -347,11 +432,15 @@ export function ScrollRestoration() {
       // During loader/navigation, layout can collapse and emit misleading
       // scroll values. Skip those writes.
       if (isNavigatingRef.current) return
+      // Restoration-triggered scroll events should not replace the saved value.
+      if (isRestoringRef.current) return
       savePageScroll(routeKey)
     }
 
     const onPageScroll = () => {
       if (isNavigatingRef.current) return
+      if (isRestoringRef.current) return
+      // Coalesce rapid scroll events into a single frame-level persistence write.
       if (persistFrame !== 0) return
       persistFrame = window.requestAnimationFrame(persistCurrentRoute)
     }
@@ -370,6 +459,8 @@ export function ScrollRestoration() {
     const onHorizontalScroll = (event: Event) => {
       // Same guard as vertical path: ignore scroll noise while navigating.
       if (isNavigatingRef.current) return
+      // Avoid feeding restoration writes back into storage while we replay them.
+      if (isRestoringRef.current) return
 
       const target = event.target
       if (!(target instanceof HTMLElement)) return
