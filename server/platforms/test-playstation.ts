@@ -1,5 +1,6 @@
 import * as fs from "fs"
 import * as path from "path"
+import * as assert from "assert"
 import { extractPrice } from "./playstation"
 
 // Import HTML files from fixtures
@@ -20,14 +21,20 @@ const premiumHTML = fs.readFileSync(
   path.join(fixturesDir, "ps-premium.html"),
   "utf-8"
 )
+const announcedHTML = fs.readFileSync(
+  path.join(__dirname, "ps-announced.html"),
+  "utf-8"
+)
 const standardHTML = fs.readFileSync(
   path.join(fixturesDir, "ps-standard.html"),
   "utf-8"
 )
 
-const price = extractPrice(premiumHTML)
+const price = extractPrice(announcedHTML)
 
 console.log("price :>>", price)
+
+assert.equal(price, null)
 
 const free = {
   __typename: "Price",

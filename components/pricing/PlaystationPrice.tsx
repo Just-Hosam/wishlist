@@ -44,6 +44,25 @@ export default async function PlaystationPrice({
     )
   } catch (error) {
     console.error("Error fetching PlayStation game info:", error)
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch game information"
+
+    if (message === "Price not available") {
+      return (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-muted-foreground hover:opacity-90"
+        >
+          <span>Price not available</span>
+        </a>
+      )
+    }
+
     return (
       <a
         href={url}

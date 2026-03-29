@@ -18,39 +18,30 @@ interface ExtractedPrice {
 export async function getPlayStationGamePrice(
   url: string
 ): Promise<PriceInput | null> {
-  try {
-    const response = await fetch(url, {
-      headers: buildRequestHeaders({
-        kind: "scrape",
-        referer: "https://store.playstation.com/"
-      })
+  const response = await fetch(url, {
+    headers: buildRequestHeaders({
+      kind: "scrape",
+      referer: "https://store.playstation.com/"
     })
+  })
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch PlayStation Store page: ${response.status}`
-      )
-    }
+  if (!response.ok) {
+    throw new Error(`Failed to fetch PlayStation Store page: ${response.status}`)
+  }
 
-    const html = await response.text()
-    const gamePrice = extractPrice(html)
+  const html = await response.text()
+  const gamePrice = extractPrice(html)
 
-    if (gamePrice) {
-      return {
-        storeUrl: url,
-        countryCode: "CA",
-        regularPrice: parseFloat(gamePrice.basePrice),
-        currentPrice: parseFloat(gamePrice.currentPrice),
-        description: gamePrice.description,
-        platform: Platform.PLAYSTATION,
-        externalId: null
-      }
-    }
+  if (!gamePrice) return null
 
-    return null
-  } catch (error) {
-    console.error("Error fetching PlayStation game price:", error)
-    return null
+  return {
+    storeUrl: url,
+    countryCode: "CA",
+    regularPrice: parseFloat(gamePrice.basePrice),
+    currentPrice: parseFloat(gamePrice.currentPrice),
+    description: gamePrice.description,
+    platform: Platform.PLAYSTATION,
+    externalId: null
   }
 }
 
@@ -58,6 +49,7 @@ export function extractPrice(html: string): ExtractedPrice | null {
   const scriptRegex =
     /<script[^>]*type="application\/json"[^>]*>([\s\S]*?)<\/script>/g
   let match
+  let foundAnnouncedState = false
 
   while ((match = scriptRegex.exec(html)) !== null) {
     try {
@@ -72,7 +64,13 @@ export function extractPrice(html: string): ExtractedPrice | null {
         ([key, item]: [string, any]) => key.includes("GameCTA") && item?.price
       )
 
-      if (priceEntries.length === 0) continue
+      if (priceEntries.length === 0) {
+        if (hasAnnouncedState(cache)) {
+          foundAnnouncedState = true
+        }
+
+        continue
+      }
 
       const selectedPriceEntry =
         priceEntries.find(
@@ -149,12 +147,26 @@ export function extractPrice(html: string): ExtractedPrice | null {
     }
   }
 
+  if (foundAnnouncedState) return null
+
   return null
 }
 
 function isPsPlusPremiumPrice(price: any): boolean {
   if (!price?.isTiedToSubscription) return false
   return price.upsellText?.toLowerCase().includes("premium") ?? false
+}
+
+function hasAnnouncedState(cache: Record<string, unknown>): boolean {
+  return Object.values(cache).some((item: any) => {
+    return (
+      item?.__typename === "Concept" &&
+      item?.isAnnounce === true &&
+      item?.defaultProduct == null &&
+      Array.isArray(item?.products) &&
+      item.products.length === 0
+    )
+  })
 }
 
 export function buildPlayStationStoreUrl(

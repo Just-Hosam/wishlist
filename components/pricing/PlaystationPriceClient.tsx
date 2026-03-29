@@ -44,11 +44,21 @@ export default function PlaystationPrice({
         setError(null)
         onFetchSuccess()
       })
-      .catch((error) => {
-        console.error("Error fetching PlayStation game info:", error)
+      .catch((err) => {
+        console.error("Error fetching PlayStation game info:", err)
         if (cancelled) return
         setPrice(null)
-        setError("Failed to fetch game information")
+
+        const message =
+          err instanceof Error
+            ? err.message
+            : "Failed to fetch game information"
+
+        setError(
+          message === "Price not available"
+            ? "Price not available"
+            : "Failed to fetch game information"
+        )
       })
 
     return () => {
@@ -65,7 +75,17 @@ export default function PlaystationPrice({
         </div>
       )}
 
-      {error && <span className="text-sm text-red-600">{error}</span>}
+      {error && (
+        <span
+          className={
+            error === "Price not available"
+              ? "text-sm text-muted-foreground"
+              : "text-sm text-red-600"
+          }
+        >
+          {error}
+        </span>
+      )}
 
       {!error && price && (
         <PriceLayout

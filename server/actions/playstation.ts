@@ -24,7 +24,7 @@ export async function fetchPlayStationPrice(
     const gameInfo = await getPlayStationGamePrice(url)
 
     if (!gameInfo) {
-      throw new Error("Failed to fetch game information from PlayStation store")
+      throw new Error("Price not available")
     }
 
     try {
