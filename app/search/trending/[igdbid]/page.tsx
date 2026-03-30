@@ -17,6 +17,14 @@ interface Props {
   params: Promise<{ igdbid: string }>
 }
 
+export async function generateStaticParams(): Promise<{ igdbid: string }[]> {
+  const { data, error } = await tryCatch(getCachedRecommendedGames())
+
+  if (error || !data) return []
+
+  return data.trending.map((game) => ({ igdbid: game.igdbId.toString() }))
+}
+
 export default async function TrendingGamePage({ params }: Props) {
   const { igdbid: igdbId } = await params
   if (!igdbId) notFound()
