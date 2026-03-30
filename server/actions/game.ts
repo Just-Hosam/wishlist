@@ -3,10 +3,10 @@
 import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
 import { GameCategory, GameInput, GameOutput } from "@/types"
-import { revalidateTag } from "next/cache"
+import { updateTag } from "next/cache"
 
 function revalidateGameCategory(category: GameCategory, userId: string) {
-  revalidateTag(`user-${category.toLowerCase()}-games-${userId}`)
+  updateTag(`user-${category.toLowerCase()}-games-${userId}`)
 }
 
 export async function deleteGame(id: string) {

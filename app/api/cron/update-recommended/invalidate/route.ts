@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
-  revalidateTag("igdb-recommended-games")
+  revalidateTag("igdb-recommended-games", "max")
   revalidatePath("/search")
 
   return NextResponse.json({

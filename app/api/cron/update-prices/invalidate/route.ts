@@ -8,9 +8,9 @@ export async function GET(request: Request) {
   const authResponse = requireCronAuth(request)
   if (!authResponse.ok) return authResponse
 
-  revalidateTag("prices")
-  revalidateTag("wishlist")
-  revalidateTag("steam-reviews")
+  revalidateTag("prices", { expire: 0 })
+  revalidateTag("wishlist", { expire: 0 })
+  revalidateTag("steam-reviews", { expire: 0 })
   revalidatePath("/wishlist")
 
   return NextResponse.json({
