@@ -10,12 +10,11 @@ export async function GET(request: Request) {
 
   revalidateTag("prices", { expire: 0 })
   revalidateTag("wishlist", { expire: 0 })
-  revalidateTag("steam-reviews", { expire: 0 })
   revalidatePath("/wishlist")
 
   return NextResponse.json({
     ok: true,
-    invalidatedTags: ["prices", "wishlist", "steam-reviews"],
+    invalidatedTags: ["prices", "wishlist"],
     invalidatedPaths: ["/wishlist"],
     timestamp: new Date().toISOString()
   })
