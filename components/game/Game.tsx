@@ -220,7 +220,10 @@ export function Game({
           {name && (
             <Suspense
               fallback={
-                <TimeToBeat title="HowLongToBeat" href={hltbSearchUrl} loading />
+                <TimeToBeat
+                  href={hltbSearchUrl}
+                  loading
+                />
               }
             >
               <HLTBTimeToBeat name={name} href={hltbSearchUrl} />
@@ -237,7 +240,7 @@ export function Game({
             href={youtubeReviewSearchUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex-1"
+            className="flex-1"
           >
             <Button
               size="lg"
@@ -296,7 +299,7 @@ async function HLTBTimeToBeat({ name, href }: { name: string; href: string }) {
 
   if (error) {
     console.error("Error fetching HLTB time to beat info:", error)
-    return <TimeToBeat title="HowLongToBeat" href={href} />
+    return <TimeToBeat href={href} />
   }
 
   return (
@@ -304,7 +307,6 @@ async function HLTBTimeToBeat({ name, href }: { name: string; href: string }) {
       story={timeToBeat?.story || 0}
       extra={timeToBeat?.extra || 0}
       complete={timeToBeat?.complete || 0}
-      title="HowLongToBeat"
       href={href}
     />
   )
