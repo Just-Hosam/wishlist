@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "@/components/navigation"
+import useAutoPopulateHLTBTimeToBeat from "@/components/game/useAutoPopulateHLTBTimeToBeat"
 import Counter from "@/components/ui/counter"
 import {
   buildNintendoStoreUrl,
@@ -55,6 +56,11 @@ export default function AddToWishlist({
   const [ntSwitchDisabled, setNtSwitchDisabled] = useState(true)
   const [steamLinked, setSteamLinked] = useState(false)
   const [steamSwitchDisabled, setSteamSwitchDisabled] = useState(true)
+  const { isLoading: isLoadingTimeToBeat } = useAutoPopulateHLTBTimeToBeat({
+    isOpen: open,
+    name: igdbGame.name,
+    setValue: setTimeToBeat
+  })
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -154,6 +160,7 @@ export default function AddToWishlist({
               <Counter
                 value={timeToBeat}
                 onChange={(value) => setTimeToBeat(value)}
+                disabled={isLoadingTimeToBeat}
               />
             </div>
             <div>

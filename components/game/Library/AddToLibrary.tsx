@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "@/components/navigation"
+import useAutoPopulateHLTBTimeToBeat from "@/components/game/useAutoPopulateHLTBTimeToBeat"
 import { ButtonGroup } from "@/components/ui/button-group"
 import Counter from "@/components/ui/counter"
 import { Switch } from "@/components/ui/switch"
@@ -40,6 +41,11 @@ export default function AddToLibrary({
   const [playstationSelected, setPlaystationSelected] = useState(false)
   const [nintendoSelected, setNintendoSelected] = useState(false)
   const [steamSelected, setSteamSelected] = useState(false)
+  const { isLoading: isLoadingTimeToBeat } = useAutoPopulateHLTBTimeToBeat({
+    isOpen: open,
+    name: igdbGame.name,
+    setValue: setTimeToBeat
+  })
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -108,6 +114,7 @@ export default function AddToLibrary({
               <Counter
                 value={timeToBeat}
                 onChange={(value) => setTimeToBeat(value)}
+                disabled={isLoadingTimeToBeat}
               />
             </div>
             <div className="flex items-end justify-between">

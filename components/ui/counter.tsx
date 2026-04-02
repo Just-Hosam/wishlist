@@ -7,10 +7,17 @@ import { ChangeEvent } from "react"
 interface GameLengthInputProps {
   value: number | null
   onChange: (value: number | null) => void
+  disabled?: boolean
 }
 
-export default function Counter({ value, onChange }: GameLengthInputProps) {
+export default function Counter({
+  value,
+  onChange,
+  disabled = false
+}: GameLengthInputProps) {
   const handleIncrement = (amount: number) => {
+    if (disabled) return
+
     const currentValue = value ?? 0
     const newValue = Math.max(0, Math.min(9999, currentValue + amount))
     onChange(newValue)
@@ -36,6 +43,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         variant="secondary"
         className="min-w-12 flex-1"
         size="icon"
+        disabled={disabled}
         onClick={() => handleIncrement(-10)}
       >
         -10
@@ -45,6 +53,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         variant="secondary"
         className="min-w-12 flex-1 text-xl font-normal"
         size="icon"
+        disabled={disabled}
         onClick={() => handleIncrement(-1)}
       >
         -
@@ -55,6 +64,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         min="0"
         max="9999"
         value={value ?? ""}
+        disabled={disabled}
         onChange={handleInputChange}
         className="flex-[2] text-center"
       />
@@ -63,6 +73,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         variant="secondary"
         className="min-w-12 flex-1 text-xl font-normal"
         size="icon"
+        disabled={disabled}
         onClick={() => handleIncrement(1)}
       >
         +
@@ -72,6 +83,7 @@ export default function Counter({ value, onChange }: GameLengthInputProps) {
         variant="secondary"
         className="min-w-12 flex-1"
         size="icon"
+        disabled={disabled}
         onClick={() => handleIncrement(10)}
       >
         +10
