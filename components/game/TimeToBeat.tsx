@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react"
 import { Skeleton } from "../ui/skeleton"
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
   extra?: number
   complete?: number
   title?: string
+  href?: string
   loading?: boolean
 }
 
@@ -13,11 +15,25 @@ export default function TimeToBeat({
   extra,
   complete,
   title,
+  href,
   loading
 }: Props) {
   return (
     <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
-      {title && <p className="mb-1 text-xs font-bold">{title}</p>}
+      {title &&
+        (href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-2 inline-flex items-center gap-1 text-xs font-bold"
+          >
+            <span>{title}</span>
+            <ExternalLink size={11} strokeWidth={3} className="-mt-[1px]" />
+          </a>
+        ) : (
+          <p className="mb-2 text-xs font-bold">{title}</p>
+        ))}
       <div className="flex items-center gap-4">
         <div className="flex-1">
           <label className="text-xs text-muted-foreground">Story</label>

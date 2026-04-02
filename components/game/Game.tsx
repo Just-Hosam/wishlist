@@ -1,10 +1,7 @@
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
 import { formatReleaseDate, tryCatch } from "@/lib/utils"
+import { getCachedHLTBTimeToBeat } from "@/server/actions/hltb"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
-import {
-  getCachedBackloggdTimeToBeat,
-  getCachedIGDBTimeToBeat
-} from "@/server/actions/time-to-beat"
 import { ExternalLink, LoaderCircle, Star } from "lucide-react"
 import Image from "next/image"
 import { Suspense } from "react"
@@ -36,8 +33,6 @@ export function Game({
   imageId,
   name,
   summary,
-  igdbId,
-  igdbSlug,
   igdbPlaystationUrlSegment,
   igdbNintendoUrlSegment,
   igdbSteamUrlSegment,
@@ -222,16 +217,15 @@ export function Game({
       {!isUpcoming && (
         <div className="mt-5">
           <label className="mb-3 block text-lg font-bold">Time to Beat</label>
-          <div className="space-y-2">
-            {igdbSlug && (
-              <Suspense fallback={<TimeToBeat title="Backloggd" loading />}>
-                <BackloggdTimeToBeat slug={igdbSlug} />
-              </Suspense>
-            )}
-            <Suspense fallback={<TimeToBeat title="IGDB API" loading />}>
-              <IGDBTimeToBeat igdbGameId={igdbId} />
+          {name && (
+            <Suspense
+              fallback={
+                <TimeToBeat title="HowLongToBeat" href={hltbSearchUrl} loading />
+              }
+            >
+              <HLTBTimeToBeat name={name} href={hltbSearchUrl} />
             </Suspense>
-          </div>
+          )}
         </div>
       )}
 
@@ -240,30 +234,6 @@ export function Game({
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">External</label>
           <a
-            href={hltbSearchUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1"
-          >
-            <Button
-              size="lg"
-              className="h-auto w-full justify-between gap-3 rounded-2xl px-6 py-4 shadow-sm"
-            >
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/logos/hltb.png"
-                  alt="HLTB logo"
-                  width={19}
-                  height={19}
-                  className="rounded-sm drop-shadow-2xl"
-                  unoptimized
-                />
-                <span className="font-semibold">HLTB Time to Beat</span>
-              </div>
-              <ExternalLink size={16} className="text-muted-foreground" />
-            </Button>
-          </a>
-          <a
             href={youtubeReviewSearchUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -271,7 +241,7 @@ export function Game({
           >
             <Button
               size="lg"
-              className="h-auto w-full justify-between gap-3 rounded-2xl px-6 py-4 shadow-sm"
+              className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -296,7 +266,7 @@ export function Game({
             >
               <Button
                 size="lg"
-                className="h-auto w-full justify-between gap-3 rounded-2xl px-6 py-4 shadow-sm"
+                className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Image
@@ -319,14 +289,14 @@ export function Game({
   )
 }
 
-async function IGDBTimeToBeat({ igdbGameId }: { igdbGameId: string }) {
+async function HLTBTimeToBeat({ name, href }: { name: string; href: string }) {
   const { data: timeToBeat, error } = await tryCatch(
-    getCachedIGDBTimeToBeat(igdbGameId)
+    getCachedHLTBTimeToBeat(name)
   )
 
   if (error) {
-    console.error("Error fetching IGDB time to beat info:", error)
-    return <TimeToBeat title="IGDB API" />
+    console.error("Error fetching HLTB time to beat info:", error)
+    return <TimeToBeat title="HowLongToBeat" href={href} />
   }
 
   return (
@@ -334,27 +304,8 @@ async function IGDBTimeToBeat({ igdbGameId }: { igdbGameId: string }) {
       story={timeToBeat?.story || 0}
       extra={timeToBeat?.extra || 0}
       complete={timeToBeat?.complete || 0}
-      title="IGDB API"
-    />
-  )
-}
-
-async function BackloggdTimeToBeat({ slug }: { slug: string }) {
-  const { data: timeToBeat, error } = await tryCatch(
-    getCachedBackloggdTimeToBeat(slug)
-  )
-
-  if (error) {
-    console.error("Error fetching Backloggd time to beat info:", error)
-    return <TimeToBeat title="Backloggd" />
-  }
-
-  return (
-    <TimeToBeat
-      story={timeToBeat?.story || 0}
-      extra={timeToBeat?.extra || 0}
-      complete={timeToBeat?.complete || 0}
-      title="Backloggd"
+      title="HowLongToBeat"
+      href={href}
     />
   )
 }
