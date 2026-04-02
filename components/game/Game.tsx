@@ -248,8 +248,8 @@ export function Game({
                   src="/logos/youtube.svg"
                   alt="YouTube logo"
                   width={22}
-                  height={22}
-                  className="drop-shadow-2xl"
+                  height={15}
+                  className="-ml-[2px] h-auto w-[22px] drop-shadow-2xl"
                   unoptimized
                 />
                 <span className="font-semibold">Reviews on Youtube</span>

@@ -113,8 +113,8 @@ export function YoutubeVideo({
             src="/logos/youtube.svg"
             alt="Play on YouTube"
             width={70}
-            height={70}
-            className="absolute shadow-2xl"
+            height={49}
+            className="absolute h-auto w-[70px] shadow-2xl"
             unoptimized
           />
         </button>
