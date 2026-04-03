@@ -39,7 +39,7 @@ Playward is a full-stack video game wishlist and backlog manager built with Next
 
 <p>
   <img src="public/screenshots/game-1.PNG" alt="Game details screen with pricing and summary for Planet of Lana" width="180" />
-  <img src="public/screenshots/game-2.PNG" alt="Game details screen with media and time to beat for Planet of Lana" width="180" />
+  <img src="public/screenshots/game-2-temp.PNG" alt="Game details screen with media and time to beat for Planet of Lana" width="180" />
   <img src="public/screenshots/reviews.PNG" alt="Steam reviews screen with rating and user reviews" width="180" />
 </p>
 
