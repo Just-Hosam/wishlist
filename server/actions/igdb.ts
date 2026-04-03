@@ -543,7 +543,7 @@ async function getTrendingGames(idSets: {
   "set-3": number[]
 }): Promise<IGDBGame[]> {
   const nowSec = Math.floor(Date.now() / 1000)
-  const oneYearAgo = nowSec - 60 * 60 * 24 * 365
+  const threeMonthsAgo = nowSec - 60 * 60 * 24 * 30 * 3
 
   const activeSets = (
     Object.entries(idSets) as [keyof typeof idSets, number[]][]
@@ -561,7 +561,7 @@ async function getTrendingGames(idSets: {
             & platforms = (48, 167, 130, 508, 6, 169)
             & first_release_date != null
             & first_release_date <= ${nowSec}
-            & first_release_date >= ${oneYearAgo}
+            & first_release_date >= ${threeMonthsAgo}
             & summary != null
             & cover != null
             & videos != null
