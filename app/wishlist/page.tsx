@@ -1,5 +1,5 @@
 import ListEmptyState from "@/components/game/ListEmptyState"
-import { formatReleaseDate } from "@/lib/utils"
+import { formatUpcomingReleaseLabel, isUpcomingRelease } from "@/lib/utils"
 import { Link } from "@/components/navigation"
 import PriceLayout from "@/components/pricing/PriceLayout"
 import { getCachedWishlistGames } from "@/server/actions/lists"
@@ -22,9 +22,7 @@ export default async function WishlistPage() {
   return (
     <div className="custom-slide-up-fade-in grid gap-4">
       {wishlistGames.map((game, index) => {
-        const isUpcoming = game.igdbFirstReleaseDate
-          ? new Date(game.igdbFirstReleaseDate * 1000) > new Date()
-          : false
+        const isUpcoming = isUpcomingRelease(game.igdbFirstReleaseDate)
 
         const nintendoPrice = game?.prices?.find(
           ({ platform }) => Platform.NINTENDO === platform
@@ -69,15 +67,14 @@ export default async function WishlistPage() {
                           strokeWidth={1.75}
                           className="-mt-[1px]"
                         />
-
-                        {formatReleaseDate(game.igdbFirstReleaseDate!)}
+                        {formatUpcomingReleaseLabel(game.igdbFirstReleaseDate!)}
                       </>
                     ) : (
                       <>
                         <Clock
                           size={12}
                           strokeWidth={1.75}
-                          className="-mt-[0.5px]"
+                          className="mt-[-0.5px]"
                         />
                         {game?.length ? `${game?.length} hours` : "-"}
                       </>

@@ -48,6 +48,26 @@ export const formatReleaseDate = (timestamp: number) => {
   })
 }
 
+export const isUpcomingRelease = (timestamp?: number | null) => {
+  if (!timestamp) return false
+
+  return new Date(timestamp * 1000) > new Date()
+}
+
+export const formatUpcomingReleaseLabel = (timestamp: number) => {
+  const millisecondsPerDay = 1000 * 60 * 60 * 24
+  const daysUntilRelease = Math.ceil(
+    (new Date(timestamp * 1000).getTime() - Date.now()) / millisecondsPerDay
+  )
+
+  const isWithin30Days = daysUntilRelease > 0 && daysUntilRelease <= 30
+  if (isWithin30Days) {
+    return `In ${daysUntilRelease} day${daysUntilRelease === 1 ? "" : "s"}`
+  }
+
+  return formatReleaseDate(timestamp)
+}
+
 export const sleep = async (ms: number): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, ms))
 }

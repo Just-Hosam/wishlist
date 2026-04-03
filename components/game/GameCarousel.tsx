@@ -18,6 +18,7 @@ interface Props {
     name: string
     coverImageUrl: string | null
     releaseDate?: number | null
+    releaseDateLabel?: string | null
     length?: number | null
     platforms?: Platform[] | null
     steamUrlSegment?: string | null
@@ -73,7 +74,7 @@ export default function GameCarousel({
 
               {showDate && game.releaseDate && (
                 <p className="mt-1 text-xs text-muted-foreground md:text-sm">
-                  {formatReleaseDate(game.releaseDate)}
+                  {game.releaseDateLabel || formatReleaseDate(game.releaseDate)}
                 </p>
               )}
 

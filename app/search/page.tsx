@@ -1,7 +1,7 @@
 import GameCarousel from "@/components/game/GameCarousel"
 import { Button } from "@/components/ui/button"
 import { buildIGDBImageUrl } from "@/lib/igdb-store-links"
-import { tryCatch } from "@/lib/utils"
+import { formatUpcomingReleaseLabel, tryCatch } from "@/lib/utils"
 import { getCachedRecommendedGames } from "@/server/actions/igdb"
 import { ExternalLink } from "lucide-react"
 import Image from "next/image"
@@ -32,6 +32,9 @@ export default async function SearchPage() {
     name: game.name,
     coverImageUrl: buildIGDBImageUrl(game.coverImageId),
     releaseDate: game.firstReleaseDate,
+    releaseDateLabel: game.firstReleaseDate
+      ? formatUpcomingReleaseLabel(game.firstReleaseDate)
+      : null,
     length: undefined,
     platforms: game.platforms,
     steamUrlSegment: game.steamUrlSegment,
