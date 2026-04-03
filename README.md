@@ -23,31 +23,31 @@ Playward is a full-stack video game wishlist and backlog manager built with Next
 ### Manage your backlog
 
 <p>
-  <img src="public/screenshots/wishlist.PNG" alt="Wishlist page showing saved games and tracked prices" width="220" />
-  <img src="public/screenshots/library.PNG" alt="Library page showing now playing and backlog sections" width="220" />
+  <img src="public/screenshots/wishlist.PNG" alt="Wishlist page showing saved games and tracked prices" width="30%" />
+  <img src="public/screenshots/library.PNG" alt="Library page showing now playing and backlog sections" width="30%" />
 </p>
 
 ### Find new games
 
 <p>
-  <img src="public/screenshots/search-recommendations.PNG" alt="Discovery screen showing trending and upcoming game recommendations" width="180" />
-  <img src="public/screenshots/search-keywords.PNG" alt="Search screen showing keyword suggestions for a game query" width="180" />
-  <img src="public/screenshots/search-results.PNG" alt="Search results for Hollow Knight titles" width="180" />
+  <img src="public/screenshots/search-recommendations.PNG" alt="Discovery screen showing trending and upcoming game recommendations" width="25%" />
+  <img src="public/screenshots/search-keywords.PNG" alt="Search screen showing keyword suggestions for a game query" width="25%" />
+  <img src="public/screenshots/search-results.PNG" alt="Search results for Hollow Knight titles" width="25%" />
 </p>
 
 ### Check out a game
 
 <p>
-  <img src="public/screenshots/game-1.PNG" alt="Game details screen with pricing and summary for Planet of Lana" width="180" />
-  <img src="public/screenshots/game-2.PNG" alt="Game details screen with media and time to beat for Planet of Lana" width="180" />
-  <img src="public/screenshots/reviews.PNG" alt="Steam reviews screen with rating and user reviews" width="180" />
+  <img src="public/screenshots/game-1.PNG" alt="Game details screen with pricing and summary for Planet of Lana" width="25%" />
+  <img src="public/screenshots/game-2.PNG" alt="Game details screen with media and time to beat for Planet of Lana" width="25%" />
+  <img src="public/screenshots/reviews.PNG" alt="Steam reviews screen with rating and user reviews" width="25%" />
 </p>
 
 ### Add it to the right list
 
 <p>
-  <img src="public/screenshots/add-to-wishlist.PNG" alt="Add to Wishlist sheet with time-to-beat and price tracking options" width="220" />
-  <img src="public/screenshots/add-to-library.PNG" alt="Add to Library sheet with platform ownership and currently playing options" width="220" />
+  <img src="public/screenshots/add-to-wishlist.PNG" alt="Add to Wishlist sheet with time-to-beat and price tracking options" width="30%" />
+  <img src="public/screenshots/add-to-library.PNG" alt="Add to Library sheet with platform ownership and currently playing options" width="30%" />
 </p>
 
 ## Architecture Highlights
