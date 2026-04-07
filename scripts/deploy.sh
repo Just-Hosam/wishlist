@@ -89,8 +89,8 @@ if echo "$RESPONSE" | grep -q "job"; then
 
     if [[ "$UPDATE_SEARCH_DATA" =~ ^[Yy]$ ]]; then
         echo ""
-        echo "⏳ Waiting 90 seconds before updating recommended search data..."
-        sleep 90
+        echo "⏳ Waiting 60 seconds before updating recommended search data..."
+        sleep 60
         echo "🔍 Updating recommended search data..."
         curl -fsS \
             -H "Authorization: Bearer $CRON_SECRET" \
