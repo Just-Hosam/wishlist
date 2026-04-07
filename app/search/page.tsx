@@ -6,7 +6,7 @@ import { getCachedRecommendedGames } from "@/server/actions/igdb"
 import { ExternalLink } from "lucide-react"
 import Image from "next/image"
 
-export const dynamic = "force-static"
+export const dynamic = "error"
 
 export default async function SearchPage() {
   const { data, error } = await tryCatch(getCachedRecommendedGames())
