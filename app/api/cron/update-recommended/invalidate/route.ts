@@ -7,11 +7,12 @@ export async function GET(request: Request) {
   if (!authResponse.ok) return authResponse
 
   revalidateTag("igdb-recommended-games", { expire: 0 })
+  revalidateTag("steam-reviews", { expire: 0 })
   revalidatePath("/search")
 
   return NextResponse.json({
     ok: true,
-    invalidatedTags: ["igdb-recommended-games"],
+    invalidatedTags: ["igdb-recommended-games", "steam-reviews"],
     invalidatedPaths: ["/search"],
     timestamp: new Date().toISOString()
   })
