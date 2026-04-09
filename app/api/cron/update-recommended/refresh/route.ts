@@ -22,11 +22,34 @@ export async function GET(request: Request) {
     )
   }
 
+  const searchUrl = new URL("/search", request.url)
+  const searchResponse = await fetch(searchUrl, {
+    method: "GET",
+    cache: "no-store"
+  })
+
+  if (!searchResponse.ok) {
+    const responseText = await searchResponse.text()
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Search page warm-up failed",
+        details: responseText || `Received status ${searchResponse.status}`,
+        trendingCount: recommendedGames.trending.length,
+        upcomingCount: recommendedGames.upcoming.length,
+        releasedCount: recommendedGames.released.length
+      },
+      { status: 500 }
+    )
+  }
+
   return NextResponse.json({
     ok: true,
     trendingCount: recommendedGames.trending.length,
     upcomingCount: recommendedGames.upcoming.length,
     releasedCount: recommendedGames.released.length,
+    warmedPaths: ["/search"],
     timestamp: new Date().toISOString()
   })
 }
