@@ -112,7 +112,10 @@ export const getCachedBackloggdTimeToBeat = async (
     async () => await fetchBackloggdTimeToBeat(normalizedSlug),
     [normalizedSlug],
     {
-      tags: [`backloggd-time-to-beat-${normalizedSlug}`],
+      tags: [
+        `backloggd-time-to-beat-${normalizedSlug}`,
+        `backloggd-time-to-beat`
+      ],
       revalidate: 604_800 // 7 days
     }
   )()
@@ -178,7 +181,7 @@ export const getCachedIGDBTimeToBeat = async (
     async () => await fetchIGDBTimeToBeat(igdbGameId),
     [igdbGameId.toString()],
     {
-      tags: [`IGDB-time-to-beat-${igdbGameId}`],
+      tags: [`IGDB-time-to-beat-${igdbGameId}`, `IGDB-time-to-beat`],
       revalidate: 604_800 // 7 days
     }
   )()

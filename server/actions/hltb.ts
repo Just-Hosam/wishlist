@@ -238,7 +238,7 @@ export const getCachedHLTBTimeToBeat = async (
     async () => await fetchHLTBTimeToBeat(normalizedName),
     [normalizedName],
     {
-      tags: [`hltb-time-to-beat-${normalizedName}`],
+      tags: [`hltb-time-to-beat-${normalizedName}`, `hltb-time-to-beat`],
       revalidate: 259200 // 3 days
     }
   )()
