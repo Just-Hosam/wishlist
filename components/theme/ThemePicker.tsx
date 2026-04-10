@@ -12,15 +12,15 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "../ui/drawer"
-import { CircleCheckBig } from "lucide-react"
+import { ArrowRight, CircleCheckBig, Palette } from "lucide-react"
 import { Accent, ACCENT_STORAGE_KEY } from "@/types/theme"
 import { cn } from "@/lib/utils"
 
 interface Props {
-  children: React.ReactNode
+  className?: string
 }
 
-export function ThemePicker({ children }: Props) {
+export function ThemePicker({ className }: Props) {
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -84,7 +84,17 @@ export function ThemePicker({ children }: Props) {
 
   return (
     <Drawer open={open} onOpenChange={(next) => setOpen(next)}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>
+        <Button
+          className={cn("w-full justify-start", className)}
+          size="lg"
+          variant="ghost"
+        >
+          <Palette />
+          Appearance
+          <ArrowRight className="ml-auto text-muted-foreground" />
+        </Button>
+      </DrawerTrigger>
       <DrawerContent>
         <div className="px-2">
           <DrawerHeader>
