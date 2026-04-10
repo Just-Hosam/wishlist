@@ -12,7 +12,7 @@
 
 // This value is updated automatically on deploy to keep boot cache rotation
 // aligned with each release. Do not bump it manually for normal SW edits.
-const SW_VERSION = "0.4.4"
+const SW_VERSION = "0.4.5"
 
 // Keep one small cache dedicated to startup-critical responses.
 const BOOT_CACHE = `boot-cache-${SW_VERSION}`
