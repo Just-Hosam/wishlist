@@ -11,7 +11,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { getCachedLibraryGames } from "@/server/actions/lists"
-import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
+import { ArrowRight, Ellipsis, Pencil } from "lucide-react"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 
@@ -69,15 +69,7 @@ export default async function LibraryGamePage({ params }: Props) {
               <Pencil />
               Edit
             </EditFromLibrary>
-            <DeleteGameButton gameId={game.id} navigateTo="/library">
-              <Button
-                className="justify-start text-destructive"
-                variant="ghost"
-              >
-                <Trash2 />
-                Delete
-              </Button>
-            </DeleteGameButton>
+            <DeleteGameButton gameId={game.id} navigateTo="/library" />
           </div>
         </PopoverContent>
       </Popover>

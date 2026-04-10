@@ -10,7 +10,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { getCachedWishlistGames } from "@/server/actions/lists"
-import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
+import { ArrowRight, Ellipsis, Pencil } from "lucide-react"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 
@@ -58,15 +58,7 @@ export default async function WishlistGamePage({ params }: Props) {
               <Pencil />
               Edit
             </EditFromWishlist>
-            <DeleteGameButton gameId={game.id} navigateTo="/wishlist">
-              <Button
-                className="justify-start text-destructive"
-                variant="ghost"
-              >
-                <Trash2 />
-                Delete
-              </Button>
-            </DeleteGameButton>
+            <DeleteGameButton gameId={game.id} navigateTo="/wishlist" />
           </div>
         </PopoverContent>
       </Popover>

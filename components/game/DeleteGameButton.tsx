@@ -1,10 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { deleteGame } from "@/server/actions/game"
 import { useRouter } from "@/components/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
+import { Trash2 } from "lucide-react"
 import {
   Drawer,
   DrawerClose,
@@ -19,13 +21,13 @@ import {
 interface Props {
   gameId: string
   navigateTo: string
-  children: React.ReactNode
+  className?: string
 }
 
 export default function DeleteGameButton({
   gameId,
   navigateTo,
-  children
+  className
 }: Props) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
@@ -49,8 +51,15 @@ export default function DeleteGameButton({
 
   return (
     <Drawer open={isOpen} onOpenChange={(next) => setIsOpen(next)}>
-      <DrawerTrigger asChild onClick={() => setIsOpen(true)}>
-        {children}
+      <DrawerTrigger asChild>
+        <Button
+          variant="ghost"
+          className={cn("justify-start text-destructive", className)}
+          onClick={() => setIsOpen(true)}
+        >
+          <Trash2 />
+          Delete
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="px-2">

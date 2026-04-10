@@ -10,7 +10,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 import { getCachedCompletedGames } from "@/server/actions/lists"
-import { ArrowRight, Ellipsis, Pencil, Trash2 } from "lucide-react"
+import { ArrowRight, Ellipsis, Pencil } from "lucide-react"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 
@@ -63,15 +63,7 @@ export default async function CompletedGamePage({ params }: Props) {
               <Pencil />
               Edit
             </EditFromCompleted>
-            <DeleteGameButton gameId={game.id} navigateTo="/more/completed">
-              <Button
-                className="justify-start text-destructive"
-                variant="ghost"
-              >
-                <Trash2 />
-                Delete
-              </Button>
-            </DeleteGameButton>
+            <DeleteGameButton gameId={game.id} navigateTo="/more/completed" />
           </div>
         </PopoverContent>
       </Popover>
