@@ -7,43 +7,43 @@ import { ThemePicker } from "@/components/theme/ThemePicker"
 export default function MorePage() {
   return (
     <div className="custom-slide-up-fade-in">
-      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
+      <h2 className="mb-4 text-sm font-semibold text-muted-foreground">
         Pages
       </h2>
       <Button
         asChild
-        className="w-full justify-start"
-        size="lg"
-        variant="ghost"
+        size="link"
+        variant="link"
+        className="w-full justify-between"
       >
         <Link href="/more/about">
-          <Info />
-          About
+          <div className="flex items-center gap-2">
+            <Info />
+            About
+          </div>
           <ArrowRight className="ml-auto text-muted-foreground" />
         </Link>
       </Button>
       <Button
         asChild
-        className="w-full justify-start"
-        size="lg"
-        variant="ghost"
+        size="link"
+        variant="link"
+        className="mt-2 w-full justify-between"
       >
         <Link href="/more/completed">
-          <CheckCircle2 />
-          Completed
+          <div className="flex items-center gap-2">
+            <CheckCircle2 />
+            Completed
+          </div>
           <ArrowRight className="ml-auto text-muted-foreground" />
         </Link>
       </Button>
-      <div className="-mx-4 my-6 border-[3px]"></div>
-      <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
+      <h2 className="mb-4 mt-6 text-sm font-semibold text-muted-foreground">
         Settings
       </h2>
       <ThemePicker />
 
-      <div className="-mx-4 my-6 border-[3px]"></div>
-      <div className="px-2">
-        <SignOutButton />
-      </div>
+      <SignOutButton className="mt-2" />
     </div>
   )
 }
