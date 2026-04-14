@@ -115,8 +115,7 @@ export default async function SearchPage() {
         >
           <Button
             size="lg"
-            variant="outline"
-            className="h-auto w-full justify-between gap-3 px-6 py-4"
+            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
           >
             <div className="flex items-center gap-2">
               <Image
@@ -139,8 +138,7 @@ export default async function SearchPage() {
         >
           <Button
             size="lg"
-            variant="outline"
-            className="h-auto w-full justify-between gap-3 px-6 py-4"
+            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
           >
             <div className="flex items-center gap-2">
               <Image
