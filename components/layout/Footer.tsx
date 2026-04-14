@@ -95,7 +95,7 @@ export default function Footer() {
     <footer
       aria-hidden={!isVisible}
       className={cn(
-        "absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#fafafa] via-[#fafafa]/[85%] via-60% to-transparent px-5 pb-6 pt-3 transition-transform duration-500 ease-in-out",
+        "absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-background via-background/[85%] via-60% to-transparent px-5 pb-6 pt-3 transition-transform duration-500 ease-in-out",
         isVisible
           ? "pointer-events-auto translate-y-0"
           : "pointer-events-none translate-y-full"
