@@ -56,12 +56,12 @@ export function Game({
     <div className="custom-slide-up-fade-in">
       {/* HEADER */}
       <header className="mx-auto flex flex-col items-center text-center">
-        <div className="mb-5 h-[253px] w-[190px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
+        <div className="-mt-2 mb-5 h-[280px] w-[210px] overflow-hidden rounded-3xl bg-gray-200 shadow-md">
           <Image
             src={buildIGDBImageUrl(imageId || "")}
             alt={name || "Game cover"}
-            width={190}
-            height={253}
+            width={210}
+            height={280}
             priority
             fetchPriority="high"
             unoptimized
@@ -162,54 +162,51 @@ export function Game({
 
       {/* MEDIA */}
       {(hasVideos || hasScreenshots) && (
-        <div className="mt-8 flex flex-col">
-          <label className="mb-3 text-lg font-bold">Media</label>
-          <div
-            className="hide-scrollbar -mx-4 flex snap-x snap-mandatory gap-[6px] overflow-x-auto scroll-smooth pb-3"
-            data-scroll-restore-id="media"
-            tabIndex={0}
-            role="region"
-            aria-label="media"
-          >
-            {hasVideos &&
-              igdbVideoIds.map((videoId, index) => {
-                if (index >= 3) return null
-                return (
-                  <div
-                    key={videoId}
-                    className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
-                  >
-                    <YoutubeVideo
-                      videoId={videoId}
-                      width={400}
-                      height={223}
-                      className="w-full overflow-hidden rounded-2xl shadow-md"
+        <div
+          className="hide-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-[6px] overflow-x-auto scroll-smooth pb-3"
+          data-scroll-restore-id="media"
+          tabIndex={0}
+          role="region"
+          aria-label="media"
+        >
+          {hasVideos &&
+            igdbVideoIds.map((videoId, index) => {
+              if (index >= 3) return null
+              return (
+                <div
+                  key={videoId}
+                  className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
+                >
+                  <YoutubeVideo
+                    videoId={videoId}
+                    width={400}
+                    height={223}
+                    className="w-full overflow-hidden rounded-2xl shadow-md"
+                  />
+                </div>
+              )
+            })}
+          {hasScreenshots &&
+            igdbScreenshotIds.map((screenshotId, index) => {
+              if (index >= 6) return null
+              return (
+                <div
+                  key={screenshotId}
+                  className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
+                >
+                  <div className="relative aspect-video overflow-hidden rounded-2xl shadow-md">
+                    <Image
+                      src={buildIGDBImageUrl(screenshotId || "")}
+                      alt={name || "Game cover"}
+                      fill
+                      sizes="(max-width: 432px) calc(100vw - 32px), 400px"
+                      className="object-cover"
+                      unoptimized
                     />
                   </div>
-                )
-              })}
-            {hasScreenshots &&
-              igdbScreenshotIds.map((screenshotId, index) => {
-                if (index >= 6) return null
-                return (
-                  <div
-                    key={screenshotId}
-                    className="w-[calc(100vw-32px)] max-w-[400px] shrink-0 snap-center first:ml-4 last:mr-4"
-                  >
-                    <div className="relative aspect-video overflow-hidden rounded-2xl shadow-md">
-                      <Image
-                        src={buildIGDBImageUrl(screenshotId || "")}
-                        alt={name || "Game cover"}
-                        fill
-                        sizes="(max-width: 432px) calc(100vw - 32px), 400px"
-                        className="object-cover"
-                        unoptimized
-                      />
-                    </div>
-                  </div>
-                )
-              })}
-          </div>
+                </div>
+              )
+            })}
         </div>
       )}
 
@@ -218,14 +215,7 @@ export function Game({
         <div className="mt-5">
           <label className="mb-3 block text-lg font-bold">Time to Beat</label>
           {name && (
-            <Suspense
-              fallback={
-                <TimeToBeat
-                  href={hltbSearchUrl}
-                  loading
-                />
-              }
-            >
+            <Suspense fallback={<TimeToBeat href={hltbSearchUrl} loading />}>
               <HLTBTimeToBeat name={name} href={hltbSearchUrl} />
             </Suspense>
           )}
