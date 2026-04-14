@@ -2,7 +2,7 @@
 
 import { getPlayStationGamePrice } from "@/server/platforms/playstation"
 import { PriceInput } from "@/types"
-import { unstable_cache } from "next/cache"
+import { getCachedPriceByUrl, setCachedPriceByUrl } from "@/server/cache/prices"
 import { savePrice } from "./price"
 
 export async function fetchPlayStationPrice(
@@ -51,14 +51,10 @@ export async function fetchPlayStationPrice(
 export const getCachedPlaystationPrice = async (
   url: string
 ): Promise<PriceInput> => {
-  return unstable_cache(
-    async () => {
-      return await fetchPlayStationPrice(url)
-    },
-    [url],
-    {
-      tags: [`playstation-price-${url}`, "playstation-prices", "prices"],
-      revalidate: 86_400 // 1 day
-    }
-  )()
+  const cachedPrice = await getCachedPriceByUrl(url)
+  if (cachedPrice) return cachedPrice
+
+  const latestPrice = await fetchPlayStationPrice(url)
+  await setCachedPriceByUrl(latestPrice)
+  return latestPrice
 }

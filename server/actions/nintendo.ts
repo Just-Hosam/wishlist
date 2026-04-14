@@ -3,7 +3,7 @@
 import { getNintendoGameInfo } from "@/server/platforms/nintendo"
 import { PriceInput } from "@/types"
 import { getPrice, savePrice } from "./price"
-import { unstable_cache } from "next/cache"
+import { getCachedPriceByUrl, setCachedPriceByUrl } from "@/server/cache/prices"
 
 export async function fetchNintendoPrice(
   url: string | null
@@ -49,14 +49,10 @@ export async function fetchNintendoPrice(
 export const getCachedNintendoPrice = async (
   url: string
 ): Promise<PriceInput> => {
-  return unstable_cache(
-    async () => {
-      return await fetchNintendoPrice(url)
-    },
-    [url],
-    {
-      tags: [`nintendo-price-${url}`, "nintendo-prices", "prices"],
-      revalidate: 86_400 // 1 day
-    }
-  )()
+  const cachedPrice = await getCachedPriceByUrl(url)
+  if (cachedPrice) return cachedPrice
+
+  const latestPrice = await fetchNintendoPrice(url)
+  await setCachedPriceByUrl(latestPrice)
+  return latestPrice
 }

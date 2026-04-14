@@ -2,7 +2,7 @@
 
 import { getSteamGameInfo } from "@/server/platforms/steam"
 import { PriceInput } from "@/types"
-import { unstable_cache } from "next/cache"
+import { getCachedPriceByUrl, setCachedPriceByUrl } from "@/server/cache/prices"
 import { savePrice } from "./price"
 
 export async function fetchSteamPrice(url: string | null): Promise<PriceInput> {
@@ -38,14 +38,10 @@ export async function fetchSteamPrice(url: string | null): Promise<PriceInput> {
 }
 
 export const getCachedSteamPrice = async (url: string): Promise<PriceInput> => {
-  return unstable_cache(
-    async () => {
-      return await fetchSteamPrice(url)
-    },
-    [url],
-    {
-      tags: [`steam-price-${url}`, "steam-prices", "prices"],
-      revalidate: 86_400 // 1 day
-    }
-  )()
+  const cachedPrice = await getCachedPriceByUrl(url)
+  if (cachedPrice) return cachedPrice
+
+  const latestPrice = await fetchSteamPrice(url)
+  await setCachedPriceByUrl(latestPrice)
+  return latestPrice
 }
