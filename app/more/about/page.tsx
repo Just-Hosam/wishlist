@@ -28,59 +28,62 @@ export default function AboutPage() {
         </p>
       </div>
       <div className="mt-6 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
-        <Link
-          href="https://github.com/Just-Hosam"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1"
+        <Button
+          asChild
+          size="link"
+          variant="link"
+          className="w-full justify-between"
         >
-          <Button
-            size="lg"
-            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
+          <Link
+            href="https://github.com/Just-Hosam"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="flex items-center gap-2">
               <Github size={24} />
               <span className="font-semibold">GitHub</span>
             </div>
             <ExternalLink size={16} className="text-muted-foreground" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
-        <Link
-          href="https://www.linkedin.com/in/hosam-dahrooge/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1"
+        <Button
+          asChild
+          size="link"
+          variant="link"
+          className="w-full justify-between"
         >
-          <Button
-            size="lg"
-            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
+          <Link
+            href="https://www.linkedin.com/in/hosam-dahrooge/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="flex items-center gap-2">
               <Linkedin size={24} />
               <span className="font-semibold">LinkedIn</span>
             </div>
             <ExternalLink size={16} className="text-muted-foreground" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
-        <Link
-          href="https://samdahrooge.com/resume.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1"
+        <Button
+          asChild
+          size="link"
+          variant="link"
+          className="w-full justify-between"
         >
-          <Button
-            size="lg"
-            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
+          <Link
+            href="https://samdahrooge.com/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="flex items-center gap-2">
               <FileText size={16} />
               <span className="font-semibold">Resume</span>
             </div>
             <ExternalLink size={16} className="text-muted-foreground" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     </div>
   )

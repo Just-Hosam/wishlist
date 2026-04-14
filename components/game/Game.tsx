@@ -226,15 +226,11 @@ export function Game({
       {!isUpcoming && name && (
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">External</label>
-          <a
-            href={youtubeReviewSearchUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1"
-          >
-            <Button
-              size="lg"
-              className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
+          <Button asChild size="link" variant="link" className="w-full justify-between">
+            <a
+              href={youtubeReviewSearchUrl}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <div className="flex items-center gap-2">
                 <Image
@@ -248,19 +244,16 @@ export function Game({
                 <span className="font-semibold">Reviews on Youtube</span>
               </div>
               <ExternalLink size={16} className="text-muted-foreground" />
-            </Button>
-          </a>
+            </a>
+          </Button>
           {steamId && (
-            <a
-              href={steamDBUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 flex-1"
+            <Button
+              asChild
+              size="link"
+              variant="link"
+              className="mt-2 w-full justify-between"
             >
-              <Button
-                size="lg"
-                className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
-              >
+              <a href={steamDBUrl} target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center gap-2">
                   <Image
                     src="/logos/steam-db.svg"
@@ -273,8 +266,8 @@ export function Game({
                   <span className="font-semibold">Steam Price History</span>
                 </div>
                 <ExternalLink size={16} className="text-muted-foreground" />
-              </Button>
-            </a>
+              </a>
+            </Button>
           )}
         </div>
       )}

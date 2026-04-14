@@ -107,15 +107,16 @@ export default async function SearchPage() {
         <p className="mb-3 text-xs text-muted-foreground">
           Check out these resources.
         </p>
-        <a
-          href="https://www.playstation.com/en-ca/ps-plus/games/?category=MONTHLY_GAMES&sort=last#plus-container"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mb-2 block"
+        <Button
+          asChild
+          size="link"
+          variant="link"
+          className="mb-2 w-full justify-between"
         >
-          <Button
-            size="lg"
-            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
+          <a
+            href="https://www.playstation.com/en-ca/ps-plus/games/?category=MONTHLY_GAMES&sort=last#plus-container"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="flex items-center gap-2">
               <Image
@@ -129,16 +130,13 @@ export default async function SearchPage() {
               <span className="font-semibold">Monthly Games</span>
             </div>
             <ExternalLink size={16} className="text-muted-foreground" />
-          </Button>
-        </a>
-        <a
-          href="https://www.subsort.gg/en?xb=0&psp=1&av=av&s=dd"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button
-            size="lg"
-            className="h-auto w-full justify-between gap-3 rounded-2xl px-5 py-4 shadow-sm"
+          </a>
+        </Button>
+        <Button asChild size="link" variant="link" className="w-full justify-between">
+          <a
+            href="https://www.subsort.gg/en?xb=0&psp=1&av=av&s=dd"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div className="flex items-center gap-2">
               <Image
@@ -152,8 +150,8 @@ export default async function SearchPage() {
               <span className="font-semibold">Game Catalog</span>
             </div>
             <ExternalLink size={16} className="text-muted-foreground" />
-          </Button>
-        </a>
+          </a>
+        </Button>
       </div>
     </div>
   )
