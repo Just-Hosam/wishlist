@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma"
 import { buildRequestHeaders } from "@/lib/request"
 import { chunk, sleep } from "@/lib/utils"
+import { setCachedPriceByUrl } from "@/server/cache/prices"
 import { GameCategory, Platform } from "@/types"
 
 const BATCH_SIZE = 10
@@ -115,6 +116,16 @@ export async function runSteamPriceUpdate() {
             updatedAt: new Date(),
             externalId: appId
           }
+        })
+
+        await setCachedPriceByUrl({
+          storeUrl: priceRecord.storeUrl,
+          platform: Platform.PC,
+          regularPrice,
+          currentPrice,
+          description: priceRecord.description,
+          countryCode: COUNTRY_CODE,
+          externalId: appId
         })
 
         updated++
