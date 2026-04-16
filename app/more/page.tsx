@@ -38,12 +38,16 @@ export default function MorePage() {
           <ArrowRight className="ml-auto text-muted-foreground" />
         </Link>
       </Button>
+
       <h2 className="mb-4 mt-6 text-sm font-semibold text-muted-foreground">
         Settings
       </h2>
       <ThemePicker />
 
-      <SignOutButton className="mt-2" />
+      <h2 className="mb-4 mt-6 text-sm font-semibold text-muted-foreground">
+        Account
+      </h2>
+      <SignOutButton />
     </div>
   )
 }
