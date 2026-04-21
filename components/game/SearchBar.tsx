@@ -218,7 +218,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
   return (
     <Popover open={open}>
       <PopoverAnchor asChild>
-        <form onSubmit={handleSubmit} className="relative w-full">
+        <form onSubmit={handleSubmit} className="relative -mb-1 w-full">
           <Search
             className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
             aria-hidden
@@ -239,7 +239,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
             placeholder="Search for games..."
-            className="pl-11 pr-12 transition-all duration-200"
+            className="h-[52px] pl-11 pr-12 shadow-md transition-all duration-200"
           />
 
           {query && (
