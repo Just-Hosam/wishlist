@@ -57,7 +57,7 @@ export default async function SearchPage() {
 
   return (
     <div className="custom-slide-up-fade-in">
-      <div className="mb-9">
+      <div className="mb-7">
         <h2 className="text-lg font-bold">Trending</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           Explore these popular titles.
@@ -72,7 +72,7 @@ export default async function SearchPage() {
         />
       </div>
 
-      <div className="mb-9">
+      <div className="mb-7">
         <h2 className="text-lg font-bold">Coming Up</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           Don't miss these upcoming releases.
@@ -87,7 +87,7 @@ export default async function SearchPage() {
         />
       </div>
 
-      <div className="mb-9">
+      <div className="mb-7">
         <h2 className="text-lg font-bold">Released</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           New and notable games.
@@ -132,7 +132,12 @@ export default async function SearchPage() {
             <ExternalLink size={16} className="text-muted-foreground" />
           </a>
         </Button>
-        <Button asChild size="link" variant="link" className="w-full justify-between">
+        <Button
+          asChild
+          size="link"
+          variant="link"
+          className="w-full justify-between"
+        >
           <a
             href="https://www.subsort.gg/en?xb=0&psp=1&av=av&s=dd"
             target="_blank"

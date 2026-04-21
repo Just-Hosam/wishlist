@@ -40,7 +40,7 @@ export default function Counter({
     <div className="flex items-center gap-2">
       <Button
         type="button"
-        variant="secondary"
+        variant="ghost"
         className="min-w-12 flex-1"
         size="icon"
         disabled={disabled}
@@ -50,7 +50,7 @@ export default function Counter({
       </Button>
       <Button
         type="button"
-        variant="secondary"
+        variant="ghost"
         className="min-w-12 flex-1 text-xl font-normal"
         size="icon"
         disabled={disabled}
@@ -70,7 +70,7 @@ export default function Counter({
       />
       <Button
         type="button"
-        variant="secondary"
+        variant="ghost"
         className="min-w-12 flex-1 text-xl font-normal"
         size="icon"
         disabled={disabled}
@@ -80,7 +80,7 @@ export default function Counter({
       </Button>
       <Button
         type="button"
-        variant="secondary"
+        variant="ghost"
         className="min-w-12 flex-1"
         size="icon"
         disabled={disabled}
