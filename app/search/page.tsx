@@ -57,7 +57,7 @@ export default async function SearchPage() {
 
   return (
     <div className="custom-slide-up-fade-in">
-      <div className="mb-7">
+      <div className="mb-8">
         <h2 className="text-lg font-bold">Trending</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           Explore these popular titles.
@@ -72,7 +72,7 @@ export default async function SearchPage() {
         />
       </div>
 
-      <div className="mb-7">
+      <div className="mb-8">
         <h2 className="text-lg font-bold">Coming Up</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           Don't miss these upcoming releases.
@@ -87,7 +87,7 @@ export default async function SearchPage() {
         />
       </div>
 
-      <div className="mb-7">
+      <div className="mb-8">
         <h2 className="text-lg font-bold">Released</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           New and notable games.

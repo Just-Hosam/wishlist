@@ -40,12 +40,12 @@ export default async function WishlistPage() {
           <Link key={game.id} href={`/wishlist/${game.id}`}>
             <div className="flex overflow-hidden rounded-3xl bg-card shadow-sm">
               {game.coverImageUrl && (
-                <div className="h-[200px] w-[150px] flex-shrink-0 overflow-hidden bg-gray-200">
+                <div className="h-[184px] w-[138px] flex-shrink-0 overflow-hidden bg-gray-200">
                   <Image
                     src={game.coverImageUrl}
                     alt={`${game.name} cover`}
-                    width={150}
-                    height={200}
+                    width={138}
+                    height={184}
                     className="h-full w-full object-cover"
                     priority={index < 2}
                     fetchPriority={index < 2 ? "high" : undefined}
