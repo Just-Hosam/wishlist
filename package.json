@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "migrate": "npx prisma migrate dev",
     "search-keywords": "tsx --env-file=.env scripts/search/execute.ts",
     "igdb-token": "tsx --env-file=.env scripts/igdb/token.ts",
     "deploy": "./scripts/deploy.sh"
