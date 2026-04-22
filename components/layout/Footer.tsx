@@ -103,7 +103,7 @@ export default function Footer() {
     >
       <div className="m-auto flex max-w-[450px] items-center gap-4">
         <nav aria-label="Primary" className="flex-1">
-          <div className="flex min-h-[68px] w-full items-center justify-around gap-[2px] rounded-full bg-white px-[6px] py-0 text-muted-foreground shadow-lg">
+          <div className="flex min-h-[68px] w-full items-center justify-around gap-[2px] rounded-full bg-card px-[6px] py-0 text-muted-foreground shadow-lg">
             <Link
               href="/wishlist"
               className={cn(
