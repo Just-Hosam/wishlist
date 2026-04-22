@@ -2,6 +2,7 @@
 
 import { useRouter } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { ArrowLeft } from "lucide-react"
 
 interface BackButtonProps {
@@ -16,7 +17,7 @@ export function BackButton({ className }: BackButtonProps) {
       type="button"
       size="icon"
       onClick={() => router.back()}
-      className={className}
+      className={cn("rounded-full shadow-md", className)}
       aria-label="Go back"
       title="Go back"
     >

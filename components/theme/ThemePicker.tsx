@@ -85,11 +85,7 @@ export function ThemePicker({ className }: Props) {
   return (
     <Drawer open={open} onOpenChange={(next) => setOpen(next)}>
       <DrawerTrigger asChild>
-        <Button
-          className={cn("w-full justify-between", className)}
-          size="link"
-          variant="link"
-        >
+        <Button className={cn("w-full justify-between", className)} size="xl">
           <Palette />
           Theme
           <ArrowRight className="ml-auto text-muted-foreground" />

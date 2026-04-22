@@ -19,7 +19,10 @@ interface Props {
 }
 
 export default async function CompletedGamePage({ params }: Props) {
-  const [requestHeaders, resolvedParams] = await Promise.all([headers(), params])
+  const [requestHeaders, resolvedParams] = await Promise.all([
+    headers(),
+    params
+  ])
   const id = resolvedParams.id
   const userId = requestHeaders.get("x-user-id")
 
@@ -36,7 +39,7 @@ export default async function CompletedGamePage({ params }: Props) {
         <PopoverTrigger asChild>
           <Button
             size="icon"
-            className="absolute right-5 top-4 z-40"
+            className="absolute right-5 top-[18px] z-40 rounded-full shadow-md"
             aria-label="Open game actions"
             title="Open game actions"
           >

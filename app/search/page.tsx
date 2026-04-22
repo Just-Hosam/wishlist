@@ -107,12 +107,7 @@ export default async function SearchPage() {
         <p className="mb-3 text-xs text-muted-foreground">
           Check out these resources.
         </p>
-        <Button
-          asChild
-          size="link"
-          variant="link"
-          className="mb-2 w-full justify-between"
-        >
+        <Button asChild size="xl" className="mb-2 w-full justify-between">
           <a
             href="https://www.playstation.com/en-ca/ps-plus/games/?category=MONTHLY_GAMES&sort=last#plus-container"
             target="_blank"
@@ -132,12 +127,7 @@ export default async function SearchPage() {
             <ExternalLink size={16} className="text-muted-foreground" />
           </a>
         </Button>
-        <Button
-          asChild
-          size="link"
-          variant="link"
-          className="w-full justify-between"
-        >
+        <Button asChild size="xl" className="w-full justify-between">
           <a
             href="https://www.subsort.gg/en?xb=0&psp=1&av=av&s=dd"
             target="_blank"

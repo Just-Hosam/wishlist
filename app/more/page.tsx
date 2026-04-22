@@ -10,12 +10,7 @@ export default function MorePage() {
       <h2 className="mb-4 text-sm font-semibold text-muted-foreground">
         Pages
       </h2>
-      <Button
-        asChild
-        size="link"
-        variant="link"
-        className="w-full justify-between"
-      >
+      <Button asChild size="xl" className="w-full justify-between">
         <Link href="/more/about">
           <div className="flex items-center gap-2">
             <Info />
@@ -24,12 +19,7 @@ export default function MorePage() {
           <ArrowRight className="ml-auto text-muted-foreground" />
         </Link>
       </Button>
-      <Button
-        asChild
-        size="link"
-        variant="link"
-        className="mt-2 w-full justify-between"
-      >
+      <Button asChild size="xl" className="mt-2 w-full justify-between">
         <Link href="/more/completed">
           <div className="flex items-center gap-2">
             <CheckCircle2 />

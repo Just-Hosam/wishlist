@@ -226,12 +226,7 @@ export function Game({
       {!isUpcoming && name && (
         <div className="mt-8 flex flex-col">
           <label className="mb-3 text-lg font-bold">External</label>
-          <Button
-            asChild
-            size="link"
-            variant="link"
-            className="w-full justify-between"
-          >
+          <Button asChild size="xl" className="w-full justify-between">
             <a
               href={youtubeReviewSearchUrl}
               target="_blank"
@@ -252,12 +247,7 @@ export function Game({
             </a>
           </Button>
           {steamId && (
-            <Button
-              asChild
-              size="link"
-              variant="link"
-              className="mt-2 w-full justify-between"
-            >
+            <Button asChild size="xl" className="mt-2 w-full justify-between">
               <a href={steamDBUrl} target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center gap-2">
                   <Image

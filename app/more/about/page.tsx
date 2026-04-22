@@ -28,12 +28,7 @@ export default function AboutPage() {
         </p>
       </div>
       <div className="mt-6 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
-        <Button
-          asChild
-          size="link"
-          variant="link"
-          className="w-full justify-between"
-        >
+        <Button asChild size="xl" className="w-full justify-between">
           <Link
             href="https://github.com/Just-Hosam"
             target="_blank"
@@ -47,12 +42,7 @@ export default function AboutPage() {
           </Link>
         </Button>
 
-        <Button
-          asChild
-          size="link"
-          variant="link"
-          className="w-full justify-between"
-        >
+        <Button asChild size="xl" className="w-full justify-between">
           <Link
             href="https://www.linkedin.com/in/hosam-dahrooge/"
             target="_blank"
@@ -66,12 +56,7 @@ export default function AboutPage() {
           </Link>
         </Button>
 
-        <Button
-          asChild
-          size="link"
-          variant="link"
-          className="w-full justify-between"
-        >
+        <Button asChild size="xl" className="w-full justify-between">
           <Link
             href="https://samdahrooge.com/resume.pdf"
             target="_blank"

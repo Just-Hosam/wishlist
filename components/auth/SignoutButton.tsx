@@ -13,10 +13,10 @@ export function SignOutButton({ className }: SignOutButtonProps) {
   return (
     <Button
       onClick={() => signOut()}
-      variant="link"
-      size="link"
+      variant="destructive"
+      size="xl"
       className={cn(
-        "w-full justify-start bg-destructive text-destructive-foreground",
+        "w-full justify-start rounded-2xl bg-destructive text-destructive-foreground",
         className
       )}
     >
