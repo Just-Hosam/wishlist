@@ -12,6 +12,7 @@ import { SearchBar } from "../game/SearchBar"
 import { useNavigation } from "../navigation/NavigationProvider"
 import { BackButton } from "./BackButton"
 import { Nav } from "./Nav"
+import NotificationButton from "../notifications/NotificationButton"
 
 export function Header() {
   const pathname = usePathname()
@@ -43,6 +44,8 @@ function resolveExactHeader(pathname: string): ReactNode | null {
       return <WishlistHeader />
     case "/library":
       return <LibraryHeader />
+    case "/notifications":
+      return <NotificationsHeader />
     case "/more":
       return <MoreHeader />
     case "/more/about":
@@ -92,15 +95,30 @@ function SigninHeader() {
 }
 
 function WishlistHeader() {
-  return <h1 className="text-4xl font-bold">Wishlist</h1>
+  return (
+    <div className="flex w-full items-center justify-between">
+      <h1 className="text-4xl font-bold">Wishlist</h1>
+      <NotificationButton />
+    </div>
+  )
 }
 
 function LibraryHeader() {
-  return <h1 className="text-4xl font-bold">Library</h1>
+  return (
+    <div className="flex w-full items-center justify-between">
+      <h1 className="text-4xl font-bold">Library</h1>
+      <NotificationButton />
+    </div>
+  )
 }
 
 function MoreHeader() {
-  return <h1 className="text-4xl font-bold">More</h1>
+  return (
+    <div className="flex w-full items-center justify-between">
+      <h1 className="text-4xl font-bold">More</h1>
+      <NotificationButton />
+    </div>
+  )
 }
 
 function SearchHeader({ initialQuery = "" }: { initialQuery?: string }) {
@@ -130,6 +148,15 @@ function ReviewsHeader() {
     <>
       <BackButton />
       <h1 className="text-xl font-bold">Steam Reviews</h1>
+    </>
+  )
+}
+
+function NotificationsHeader() {
+  return (
+    <>
+      <BackButton />
+      <h1 className="text-xl font-bold">Notifications</h1>
     </>
   )
 }
