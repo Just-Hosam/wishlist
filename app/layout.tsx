@@ -101,7 +101,7 @@ export default async function RootLayout({
           </Suspense>
           <Header />
           <main
-            className="m-auto h-full max-w-[700px] overflow-y-auto bg-background px-4 pb-40 pt-[92px]"
+            className="m-auto h-full max-w-[700px] overflow-y-auto bg-background px-4 pb-40 pt-[96px]"
             data-scroll-container
           >
             <GlobalLoader>{children}</GlobalLoader>

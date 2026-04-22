@@ -218,7 +218,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
   return (
     <Popover open={open}>
       <PopoverAnchor asChild>
-        <form onSubmit={handleSubmit} className="relative -mb-1 w-full">
+        <form onSubmit={handleSubmit} className="relative w-full">
           <Search
             className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
             aria-hidden
