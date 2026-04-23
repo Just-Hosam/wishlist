@@ -62,37 +62,39 @@ export default function EditFromCompleted({ game, children }: Props) {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="px-2">
-          <DrawerHeader>
-            <DrawerTitle>Edit Game</DrawerTitle>
-          </DrawerHeader>
-          <form className="px-4 pb-5 pt-3">
-            <label className="text-sm font-medium">Time to Beat</label>
-            <p className="mb-3 text-xs text-muted-foreground">
-              Enter the length in hours.
-            </p>
+        <DrawerHeader>
+          <DrawerTitle>Edit Game</DrawerTitle>
+        </DrawerHeader>
+        <form className="space-y-6 pt-3">
+          <div>
+            <header className="mb-3 pl-1">
+              <label className="text-sm font-medium">Time to Beat</label>
+              <p className="text-xs text-muted-foreground">
+                Enter the length in hours.
+              </p>
+            </header>
             <Counter
               value={timeToBeat}
               onChange={(value) => setTimeToBeat(value)}
             />
-          </form>
+          </div>
+        </form>
 
-          <DrawerFooter>
-            <Button
-              size="lg"
-              disabled={isSaving}
-              variant="accent"
-              onClick={handleSave}
-            >
-              {isSaving ? "Saving..." : "Save"}
+        <DrawerFooter>
+          <Button
+            size="lg"
+            disabled={isSaving}
+            variant="accent"
+            onClick={handleSave}
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
+          <DrawerClose asChild>
+            <Button size="lg" variant="ghost">
+              Cancel
             </Button>
-            <DrawerClose asChild>
-              <Button size="lg" variant="ghost">
-                Cancel
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

@@ -101,119 +101,121 @@ export default function AddToLibrary({
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="px-2">
-          <DrawerHeader>
-            <DrawerTitle>Add to Library</DrawerTitle>
-          </DrawerHeader>
-          <form className="space-y-6 px-4 pb-5 pt-3">
-            <div>
+        <DrawerHeader>
+          <DrawerTitle>Add to Library</DrawerTitle>
+        </DrawerHeader>
+        <form className="space-y-6 pt-3">
+          <div>
+            <header className="mb-3 pl-1">
               <label className="text-sm font-medium">Time to Beat</label>
-              <p className="mb-3 text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Enter the length in hours.
               </p>
-              <Counter
-                value={timeToBeat}
-                onChange={(value) => setTimeToBeat(value)}
-                disabled={isLoadingTimeToBeat}
-              />
-            </div>
-            <div className="flex items-end justify-between">
-              <div>
-                <label className="text-sm font-medium" htmlFor="now-playing">
-                  Currently playing
-                </label>
-                <p className="text-xs text-muted-foreground">
-                  Keep this game marked as in progress.
-                </p>
-              </div>
-              <Switch
-                id="now-playing"
-                checked={nowPlaying}
-                onCheckedChange={setNowPlaying}
-              ></Switch>
-            </div>
-            <div>
+            </header>
+            <Counter
+              value={timeToBeat}
+              onChange={(value) => setTimeToBeat(value)}
+              disabled={isLoadingTimeToBeat}
+            />
+          </div>
+          <div className="flex items-end justify-between">
+            <header className="pl-1">
+              <label className="text-sm font-medium" htmlFor="now-playing">
+                Currently playing
+              </label>
+              <p className="text-xs text-muted-foreground">
+                Keep this game marked as in progress.
+              </p>
+            </header>
+            <Switch
+              id="now-playing"
+              checked={nowPlaying}
+              onCheckedChange={setNowPlaying}
+            />
+          </div>
+          <div>
+            <header className="mb-3 pl-1">
               <label className="text-sm font-medium" htmlFor="category">
                 Owned on
               </label>
               <p className="text-xs text-muted-foreground">
                 Select every platform you own this title on.
               </p>
-              <ButtonGroup className="mt-3 w-full">
-                <Button
-                  size="lg"
-                  type="button"
-                  className="flex-1 shadow-none"
-                  variant={steamSelected ? "accent" : "outline"}
-                  onClick={() => setSteamSelected(!steamSelected)}
-                >
-                  <Image
-                    src="/logos/steam.svg"
-                    alt="Steam Logo"
-                    width={18}
-                    height={18}
-                    unoptimized
-                  />
-                  <span className="hidden text-sm font-normal sm:inline-block">
-                    Steam
-                  </span>
-                </Button>
-                <Button
-                  size="lg"
-                  type="button"
-                  className="flex-1 shadow-none"
-                  variant={playstationSelected ? "accent" : "outline"}
-                  onClick={() => setPlaystationSelected(!playstationSelected)}
-                >
-                  <Image
-                    src="/logos/playstation.svg"
-                    alt="PlayStation Logo"
-                    width={18}
-                    height={18}
-                    unoptimized
-                  />
-                  <span className="hidden text-sm font-normal sm:inline-block">
-                    Playstation
-                  </span>
-                </Button>
-                <Button
-                  size="lg"
-                  type="button"
-                  className="flex-1 shadow-none"
-                  variant={nintendoSelected ? "accent" : "outline"}
-                  onClick={() => setNintendoSelected(!nintendoSelected)}
-                >
-                  <Image
-                    src="/logos/nintendo-switch.svg"
-                    alt="Nintendo Logo"
-                    width={18}
-                    height={18}
-                    unoptimized
-                  />
-                  <span className="hidden text-sm font-normal sm:inline-block">
-                    Nintendo
-                  </span>
-                </Button>
-              </ButtonGroup>
-            </div>
-          </form>
-
-          <DrawerFooter>
-            <Button
-              size="lg"
-              disabled={isSaving}
-              variant="accent"
-              onClick={handleSave}
-            >
-              {isSaving ? "Adding..." : "Add to Library"}
-            </Button>
-            <DrawerClose asChild>
-              <Button size="lg" variant="ghost">
-                Cancel
+            </header>
+            <ButtonGroup className="w-full rounded-2xl bg-card shadow-sm">
+              <Button
+                size="xl"
+                type="button"
+                className="flex-1 py-5 shadow-none"
+                variant={steamSelected ? "accent" : "ghost"}
+                onClick={() => setSteamSelected(!steamSelected)}
+              >
+                <Image
+                  src="/logos/steam.svg"
+                  alt="Steam Logo"
+                  width={18}
+                  height={18}
+                  unoptimized
+                />
+                <span className="hidden text-sm font-normal sm:inline-block">
+                  Steam
+                </span>
               </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+              <Button
+                size="xl"
+                type="button"
+                className="flex-1 py-5 shadow-none"
+                variant={playstationSelected ? "accent" : "ghost"}
+                onClick={() => setPlaystationSelected(!playstationSelected)}
+              >
+                <Image
+                  src="/logos/playstation.svg"
+                  alt="PlayStation Logo"
+                  width={18}
+                  height={18}
+                  unoptimized
+                />
+                <span className="hidden text-sm font-normal sm:inline-block">
+                  Playstation
+                </span>
+              </Button>
+              <Button
+                size="xl"
+                type="button"
+                className="flex-1 py-5 shadow-none"
+                variant={nintendoSelected ? "accent" : "ghost"}
+                onClick={() => setNintendoSelected(!nintendoSelected)}
+              >
+                <Image
+                  src="/logos/nintendo-switch.svg"
+                  alt="Nintendo Logo"
+                  width={18}
+                  height={18}
+                  unoptimized
+                />
+                <span className="hidden text-sm font-normal sm:inline-block">
+                  Nintendo
+                </span>
+              </Button>
+            </ButtonGroup>
+          </div>
+        </form>
+
+        <DrawerFooter>
+          <Button
+            size="lg"
+            disabled={isSaving}
+            variant="accent"
+            onClick={handleSave}
+          >
+            {isSaving ? "Adding..." : "Add to Library"}
+          </Button>
+          <DrawerClose asChild>
+            <Button size="lg" variant="ghost">
+              Cancel
+            </Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

@@ -37,7 +37,7 @@ export default function Counter({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 rounded-2xl bg-card px-5 py-2 shadow-sm">
       <Button
         type="button"
         variant="ghost"
@@ -66,6 +66,7 @@ export default function Counter({
         value={value ?? ""}
         disabled={disabled}
         onChange={handleInputChange}
+        variant="secondary"
         className="flex-[2] text-center"
       />
       <Button

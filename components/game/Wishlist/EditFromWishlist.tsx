@@ -178,27 +178,31 @@ export default function EditFromWishlist({ game, children }: Props) {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="px-2">
-          <DrawerHeader>
-            <DrawerTitle>Edit Game</DrawerTitle>
-          </DrawerHeader>
-          <form className="space-y-6 px-4 pb-5 pt-3">
-            <div>
+        <DrawerHeader>
+          <DrawerTitle>Edit Game</DrawerTitle>
+        </DrawerHeader>
+        <form className="space-y-6 pt-3">
+          <div>
+            <header className="mb-3 pl-1">
               <label className="text-sm font-medium">Time to Beat</label>
-              <p className="mb-3 text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Enter the length in hours.
               </p>
-              <Counter
-                value={timeToBeat}
-                onChange={(value) => setTimeToBeat(value)}
-              />
-            </div>
-            <div>
+            </header>
+            <Counter
+              value={timeToBeat}
+              onChange={(value) => setTimeToBeat(value)}
+            />
+          </div>
+          <div>
+            <header className="mb-3 pl-1">
               <label className="text-sm font-medium">Prices</label>
               <p className="text-xs text-muted-foreground">
                 Track prices for these stores.
               </p>
-              <div className="mt-3 space-y-2">
+            </header>
+            <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
+              <div className="space-y-2">
                 <div className="flex items-center">
                   <Image
                     src="/logos/steam.svg"
@@ -218,7 +222,7 @@ export default function EditFromWishlist({ game, children }: Props) {
                     checked={steamLinked}
                     onCheckedChange={setSteamLinked}
                     disabled={steamSwitchDisabled}
-                    className="ml-auto data-[state=checked]:bg-slate-600"
+                    className="ml-auto data-[state=checked]:bg-[#134376]"
                   />
                 </div>
                 <div className="flex items-center">
@@ -266,24 +270,24 @@ export default function EditFromWishlist({ game, children }: Props) {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
+        </form>
 
-          <DrawerFooter>
-            <Button
-              size="lg"
-              disabled={isSaving}
-              variant="accent"
-              onClick={handleSave}
-            >
-              {isSaving ? "Saving..." : "Save"}
+        <DrawerFooter>
+          <Button
+            size="lg"
+            disabled={isSaving}
+            variant="accent"
+            onClick={handleSave}
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
+          <DrawerClose asChild>
+            <Button size="lg" variant="ghost">
+              Cancel
             </Button>
-            <DrawerClose asChild>
-              <Button size="lg" variant="ghost">
-                Cancel
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

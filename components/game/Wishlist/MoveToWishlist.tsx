@@ -124,100 +124,104 @@ export default function MoveToWishlist({
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="px-2">
-          <DrawerHeader>
-            <DrawerTitle>Move to Wishlist</DrawerTitle>
-          </DrawerHeader>
-          <form className="px-4 pb-5 pt-3">
-            <label className="text-sm font-medium">Prices</label>
-            <p className="text-xs text-muted-foreground">
-              Track prices for these stores.
-            </p>
-            <div className="mt-3 space-y-2">
-              <div className="flex items-center">
-                <Image
-                  src="/logos/steam.svg"
-                  alt="Steam Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                  unoptimized
-                />
+        <DrawerHeader>
+          <DrawerTitle>Move to Wishlist</DrawerTitle>
+        </DrawerHeader>
+        <form className="space-y-6 pt-3">
+          <div>
+            <header className="mb-3 pl-1">
+              <label className="text-sm font-medium">Prices</label>
+              <p className="text-xs text-muted-foreground">
+                Track prices for these stores.
+              </p>
+            </header>
+            <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <Image
+                    src="/logos/steam.svg"
+                    alt="Steam Logo"
+                    width={20}
+                    height={20}
+                    className="mr-3"
+                    unoptimized
+                  />
 
-                <SteamPriceClient
-                  igdbSteamUrlSegment={igdbSteamUrlSegment}
-                  onFetchSuccess={() => setSteamSwitchDisabled(false)}
-                />
+                  <SteamPriceClient
+                    igdbSteamUrlSegment={igdbSteamUrlSegment}
+                    onFetchSuccess={() => setSteamSwitchDisabled(false)}
+                  />
 
-                <Switch
-                  checked={steamLinked}
-                  onCheckedChange={setSteamLinked}
-                  disabled={steamSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-slate-600"
-                />
-              </div>
-              <div className="flex items-center">
-                <Image
-                  src="/logos/playstation.svg"
-                  alt="PlayStation Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                  unoptimized
-                />
-                <PlaystationPriceClient
-                  igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
-                  onFetchSuccess={() => setPsSwitchDisabled(false)}
-                />
+                  <Switch
+                    checked={steamLinked}
+                    onCheckedChange={setSteamLinked}
+                    disabled={steamSwitchDisabled}
+                    className="ml-auto data-[state=checked]:bg-[#134376]"
+                  />
+                </div>
+                <div className="flex items-center">
+                  <Image
+                    src="/logos/playstation.svg"
+                    alt="PlayStation Logo"
+                    width={20}
+                    height={20}
+                    className="mr-3"
+                    unoptimized
+                  />
+                  <PlaystationPriceClient
+                    igdbPlaystationUrlSegment={igdbPlaystationUrlSegment}
+                    onFetchSuccess={() => setPsSwitchDisabled(false)}
+                  />
 
-                <Switch
-                  checked={playStationLinked}
-                  onCheckedChange={setPlayStationLinked}
-                  disabled={psSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-blue-600"
-                />
-              </div>
-              <div className="flex items-center">
-                <Image
-                  src="/logos/nintendo-switch.svg"
-                  alt="Nintendo Switch Logo"
-                  width={20}
-                  height={20}
-                  className="mr-3"
-                  unoptimized
-                />
+                  <Switch
+                    checked={playStationLinked}
+                    onCheckedChange={setPlayStationLinked}
+                    disabled={psSwitchDisabled}
+                    className="ml-auto data-[state=checked]:bg-blue-600"
+                  />
+                </div>
+                <div className="flex items-center">
+                  <Image
+                    src="/logos/nintendo-switch.svg"
+                    alt="Nintendo Switch Logo"
+                    width={20}
+                    height={20}
+                    className="mr-3"
+                    unoptimized
+                  />
 
-                <NintendoPriceClient
-                  igdbNintendoUrlSegment={igdbNintendoUrlSegment}
-                  onFetchSuccess={() => setNtSwitchDisabled(false)}
-                />
+                  <NintendoPriceClient
+                    igdbNintendoUrlSegment={igdbNintendoUrlSegment}
+                    onFetchSuccess={() => setNtSwitchDisabled(false)}
+                  />
 
-                <Switch
-                  checked={nintendoLinked}
-                  onCheckedChange={setNintendoLinked}
-                  disabled={ntSwitchDisabled}
-                  className="ml-auto data-[state=checked]:bg-red-600"
-                />
+                  <Switch
+                    checked={nintendoLinked}
+                    onCheckedChange={setNintendoLinked}
+                    disabled={ntSwitchDisabled}
+                    className="ml-auto data-[state=checked]:bg-red-600"
+                  />
+                </div>
               </div>
             </div>
-          </form>
+          </div>
+        </form>
 
-          <DrawerFooter>
-            <Button
-              size="lg"
-              disabled={isSaving}
-              variant="accent"
-              onClick={handleSave}
-            >
-              {isSaving ? "Moving..." : "Move to Wishlist"}
+        <DrawerFooter>
+          <Button
+            size="lg"
+            disabled={isSaving}
+            variant="accent"
+            onClick={handleSave}
+          >
+            {isSaving ? "Moving..." : "Move to Wishlist"}
+          </Button>
+          <DrawerClose asChild>
+            <Button size="lg" variant="ghost">
+              Cancel
             </Button>
-            <DrawerClose asChild>
-              <Button size="lg" variant="ghost">
-                Cancel
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )
