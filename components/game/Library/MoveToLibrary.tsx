@@ -104,7 +104,7 @@ export default function MoveToLibrary({ game, children }: Props) {
         <DrawerHeader>
           <DrawerTitle>Move to Library</DrawerTitle>
         </DrawerHeader>
-        <form className="space-y-6 pt-3">
+        <form className="space-y-5">
           <div className="flex items-end justify-between">
             <header className="pl-1">
               <label className="text-sm font-medium" htmlFor="now-playing">
@@ -121,7 +121,7 @@ export default function MoveToLibrary({ game, children }: Props) {
             ></Switch>
           </div>
           <div>
-            <header className="mb-3 pl-1">
+            <header className="mb-2 mt-3 pl-1">
               <label className="text-sm font-medium" htmlFor="category">
                 Owned on
               </label>

@@ -87,9 +87,9 @@ export default function EditFromLibrary({ game, children }: Props) {
         <DrawerHeader>
           <DrawerTitle>Edit Game</DrawerTitle>
         </DrawerHeader>
-        <form className="space-y-6 pt-3">
+        <form className="space-y-5">
           <div>
-            <header className="mb-3 pl-1">
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium">Time to Beat</label>
               <p className="text-xs text-muted-foreground">
                 Enter the length in hours.
@@ -116,7 +116,7 @@ export default function EditFromLibrary({ game, children }: Props) {
             ></Switch>
           </div>
           <div>
-            <header className="mb-3 pl-1">
+            <header className="mb-2 mt-3 pl-1">
               <label className="text-sm font-medium" htmlFor="category">
                 Owned on
               </label>
