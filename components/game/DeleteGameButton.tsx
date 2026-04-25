@@ -62,26 +62,24 @@ export default function DeleteGameButton({
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="px-2">
-          <DrawerHeader>
-            <DrawerTitle>Delete Game</DrawerTitle>
-            <DrawerDescription>
-              Are you sure you want to delete this game?
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <Button
-              disabled={isPending}
-              onClick={handleDelete}
-              variant="destructive"
-            >
-              {isPending ? "Deleting..." : "Delete"}
-            </Button>
-            <DrawerClose asChild>
-              <Button variant="ghost">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+        <DrawerHeader className="mb-1">
+          <DrawerTitle>Delete Game</DrawerTitle>
+          <DrawerDescription>
+            Are you sure you want to delete this game?
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <Button
+            disabled={isPending}
+            onClick={handleDelete}
+            variant="destructive"
+          >
+            {isPending ? "Deleting..." : "Delete"}
+          </Button>
+          <DrawerClose asChild>
+            <Button variant="ghost">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

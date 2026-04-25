@@ -65,19 +65,17 @@ export default function EditFromCompleted({ game, children }: Props) {
         <DrawerHeader>
           <DrawerTitle>Edit Game</DrawerTitle>
         </DrawerHeader>
-        <form className="space-y-6 pt-3">
-          <div>
-            <header className="mb-3 pl-1">
-              <label className="text-sm font-medium">Time to Beat</label>
-              <p className="text-xs text-muted-foreground">
-                Enter the length in hours.
-              </p>
-            </header>
-            <Counter
-              value={timeToBeat}
-              onChange={(value) => setTimeToBeat(value)}
-            />
-          </div>
+        <form>
+          <header className="mb-2 pl-1">
+            <label className="text-sm font-medium">Time to Beat</label>
+            <p className="text-xs text-muted-foreground">
+              Enter the length in hours.
+            </p>
+          </header>
+          <Counter
+            value={timeToBeat}
+            onChange={(value) => setTimeToBeat(value)}
+          />
         </form>
 
         <DrawerFooter>
