@@ -127,9 +127,9 @@ export default function MoveToWishlist({
         <DrawerHeader>
           <DrawerTitle>Move to Wishlist</DrawerTitle>
         </DrawerHeader>
-        <form className="space-y-6 pt-3">
+        <form className="space-y-4">
           <div>
-            <header className="mb-3 pl-1">
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium">Prices</label>
               <p className="text-xs text-muted-foreground">
                 Track prices for these stores.

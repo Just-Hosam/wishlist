@@ -181,9 +181,9 @@ export default function EditFromWishlist({ game, children }: Props) {
         <DrawerHeader>
           <DrawerTitle>Edit Game</DrawerTitle>
         </DrawerHeader>
-        <form className="space-y-6 pt-3">
+        <form className="space-y-4">
           <div>
-            <header className="mb-3 pl-1">
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium">Time to Beat</label>
               <p className="text-xs text-muted-foreground">
                 Enter the length in hours.
@@ -195,7 +195,7 @@ export default function EditFromWishlist({ game, children }: Props) {
             />
           </div>
           <div>
-            <header className="mb-3 pl-1">
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium">Prices</label>
               <p className="text-xs text-muted-foreground">
                 Track prices for these stores.
