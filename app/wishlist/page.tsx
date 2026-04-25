@@ -20,7 +20,7 @@ export default async function WishlistPage() {
   }
 
   return (
-    <div className="custom-slide-up-fade-in grid gap-4">
+    <div className="custom-slide-up-fade-in grid gap-3">
       {wishlistGames.map((game, index) => {
         const isUpcoming = isUpcomingRelease(game.igdbFirstReleaseDate)
 
