@@ -92,95 +92,93 @@ export function ThemePicker({ className }: Props) {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="px-2">
-          <DrawerHeader>
-            <DrawerTitle>Theme</DrawerTitle>
-          </DrawerHeader>
-          <form className="space-y-6 px-4 pb-5 pt-3">
-            <div>
-              <label className="text-sm font-medium">Accent</label>
-              <p className="text-xs text-muted-foreground">
-                Accent color used across the app.
-              </p>
-              <div className="mt-3 flex items-stretch justify-stretch gap-2">
-                <div
-                  className="grid h-[55px] flex-1 place-items-center rounded-2xl bg-[hsl(var(--accent-purple))]"
-                  onClick={(event) =>
-                    handleAccentClick(Accent.PURPLE, event.currentTarget)
-                  }
-                >
-                  {accent === Accent.PURPLE && (
-                    <CircleCheckBig
-                      size={20}
-                      className="custom-fade-in text-accent-foreground"
-                    />
-                  )}
-                </div>
-                <div
-                  className="grid h-[55px] flex-1 place-items-center rounded-2xl bg-[hsl(var(--accent-orange))]"
-                  onClick={(event) =>
-                    handleAccentClick(Accent.ORANGE, event.currentTarget)
-                  }
-                >
-                  {accent === Accent.ORANGE && (
-                    <CircleCheckBig
-                      size={20}
-                      className="custom-fade-in text-accent-foreground"
-                    />
-                  )}
-                </div>
-                <div
-                  className="grid h-[55px] flex-1 place-items-center rounded-2xl bg-[hsl(var(--accent-pink))]"
-                  onClick={(event) =>
-                    handleAccentClick(Accent.PINK, event.currentTarget)
-                  }
-                >
-                  {accent === Accent.PINK && (
-                    <CircleCheckBig
-                      size={20}
-                      className="custom-fade-in text-accent-foreground"
-                    />
-                  )}
-                </div>
-                <div
-                  className="grid h-[55px] flex-1 place-items-center rounded-2xl bg-[hsl(var(--accent-blue))]"
-                  onClick={(event) =>
-                    handleAccentClick(Accent.BLUE, event.currentTarget)
-                  }
-                >
-                  {accent === Accent.BLUE && (
-                    <CircleCheckBig
-                      size={20}
-                      className="custom-fade-in text-accent-foreground"
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          </form>
-
-          <DrawerFooter>
-            <Button
-              size="lg"
-              disabled={isSaving}
-              variant="accent"
-              onClick={handleSave}
-              className={cn(
-                accent === Accent.PURPLE && "bg-[hsl(var(--accent-purple))]",
-                accent === Accent.ORANGE && "bg-[hsl(var(--accent-orange))]",
-                accent === Accent.PINK && "bg-[hsl(var(--accent-pink))]",
-                accent === Accent.BLUE && "bg-[hsl(var(--accent-blue))]"
-              )}
+        <DrawerHeader>
+          <DrawerTitle>Theme</DrawerTitle>
+        </DrawerHeader>
+        <form>
+          <header className="mb-2 pl-1">
+            <label className="text-sm font-medium">Accent</label>
+            <p className="text-xs text-muted-foreground">
+              Accent color used across the app.
+            </p>
+          </header>
+          <div className="flex items-stretch justify-stretch gap-2 rounded-2xl bg-card p-2 shadow-sm">
+            <div
+              className="grid h-[55px] flex-1 place-items-center rounded-xl bg-[hsl(var(--accent-purple))]"
+              onClick={(event) =>
+                handleAccentClick(Accent.PURPLE, event.currentTarget)
+              }
             >
-              {isSaving ? "Saving..." : "Save"}
+              {accent === Accent.PURPLE && (
+                <CircleCheckBig
+                  size={20}
+                  className="custom-fade-in text-accent-foreground"
+                />
+              )}
+            </div>
+            <div
+              className="grid h-[55px] flex-1 place-items-center rounded-xl bg-[hsl(var(--accent-orange))]"
+              onClick={(event) =>
+                handleAccentClick(Accent.ORANGE, event.currentTarget)
+              }
+            >
+              {accent === Accent.ORANGE && (
+                <CircleCheckBig
+                  size={20}
+                  className="custom-fade-in text-accent-foreground"
+                />
+              )}
+            </div>
+            <div
+              className="grid h-[55px] flex-1 place-items-center rounded-xl bg-[hsl(var(--accent-pink))]"
+              onClick={(event) =>
+                handleAccentClick(Accent.PINK, event.currentTarget)
+              }
+            >
+              {accent === Accent.PINK && (
+                <CircleCheckBig
+                  size={20}
+                  className="custom-fade-in text-accent-foreground"
+                />
+              )}
+            </div>
+            <div
+              className="grid h-[55px] flex-1 place-items-center rounded-xl bg-[hsl(var(--accent-blue))]"
+              onClick={(event) =>
+                handleAccentClick(Accent.BLUE, event.currentTarget)
+              }
+            >
+              {accent === Accent.BLUE && (
+                <CircleCheckBig
+                  size={20}
+                  className="custom-fade-in text-accent-foreground"
+                />
+              )}
+            </div>
+          </div>
+        </form>
+
+        <DrawerFooter>
+          <Button
+            size="lg"
+            disabled={isSaving}
+            variant="accent"
+            onClick={handleSave}
+            className={cn(
+              accent === Accent.PURPLE && "bg-[hsl(var(--accent-purple))]",
+              accent === Accent.ORANGE && "bg-[hsl(var(--accent-orange))]",
+              accent === Accent.PINK && "bg-[hsl(var(--accent-pink))]",
+              accent === Accent.BLUE && "bg-[hsl(var(--accent-blue))]"
+            )}
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
+          <DrawerClose asChild>
+            <Button size="lg" variant="ghost">
+              Cancel
             </Button>
-            <DrawerClose asChild>
-              <Button size="lg" variant="ghost">
-                Cancel
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )
