@@ -15,7 +15,7 @@ export default function ListEmptyState() {
         Start by searching for your first game
       </p>
       <Link href="/search">
-        <Button className="mt-6" size="lg" variant="accent">
+        <Button className="mt-6 rounded-full" size="lg" variant="accent">
           <Search />
           Search
         </Button>

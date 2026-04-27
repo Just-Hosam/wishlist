@@ -27,7 +27,7 @@ export default function AboutPage() {
           I'm always tinkering with new features.
         </p>
       </div>
-      <div className="mt-6 flex flex-col items-stretch gap-3 md:flex-row md:items-center">
+      <div className="mt-6 flex flex-col items-stretch gap-2 md:flex-row md:items-center">
         <Button asChild size="xl" className="w-full justify-between">
           <Link
             href="https://github.com/Just-Hosam"
