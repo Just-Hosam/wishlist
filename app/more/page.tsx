@@ -3,6 +3,7 @@ import { Link } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2, Info } from "lucide-react"
 import { ThemePicker } from "@/components/theme/ThemePicker"
+import { NotificationSettings } from "@/components/notifications/NotificationSettings"
 
 export default function MorePage() {
   return (
@@ -32,7 +33,8 @@ export default function MorePage() {
       <h2 className="mb-4 mt-6 text-sm font-semibold text-muted-foreground">
         Settings
       </h2>
-      <ThemePicker />
+      <NotificationSettings />
+      <ThemePicker className="mt-2" />
 
       <h2 className="mb-4 mt-6 text-sm font-semibold text-muted-foreground">
         Account
