@@ -46,6 +46,7 @@ const DrawerContent = React.forwardRef<
         "fixed inset-x-0 bottom-0 z-50 mx-auto mt-24 flex h-auto max-w-[700px] flex-col rounded-t-3xl border bg-background px-4 pb-6",
         className
       )}
+      aria-describedby={undefined}
       {...props}
     >
       <div className="mx-auto mb-3 mt-3 h-[6px] w-[60px] rounded-full bg-gray-300" />
