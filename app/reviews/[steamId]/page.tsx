@@ -83,7 +83,7 @@ function Review(review: SteamReview) {
           {review.recommended ? (
             <ThumbsUp size={20} />
           ) : (
-            <ThumbsDown size={20} className="-mb-[1px] -ml-[1px]" />
+            <ThumbsDown size={20} className="-mb-[1px] -ml-[2px]" />
           )}
         </div>
         <div>
