@@ -3,7 +3,7 @@ import { buildSteamStoreReviewsUrl } from "@/lib/igdb-store-links"
 import { cn, formatReleaseDate, tryCatch } from "@/lib/utils"
 import { getCachedSteamReviews } from "@/server/actions/reviews"
 import { SteamReview } from "@/types/reviews"
-import { Check, ExternalLink, Info, Star, X } from "lucide-react"
+import { ExternalLink, Info, Star, ThumbsDown, ThumbsUp } from "lucide-react"
 import { notFound } from "next/navigation"
 
 interface Props {
@@ -76,11 +76,15 @@ function Review(review: SteamReview) {
       <header className="flex items-center gap-3">
         <div
           className={cn(
-            "rounded-full p-2 text-accent-foreground",
+            "grid size-10 place-items-center rounded-full text-accent-foreground",
             review.recommended ? "bg-green-600" : "bg-red-600"
           )}
         >
-          {review.recommended ? <Check /> : <X />}
+          {review.recommended ? (
+            <ThumbsUp size={20} />
+          ) : (
+            <ThumbsDown size={20} className="-mb-[1px] -ml-[1px]" />
+          )}
         </div>
         <div>
           <p className="font-semibold">{review.username}</p>
