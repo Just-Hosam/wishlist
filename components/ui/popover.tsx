@@ -7,16 +7,39 @@ import { cn } from "@/lib/utils"
 
 const Popover = PopoverPrimitive.Root
 
-const PopoverTrigger = PopoverPrimitive.Trigger
+const PopoverTrigger = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <PopoverPrimitive.Trigger
+    ref={ref}
+    className={cn("z-50", className)}
+    {...props}
+  />
+))
+PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName
 
-const PopoverAnchor = PopoverPrimitive.Anchor
+const PopoverAnchor = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Anchor>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Anchor>
+>(({ className, ...props }, ref) => (
+  <PopoverPrimitive.Anchor
+    ref={ref}
+    className={cn("z-50", className)}
+    {...props}
+  />
+))
+PopoverAnchor.displayName = PopoverPrimitive.Anchor.displayName
 
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> & {
+    darkBlur?: boolean
+  }
 >(
   (
     {
+      darkBlur = false,
       className,
       align = "center",
       sideOffset = 6,
@@ -30,7 +53,10 @@ const PopoverContent = React.forwardRef<
         <PopoverPrimitive.Close asChild>
           <button
             type="button"
-            className="fixed inset-0 z-40 cursor-default appearance-none border-0 bg-transparent p-0"
+            className={cn(
+              "fixed inset-0 z-40 cursor-default appearance-none border-0 p-0",
+              darkBlur ? "bg-black/80 backdrop-blur-sm" : "bg-transparent"
+            )}
             aria-hidden
             tabIndex={-1}
           />
