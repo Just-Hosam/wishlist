@@ -186,5 +186,5 @@ function shouldShowFooter(pathname: string) {
     return true
   }
 
-  return segments[0] === "search" && segments.length === 2
+  return false
 }
