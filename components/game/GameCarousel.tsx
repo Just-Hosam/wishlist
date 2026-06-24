@@ -40,7 +40,7 @@ export default function GameCarousel({
 
   return (
     <div
-      className="hide-scrollbar -mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto scroll-smooth"
+      className="hide-scrollbar -mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2.5 overflow-x-auto scroll-smooth"
       data-scroll-restore-id={restoreId}
       tabIndex={0}
       role="region"
@@ -48,7 +48,7 @@ export default function GameCarousel({
     >
       {games.map((game, index) => (
         <div
-          className="w-[166px] shrink-0 snap-start first:ml-4 last:mr-4"
+          className="w-[158px] shrink-0 snap-start first:ml-4 last:mr-4"
           key={game.id}
         >
           <Link href={`${baseHref}/${game.id}`}>
@@ -58,7 +58,7 @@ export default function GameCarousel({
                   src={game.coverImageUrl}
                   alt={`${game.name} cover`}
                   fill
-                  sizes="166px"
+                  sizes="158px"
                   className="object-cover"
                   priority={index < priorityCount}
                   fetchPriority={index < priorityCount ? "high" : undefined}
