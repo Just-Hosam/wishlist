@@ -31,7 +31,7 @@ export default async function ReleasedGamePage({ params }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover modal>
         <PopoverTrigger asChild>
           <Button
             size="lg"

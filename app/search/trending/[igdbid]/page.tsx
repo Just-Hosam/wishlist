@@ -31,7 +31,7 @@ export default async function TrendingGamePage({ params }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover modal>
         <PopoverTrigger asChild>
           <Button
             size="lg"

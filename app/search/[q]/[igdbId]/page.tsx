@@ -30,7 +30,7 @@ export default async function SearchGamePage({ params }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover modal>
         <PopoverTrigger asChild>
           <Button
             size="lg"

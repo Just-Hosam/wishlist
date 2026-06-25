@@ -36,7 +36,7 @@ export default async function LibraryGamePage({ params }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover modal>
         <PopoverTrigger asChild>
           <Button
             size="icon"

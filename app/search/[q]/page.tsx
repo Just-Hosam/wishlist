@@ -63,7 +63,7 @@ export default async function SearchResultsPage({ params }: Props) {
     <div className="custom-slide-up-fade-in grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
       {results.map((game, index) => (
         <div className="relative" key={game.id}>
-          <Popover>
+          <Popover modal>
             <PopoverTrigger asChild>
               <Button
                 size="icon"

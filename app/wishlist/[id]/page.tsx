@@ -35,7 +35,7 @@ export default async function WishlistGamePage({ params }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover modal>
         <PopoverTrigger asChild>
           <Button
             size="icon"
