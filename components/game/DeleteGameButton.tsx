@@ -70,6 +70,7 @@ export default function DeleteGameButton({
         </DrawerHeader>
         <DrawerFooter>
           <Button
+            size="lg"
             disabled={isPending}
             onClick={handleDelete}
             variant="destructive"
@@ -77,7 +78,9 @@ export default function DeleteGameButton({
             {isPending ? "Deleting..." : "Delete"}
           </Button>
           <DrawerClose asChild>
-            <Button variant="ghost">Cancel</Button>
+            <Button size="lg" variant="ghost">
+              Cancel
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
