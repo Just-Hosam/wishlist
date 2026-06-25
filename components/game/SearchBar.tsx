@@ -8,7 +8,13 @@ import {
   SearchKeywordSuggestion
 } from "@/types/search"
 import { ArrowUpLeft, History, Search, X } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from "react"
 import { useRouter } from "../navigation"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
@@ -16,14 +22,28 @@ import { Popover, PopoverAnchor, PopoverContent } from "../ui/popover"
 import { Skeleton } from "../ui/skeleton"
 
 interface Props {
+  focusOnMount?: boolean
   initialQuery?: string
+  onContentOpenChange?: (isOpen: boolean) => void
+}
+
+export interface SearchBarHandle {
+  blur: () => void
+  focus: () => void
 }
 
 type VisibleItem =
   | { kind: "history"; key: string; label: string }
   | { kind: "suggestion"; key: string; label: string; igdbId: number }
 
-export function SearchBar({ initialQuery = "" }: Props) {
+export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
+  {
+    focusOnMount = false,
+    initialQuery = "",
+    onContentOpenChange
+  },
+  ref
+) {
   const router = useRouter()
   const [query, setQuery] = useState(initialQuery)
   const [history, setHistory] = useState<string[]>([])
@@ -31,7 +51,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
   const [suggestions, setSuggestions] = useState<SearchKeywordSuggestion[]>([])
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
-  const [isInputFocused, setIsInputFocused] = useState(false)
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const trimmedQuery = query.trim()
   const canShowKeywordSuggestions =
@@ -55,8 +75,6 @@ export function SearchBar({ initialQuery = "" }: Props) {
   const isLoading = canShowKeywordSuggestions
     ? isLoadingSuggestions
     : isLoadingHistory
-  const hasVisibleContent = isLoading || visibleItems.length > 0
-  const open = isInputFocused && hasVisibleContent
 
   useEffect(() => {
     let isMounted = true
@@ -83,20 +101,14 @@ export function SearchBar({ initialQuery = "" }: Props) {
   }, [initialQuery])
 
   useEffect(() => {
-    setActiveIndex(-1)
-  }, [trimmedQuery, visibleItems.length])
+    if (!focusOnMount) return
+
+    inputRef.current?.focus()
+  }, [focusOnMount])
 
   useEffect(() => {
-    const handleFocusSearch = () => {
-      inputRef.current?.focus()
-    }
-
-    window.addEventListener("focus-search-input", handleFocusSearch)
-
-    return () => {
-      window.removeEventListener("focus-search-input", handleFocusSearch)
-    }
-  }, [])
+    setActiveIndex(-1)
+  }, [trimmedQuery, visibleItems.length])
 
   useEffect(() => {
     if (!canShowKeywordSuggestions) {
@@ -135,13 +147,33 @@ export function SearchBar({ initialQuery = "" }: Props) {
     }
   }, [canShowKeywordSuggestions, trimmedQuery])
 
+  const handlePopoverOpenChange = (isOpen: boolean) => {
+    setIsPopoverOpen(isOpen)
+    onContentOpenChange?.(isOpen)
+
+    if (!isOpen) {
+      setActiveIndex(-1)
+      inputRef.current?.blur()
+    }
+  }
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      blur: () => handlePopoverOpenChange(false),
+      focus: () => {
+        handlePopoverOpenChange(true)
+        inputRef.current?.focus()
+      }
+    }),
+    [onContentOpenChange]
+  )
+
   const navigateToSearch = (keyword: string) => {
     const trimmedKeyword = keyword.trim()
     if (!trimmedKeyword) return
 
-    setIsInputFocused(false)
-    setActiveIndex(-1)
-    inputRef.current?.blur()
+    handlePopoverOpenChange(false)
     router.push(`/search/${encodePathSegment(trimmedKeyword)}`)
   }
 
@@ -162,9 +194,8 @@ export function SearchBar({ initialQuery = "" }: Props) {
     setQuery("")
     setSuggestions([])
     setActiveIndex(-1)
-    setIsInputFocused(true)
+    handlePopoverOpenChange(true)
     inputRef.current?.focus()
-    router.push("/search")
   }
 
   const handleQueryClick = (keyword: string) => {
@@ -187,9 +218,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Escape") {
-      setIsInputFocused(false)
-      setActiveIndex(-1)
-      inputRef.current?.blur()
+      handlePopoverOpenChange(false)
       return
     }
 
@@ -215,16 +244,18 @@ export function SearchBar({ initialQuery = "" }: Props) {
     }
   }
 
-  return (
-    <Popover open={open}>
-      <PopoverAnchor asChild>
-        <form onSubmit={handleSubmit} className="relative w-full">
-          <Search
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-            aria-hidden
-            size={18}
-          />
+  const handleInputFocus = () => {
+    handlePopoverOpenChange(true)
+  }
 
+  const handleInputBlur = () => {
+    handlePopoverOpenChange(false)
+  }
+
+  return (
+    <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
+      <PopoverAnchor asChild>
+        <form onSubmit={handleSubmit} className="relative z-40 min-w-0 flex-1">
           <Input
             ref={inputRef}
             type="text"
@@ -236,16 +267,17 @@ export function SearchBar({ initialQuery = "" }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleInputKeyDown}
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
             placeholder="Search for games..."
-            className="h-[52px] pl-11 pr-12 shadow-md transition-all duration-200"
+            className="h-[48px] rounded-full pl-5 pr-12 shadow-md transition-all duration-200"
           />
 
           {query && (
             <button
               type="button"
               onClick={handleClearSearch}
+              onMouseDown={(event) => event.preventDefault()}
               className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-muted-foreground hover:text-muted-foreground/80"
               aria-label="Clear search"
             >
@@ -255,11 +287,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
         </form>
       </PopoverAnchor>
       <PopoverContent
-        className="z-40 mt-2 max-w-[500px] px-0 py-[2px]"
-        style={{
-          width: "var(--radix-popover-trigger-width)",
-          maxWidth: "500px"
-        }}
+        className="mt-2 max-h-[min(420px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[500px] overflow-y-auto bg-transparent p-0 shadow-none"
         onMouseDown={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
@@ -315,7 +343,7 @@ export function SearchBar({ initialQuery = "" }: Props) {
       </PopoverContent>
     </Popover>
   )
-}
+})
 
 function SearchPopoverRow({
   action,
@@ -332,7 +360,7 @@ function SearchPopoverRow({
 }) {
   return (
     <div
-      className={`flex min-h-11 cursor-pointer items-center border-b py-2 pl-3 pr-2 text-sm last:border-none ${
+      className={`mb-[6px] flex min-h-11 cursor-pointer items-center rounded-full bg-card py-2 pl-3 pr-2 text-sm shadow-lg ${
         isActive ? "bg-muted/60" : ""
       }`}
       onClick={onClick}

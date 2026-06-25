@@ -8,11 +8,13 @@ import {
 import { Gamepad2 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
-import { SearchBar } from "../game/SearchBar"
+import { SearchButton } from "../game/SearchButton"
+import { SearchHeader } from "../game/SearchHeader"
+import { useRouter } from "../navigation"
 import { useNavigation } from "../navigation/NavigationProvider"
+import NotificationButton from "../notifications/NotificationButton"
 import { BackButton } from "./BackButton"
 import { Nav } from "./Nav"
-import NotificationButton from "../notifications/NotificationButton"
 
 export function Header() {
   const pathname = usePathname()
@@ -62,11 +64,11 @@ function resolveSearchHeader(pathname: string): ReactNode | null {
   if (segments[0] !== "search") return null
 
   if (segments.length === 1) {
-    return <SearchHeader />
+    return <SearchPageHeader />
   }
 
   if (segments.length === 2) {
-    return <SearchHeader initialQuery={decodePathSegment(segments[1])} />
+    return <SearchResultsHeader initialQuery={decodePathSegment(segments[1])} />
   }
 
   if (segments.length >= 3) {
@@ -121,8 +123,27 @@ function MoreHeader() {
   )
 }
 
-function SearchHeader({ initialQuery = "" }: { initialQuery?: string }) {
-  return <SearchBar initialQuery={initialQuery} />
+function SearchPageHeader() {
+  return (
+    <div className="flex w-full items-center justify-between">
+      <h1 className="text-4xl font-bold">Search</h1>
+      <div className="flex items-center gap-1">
+        <SearchButton />
+        <NotificationButton />
+      </div>
+    </div>
+  )
+}
+
+function SearchResultsHeader({ initialQuery }: { initialQuery: string }) {
+  const router = useRouter()
+
+  return (
+    <SearchHeader
+      initialQuery={initialQuery}
+      onBack={() => router.push("/search")}
+    />
+  )
 }
 
 function AboutHeader() {
