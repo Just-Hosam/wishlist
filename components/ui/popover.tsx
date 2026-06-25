@@ -6,30 +6,8 @@ import * as PopoverPrimitive from "@radix-ui/react-popover"
 import { cn } from "@/lib/utils"
 
 const Popover = PopoverPrimitive.Root
-
-const PopoverTrigger = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <PopoverPrimitive.Trigger
-    ref={ref}
-    className={cn("z-50", className)}
-    {...props}
-  />
-))
-PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName
-
-const PopoverAnchor = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Anchor>,
-  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Anchor>
->(({ className, ...props }, ref) => (
-  <PopoverPrimitive.Anchor
-    ref={ref}
-    className={cn("z-50", className)}
-    {...props}
-  />
-))
-PopoverAnchor.displayName = PopoverPrimitive.Anchor.displayName
+const PopoverTrigger = PopoverPrimitive.Trigger
+const PopoverAnchor = PopoverPrimitive.Anchor
 
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
