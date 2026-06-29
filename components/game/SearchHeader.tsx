@@ -74,7 +74,8 @@ export function SearchHeader({
     >
       <DrawerPortal>
         <DrawerOverlay
-          className="z-[35] cursor-default backdrop-blur-sm"
+          className="z-[35] cursor-default"
+          style={{ top: "calc(0px - env(safe-area-inset-top))" }}
           onMouseDown={handleBackdropMouseDown}
           aria-hidden
         />
