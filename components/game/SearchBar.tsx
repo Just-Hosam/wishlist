@@ -37,11 +37,7 @@ type VisibleItem =
   | { kind: "suggestion"; key: string; label: string; igdbId: number }
 
 export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
-  {
-    focusOnMount = false,
-    initialQuery = "",
-    onContentOpenChange
-  },
+  { focusOnMount = false, initialQuery = "", onContentOpenChange },
   ref
 ) {
   const router = useRouter()
@@ -282,7 +278,7 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
         </form>
       </PopoverAnchor>
       <PopoverContent
-        className="mt-2 max-h-[min(420px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[500px] overflow-y-auto bg-transparent p-0 shadow-none"
+        className="mt-2 max-h-[min(420px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[500px] overflow-y-auto bg-card px-0 py-1 shadow-none"
         onMouseDown={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
@@ -292,7 +288,6 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
                 <SearchPopoverRow
                   action={<Skeleton className="size-5 rounded-full" />}
                   icon={<Skeleton className="size-5 rounded-full" />}
-                  isActive={false}
                   key={`skeleton-${index}`}
                   label={<Skeleton className="h-4 w-36" />}
                   onClick={undefined}
@@ -302,7 +297,7 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
           : null}
 
         {!isLoading
-          ? visibleItems.map((item, index) => (
+          ? visibleItems.map((item) => (
               <SearchPopoverRow
                 icon={
                   item.kind === "history" ? (
@@ -328,7 +323,6 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
                     <ArrowUpLeft className="size-4 text-muted-foreground" />
                   )
                 }
-                isActive={activeIndex === index}
                 key={item.key}
                 label={item.label}
                 onClick={() => handleQueryClick(item.label)}
@@ -343,21 +337,17 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
 function SearchPopoverRow({
   action,
   icon,
-  isActive,
   label,
   onClick
 }: {
   action: React.ReactNode
   icon: React.ReactNode
-  isActive: boolean
   label: React.ReactNode
   onClick?: () => void
 }) {
   return (
     <div
-      className={`mb-[6px] flex min-h-11 cursor-pointer items-center rounded-full bg-card py-2 pl-3 pr-2 text-sm shadow-lg ${
-        isActive ? "bg-muted/60" : ""
-      }`}
+      className="flex min-h-11 cursor-pointer items-center border-b bg-card py-2 pl-3 pr-2 text-sm last:border-none"
       onClick={onClick}
     >
       <div className="mr-1 flex size-8 shrink-0 items-center justify-center">
