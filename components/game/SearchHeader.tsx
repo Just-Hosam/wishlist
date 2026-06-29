@@ -34,6 +34,22 @@ export function SearchHeader({
     }
   }, [])
 
+  useEffect(() => {
+    if (!isContentOpen) return
+
+    const initialBackground = document.body.style.background
+    document.body.style.background = "black"
+
+    return () => {
+      if (initialBackground) {
+        document.body.style.background = initialBackground
+        return
+      }
+
+      document.body.style.removeProperty("background")
+    }
+  }, [isContentOpen])
+
   const closeSearchContent = () => {
     if (searchBarRef.current) {
       searchBarRef.current.blur()
