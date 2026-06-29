@@ -2,6 +2,7 @@
 
 import { ArrowLeft } from "lucide-react"
 import { type MouseEvent, useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import { Button } from "../ui/button"
 import { SearchBar, SearchBarHandle } from "./SearchBar"
 
@@ -67,15 +68,18 @@ export function SearchHeader({
 
   return (
     <>
-      {isContentOpen ? (
-        <button
-          type="button"
-          className="fixed inset-0 z-[35] cursor-default appearance-none border-0 bg-black/80 p-0 backdrop-blur-sm"
-          onMouseDown={handleBackdropMouseDown}
-          aria-hidden
-          tabIndex={-1}
-        />
-      ) : null}
+      {isContentOpen
+        ? createPortal(
+            <button
+              type="button"
+              className="fixed inset-0 z-[35] cursor-default appearance-none border-0 bg-black/80 p-0 backdrop-blur-sm"
+              onMouseDown={handleBackdropMouseDown}
+              aria-hidden
+              tabIndex={-1}
+            />,
+            document.body
+          )
+        : null}
       <div className="relative z-40 flex w-full items-center gap-2">
         <Button
           type="button"
