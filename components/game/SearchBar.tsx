@@ -48,6 +48,7 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+  const isPopoverOpenRef = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const trimmedQuery = query.trim()
   const canShowKeywordSuggestions =
@@ -144,6 +145,9 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
   }, [canShowKeywordSuggestions, trimmedQuery])
 
   const handlePopoverOpenChange = (isOpen: boolean) => {
+    if (isPopoverOpenRef.current === isOpen) return
+
+    isPopoverOpenRef.current = isOpen
     setIsPopoverOpen(isOpen)
     onContentOpenChange?.(isOpen)
 
@@ -258,6 +262,7 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
             spellCheck="false"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onBlur={() => handlePopoverOpenChange(false)}
             onKeyDown={handleInputKeyDown}
             onFocus={handleInputFocus}
             placeholder="Search for games..."
