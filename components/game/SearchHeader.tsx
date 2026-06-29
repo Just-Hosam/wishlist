@@ -2,8 +2,8 @@
 
 import { ArrowLeft } from "lucide-react"
 import { type MouseEvent, useEffect, useRef, useState } from "react"
-import { createPortal } from "react-dom"
 import { Button } from "../ui/button"
+import { Drawer, DrawerOverlay, DrawerPortal } from "../ui/drawer"
 import { SearchBar, SearchBarHandle } from "./SearchBar"
 
 interface SearchHeaderProps {
@@ -33,22 +33,6 @@ export function SearchHeader({
       window.removeEventListener("focus-search-input", handleFocusSearch)
     }
   }, [])
-
-  useEffect(() => {
-    if (!isContentOpen) return
-
-    const initialBackground = document.body.style.background
-    document.body.style.background = "black"
-
-    return () => {
-      if (initialBackground) {
-        document.body.style.background = initialBackground
-        return
-      }
-
-      document.body.style.removeProperty("background")
-    }
-  }, [isContentOpen])
 
   const closeSearchContent = () => {
     if (searchBarRef.current) {
@@ -83,19 +67,18 @@ export function SearchHeader({
   }
 
   return (
-    <>
-      {isContentOpen
-        ? createPortal(
-            <button
-              type="button"
-              className="fixed inset-0 z-[35] cursor-default appearance-none border-0 bg-black/80 p-0 backdrop-blur-sm"
-              onMouseDown={handleBackdropMouseDown}
-              aria-hidden
-              tabIndex={-1}
-            />,
-            document.body
-          )
-        : null}
+    <Drawer
+      open={isContentOpen}
+      onOpenChange={handleContentOpenChange}
+      shouldScaleBackground={false}
+    >
+      <DrawerPortal>
+        <DrawerOverlay
+          className="z-[35] cursor-default backdrop-blur-sm"
+          onMouseDown={handleBackdropMouseDown}
+          aria-hidden
+        />
+      </DrawerPortal>
       <div className="relative z-40 flex w-full items-center gap-2">
         <Button
           type="button"
@@ -115,6 +98,6 @@ export function SearchHeader({
           onContentOpenChange={handleContentOpenChange}
         />
       </div>
-    </>
+    </Drawer>
   )
 }
