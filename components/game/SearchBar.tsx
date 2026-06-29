@@ -278,7 +278,7 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
         </form>
       </PopoverAnchor>
       <PopoverContent
-        className="mt-2 max-h-[min(420px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[500px] overflow-y-auto bg-card px-0 py-1 shadow-none"
+        className="mr-1 mt-2 max-h-[min(420px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[500px] overflow-y-auto bg-card px-0 py-1 shadow-none"
         onMouseDown={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
