@@ -248,12 +248,8 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
     handlePopoverOpenChange(true)
   }
 
-  const handleInputBlur = () => {
-    handlePopoverOpenChange(false)
-  }
-
   return (
-    <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
+    <Popover open={isPopoverOpen}>
       <PopoverAnchor asChild>
         <form onSubmit={handleSubmit} className="relative z-40 min-w-0 flex-1">
           <Input
@@ -268,7 +264,6 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleInputKeyDown}
             onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
             placeholder="Search for games..."
             className="h-[48px] rounded-full pl-5 pr-12 shadow-md transition-all duration-200"
           />
@@ -277,7 +272,7 @@ export const SearchBar = forwardRef<SearchBarHandle, Props>(function SearchBar(
             <button
               type="button"
               onClick={handleClearSearch}
-              onMouseDown={(event) => event.preventDefault()}
+              onPointerDown={(event) => event.preventDefault()}
               className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-muted-foreground hover:text-muted-foreground/80"
               aria-label="Clear search"
             >
