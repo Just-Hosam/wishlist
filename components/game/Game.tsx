@@ -163,7 +163,7 @@ export function Game({
       {/* MEDIA */}
       {(hasVideos || hasScreenshots) && (
         <div
-          className="hide-scrollbar -mx-4 mt-4 flex snap-x snap-mandatory gap-[6px] overflow-x-auto scroll-smooth pb-3"
+          className="hide-scrollbar -mx-4 mt-4 flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-smooth pb-3"
           data-scroll-restore-id="media"
           tabIndex={0}
           role="region"
