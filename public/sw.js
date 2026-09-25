@@ -25,6 +25,8 @@ const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v1"
 // These remote image URLs are stable enough to tolerate long-lived reuse.
 const REMOTE_IMAGE_TTL_MS = 1_296_000_000 // 15 days
 
+const REMOTE_IMAGE_MAX_ENTRIES = 1_000
+
 const REMOTE_IMAGE_MAX_IDLE_MS = 2_592_000_000 // 30 days
 
 // "App shell" = the smallest set of assets needed for very fast startup.
@@ -66,6 +68,7 @@ self.addEventListener("activate", (event) => {
         )
       )
       .then(() => trimRemoteImagesByIdleTime(REMOTE_IMAGE_MAX_IDLE_MS))
+      .then(() => trimRemoteImagesByEntryCount(REMOTE_IMAGE_MAX_ENTRIES))
       // Keep activate alive until claim is complete for deterministic takeover.
       .then(() => self.clients.claim())
   )
@@ -298,6 +301,39 @@ async function trimRemoteImagesByIdleTime(maxIdleTime) {
         imageCache.delete(cacheKey, { ignoreVary: true }),
         metadataCache.delete(cacheKey)
       ])
+  )
+}
+
+async function trimRemoteImagesByEntryCount(maxNumberOfEntries) {
+  const [imageCache, metadataCache] = await Promise.all([
+    caches.open(REMOTE_IMAGE_CACHE),
+    caches.open(REMOTE_IMAGE_META_CACHE)
+  ])
+
+  const cacheKeys = await metadataCache.keys()
+
+  if (cacheKeys.length <= maxNumberOfEntries) return
+
+  const entries = await Promise.all(
+    cacheKeys.map(async (cacheKey) => {
+      const metadata = await readCacheMetadata(metadataCache, cacheKey)
+
+      return {
+        cacheKey,
+        lastViewedAt: metadata?.lastViewedAt ?? 0
+      }
+    })
+  )
+
+  const entriesToDelete = entries
+    .sort((a, b) => b.lastViewedAt - a.lastViewedAt)
+    .slice(maxNumberOfEntries)
+
+  await Promise.all(
+    entriesToDelete.flatMap(({ cacheKey }) => [
+      imageCache.delete(cacheKey, { ignoreVary: true }),
+      metadataCache.delete(cacheKey)
+    ])
   )
 }
 
