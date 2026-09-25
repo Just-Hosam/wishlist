@@ -67,8 +67,18 @@ self.addEventListener("activate", (event) => {
           })
         )
       )
-      .then(() => trimRemoteImagesByIdleTime(REMOTE_IMAGE_MAX_IDLE_MS))
-      .then(() => trimRemoteImagesByEntryCount(REMOTE_IMAGE_MAX_ENTRIES))
+      .then(() =>
+        trimRemoteImagesByIdleTime(REMOTE_IMAGE_MAX_IDLE_MS).catch((error) => {
+          console.warn("Failed to trim images by idle time", error)
+        })
+      )
+      .then(() =>
+        trimRemoteImagesByEntryCount(REMOTE_IMAGE_MAX_ENTRIES).catch(
+          (error) => {
+            console.warn("Failed to trim images by entry count", error)
+          }
+        )
+      )
       // Keep activate alive until claim is complete for deterministic takeover.
       .then(() => self.clients.claim())
   )
@@ -268,10 +278,14 @@ async function touchLastViewedAt(cache, cacheKey, metadata) {
 
   if (wasRecentlyTouched) return
 
-  await writeCacheMetadata(cache, cacheKey, {
-    ...metadata,
-    lastViewedAt: now
-  })
+  try {
+    await writeCacheMetadata(cache, cacheKey, {
+      ...metadata,
+      lastViewedAt: now
+    })
+  } catch (error) {
+    console.warn("Failed to update image cache metadata", error)
+  }
 }
 
 async function trimRemoteImagesByIdleTime(maxIdleTime) {
