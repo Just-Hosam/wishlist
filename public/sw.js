@@ -23,7 +23,9 @@ const REMOTE_IMAGE_CACHE = "remote-image-cache-v1"
 // in a parallel cache keyed by the same request URL.
 const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v1"
 // These remote image URLs are stable enough to tolerate long-lived reuse.
-const REMOTE_IMAGE_TTL_MS = 2_592_000_000 // 30 days
+const REMOTE_IMAGE_TTL_MS = 1_296_000_000 // 15 days
+
+const REMOTE_IMAGE_MAX_IDLE_MS = 2_592_000_000 // 30 days
 
 // "App shell" = the smallest set of assets needed for very fast startup.
 // `/launch` is a light page in this app that immediately routes onward.
@@ -46,8 +48,8 @@ self.addEventListener("install", (event) => {
 })
 
 self.addEventListener("activate", (event) => {
-  // On activate, rotate versioned boot caches while preserving long-lived
-  // remote image caches across releases.
+  // On activate, rotate versioned boot caches while preserving and pruning
+  // long-lived remote image caches across releases.
   event.waitUntil(
     caches
       .keys()
@@ -63,6 +65,7 @@ self.addEventListener("activate", (event) => {
           })
         )
       )
+      .then(() => trimRemoteImagesByIdleTime(REMOTE_IMAGE_MAX_IDLE_MS))
       // Keep activate alive until claim is complete for deterministic takeover.
       .then(() => self.clients.claim())
   )
@@ -266,6 +269,36 @@ async function touchLastViewedAt(cache, cacheKey, metadata) {
     ...metadata,
     lastViewedAt: now
   })
+}
+
+async function trimRemoteImagesByIdleTime(maxIdleTime) {
+  const now = Date.now()
+
+  const [imageCache, metadataCache] = await Promise.all([
+    caches.open(REMOTE_IMAGE_CACHE),
+    caches.open(REMOTE_IMAGE_META_CACHE)
+  ])
+
+  const cacheKeys = await metadataCache.keys()
+
+  const entriesToDelete = await Promise.all(
+    cacheKeys.map(async (cacheKey) => {
+      const metadata = await readCacheMetadata(metadataCache, cacheKey)
+      const lastViewedAt = metadata?.lastViewedAt ?? 0
+      const isPastIdleLimit = now - lastViewedAt >= maxIdleTime
+
+      return isPastIdleLimit ? cacheKey : null
+    })
+  )
+
+  await Promise.all(
+    entriesToDelete
+      .filter(Boolean)
+      .flatMap((cacheKey) => [
+        imageCache.delete(cacheKey, { ignoreVary: true }),
+        metadataCache.delete(cacheKey)
+      ])
+  )
 }
 
 function isBootStaticAsset(pathname) {
