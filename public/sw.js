@@ -176,18 +176,20 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
   const cacheKey = request
   const metaCacheKey = request.url
 
-  const [cachedResponse, timestamps] = await Promise.all([
+  const [cachedResponse, metadata] = await Promise.all([
     imageCache.match(cacheKey),
     readCacheMetadata(metadataCache, metaCacheKey)
   ])
 
-  const cachedAt = timestamps?.cachedAt
-  const lastViewedAt = timestamps?.lastViewedAt
+  const cachedAt = metadata?.cachedAt
 
   const isExpired = (cachedAt) => Date.now() - cachedAt >= ttlMs
   const isCacheValid = cachedAt && !isExpired(cachedAt)
 
-  if (cachedResponse && isCacheValid) return cachedResponse
+  if (cachedResponse && isCacheValid) {
+    await touchLastViewedAt(metadataCache, metaCacheKey, metadata)
+    return cachedResponse
+  }
 
   try {
     const response = await fetch(request)
@@ -209,7 +211,10 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
     return response
   } catch (error) {
     // Return stale cache if new response fails
-    if (cachedResponse) return cachedResponse
+    if (cachedResponse) {
+      await touchLastViewedAt(metadataCache, metaCacheKey, metadata)
+      return cachedResponse
+    }
 
     throw error
   }
@@ -247,6 +252,20 @@ async function writeCacheMetadata(cache, cacheKey, metadata) {
   })
 
   await cache.put(cacheKey, response)
+}
+
+async function touchLastViewedAt(cache, cacheKey, metadata) {
+  if (!metadata) return
+
+  const now = Date.now()
+  const wasRecentlyTouched = now - metadata.lastViewedAt < 86_400_000 // 1 DAY
+
+  if (wasRecentlyTouched) return
+
+  await writeCacheMetadata(cache, cacheKey, {
+    ...metadata,
+    lastViewedAt: now
+  })
 }
 
 function isBootStaticAsset(pathname) {
