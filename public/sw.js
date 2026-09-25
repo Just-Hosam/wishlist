@@ -296,7 +296,7 @@ async function trimRemoteImagesByIdleTime(maxIdleTime) {
     caches.open(REMOTE_IMAGE_META_CACHE)
   ])
 
-  const cacheKeys = await metadataCache.keys()
+  const cacheKeys = await imageCache.keys()
 
   const entriesToDelete = await Promise.all(
     cacheKeys.map(async (cacheKey) => {
@@ -324,7 +324,7 @@ async function trimRemoteImagesByEntryCount(maxNumberOfEntries) {
     caches.open(REMOTE_IMAGE_META_CACHE)
   ])
 
-  const cacheKeys = await metadataCache.keys()
+  const cacheKeys = await imageCache.keys()
 
   if (cacheKeys.length <= maxNumberOfEntries) return
 
