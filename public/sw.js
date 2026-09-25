@@ -176,10 +176,13 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
   const cacheKey = request
   const metaCacheKey = request.url
 
-  const [cachedResponse, cachedAt] = await Promise.all([
+  const [cachedResponse, timestamps] = await Promise.all([
     imageCache.match(cacheKey),
-    readCachedAt(metadataCache, metaCacheKey)
+    readCacheMetadata(metadataCache, metaCacheKey)
   ])
+
+  const cachedAt = timestamps?.cachedAt
+  const lastViewedAt = timestamps?.lastViewedAt
 
   const isExpired = (cachedAt) => Date.now() - cachedAt >= ttlMs
   const isCacheValid = cachedAt && !isExpired(cachedAt)
@@ -192,9 +195,14 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
     const isCachable = response.ok || response.type === "opaque"
 
     if (isCachable) {
+      const now = Date.now()
+
       await Promise.all([
         imageCache.put(cacheKey, response.clone()),
-        writeCachedAt(metadataCache, metaCacheKey, Date.now())
+        writeCacheMetadata(metadataCache, metaCacheKey, {
+          cachedAt: now,
+          lastViewedAt: now
+        })
       ])
     }
 
@@ -207,7 +215,7 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
   }
 }
 
-async function readCachedAt(cache, cacheKey) {
+async function readCacheMetadata(cache, cacheKey) {
   const response = await cache.match(cacheKey)
 
   if (!response) return null
@@ -216,16 +224,23 @@ async function readCachedAt(cache, cacheKey) {
     // Treat malformed metadata as a miss so the image is refreshed normally.
     const data = await response.json()
     const cachedAt = Number(data?.cachedAt)
-    return Number.isFinite(cachedAt) ? cachedAt : null
+    const lastViewedAt = Number(data?.lastViewedAt)
+
+    if (!Number.isFinite(cachedAt)) return null
+
+    return {
+      cachedAt,
+      lastViewedAt: Number.isFinite(lastViewedAt) ? lastViewedAt : cachedAt
+    }
   } catch {
     return null
   }
 }
 
-async function writeCachedAt(cache, cacheKey, cachedAt) {
-  // Store only the timestamp we need for TTL checks; image bytes live in the
+async function writeCacheMetadata(cache, cacheKey, metadata) {
+  // Store timestamps for TTL checks and deletion; image bytes live in the
   // separate artwork cache.
-  const response = new Response(JSON.stringify({ cachedAt }), {
+  const response = new Response(JSON.stringify(metadata), {
     headers: {
       "content-type": "application/json"
     }
