@@ -18,10 +18,10 @@ const SW_VERSION = "0.4.13"
 const BOOT_CACHE = `boot-cache-${SW_VERSION}`
 // Store remote artwork separately from boot assets so image churn does not
 // evict the tiny shell cache used for fast startup.
-const REMOTE_IMAGE_CACHE = "remote-image-cache-v1"
+const REMOTE_IMAGE_CACHE = "remote-image-cache-v2"
 // CacheStorage cannot attach custom metadata to entries, so keep TTL metadata
 // in a parallel cache keyed by the same request URL.
-const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v1"
+const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v2"
 // These remote image URLs are stable enough to tolerate long-lived reuse.
 const REMOTE_IMAGE_TTL_MS = 1_296_000_000 // 15 days
 
