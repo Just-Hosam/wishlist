@@ -18,12 +18,16 @@ const SW_VERSION = "0.4.13"
 const BOOT_CACHE = `boot-cache-${SW_VERSION}`
 // Store remote artwork separately from boot assets so image churn does not
 // evict the tiny shell cache used for fast startup.
-const REMOTE_IMAGE_CACHE = "remote-image-cache-v1"
+const REMOTE_IMAGE_CACHE = "remote-image-cache-v2"
 // CacheStorage cannot attach custom metadata to entries, so keep TTL metadata
 // in a parallel cache keyed by the same request URL.
-const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v1"
+const REMOTE_IMAGE_META_CACHE = "remote-image-meta-v2"
 // These remote image URLs are stable enough to tolerate long-lived reuse.
-const REMOTE_IMAGE_TTL_MS = 2_592_000_000 // 30 days
+const REMOTE_IMAGE_TTL_MS = 1_296_000_000 // 15 days
+
+const REMOTE_IMAGE_MAX_ENTRIES = 1_000
+
+const REMOTE_IMAGE_MAX_IDLE_MS = 2_592_000_000 // 30 days
 
 // "App shell" = the smallest set of assets needed for very fast startup.
 // `/launch` is a light page in this app that immediately routes onward.
@@ -46,8 +50,8 @@ self.addEventListener("install", (event) => {
 })
 
 self.addEventListener("activate", (event) => {
-  // On activate, rotate versioned boot caches while preserving long-lived
-  // remote image caches across releases.
+  // On activate, rotate versioned boot caches while preserving and pruning
+  // long-lived remote image caches across releases.
   event.waitUntil(
     caches
       .keys()
@@ -61,6 +65,18 @@ self.addEventListener("activate", (event) => {
             // Keep current cache entries untouched.
             return Promise.resolve()
           })
+        )
+      )
+      .then(() =>
+        trimRemoteImagesByIdleTime(REMOTE_IMAGE_MAX_IDLE_MS).catch((error) => {
+          console.warn("Failed to trim images by idle time", error)
+        })
+      )
+      .then(() =>
+        trimRemoteImagesByEntryCount(REMOTE_IMAGE_MAX_ENTRIES).catch(
+          (error) => {
+            console.warn("Failed to trim images by entry count", error)
+          }
         )
       )
       // Keep activate alive until claim is complete for deterministic takeover.
@@ -176,15 +192,20 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
   const cacheKey = request
   const metaCacheKey = request.url
 
-  const [cachedResponse, cachedAt] = await Promise.all([
+  const [cachedResponse, metadata] = await Promise.all([
     imageCache.match(cacheKey),
-    readCachedAt(metadataCache, metaCacheKey)
+    readCacheMetadata(metadataCache, metaCacheKey)
   ])
+
+  const cachedAt = metadata?.cachedAt
 
   const isExpired = (cachedAt) => Date.now() - cachedAt >= ttlMs
   const isCacheValid = cachedAt && !isExpired(cachedAt)
 
-  if (cachedResponse && isCacheValid) return cachedResponse
+  if (cachedResponse && isCacheValid) {
+    await touchLastViewedAt(metadataCache, metaCacheKey, metadata)
+    return cachedResponse
+  }
 
   try {
     const response = await fetch(request)
@@ -192,22 +213,30 @@ async function serveRemoteImage(request, { cacheName, metaCacheName, ttlMs }) {
     const isCachable = response.ok || response.type === "opaque"
 
     if (isCachable) {
+      const now = Date.now()
+
       await Promise.all([
         imageCache.put(cacheKey, response.clone()),
-        writeCachedAt(metadataCache, metaCacheKey, Date.now())
+        writeCacheMetadata(metadataCache, metaCacheKey, {
+          cachedAt: now,
+          lastViewedAt: now
+        })
       ])
     }
 
     return response
   } catch (error) {
     // Return stale cache if new response fails
-    if (cachedResponse) return cachedResponse
+    if (cachedResponse) {
+      await touchLastViewedAt(metadataCache, metaCacheKey, metadata)
+      return cachedResponse
+    }
 
     throw error
   }
 }
 
-async function readCachedAt(cache, cacheKey) {
+async function readCacheMetadata(cache, cacheKey) {
   const response = await cache.match(cacheKey)
 
   if (!response) return null
@@ -216,22 +245,110 @@ async function readCachedAt(cache, cacheKey) {
     // Treat malformed metadata as a miss so the image is refreshed normally.
     const data = await response.json()
     const cachedAt = Number(data?.cachedAt)
-    return Number.isFinite(cachedAt) ? cachedAt : null
+    const lastViewedAt = Number(data?.lastViewedAt)
+
+    if (!Number.isFinite(cachedAt)) return null
+
+    return {
+      cachedAt,
+      lastViewedAt: Number.isFinite(lastViewedAt) ? lastViewedAt : cachedAt
+    }
   } catch {
     return null
   }
 }
 
-async function writeCachedAt(cache, cacheKey, cachedAt) {
-  // Store only the timestamp we need for TTL checks; image bytes live in the
+async function writeCacheMetadata(cache, cacheKey, metadata) {
+  // Store timestamps for TTL checks and deletion; image bytes live in the
   // separate artwork cache.
-  const response = new Response(JSON.stringify({ cachedAt }), {
+  const response = new Response(JSON.stringify(metadata), {
     headers: {
       "content-type": "application/json"
     }
   })
 
   await cache.put(cacheKey, response)
+}
+
+async function touchLastViewedAt(cache, cacheKey, metadata) {
+  if (!metadata) return
+
+  const now = Date.now()
+  const wasRecentlyTouched = now - metadata.lastViewedAt < 86_400_000 // 1 DAY
+
+  if (wasRecentlyTouched) return
+
+  try {
+    await writeCacheMetadata(cache, cacheKey, {
+      ...metadata,
+      lastViewedAt: now
+    })
+  } catch (error) {
+    console.warn("Failed to update image cache metadata", error)
+  }
+}
+
+async function trimRemoteImagesByIdleTime(maxIdleTime) {
+  const now = Date.now()
+
+  const [imageCache, metadataCache] = await Promise.all([
+    caches.open(REMOTE_IMAGE_CACHE),
+    caches.open(REMOTE_IMAGE_META_CACHE)
+  ])
+
+  const cacheKeys = await imageCache.keys()
+
+  const entriesToDelete = await Promise.all(
+    cacheKeys.map(async (cacheKey) => {
+      const metadata = await readCacheMetadata(metadataCache, cacheKey)
+      const lastViewedAt = metadata?.lastViewedAt ?? 0
+      const isPastIdleLimit = now - lastViewedAt >= maxIdleTime
+
+      return isPastIdleLimit ? cacheKey : null
+    })
+  )
+
+  await Promise.all(
+    entriesToDelete
+      .filter(Boolean)
+      .flatMap((cacheKey) => [
+        imageCache.delete(cacheKey, { ignoreVary: true }),
+        metadataCache.delete(cacheKey)
+      ])
+  )
+}
+
+async function trimRemoteImagesByEntryCount(maxNumberOfEntries) {
+  const [imageCache, metadataCache] = await Promise.all([
+    caches.open(REMOTE_IMAGE_CACHE),
+    caches.open(REMOTE_IMAGE_META_CACHE)
+  ])
+
+  const cacheKeys = await imageCache.keys()
+
+  if (cacheKeys.length <= maxNumberOfEntries) return
+
+  const entries = await Promise.all(
+    cacheKeys.map(async (cacheKey) => {
+      const metadata = await readCacheMetadata(metadataCache, cacheKey)
+
+      return {
+        cacheKey,
+        lastViewedAt: metadata?.lastViewedAt ?? 0
+      }
+    })
+  )
+
+  const entriesToDelete = entries
+    .sort((a, b) => b.lastViewedAt - a.lastViewedAt)
+    .slice(maxNumberOfEntries)
+
+  await Promise.all(
+    entriesToDelete.flatMap(({ cacheKey }) => [
+      imageCache.delete(cacheKey, { ignoreVary: true }),
+      metadataCache.delete(cacheKey)
+    ])
+  )
 }
 
 function isBootStaticAsset(pathname) {
