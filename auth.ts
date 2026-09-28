@@ -5,5 +5,12 @@ import prisma from "@/lib/prisma"
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  ...authConfig
+  ...authConfig,
+  events: {
+    async createUser({ user }) {
+      await prisma.notificationSettings.create({
+        data: { userId: user.id }
+      })
+    }
+  }
 })
