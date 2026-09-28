@@ -2,13 +2,18 @@
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import {
+  getNotificationSettings,
+  saveNotificationSettings
+} from "@/server/actions/notifications"
 import { ArrowRight, Bell } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -23,22 +28,52 @@ interface Props {
 export function NotificationSettings({ className }: Props) {
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [allowed, setAllowed] = useState(false)
-  const [wishlistSales, setWishlistSales] = useState(false)
-  const [wishlistAvailable, setWishlistAvailable] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const [psMonthlyGames, setPsMonthlyGames] = useState(false)
-  const [psCatalog, setPsCatalog] = useState(false)
-  const [newFeatures, setNewFeatures] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+
+    let cancelled = false
+
+    async function loadSettings() {
+      setIsLoading(true)
+
+      try {
+        const settings = await getNotificationSettings()
+
+        if (!cancelled) {
+          setPsMonthlyGames(settings.playstationPlusMonthlyGames)
+        }
+      } catch (error) {
+        console.error("Error loading notification settings:", error)
+        toast.error("Failed to load notification settings.")
+      } finally {
+        if (!cancelled) setIsLoading(false)
+      }
+    }
+
+    loadSettings()
+
+    return () => {
+      cancelled = true
+    }
+  }, [open])
 
   const handleSave = async () => {
     setIsSaving(true)
 
     try {
+      await saveNotificationSettings({
+        playstationPlusMonthlyGames: psMonthlyGames
+      })
+
       toast.success("Settings Updated!")
       setOpen(false)
     } catch (error) {
-      console.error("Error moving game to library:", error)
-      toast.error("Something went wrong.")
+      console.error("Error saving notification settings:", error)
+      toast.error("Failed to save notification settings.")
     } finally {
       setIsSaving(false)
     }
@@ -56,99 +91,27 @@ export function NotificationSettings({ className }: Props) {
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Notifications</DrawerTitle>
+          <DrawerDescription>
+            Manage your notification preferences
+          </DrawerDescription>
         </DrawerHeader>
         <form className="space-y-4">
-          <div className="flex items-end justify-between">
-            <header className="pl-1">
-              <label className="text-sm font-medium" htmlFor="now-playing">
-                Permissions
-              </label>
-              <p className="text-xs text-muted-foreground">
-                Allow for push notifications
-              </p>
-            </header>
-            <Switch
-              id="now-playing"
-              checked={allowed}
-              onCheckedChange={setAllowed}
-            ></Switch>
-          </div>
-          <div>
-            <header className="mb-2 pl-1">
-              <label className="text-sm font-medium">Notifications</label>
-              <p className="text-xs text-muted-foreground">
-                Which notifications do you want
-              </p>
-            </header>
-            <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <label
-                    className="text-sm font-medium"
-                    htmlFor="wishlist-games-on-sale"
-                  >
-                    On Sale
-                  </label>
-                  <Switch
-                    id="wishlist-games-on-sale"
-                    checked={wishlistSales}
-                    onCheckedChange={setWishlistSales}
-                    className="ml-auto"
-                  />
-                </div>
-                <div className="flex items-center">
-                  <label
-                    className="text-sm font-medium"
-                    htmlFor="wishlist-games-now-available"
-                  >
-                    Available
-                  </label>
-                  <Switch
-                    id="wishlist-games-now-available"
-                    checked={wishlistAvailable}
-                    onCheckedChange={setWishlistAvailable}
-                    className="ml-auto"
-                  />
-                </div>
-                <div className="flex items-center">
-                  <label
-                    className="text-sm font-medium"
-                    htmlFor="playstation-plus-monthly-games"
-                  >
-                    PS+ Monthly Games
-                  </label>
-                  <Switch
-                    id="playstation-plus-monthly-games"
-                    checked={psMonthlyGames}
-                    onCheckedChange={setPsMonthlyGames}
-                    className="ml-auto"
-                  />
-                </div>
-                <div className="flex items-center">
-                  <label
-                    className="text-sm font-medium"
-                    htmlFor="playstation-plus-game-catalog"
-                  >
-                    PS+ Game Catalog
-                  </label>
-                  <Switch
-                    id="playstation-plus-game-catalog"
-                    checked={psCatalog}
-                    onCheckedChange={setPsCatalog}
-                    className="ml-auto"
-                  />
-                </div>
-                <div className="flex items-center">
-                  <label className="text-sm font-medium" htmlFor="new-feature">
-                    New features
-                  </label>
-                  <Switch
-                    id="new-feature"
-                    checked={newFeatures}
-                    onCheckedChange={setNewFeatures}
-                    className="ml-auto"
-                  />
-                </div>
+          <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <label
+                  className="text-sm font-medium"
+                  htmlFor="playstation-plus-monthly-games"
+                >
+                  PS+ Monthly Games
+                </label>
+                <Switch
+                  id="playstation-plus-monthly-games"
+                  checked={psMonthlyGames}
+                  onCheckedChange={setPsMonthlyGames}
+                  disabled={isLoading}
+                  className="ml-auto"
+                />
               </div>
             </div>
           </div>
@@ -157,7 +120,7 @@ export function NotificationSettings({ className }: Props) {
         <DrawerFooter>
           <Button
             size="lg"
-            disabled={isSaving}
+            disabled={isLoading || isSaving}
             variant="accent"
             onClick={handleSave}
           >
