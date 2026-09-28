@@ -26,3 +26,14 @@ export const PriceDescription = {
 
 export type PriceDescription =
   (typeof PriceDescription)[keyof typeof PriceDescription]
+
+export const NotificationType = {
+  WISHLIST_GAMES_ON_SALE: "WISHLIST_GAMES_ON_SALE",
+  WISHLIST_GAMES_NOW_AVAILABLE: "WISHLIST_GAMES_NOW_AVAILABLE",
+  PLAYSTATION_PLUS_MONTHLY_GAMES: "PLAYSTATION_PLUS_MONTHLY_GAMES",
+  PLAYSTATION_PLUS_GAME_CATALOG: "PLAYSTATION_PLUS_GAME_CATALOG",
+  NEW_FEATURE: "NEW_FEATURE"
+} as const
+
+export type NotificationType =
+  (typeof NotificationType)[keyof typeof NotificationType]

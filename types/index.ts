@@ -1,5 +1,6 @@
 export * from "./enums"
 export * from "./game"
 export * from "./igdb"
+export * from "./notifications"
 export * from "./price"
 export * from "./search"
