@@ -203,9 +203,11 @@ model Notification {
   message   String
   payload   Json?
   readAt    DateTime?
+  eventKey  String
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
+  @@unique([userId, type, eventKey])
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, readAt, createdAt(sort: Desc)])
 }
