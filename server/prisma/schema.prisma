@@ -43,18 +43,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  age           Int?
-  bio           String?
-  accounts      Account[]
-  sessions      Session[]
-  games         Game[]
-  searchHistory SearchHistory[]
-  notifications Notification[]
+  id                   String                @id @default(cuid())
+  name                 String?
+  email                String?               @unique
+  emailVerified        DateTime?
+  image                String?
+  age                  Int?
+  bio                  String?
+  accounts             Account[]
+  sessions             Session[]
+  games                Game[]
+  searchHistory        SearchHistory[]
+  notifications        Notification[]
+  notificationSettings NotificationSettings?
 }
 
 model VerificationToken {
@@ -207,4 +208,12 @@ model Notification {
 
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, readAt, createdAt(sort: Desc)])
+}
+
+model NotificationSettings {
+  userId                      String   @id
+  user                        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  playstationPlusMonthlyGames Boolean  @default(true)
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
 }
