@@ -48,6 +48,39 @@ export const formatReleaseDate = (timestamp: number) => {
   })
 }
 
+export const formatRelativeDate = (date: Date) => {
+  const millisecondsPerMinute = 1000 * 60
+  const millisecondsPerHour = millisecondsPerMinute * 60
+  const millisecondsPerDay = millisecondsPerHour * 24
+  const millisecondsPerWeek = millisecondsPerDay * 7
+  const millisecondsPerMonth = millisecondsPerDay * 30
+  const elapsed = Math.max(0, Date.now() - date.getTime())
+
+  if (elapsed < millisecondsPerMinute) return "Just now"
+
+  if (elapsed < millisecondsPerHour) {
+    const minutes = Math.floor(elapsed / millisecondsPerMinute)
+    return `${minutes} minute${minutes === 1 ? "" : "s"} ago`
+  }
+
+  if (elapsed < millisecondsPerDay) {
+    const hours = Math.floor(elapsed / millisecondsPerHour)
+    return `${hours} hour${hours === 1 ? "" : "s"} ago`
+  }
+
+  if (elapsed < millisecondsPerWeek) {
+    const days = Math.floor(elapsed / millisecondsPerDay)
+    return `${days} day${days === 1 ? "" : "s"} ago`
+  }
+
+  if (elapsed < millisecondsPerMonth) {
+    const weeks = Math.floor(elapsed / millisecondsPerWeek)
+    return `${weeks} week${weeks === 1 ? "" : "s"} ago`
+  }
+
+  return formatReleaseDate(date.getTime() / 1000)
+}
+
 export const isUpcomingRelease = (timestamp?: number | null) => {
   if (!timestamp) return false
 

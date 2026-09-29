@@ -1,3 +1,4 @@
+import { formatRelativeDate } from "@/lib/utils"
 import { getNotificationsForUser } from "@/server/actions/notifications"
 import { NotificationOutput, NotificationType } from "@/types"
 import { BellOff } from "lucide-react"
@@ -71,9 +72,9 @@ function PlaystationPlusNotification({
         </p>
         <time
           dateTime={notification.createdAt.toISOString()}
-          className="mt-[10px] text-xs font-light text-muted-foreground"
+          className="mt-[10px] block text-xs font-light text-muted-foreground"
         >
-          2 days ago
+          {formatRelativeDate(notification.createdAt)}
         </time>
       </div>
     </li>
