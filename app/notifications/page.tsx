@@ -1,4 +1,3 @@
-import { formatReleaseDate } from "@/lib/utils"
 import { getNotificationsForUser } from "@/server/actions/notifications"
 import { NotificationOutput, NotificationType } from "@/types"
 import { BellOff } from "lucide-react"
@@ -15,7 +14,7 @@ export default async function MorePage() {
   if (notifications.length === 0) return <NotificationsEmptyState />
 
   return (
-    <div className="custom-slide-up-fade-in grid gap-3">
+    <ul className="custom-slide-up-fade-in grid gap-3">
       {notifications.map((notification) => {
         switch (notification.type) {
           case NotificationType.PLAYSTATION_PLUS_MONTHLY_GAMES:
@@ -30,7 +29,7 @@ export default async function MorePage() {
             return null
         }
       })}
-    </div>
+    </ul>
   )
 }
 
@@ -56,28 +55,27 @@ function PlaystationPlusNotification({
   notification: NotificationOutput
 }) {
   return (
-    <div className="overflow-hidden rounded-3xl bg-card px-5 py-4 shadow-sm">
-      <header className="flex content-center gap-3">
-        <Image
-          src="/logos/ps-plus.svg"
-          alt="PlayStation Plus logo"
-          width={32}
-          height={32}
-          className="rounded-sm drop-shadow-2xl"
-          unoptimized
-        />
-        <div>
-          <div className="font-semibold">{notification.title}</div>
-          <div className="mt-[1px] text-xs text-muted-foreground">
-            {formatReleaseDate(notification.createdAt.getTime() / 1000)}
-          </div>
-        </div>
-      </header>
-      <div className="mt-4">
-        <div className="text-sm text-muted-foreground">
+    <li className="flex gap-3 overflow-hidden rounded-3xl bg-card px-5 py-4 shadow-sm">
+      <Image
+        src="/logos/ps-plus.svg"
+        alt="PlayStation Plus logo"
+        width={25}
+        height={25}
+        className="mt-[5px] self-start rounded-sm drop-shadow-2xl"
+        unoptimized
+      />
+      <div>
+        <h2 className="text-sm font-semibold">{notification.title}</h2>
+        <p className="mt-[2px] text-xs text-muted-foreground">
           {notification.message}
-        </div>
+        </p>
+        <time
+          dateTime={notification.createdAt.toISOString()}
+          className="mt-[10px] text-xs font-light text-muted-foreground"
+        >
+          2 days ago
+        </time>
       </div>
-    </div>
+    </li>
   )
 }
