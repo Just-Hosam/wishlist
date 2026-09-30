@@ -12,6 +12,7 @@ import type { Metadata } from "next"
 import { Montserrat, Open_Sans } from "next/font/google"
 import { Suspense } from "react"
 import "../styles/globals.css"
+import { NotificationProvider } from "@/components/notifications/NotificationProvider"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -96,20 +97,22 @@ export default async function RootLayout({
         <ServiceWorkerRegistration />
         <AccentHydrator />
         <NavigationProvider>
-          <Suspense fallback={null}>
-            <ScrollRestoration />
-          </Suspense>
-          <Header />
-          <main
-            className="m-auto h-full max-w-[700px] overflow-y-auto bg-background px-4 pb-40 pt-[96px]"
-            data-scroll-container
-          >
-            <GlobalLoader>{children}</GlobalLoader>
-          </main>
-          <Footer />
-          <Toaster position="top-center" duration={2000} />
-          <SpeedInsights />
-          <Analytics />
+          <NotificationProvider>
+            <Suspense fallback={null}>
+              <ScrollRestoration />
+            </Suspense>
+            <Header />
+            <main
+              className="m-auto h-full max-w-[700px] overflow-y-auto bg-background px-4 pb-40 pt-[96px]"
+              data-scroll-container
+            >
+              <GlobalLoader>{children}</GlobalLoader>
+            </main>
+            <Footer />
+            <Toaster position="top-center" duration={2000} />
+            <SpeedInsights />
+            <Analytics />
+          </NotificationProvider>
         </NavigationProvider>
       </body>
     </html>
