@@ -15,9 +15,7 @@ export default async function WishlistPage() {
 
   const wishlistGames = await getCachedWishlistGames(userId)
 
-  if (wishlistGames.length === 0) {
-    return <ListEmptyState />
-  }
+  if (wishlistGames.length === 0) return <ListEmptyState />
 
   return (
     <div className="custom-slide-up-fade-in grid gap-3">

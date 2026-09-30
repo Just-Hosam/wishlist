@@ -10,9 +10,7 @@ export default async function CompletedList() {
 
   const games = await getCachedCompletedGames(userId)
 
-  if (games.length === 0) {
-    return <ListEmptyState />
-  }
+  if (games.length === 0) return <ListEmptyState />
 
   return (
     <div className="custom-slide-up-fade-in">

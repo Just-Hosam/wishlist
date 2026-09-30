@@ -3,6 +3,7 @@ import { Header } from "@/components/layout/Header"
 import { GlobalLoader } from "@/components/navigation/GlobalLoader"
 import { NavigationProvider } from "@/components/navigation/NavigationProvider"
 import { ScrollRestoration } from "@/components/navigation/ScrollRestoration"
+import { NotificationProvider } from "@/components/notifications/NotificationProvider"
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration"
 import { AccentHydrator } from "@/components/theme/AccentHydrator"
 import { Toaster } from "@/components/ui/sonner"
@@ -12,7 +13,6 @@ import type { Metadata } from "next"
 import { Montserrat, Open_Sans } from "next/font/google"
 import { Suspense } from "react"
 import "../styles/globals.css"
-import { NotificationProvider } from "@/components/notifications/NotificationProvider"
 
 const montserrat = Montserrat({
   subsets: ["latin"],

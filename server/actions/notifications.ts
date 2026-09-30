@@ -35,6 +35,23 @@ export async function hasUnreadNotifications(): Promise<boolean> {
   return notification !== null
 }
 
+export async function markNotificationsAsRead() {
+  const session = await auth()
+  const userId = session?.user?.id
+
+  if (!userId) throw new Error("Unauthorized.")
+
+  await prisma.notification.updateMany({
+    where: {
+      userId,
+      readAt: null
+    },
+    data: {
+      readAt: new Date()
+    }
+  })
+}
+
 export async function getNotificationSettings(): Promise<NotificationSettingsOutput> {
   const session = await auth()
   const userId = session?.user?.id
