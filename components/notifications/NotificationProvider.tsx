@@ -1,18 +1,10 @@
 "use client"
 
-import { hasUnreadNotifications } from "@/server/actions/notifications"
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from "react"
+import { createContext, ReactNode, useContext, useState } from "react"
 
 interface NotificationContextType {
   hasUnread: boolean
-  clearUnread: () => void
+  setHasUnread: (hasUnread: boolean) => void
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -22,32 +14,8 @@ const NotificationContext = createContext<NotificationContextType | undefined>(
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const [hasUnread, setHasUnread] = useState(false)
 
-  const clearUnread = useCallback(() => {
-    setHasUnread(false)
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function checkForUnreadNotifications() {
-      try {
-        const result = await hasUnreadNotifications()
-
-        if (!cancelled) setHasUnread(result)
-      } catch (error) {
-        console.error("Failed to check for unread notifications:", error)
-      }
-    }
-
-    checkForUnreadNotifications()
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   return (
-    <NotificationContext.Provider value={{ hasUnread, clearUnread }}>
+    <NotificationContext.Provider value={{ hasUnread, setHasUnread }}>
       {children}
     </NotificationContext.Provider>
   )

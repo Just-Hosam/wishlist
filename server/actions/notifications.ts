@@ -6,33 +6,41 @@ import {
   NotificationOutput,
   NotificationSettingsOutput
 } from "@/types/notifications"
+import { unstable_cache, updateTag } from "next/cache"
 
-export async function getNotificationsForUser(
-  userId: string
-): Promise<NotificationOutput[]> {
-  return prisma.notification.findMany({
-    where: { userId },
-    orderBy: { createdAt: "desc" }
-  })
-}
-
-export async function hasUnreadNotifications(): Promise<boolean> {
+export async function getNotifications(): Promise<NotificationOutput[]> {
   const session = await auth()
   const userId = session?.user?.id
 
-  if (!userId) return false
+  if (!userId) return []
 
-  const notification = await prisma.notification.findFirst({
-    where: {
-      userId,
-      readAt: null
+  const notifications = await unstable_cache(
+    async () => {
+      const results = await prisma.notification.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" }
+      })
+
+      return results.map((notification) => ({
+        ...notification,
+        readAt: notification.readAt?.toISOString() ?? null,
+        createdAt: notification.createdAt.toISOString(),
+        updatedAt: notification.updatedAt.toISOString()
+      }))
     },
-    select: {
-      id: true
+    [userId],
+    {
+      tags: [`user-notifications-${userId}`, "notification"],
+      revalidate: 300 // 5 mins
     }
-  })
+  )()
 
-  return notification !== null
+  return notifications.map((notification) => ({
+    ...notification,
+    readAt: notification.readAt ? new Date(notification.readAt) : null,
+    createdAt: new Date(notification.createdAt),
+    updatedAt: new Date(notification.updatedAt)
+  }))
 }
 
 export async function markNotificationsAsRead() {
@@ -50,6 +58,8 @@ export async function markNotificationsAsRead() {
       readAt: new Date()
     }
   })
+
+  updateTag(`user-notifications-${userId}`)
 }
 
 export async function getNotificationSettings(): Promise<NotificationSettingsOutput> {

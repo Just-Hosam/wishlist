@@ -6,7 +6,7 @@ import { useNotification } from "./NotificationProvider"
 import { tryCatch } from "@/lib/utils"
 
 export default function MarkNotificationsAsRead() {
-  const { clearUnread } = useNotification()
+  const { setHasUnread } = useNotification()
 
   useEffect(() => {
     async function markAsRead() {
@@ -17,11 +17,11 @@ export default function MarkNotificationsAsRead() {
         return
       }
 
-      clearUnread()
+      setHasUnread(false)
     }
 
     markAsRead()
-  }, [clearUnread])
+  }, [setHasUnread])
 
   return null
 }
