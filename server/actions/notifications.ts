@@ -8,12 +8,9 @@ import {
 } from "@/types/notifications"
 import { unstable_cache, updateTag } from "next/cache"
 
-export async function getNotifications(): Promise<NotificationOutput[]> {
-  const session = await auth()
-  const userId = session?.user?.id
-
-  if (!userId) return []
-
+export async function getCachedNotifications(
+  userId: string
+): Promise<NotificationOutput[]> {
   const notifications = await unstable_cache(
     async () => {
       const results = await prisma.notification.findMany({

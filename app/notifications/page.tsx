@@ -1,16 +1,16 @@
 import MarkNotificationsAsRead from "@/components/notifications/MarkNotificationsAsRead"
 import NotificationsEmptyState from "@/components/notifications/NotificationsEmptyState"
 import PlaystationPlusNotification from "@/components/notifications/PlaystationPlusNotification"
-import { getNotifications } from "@/server/actions/notifications"
+import { getCachedNotifications } from "@/server/actions/notifications"
 import { NotificationType } from "@/types"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-export default async function MorePage() {
+export default async function NotificationsPage() {
   const userId = (await headers()).get("x-user-id")
   if (!userId) redirect("/")
 
-  const notifications = await getNotifications()
+  const notifications = await getCachedNotifications(userId)
 
   if (notifications.length === 0) return <NotificationsEmptyState />
 

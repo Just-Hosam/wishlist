@@ -1,7 +1,5 @@
 "use client"
 
-import { tryCatch } from "@/lib/utils"
-import { getNotifications } from "@/server/actions/notifications"
 import { Bell } from "lucide-react"
 import { useEffect } from "react"
 import { Link } from "../navigation"
@@ -14,21 +12,26 @@ export default function NotificationButton() {
     let cancelled = false
 
     async function checkNotifications() {
-      const { data: notifications, error } = await tryCatch(getNotifications())
+      try {
+        const response = await fetch("/api/notifications", {
+          cache: "no-store"
+        })
 
-      if (error) {
+        if (!response.ok) {
+          throw new Error(
+            `Notification check failed with status ${response.status}`
+          )
+        }
+
+        const data = (await response.json()) as { hasUnread: boolean }
+
+        if (!cancelled) setHasUnread(data.hasUnread)
+      } catch (error) {
         console.error("Failed to check notifications:", error)
-        return
-      }
-
-      if (!cancelled) {
-        setHasUnread(
-          notifications.some((notification) => notification.readAt === null)
-        )
       }
     }
 
-    checkNotifications()
+    void checkNotifications()
 
     return () => {
       cancelled = true
