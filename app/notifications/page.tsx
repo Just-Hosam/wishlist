@@ -1,6 +1,6 @@
 import MarkNotificationsAsRead from "@/components/notifications/MarkNotificationsAsRead"
 import NotificationsEmptyState from "@/components/notifications/NotificationsEmptyState"
-import PlaystationPlusNotification from "@/components/notifications/PlaystationPlusNotification"
+import PSPlusMonthlyGamesNotification from "@/components/notifications/layouts/PSPlusMonthlyGamesNotification"
 import { getCachedNotifications } from "@/server/actions/notifications"
 import { NotificationType } from "@/types"
 import { headers } from "next/headers"
@@ -25,9 +25,8 @@ export default async function NotificationsPage() {
         {notifications.map((notification) => {
           switch (notification.type) {
             case NotificationType.PLAYSTATION_PLUS_MONTHLY_GAMES:
-            case NotificationType.PLAYSTATION_PLUS_GAME_CATALOG:
               return (
-                <PlaystationPlusNotification
+                <PSPlusMonthlyGamesNotification
                   key={notification.id}
                   notification={notification}
                 />
