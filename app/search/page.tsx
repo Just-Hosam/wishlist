@@ -109,7 +109,7 @@ export default async function SearchPage() {
         </p>
         <Button asChild size="xl" className="mb-2 w-full justify-between">
           <a
-            href="https://www.playstation.com/en-ca/ps-plus/games/?category=MONTHLY_GAMES&sort=last#plus-container"
+            href="https://psprices.com/region-ca/collection/ps-plus-monthly?platform=PS5"
             target="_blank"
             rel="noopener noreferrer"
           >
