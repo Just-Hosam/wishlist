@@ -149,7 +149,10 @@ function PWAConfig() {
         href="/favicon/apple-touch-icon.png"
       />
       <meta name="apple-mobile-web-app-title" content="Playward" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+      />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <link
         rel="apple-touch-startup-image"
