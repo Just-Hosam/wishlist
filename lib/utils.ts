@@ -87,6 +87,26 @@ export const isUpcomingRelease = (timestamp?: number | null) => {
   return new Date(timestamp * 1000) > new Date()
 }
 
+export function getCalendarDate(date: Date, timeZone: string) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "long"
+  }).formatToParts(date)
+
+  const valueFor = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value
+
+  return {
+    year: Number(valueFor("year")),
+    month: Number(valueFor("month")),
+    day: Number(valueFor("day")),
+    weekday: valueFor("weekday") ?? ""
+  }
+}
+
 export const formatUpcomingReleaseLabel = (timestamp: number) => {
   const millisecondsPerDay = 1000 * 60 * 60 * 24
   const daysUntilRelease = Math.ceil(
