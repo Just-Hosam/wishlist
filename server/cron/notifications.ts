@@ -22,8 +22,8 @@ export async function createPSPlusMonthlyGameNotifications() {
     data: users.map(({ id }) => ({
       userId: id,
       type: NotificationType.PLAYSTATION_PLUS_MONTHLY_GAMES,
-      title: "PlayStation Plus Monthly Games",
-      message: "This month's PlayStation Plus games are now available.",
+      title: "New PS+ Monthly Games",
+      message: "This month's PS+ monthly games are now available.",
       eventKey
     })),
     skipDuplicates: true
