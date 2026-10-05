@@ -17,4 +17,9 @@ Scheduler: https://cron-job.org/en/
 - Endpoint: `/api/cron/notifications/ps-plus-monthly-games`
 - Schedule: Every Tuesday at 6am MST
 
+## PlayStation Plus Catalog Updates
+
+- Endpoint: `/api/cron/notifications/ps-plus-catalog-update`
+- Schedule: Every Tuesday at 6am MST
+
 The scheduler configuration is managed outside this repository.
