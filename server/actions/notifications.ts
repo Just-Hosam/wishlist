@@ -79,6 +79,7 @@ export async function getNotificationSettings(): Promise<NotificationSettingsOut
 
 export async function saveNotificationSettings(settings: {
   playstationPlusMonthlyGames: boolean
+  playstationPlusCatalogUpdates: boolean
 }) {
   const session = await auth()
   const userId = session?.user?.id
@@ -88,11 +89,13 @@ export async function saveNotificationSettings(settings: {
   await prisma.notificationSettings.upsert({
     where: { userId },
     update: {
-      playstationPlusMonthlyGames: settings.playstationPlusMonthlyGames
+      playstationPlusMonthlyGames: settings.playstationPlusMonthlyGames,
+      playstationPlusCatalogUpdates: settings.playstationPlusCatalogUpdates
     },
     create: {
       userId,
-      playstationPlusMonthlyGames: settings.playstationPlusMonthlyGames
+      playstationPlusMonthlyGames: settings.playstationPlusMonthlyGames,
+      playstationPlusCatalogUpdates: settings.playstationPlusCatalogUpdates
     }
   })
 }

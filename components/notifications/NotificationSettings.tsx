@@ -31,6 +31,7 @@ export function NotificationSettings({ className }: Props) {
   const [isLoading, setIsLoading] = useState(false)
 
   const [psMonthlyGames, setPsMonthlyGames] = useState(false)
+  const [psCatalogUpdates, setPsCatalogUpdates] = useState(false)
 
   useEffect(() => {
     if (!open) return
@@ -45,6 +46,7 @@ export function NotificationSettings({ className }: Props) {
 
         if (!cancelled) {
           setPsMonthlyGames(settings.playstationPlusMonthlyGames)
+          setPsCatalogUpdates(settings.playstationPlusCatalogUpdates)
         }
       } catch (error) {
         console.error("Error loading notification settings:", error)
@@ -66,7 +68,8 @@ export function NotificationSettings({ className }: Props) {
 
     try {
       await saveNotificationSettings({
-        playstationPlusMonthlyGames: psMonthlyGames
+        playstationPlusMonthlyGames: psMonthlyGames,
+        playstationPlusCatalogUpdates: psCatalogUpdates
       })
 
       toast.success("Settings Updated!")
@@ -97,7 +100,7 @@ export function NotificationSettings({ className }: Props) {
         </DrawerHeader>
         <form className="space-y-4">
           <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center">
                 <label
                   className="text-sm font-medium"
@@ -109,6 +112,21 @@ export function NotificationSettings({ className }: Props) {
                   id="playstation-plus-monthly-games"
                   checked={psMonthlyGames}
                   onCheckedChange={setPsMonthlyGames}
+                  disabled={isLoading}
+                  className="ml-auto"
+                />
+              </div>
+              <div className="flex items-center">
+                <label
+                  className="text-sm font-medium"
+                  htmlFor="playstation-plus-catalog-updates"
+                >
+                  PS+ Catalog Updates
+                </label>
+                <Switch
+                  id="playstation-plus-catalog-updates"
+                  checked={psCatalogUpdates}
+                  onCheckedChange={setPsCatalogUpdates}
                   disabled={isLoading}
                   className="ml-auto"
                 />
