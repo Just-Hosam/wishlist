@@ -1,0 +1,7 @@
+interface:
+  display_name: "Unslop"
+  short_description: "Remove AI writing patterns from prose"
+  default_prompt: "Use $unslop to rewrite this text without AI writing patterns."
+
+policy:
+  allow_implicit_invocation: false
