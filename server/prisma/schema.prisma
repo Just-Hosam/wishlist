@@ -213,9 +213,10 @@ model Notification {
 }
 
 model NotificationSettings {
-  userId                      String   @id
-  user                        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  playstationPlusMonthlyGames Boolean  @default(true)
-  createdAt                   DateTime @default(now())
-  updatedAt                   DateTime @updatedAt
+  userId                        String   @id
+  user                          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  playstationPlusMonthlyGames   Boolean  @default(true)
+  playstationPlusCatalogUpdates Boolean  @default(true)
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
 }
