@@ -29,9 +29,20 @@ export function NotificationSettings({ className }: Props) {
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermission | null>(null)
 
+  const [pushEnabled, setPushEnabled] = useState(false)
   const [psMonthlyGames, setPsMonthlyGames] = useState(false)
   const [psCatalogUpdates, setPsCatalogUpdates] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+
+    setNotificationPermission(
+      "Notification" in window ? Notification.permission : null
+    )
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -45,6 +56,7 @@ export function NotificationSettings({ className }: Props) {
         const settings = await getNotificationSettings()
 
         if (!cancelled) {
+          setPushEnabled(settings.pushEnabled)
           setPsMonthlyGames(settings.playstationPlusMonthlyGames)
           setPsCatalogUpdates(settings.playstationPlusCatalogUpdates)
         }
@@ -68,6 +80,7 @@ export function NotificationSettings({ className }: Props) {
 
     try {
       await saveNotificationSettings({
+        pushEnabled,
         playstationPlusMonthlyGames: psMonthlyGames,
         playstationPlusCatalogUpdates: psCatalogUpdates
       })
@@ -80,6 +93,14 @@ export function NotificationSettings({ className }: Props) {
     } finally {
       setIsSaving(false)
     }
+  }
+
+  const handleRequestNotificationPermission = async () => {
+    if (!("Notification" in window)) return
+
+    const permission = await Notification.requestPermission()
+
+    setNotificationPermission(permission)
   }
 
   return (
@@ -98,7 +119,52 @@ export function NotificationSettings({ className }: Props) {
             Manage your notification preferences
           </DrawerDescription>
         </DrawerHeader>
-        <form className="space-y-4">
+        <form className="space-y-5">
+          <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
+            <div className="flex items-center">
+              <label
+                className="text-sm font-medium"
+                htmlFor="push-notifications"
+              >
+                Push Notifications
+              </label>
+              <Switch
+                id="push-notifications"
+                checked={pushEnabled}
+                onCheckedChange={setPushEnabled}
+                disabled={isLoading}
+                className="ml-auto"
+              />
+            </div>
+            {notificationPermission === "default" && (
+              <div className="mt-4 border-t border-border pt-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-sm">
+                    Allow Playward to send you notifications to this device.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="accent"
+                    onClick={handleRequestNotificationPermission}
+                  >
+                    Allow
+                  </Button>
+                </div>
+              </div>
+            )}
+            {notificationPermission === "denied" && (
+              <div className="mt-4 border-t border-border pt-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-sm">
+                    Notifications are blocked on this device.
+                  </p>
+                  <Button type="button" variant="accent">
+                    Enable
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
           <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
             <div className="space-y-3">
               <div className="flex items-center">
