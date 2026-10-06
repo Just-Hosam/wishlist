@@ -1,5 +1,6 @@
 import MarkNotificationsAsRead from "@/components/notifications/MarkNotificationsAsRead"
 import NotificationsEmptyState from "@/components/notifications/NotificationsEmptyState"
+import NewFeatureNotification from "@/components/notifications/layouts/NewFeatureNotification"
 import PSPlusCatalogNotification from "@/components/notifications/layouts/PSPlusCatalogNotification"
 import PSPlusMonthlyGamesNotification from "@/components/notifications/layouts/PSPlusMonthlyGamesNotification"
 import { getCachedNotifications } from "@/server/actions/notifications"
@@ -35,6 +36,13 @@ export default async function NotificationsPage() {
             case NotificationType.PLAYSTATION_PLUS_GAME_CATALOG:
               return (
                 <PSPlusCatalogNotification
+                  key={notification.id}
+                  notification={notification}
+                />
+              )
+            case NotificationType.NEW_FEATURE:
+              return (
+                <NewFeatureNotification
                   key={notification.id}
                   notification={notification}
                 />

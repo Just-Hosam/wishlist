@@ -58,3 +58,26 @@ export async function createPSPlusCatalogUpdateNotifications() {
     skipDuplicates: true
   })
 }
+
+export async function createNewFeatureNotifications({
+  eventKey,
+  title,
+  message
+}: {
+  eventKey: string
+  title: string
+  message: string
+}) {
+  const users = await prisma.user.findMany({ select: { id: true } })
+
+  return prisma.notification.createMany({
+    data: users.map(({ id }) => ({
+      userId: id,
+      type: NotificationType.NEW_FEATURE,
+      title,
+      message,
+      eventKey
+    })),
+    skipDuplicates: true
+  })
+}
