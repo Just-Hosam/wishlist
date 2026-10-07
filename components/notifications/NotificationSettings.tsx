@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 import {
   getNotificationSettings,
   saveNotificationSettings
@@ -21,11 +20,7 @@ import {
 } from "../ui/drawer"
 import { Switch } from "../ui/switch"
 
-interface Props {
-  className?: string
-}
-
-export function NotificationSettings({ className }: Props) {
+export function NotificationSettings() {
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -106,7 +101,7 @@ export function NotificationSettings({ className }: Props) {
   return (
     <Drawer open={open} onOpenChange={(next) => setOpen(next)}>
       <DrawerTrigger asChild>
-        <Button className={cn("w-full justify-between", className)} size="xl">
+        <Button className="w-full justify-between" size="xl">
           <Bell />
           Notifications
           <ArrowRight className="ml-auto text-muted-foreground" />
