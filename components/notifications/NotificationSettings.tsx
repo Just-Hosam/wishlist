@@ -6,6 +6,7 @@ import {
   getNotificationSettings,
   saveNotificationSettings
 } from "@/server/actions/notifications"
+import { PUSH_PERMISSION_GRANTED_EVENT } from "@/types/notifications"
 import { ArrowRight, Bell } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -122,6 +123,10 @@ export function NotificationSettings() {
     const permission = await Notification.requestPermission()
 
     setNotificationPermission(permission)
+
+    if (permission === "granted") {
+      window.dispatchEvent(new Event(PUSH_PERMISSION_GRANTED_EVENT))
+    }
   }
 
   return (
