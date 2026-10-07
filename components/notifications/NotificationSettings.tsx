@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   getNotificationSettings,
   saveNotificationSettings
@@ -24,9 +25,13 @@ export function NotificationSettings() {
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Native permission checks
+  const [isCheckingPermission, setIsCheckingPermission] = useState(true)
   const [notificationPermission, setNotificationPermission] =
     useState<NotificationPermission | null>(null)
 
+  // Notification settings
   const [pushEnabled, setPushEnabled] = useState(false)
   const [psMonthlyGames, setPsMonthlyGames] = useState(false)
   const [psCatalogUpdates, setPsCatalogUpdates] = useState(false)
@@ -34,9 +39,30 @@ export function NotificationSettings() {
   useEffect(() => {
     if (!open) return
 
-    setNotificationPermission(
-      "Notification" in window ? Notification.permission : null
-    )
+    async function checkNotificationPermission() {
+      if (!("Notification" in window)) {
+        setIsCheckingPermission(false)
+        return
+      }
+
+      try {
+        const permissionStatus = await navigator.permissions.query({
+          name: "notifications" as PermissionName
+        })
+
+        setNotificationPermission(
+          permissionStatus.state === "prompt"
+            ? Notification.permission
+            : permissionStatus.state
+        )
+      } catch {
+        setNotificationPermission(Notification.permission)
+      } finally {
+        setIsCheckingPermission(false)
+      }
+    }
+
+    checkNotificationPermission()
   }, [open])
 
   useEffect(() => {
@@ -131,6 +157,19 @@ export function NotificationSettings() {
                 className="ml-auto"
               />
             </div>
+            {isCheckingPermission && notificationPermission === null && (
+              <div className="mt-4 border-t border-border pt-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-4/5" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                  <Button type="button" variant="accent" disabled>
+                    <Skeleton className="h-4 w-10 bg-secondary-foreground/30" />
+                  </Button>
+                </div>
+              </div>
+            )}
             {notificationPermission === "default" && (
               <div className="mt-4 border-t border-border pt-4">
                 <div className="flex items-center justify-between gap-4">
