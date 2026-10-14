@@ -1,5 +1,6 @@
 "use client"
 
+import { savePushSubscription } from "@/server/actions/notifications"
 import { PUSH_PERMISSION_GRANTED_EVENT } from "@/types/notifications"
 import { useEffect } from "react"
 
@@ -63,6 +64,13 @@ async function syncPushSubscription() {
   }
 
   console.info("[PUSH] Browser subscription:", subscription.toJSON())
+
+  try {
+    await savePushSubscription(subscription.toJSON())
+    console.info("[PUSH] Subscription saved.")
+  } catch (error) {
+    console.warn("Failed to save push subscription", error)
+  }
 }
 
 async function registerServiceWorker() {
