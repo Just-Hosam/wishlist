@@ -13,6 +13,7 @@ export async function GET(request: Request) {
 
   const isSecondTuesdayOfMonth =
     date.weekday === "Tuesday" && date.day >= 8 && date.day <= 14
+
   if (!isSecondTuesdayOfMonth) {
     return NextResponse.json({
       ok: true,

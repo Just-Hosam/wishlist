@@ -159,6 +159,35 @@ self.addEventListener("fetch", (event) => {
   }
 })
 
+self.addEventListener("push", (event) => {
+  let payload = {}
+
+  try {
+    payload = event.data?.json() ?? {}
+  } catch (error) {
+    console.warn("Failed to parse push payload", error)
+  }
+
+  const title = typeof payload?.title === "string" ? payload.title : "Playward"
+
+  const message =
+    typeof payload?.message === "string"
+      ? payload.message
+      : "You have a new notification."
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: message,
+      icon: "/favicon/web-app-manifest-192x192.png"
+    })
+  )
+})
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+  event.waitUntil(self.clients.openWindow("/launch"))
+})
+
 async function cacheFirst(request, cacheKey = request) {
   const cache = await caches.open(BOOT_CACHE)
 

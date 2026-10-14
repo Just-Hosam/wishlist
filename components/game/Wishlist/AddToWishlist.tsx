@@ -172,7 +172,7 @@ export default function AddToWishlist({
               </p>
             </header>
             <div className="rounded-2xl bg-card px-5 py-4 shadow-sm">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center">
                   <Image
                     src="/logos/steam.svg"
