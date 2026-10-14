@@ -56,6 +56,7 @@ model User {
   searchHistory        SearchHistory[]
   notifications        Notification[]
   notificationSettings NotificationSettings?
+  pushSubscriptions    PushSubscription[]
 }
 
 model VerificationToken {
@@ -220,4 +221,18 @@ model NotificationSettings {
   playstationPlusCatalogUpdates Boolean  @default(true)
   createdAt                     DateTime @default(now())
   updatedAt                     DateTime @updatedAt
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
