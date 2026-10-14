@@ -137,6 +137,10 @@ export async function savePushSubscription(subscription: PushSubscriptionJSON) {
     throw new Error("Invalid subscription expiration.")
   }
 
+  const isValidUrl = URL.canParse(endpoint)
+
+  if (!isValidUrl) throw new Error("Invalid subscription endpoint.")
+
   const isSecureEndpoint = new URL(endpoint).protocol === "https:"
 
   if (!isSecureEndpoint) throw new Error("Push endpoint must use HTTPS.")
