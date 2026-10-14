@@ -70,7 +70,7 @@ export async function createNewFeatureNotifications({
 }) {
   const users = await prisma.user.findMany({ select: { id: true } })
 
-  return prisma.notification.createMany({
+  const notifications = await prisma.notification.createManyAndReturn({
     data: users.map(({ id }) => ({
       userId: id,
       type: NotificationType.NEW_FEATURE,
@@ -78,6 +78,12 @@ export async function createNewFeatureNotifications({
       message,
       eventKey
     })),
-    skipDuplicates: true
+    skipDuplicates: true,
+    select: { userId: true }
   })
+
+  return {
+    count: notifications.length,
+    userIds: notifications.map(({ userId }) => userId)
+  }
 }
