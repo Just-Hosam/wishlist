@@ -1,5 +1,7 @@
+import { tryCatch } from "@/lib/utils"
 import { requireCronAuth } from "@/server/cron/auth"
 import { createNewFeatureNotifications } from "@/server/cron/notifications"
+import { sendPushNotificationsForUsers } from "@/server/cron/push-notifications"
 import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
@@ -25,32 +27,44 @@ export async function POST(request: Request) {
     )
   }
 
-  try {
-    const { count } = await createNewFeatureNotifications({
-      eventKey,
-      title,
-      message
-    })
+  const { data: notifications, error: creationError } = await tryCatch(
+    createNewFeatureNotifications({ eventKey, title, message })
+  )
 
-    revalidateTag("notification", { expire: 0 })
-
-    return NextResponse.json({
-      ok: true,
-      created: count,
-      eventKey,
-      timestamp: new Date().toISOString()
-    })
-  } catch (error) {
-    console.error("[NOTIFICATIONS] New feature notification failed:", error)
+  if (creationError) {
+    console.error("[NOTIFICATIONS] Creation failed:", creationError)
 
     return NextResponse.json(
       {
         ok: false,
         error: "New feature notification failed",
-        details: error instanceof Error ? error.message : "Unknown error",
+        details:
+          creationError instanceof Error
+            ? creationError.message
+            : "Unknown error",
         timestamp: new Date().toISOString()
       },
       { status: 500 }
     )
   }
+
+  revalidateTag("notification", { expire: 0 })
+
+  const push = await sendPushNotificationsForUsers(notifications.userIds, {
+    title,
+    message
+  })
+
+  if (push) {
+    console.info(
+      `[PUSH] Accepted ${push.accepted} notifications, failed ${push.failed}`
+    )
+  }
+
+  return NextResponse.json({
+    ok: true,
+    created: notifications.count,
+    eventKey,
+    timestamp: new Date().toISOString()
+  })
 }
