@@ -1,4 +1,8 @@
-import type { Notification, NotificationSettings } from "@prisma/client"
+import type {
+  Notification,
+  NotificationSettings,
+  PushSubscription
+} from "@prisma/client"
 
 export const PUSH_PERMISSION_GRANTED_EVENT = "playward:push-permission-granted"
 
@@ -10,3 +14,5 @@ export type NotificationInput = Omit<
 export type NotificationOutput = Notification
 
 export type NotificationSettingsOutput = NotificationSettings
+
+export type PushSubscriptionOutput = PushSubscription
