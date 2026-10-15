@@ -29,7 +29,7 @@ export function ChoiceButton({
   return (
     <Button
       type="button"
-      size="lg"
+      size="xl"
       {...props}
       aria-pressed={selected}
       onClick={(event) => {
