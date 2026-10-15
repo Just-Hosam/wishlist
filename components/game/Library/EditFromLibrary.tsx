@@ -3,7 +3,6 @@
 import { useRouter } from "@/components/navigation"
 import { ChoiceButton } from "@/components/ui/choice-button"
 import Counter from "@/components/ui/counter"
-import { Switch } from "@/components/ui/switch"
 import { saveGame } from "@/server/actions/game"
 import { GameInput, GameOutput, Platform } from "@/types"
 import Image from "next/image"
@@ -100,8 +99,8 @@ export default function EditFromLibrary({ game, children }: Props) {
               onChange={(value) => setTimeToBeat(value)}
             />
           </div>
-          <div className="flex items-end justify-between">
-            <header className="pl-1">
+          <div>
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium" htmlFor="now-playing">
                 Currently playing
               </label>
@@ -109,11 +108,21 @@ export default function EditFromLibrary({ game, children }: Props) {
                 Keep this game marked as in progress.
               </p>
             </header>
-            <Switch
-              id="now-playing"
-              checked={nowPlaying}
-              onCheckedChange={setNowPlaying}
-            ></Switch>
+            <div className="flex gap-2">
+              <ChoiceButton
+                id="now-playing"
+                selected={nowPlaying}
+                onClick={() => setNowPlaying(true)}
+              >
+                Yes
+              </ChoiceButton>
+              <ChoiceButton
+                selected={!nowPlaying}
+                onClick={() => setNowPlaying(false)}
+              >
+                No
+              </ChoiceButton>
+            </div>
           </div>
           <div>
             <header className="mb-2 pl-1">

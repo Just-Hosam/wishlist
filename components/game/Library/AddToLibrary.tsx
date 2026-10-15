@@ -1,10 +1,9 @@
 "use client"
 
-import { useRouter } from "@/components/navigation"
 import useAutoPopulateHLTBTimeToBeat from "@/components/game/useAutoPopulateHLTBTimeToBeat"
+import { useRouter } from "@/components/navigation"
 import { ChoiceButton } from "@/components/ui/choice-button"
 import Counter from "@/components/ui/counter"
-import { Switch } from "@/components/ui/switch"
 import { saveGame } from "@/server/actions/game"
 import { GameCategory, GameInput, IGDBGame, Platform } from "@/types"
 import Image from "next/image"
@@ -37,7 +36,7 @@ export default function AddToLibrary({
   const [open, setOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [timeToBeat, setTimeToBeat] = useState<number | null>(null)
-  const [nowPlaying, setNowPlaying] = useState(false)
+  const [nowPlaying, setNowPlaying] = useState<boolean | null>(null)
   const [playstationSelected, setPlaystationSelected] = useState(false)
   const [nintendoSelected, setNintendoSelected] = useState(false)
   const [steamSelected, setSteamSelected] = useState(false)
@@ -73,7 +72,7 @@ export default function AddToLibrary({
         category: GameCategory.LIBRARY,
         platforms: platforms,
         length: timeToBeat || null,
-        nowPlaying: nowPlaying
+        nowPlaying: nowPlaying ?? false
       }
 
       await saveGame(game)
@@ -118,8 +117,8 @@ export default function AddToLibrary({
               disabled={isLoadingTimeToBeat}
             />
           </div>
-          <div className="flex items-end justify-between">
-            <header className="pl-1">
+          <div>
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium" htmlFor="now-playing">
                 Currently playing
               </label>
@@ -127,11 +126,21 @@ export default function AddToLibrary({
                 Keep this game marked as in progress.
               </p>
             </header>
-            <Switch
-              id="now-playing"
-              checked={nowPlaying}
-              onCheckedChange={setNowPlaying}
-            />
+            <div className="flex gap-[6px]">
+              <ChoiceButton
+                id="now-playing"
+                selected={nowPlaying === true}
+                onClick={() => setNowPlaying(true)}
+              >
+                Yes
+              </ChoiceButton>
+              <ChoiceButton
+                selected={nowPlaying === false}
+                onClick={() => setNowPlaying(false)}
+              >
+                No
+              </ChoiceButton>
+            </div>
           </div>
           <div>
             <header className="mb-2 pl-1">
