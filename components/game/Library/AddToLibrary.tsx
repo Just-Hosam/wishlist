@@ -2,7 +2,7 @@
 
 import { useRouter } from "@/components/navigation"
 import useAutoPopulateHLTBTimeToBeat from "@/components/game/useAutoPopulateHLTBTimeToBeat"
-import { ButtonGroup } from "@/components/ui/button-group"
+import { ChoiceButton } from "@/components/ui/choice-button"
 import Counter from "@/components/ui/counter"
 import { Switch } from "@/components/ui/switch"
 import { saveGame } from "@/server/actions/game"
@@ -134,7 +134,7 @@ export default function AddToLibrary({
             />
           </div>
           <div>
-            <header className="mb-2 mt-3 pl-1">
+            <header className="mb-2 pl-1">
               <label className="text-sm font-medium" htmlFor="category">
                 Owned on
               </label>
@@ -142,12 +142,9 @@ export default function AddToLibrary({
                 Select every platform you own this title on.
               </p>
             </header>
-            <ButtonGroup className="w-full rounded-2xl bg-card shadow-sm">
-              <Button
-                size="xl"
-                type="button"
-                className="flex-1 py-5 shadow-none"
-                variant={steamSelected ? "accent" : "ghost"}
+            <div className="flex gap-[6px]">
+              <ChoiceButton
+                selected={steamSelected}
                 onClick={() => setSteamSelected(!steamSelected)}
               >
                 <Image
@@ -157,15 +154,9 @@ export default function AddToLibrary({
                   height={18}
                   unoptimized
                 />
-                <span className="hidden text-sm font-normal sm:inline-block">
-                  Steam
-                </span>
-              </Button>
-              <Button
-                size="xl"
-                type="button"
-                className="flex-1 py-5 shadow-none"
-                variant={playstationSelected ? "accent" : "ghost"}
+              </ChoiceButton>
+              <ChoiceButton
+                selected={playstationSelected}
                 onClick={() => setPlaystationSelected(!playstationSelected)}
               >
                 <Image
@@ -175,15 +166,9 @@ export default function AddToLibrary({
                   height={18}
                   unoptimized
                 />
-                <span className="hidden text-sm font-normal sm:inline-block">
-                  Playstation
-                </span>
-              </Button>
-              <Button
-                size="xl"
-                type="button"
-                className="flex-1 py-5 shadow-none"
-                variant={nintendoSelected ? "accent" : "ghost"}
+              </ChoiceButton>
+              <ChoiceButton
+                selected={nintendoSelected}
                 onClick={() => setNintendoSelected(!nintendoSelected)}
               >
                 <Image
@@ -193,11 +178,8 @@ export default function AddToLibrary({
                   height={18}
                   unoptimized
                 />
-                <span className="hidden text-sm font-normal sm:inline-block">
-                  Nintendo
-                </span>
-              </Button>
-            </ButtonGroup>
+              </ChoiceButton>
+            </div>
           </div>
         </form>
 
