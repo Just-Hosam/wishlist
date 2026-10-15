@@ -1,6 +1,7 @@
-import { getCalendarDate } from "@/lib/utils"
+import { getCalendarDate, tryCatch } from "@/lib/utils"
 import { requireCronAuth } from "@/server/cron/auth"
 import { createPSPlusMonthlyGameNotifications } from "@/server/cron/notifications"
+import { sendPushNotificationsForUsers } from "@/server/cron/push-notifications"
 import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
@@ -21,33 +22,46 @@ export async function GET(request: Request) {
     })
   }
 
-  try {
-    const { count } = await createPSPlusMonthlyGameNotifications()
+  const { data: notifications, error: creationError } = await tryCatch(
+    createPSPlusMonthlyGameNotifications()
+  )
 
-    if (count > 0) {
-      revalidateTag("notification", { expire: 0 })
-    }
-
-    return NextResponse.json({
-      ok: true,
-      skipped: false,
-      created: count,
-      timestamp: now.toISOString()
-    })
-  } catch (error) {
+  if (creationError) {
     console.error(
       "[CRON] PlayStation Plus monthly games notification failed:",
-      error
+      creationError
     )
 
     return NextResponse.json(
       {
         ok: false,
         error: "PlayStation Plus monthly games notification failed",
-        details: error instanceof Error ? error.message : "Unknown error",
+        details:
+          creationError instanceof Error
+            ? creationError.message
+            : "Unknown error",
         timestamp: new Date().toISOString()
       },
       { status: 500 }
     )
   }
+
+  const { count, userIds, payload } = notifications
+
+  revalidateTag("notification", { expire: 0 })
+
+  const push = await sendPushNotificationsForUsers(userIds, payload)
+
+  if (push) {
+    console.info(
+      `[PUSH] Accepted ${push.accepted} notifications, failed ${push.failed}`
+    )
+  }
+
+  return NextResponse.json({
+    ok: true,
+    skipped: false,
+    created: count,
+    timestamp: now.toISOString()
+  })
 }

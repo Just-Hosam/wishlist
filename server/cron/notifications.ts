@@ -3,6 +3,10 @@ import { NotificationType } from "@/types"
 
 export async function createPSPlusMonthlyGameNotifications() {
   const eventKey = new Date().toISOString().slice(0, 7)
+  const payload = {
+    title: "New PS+ Monthly Games",
+    message: "This month's PS+ monthly games are now available."
+  }
 
   const users = await prisma.user.findMany({
     where: {
@@ -18,16 +22,22 @@ export async function createPSPlusMonthlyGameNotifications() {
     select: { id: true }
   })
 
-  return prisma.notification.createMany({
+  const notifications = await prisma.notification.createManyAndReturn({
     data: users.map(({ id }) => ({
       userId: id,
       type: NotificationType.PLAYSTATION_PLUS_MONTHLY_GAMES,
-      title: "New PS+ Monthly Games",
-      message: "This month's PS+ monthly games are now available.",
+      ...payload,
       eventKey
     })),
-    skipDuplicates: true
+    skipDuplicates: true,
+    select: { userId: true }
   })
+
+  return {
+    count: notifications.length,
+    userIds: notifications.map(({ userId }) => userId),
+    payload
+  }
 }
 
 export async function createPSPlusCatalogUpdateNotifications() {
