@@ -6,7 +6,6 @@ import { ScrollRestoration } from "@/components/navigation/ScrollRestoration"
 import { NotificationProvider } from "@/components/notifications/NotificationProvider"
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration"
 import { AccentHydrator } from "@/components/theme/AccentHydrator"
-import { ButtonClickAnimation } from "@/components/ui/button-click-animation"
 import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -96,7 +95,6 @@ export default async function RootLayout({
       </head>
       <body className="bg-background">
         <ServiceWorkerRegistration />
-        <ButtonClickAnimation />
         <AccentHydrator />
         <NavigationProvider>
           <NotificationProvider>
