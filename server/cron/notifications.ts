@@ -42,6 +42,10 @@ export async function createPSPlusMonthlyGameNotifications() {
 
 export async function createPSPlusCatalogUpdateNotifications() {
   const eventKey = new Date().toISOString().slice(0, 7)
+  const payload = {
+    title: "PS+ Catalog Updated",
+    message: "This month's PS+ Game Catalog update is now available."
+  }
 
   const users = await prisma.user.findMany({
     where: {
@@ -57,16 +61,22 @@ export async function createPSPlusCatalogUpdateNotifications() {
     select: { id: true }
   })
 
-  return prisma.notification.createMany({
+  const notifications = await prisma.notification.createManyAndReturn({
     data: users.map(({ id }) => ({
       userId: id,
       type: NotificationType.PLAYSTATION_PLUS_GAME_CATALOG,
-      title: "PS+ Catalog Updated",
-      message: "This month's PS+ Game Catalog update is now available.",
+      ...payload,
       eventKey
     })),
-    skipDuplicates: true
+    skipDuplicates: true,
+    select: { userId: true }
   })
+
+  return {
+    count: notifications.length,
+    userIds: notifications.map(({ userId }) => userId),
+    payload
+  }
 }
 
 export async function createNewFeatureNotifications({
