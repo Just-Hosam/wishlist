@@ -87,7 +87,9 @@ function Review(review: SteamReview) {
           )}
         </div>
         <div>
-          <p className="font-semibold">{review.username}</p>
+          <p className="font-semibold">
+            {review.recommended ? "Recommended" : "Not Recommended"}
+          </p>
           {review.date && (
             <p className="mt-[1px] text-xs text-muted-foreground">
               {formatReleaseDate(review.date)}
