@@ -3,12 +3,14 @@ import { tryCatch } from "@/lib/utils"
 import { RawSteamReview, RawSteamReviews, SteamReviews } from "@/types/reviews"
 import { unstable_cache } from "next/cache"
 
-const STEAM_REVIEWS_URL = "https://store.steampowered.com/appreviews"
+const STEAM_REVIEWS_URL =
+  "https://api.steampowered.com/IUserReviewsService/GetAppReviews/v1/"
 
 async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
   if (!steamId) throw new Error("Invalid Steam Id")
 
-  const url = `${STEAM_REVIEWS_URL}/${steamId}?json=1`
+  const url = new URL(STEAM_REVIEWS_URL)
+  url.searchParams.set("input_json", JSON.stringify({ appid: Number(steamId) }))
 
   const { data: response, error } = await tryCatch(
     fetch(url, {
@@ -29,7 +31,7 @@ async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
     )
   }
 
-  const data = (await response.json()) as RawSteamReviews
+  const { response: data } = (await response.json()) as RawSteamReviews
 
   const total = data?.query_summary?.total_reviews
   const positive = data?.query_summary?.total_positive
@@ -37,7 +39,6 @@ async function fetchSteamReviews(steamId: string): Promise<SteamReviews> {
   const reviews = (data?.reviews ?? []).map((review: RawSteamReview) => ({
     message: review.review,
     recommended: review.voted_up,
-    username: review.author?.personaname,
     date: review.timestamp_created
   }))
 
