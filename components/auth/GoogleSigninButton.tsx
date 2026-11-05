@@ -6,21 +6,15 @@ import Image from "next/image"
 
 export function GoogleSigninButton() {
   return (
-    <div className="mx-auto w-fit">
-      <Button
-        onClick={() => signIn("google")}
-        variant="outline"
-        className="gap-3 rounded-lg p-6"
-      >
-        <Image
-          src="/logos/google.svg"
-          alt="Google Logo"
-          width={20}
-          height={20}
-          unoptimized
-        ></Image>
-        <p className="text-base">Login with Google</p>
-      </Button>
-    </div>
+    <Button onClick={() => signIn("google")} size="lg" className="w-full gap-3">
+      <Image
+        src="/logos/google.svg"
+        alt="Google Logo"
+        width={16}
+        height={16}
+        unoptimized
+      ></Image>
+      <p className="text-base">Login with Google</p>
+    </Button>
   )
 }
