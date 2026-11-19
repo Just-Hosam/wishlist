@@ -1,5 +1,6 @@
 # Cron Schedule
 
+The scheduler configuration is managed outside this repository.
 Scheduler: https://cron-job.org/en/
 
 ## Update Prices
@@ -22,4 +23,7 @@ Scheduler: https://cron-job.org/en/
 - Endpoint: `/api/cron/notifications/ps-plus-catalog-update`
 - Schedule: Every Tuesday at 6am MST
 
-The scheduler configuration is managed outside this repository.
+## Guest Cleanup
+
+- Endpoint: `/api/cron/delete-guest-accounts`
+- Schedule: Daily at 3am MST

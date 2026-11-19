@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma"
 import { Prisma } from "@prisma/client"
 
 export async function createGuest() {
-  const guest = await createGuestUser()
+  const guest = await createGuestAccount()
   const baseUserId = process.env.BASE_USER_ID
 
   if (!baseUserId) return guest
@@ -19,7 +19,7 @@ export async function createGuest() {
   return guest
 }
 
-async function createGuestUser() {
+async function createGuestAccount() {
   return prisma.user.create({
     data: {
       name: "Guest",
