@@ -10,10 +10,12 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "@/components/ui/drawer"
-import { Info, Users } from "lucide-react"
+import { Users } from "lucide-react"
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { toast } from "sonner"
+
+import { GuestAccountInfo } from "./GuestAccountInfo"
 
 export function GuestSigninButton() {
   const [open, setOpen] = useState(false)
@@ -47,19 +49,9 @@ export function GuestSigninButton() {
         <DrawerHeader>
           <DrawerTitle>Explore as a Guest</DrawerTitle>
         </DrawerHeader>
-        <div className="rounded-2xl border bg-zinc-200 px-5 py-4 text-sm text-foreground shadow-sm">
-          <header className="flex items-center gap-2">
-            <Info
-              className="size-[20px] shrink-0 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <p className="font-semibold">Changes are temporary</p>
-          </header>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Add, remove, and organize games freely. Your changes will reset when
-            you log out or at the end of the day.
-          </p>
-        </div>
+
+        <GuestAccountInfo />
+
         <DrawerFooter>
           <Button
             size="lg"
