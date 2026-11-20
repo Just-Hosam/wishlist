@@ -8,6 +8,7 @@ import {
 import { Gamepad2 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
+import { GuestInfoButton } from "../auth/GuestInfoButton"
 import { SearchButton } from "../game/SearchButton"
 import { SearchHeader } from "../game/SearchHeader"
 import { useRouter } from "../navigation"
@@ -100,7 +101,10 @@ function WishlistHeader() {
   return (
     <div className="flex w-full items-center justify-between">
       <h1 className="text-4xl font-bold">Wishlist</h1>
-      <NotificationButton />
+      <div className="flex items-center gap-1">
+        <GuestInfoButton />
+        <NotificationButton />
+      </div>
     </div>
   )
 }
@@ -109,7 +113,10 @@ function LibraryHeader() {
   return (
     <div className="flex w-full items-center justify-between">
       <h1 className="text-4xl font-bold">Library</h1>
-      <NotificationButton />
+      <div className="flex items-center gap-1">
+        <GuestInfoButton />
+        <NotificationButton />
+      </div>
     </div>
   )
 }
@@ -118,7 +125,10 @@ function MoreHeader() {
   return (
     <div className="flex w-full items-center justify-between">
       <h1 className="text-4xl font-bold">More</h1>
-      <NotificationButton />
+      <div className="flex items-center gap-1">
+        <GuestInfoButton />
+        <NotificationButton />
+      </div>
     </div>
   )
 }
